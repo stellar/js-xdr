@@ -1,0 +1,7 @@
+{
+  "destinationFolder": "dist",
+  "exportFileName": "xdr",
+  "entryFileName": "index",
+  "exportVarName": "XDR",
+  "mochaGlobals": ["stub", "spy", "expect"]
+}
