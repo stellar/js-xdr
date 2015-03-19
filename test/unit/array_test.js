@@ -57,7 +57,7 @@ describe('Array#write', function() {
   }
 });
 
-describe('Array.isValid', function() {
+describe('Array#isValid', function() {
   let subject = many;
 
   it("returns true for an array of the correct size with the correct types", function() {

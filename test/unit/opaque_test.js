@@ -31,7 +31,7 @@ describe('Opaque#write', function() {
   }
 });
 
-describe('Opaque.isValid', function() {
+describe('Opaque#isValid', function() {
   it('returns true for buffers of the correct length', function() {
     expect(subject.isValid(new Buffer(3))).to.be.true;
   });

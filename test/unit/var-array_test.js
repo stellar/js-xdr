@@ -49,7 +49,7 @@ describe('VarArray#write', function() {
   }
 });
 
-describe('VarArray.isValid', function() {
+describe('VarArray#isValid', function() {
   it("returns true for an array of the correct sizes with the correct types", function() {
     expect(subject.isValid([])).to.be.true;
     expect(subject.isValid([1])).to.be.true;

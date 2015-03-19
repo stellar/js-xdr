@@ -39,7 +39,7 @@ describe('VarOpaque#write', function() {
   }
 });
 
-describe('VarOpaque.isValid', function() {
+describe('VarOpaque#isValid', function() {
   it('returns true for buffers of the correct length', function() {
     expect(subject.isValid(new Buffer(0))).to.be.true;
     expect(subject.isValid(new Buffer(1))).to.be.true;
