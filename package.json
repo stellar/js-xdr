@@ -11,17 +11,9 @@
     "url": "https://github.com/stellar/js-xdr.git"
   },
   "keywords": [
-    "boilerplate",
-    "es6",
-    "node",
-    "starter",
-    "kit",
-    "transpile",
-    "6to5",
-    "babel"
   ],
   "author": "Scott Fleckenstein <scott@stellar.org>",
-  "license": "MIT",
+  "license": "ISC",
   "bugs": {
     "url": "https://github.com/stellar/js-xdr/issues"
   },
