@@ -1,6 +1,6 @@
 import Long  from 'long';
 
-export class Hyper extends Long {
+export class UnsignedHyper extends Long {
   static read(io) {
     let high = io.readInt32BE();
     let low  = io.readInt32BE();
@@ -10,7 +10,7 @@ export class Hyper extends Long {
   static write(value, io) {
     if(!(value instanceof this)) {
       throw new Error(
-        `XDR Write Error: ${value} is not a Hyper`
+        `XDR Write Error: ${value} is not an UnsignedHyper`
       );
     }
 
@@ -19,12 +19,12 @@ export class Hyper extends Long {
   }
 
   static fromString(string) {
-    let result = super.fromString(string, false);
+    let result = super.fromString(string, true);
     return new this(result.low, result.high);
   }
 
   static fromBits(low, high) {
-    let result = super.fromBits(low, high, false);
+    let result = super.fromBits(low, high, true);
     return new this(result.low, result.high);
   }
 
@@ -37,5 +37,12 @@ export class Hyper extends Long {
   }
 }
 
-Hyper.MAX_VALUE = new Hyper(Long.MAX_VALUE.low, Long.MAX_VALUE.high);
-Hyper.MIN_VALUE = new Hyper(Long.MIN_VALUE.low, Long.MIN_VALUE.high);
+UnsignedHyper.MAX_VALUE = new UnsignedHyper(
+  Long.MAX_UNSIGNED_VALUE.low, 
+  Long.MAX_UNSIGNED_VALUE.high
+);
+
+UnsignedHyper.MIN_VALUE = new UnsignedHyper(
+  Long.MIN_VALUE.low, 
+  Long.MIN_VALUE.high
+);
