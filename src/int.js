@@ -14,14 +14,18 @@ export var Int = {
       throw new Error("XDR Write Error: not a number");
     }
 
+    if(Math.floor(value) !== value){ 
+      throw new Error("XDR Write Error: not an integer");
+    }
+
+
     io.writeInt32BE(value);
   },
 
   isValid(value) {
     if (!isNumber(value)){ return false; }
+    if (Math.floor(value) !== value ){ return false; }
 
-    let asInt = Math.floor(value);
-
-    return asInt >= MIN_INT && asInt <= MAX_INT; 
+    return value >= MIN_INT && value <= MAX_INT; 
   },
 };
