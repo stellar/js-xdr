@@ -1,5 +1,6 @@
 export * from './int';
 export * from './hyper';
+export * from './unsigned-int';
 
 export * from './float'; 
 export * from './double'; 
