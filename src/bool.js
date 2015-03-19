@@ -2,8 +2,8 @@ import { Int } from "./int";
 import { isBoolean } from "lodash";
 
 export var Bool = {
-  read(buffer, offset) {
-    let value = Int.read(buffer, offset);
+  read(io) {
+    let value = Int.read(io);
 
     switch(value) {
       case 0: return false;
@@ -12,9 +12,9 @@ export var Bool = {
     }
   },
 
-  write(value, buffer, offset) {
+  write(value, io) {
     let intVal = value ? 1 : 0;
-    return Int.write(intVal, buffer, offset);
+    return Int.write(intVal, io);
   },
 
   isValid(value) {

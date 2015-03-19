@@ -1,5 +1,6 @@
 let Int = XDR.Int;
-import { bufferToArray } from "../support/buffer-helpers";
+import { Cursor } from "../../src/cursor";
+import { cursorToArray } from "../support/io-helpers";
 
 describe('Int.read', function() {
 
@@ -12,8 +13,8 @@ describe('Int.read', function() {
   });
 
   function read(bytes) {
-    let buffer = new Buffer(bytes);
-    return Int.read(buffer, 0);
+    let io = new Cursor(bytes);
+    return Int.read(io);
   }
 });
 
@@ -27,15 +28,10 @@ describe('Int.write', function() {
     expect(write(-Math.pow(2,31))).to.eql([128,0,0,0]);
   });
 
-  it('returns the number of bytes written (4)', function() {
-    let buffer = new Buffer(8);
-    expect(Int.write(0, buffer, 0)).to.eql(4);
-  });
-
   function write(value) {
-    let buffer       = new Buffer(8);
-    let bytesWritten = Int.write(value, buffer, 0);
-    return bufferToArray(buffer, bytesWritten);
+    let io = new Cursor(8);
+    Int.write(value, io);
+    return cursorToArray(io);
   }
 });
 

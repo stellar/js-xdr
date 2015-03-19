@@ -5,13 +5,12 @@ const MIN_INT = -Math.pow(2, 31);
 
 export var Int = {
 
-  read(buffer, offset) {
-    return buffer.readInt32BE(offset);
+  read(io) {
+    return io.readInt32BE();
   },
 
-  write(value, buffer, offset) {
-    buffer.writeInt32BE(value, offset);
-    return 4;
+  write(value, io) {
+    io.writeInt32BE(value);
   },
 
   isValid(value) {

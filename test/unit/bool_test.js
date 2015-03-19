@@ -1,5 +1,6 @@
 let Bool = XDR.Bool;
-import { bufferToArray } from "../support/buffer-helpers";
+import { Cursor } from "../../src/cursor";
+import { cursorToArray } from "../support/io-helpers";
 
 describe('Bool.read', function() {
 
@@ -12,8 +13,8 @@ describe('Bool.read', function() {
   });
 
   function read(bytes) {
-    let buffer = new Buffer(bytes);
-    return Bool.read(buffer, 0);
+    let io = new Cursor(bytes);
+    return Bool.read(io);
   }
 });
 
@@ -24,15 +25,10 @@ describe('Bool.write', function() {
     expect(write(true)).to.eql([0,0,0,1]);
   });
 
-  it('returns the number of bytes written (4)', function() {
-    let buffer = new Buffer(8);
-    expect(Bool.write(0, buffer, 0)).to.eql(4);
-  });
-
   function write(value) {
-    let buffer       = new Buffer(8);
-    let bytesWritten = Bool.write(value, buffer, 0);
-    return bufferToArray(buffer, bytesWritten);
+    let io = new Cursor(8);
+    Bool.write(value, io);
+    return cursorToArray(io);
   }
 });
 
