@@ -5,6 +5,7 @@ export * from './unsigned-hyper';
 
 export * from './float'; 
 export * from './double'; 
+export * from './quadruple'; 
 
 export * from './bool';
 
