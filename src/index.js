@@ -9,6 +9,7 @@ export * from './quadruple';
 
 export * from './bool';
 
+
 export * from './string';
 
 export * from './opaque'; 
@@ -18,4 +19,5 @@ export * from './array';
 export * from './var-array'; 
 
 export * from './option';
+export * from './void';
 export * from './enum';
