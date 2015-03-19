@@ -9,6 +9,8 @@ export * from './quadruple';
 
 export * from './bool';
 
+export * from './string';
+
 export * from './opaque'; 
 export * from './var-opaque'; 
 
