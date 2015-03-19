@@ -10,3 +10,5 @@ export * from './var-opaque';
 
 export * from './array'; 
 export * from './var-array'; 
+
+export * from './enum';
