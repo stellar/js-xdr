@@ -8,7 +8,7 @@ export var Bool = {
     switch(value) {
       case 0: return false;
       case 1: return true;
-      default: throw new Error(`XDR Read Error: Got ${value} when trying to read a bool `);
+      default: throw new Error(`XDR Read Error: Got ${value} when trying to read a bool`);
     }
   },
 
