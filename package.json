@@ -47,6 +47,7 @@
   },
   "dependencies": {
     "cursor": "^0.1.5",
-    "lodash": "^3.5.0"
+    "lodash": "^3.5.0",
+    "long": "^2.2.3"
   }
 }
