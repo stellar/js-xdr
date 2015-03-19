@@ -14,4 +14,5 @@ export * from './var-opaque';
 export * from './array'; 
 export * from './var-array'; 
 
+export * from './option';
 export * from './enum';
