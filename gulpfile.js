@@ -36,8 +36,8 @@ gulp.task('lint:src', function() {
     .pipe($.plumber())
     .pipe($.jshint())
     .pipe($.jshint.reporter('jshint-stylish'))
-    // .pipe($.notify(ding))
-    // .pipe($.jshint.reporter('fail'));
+    .pipe($.notify(ding))
+    .pipe($.jshint.reporter('fail'));
 });
 
 // Lint our test code
@@ -46,8 +46,8 @@ gulp.task('lint:test', function() {
     .pipe($.plumber())
     .pipe($.jshint())
     .pipe($.jshint.reporter('jshint-stylish'))
-    // .pipe($.notify(ding))
-    // .pipe($.jshint.reporter('fail'));
+    .pipe($.notify(ding))
+    .pipe($.jshint.reporter('fail'));
 });
 
 // Build two versions of the library
