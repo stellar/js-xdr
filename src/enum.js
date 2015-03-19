@@ -46,7 +46,7 @@ export class Enum {
     ChildEnum._byValue = new Map();
     
     each(members, (value, key) => {
-      let inst = new Result(key, value);
+      let inst = new ChildEnum(key, value);
       ChildEnum._members.set(key, inst);
       ChildEnum._byValue.set(value, inst);
       ChildEnum[key] = function() {
