@@ -59,3 +59,11 @@ describe('VarOpaque#isValid', function() {
   });
 });
 
+describe("VarOpaque#constructor", function() {
+  let subject = new XDR.VarOpaque();
+
+  it("defaults to max length of a uint max value", function() {
+    expect(subject._maxLength).to.eql(Math.pow(2,32) - 1);
+  });
+});
+

@@ -55,3 +55,11 @@ describe('String#isValid', function() {
   });
 });
 
+describe("String#constructor", function() {
+  let subject = new XDR.String();
+
+  it("defaults to max length of a uint max value", function() {
+    expect(subject._maxLength).to.eql(Math.pow(2,32) - 1);
+  });
+});
+

@@ -1,9 +1,6 @@
 import {isNumber} from 'lodash';
 import includeIoMixin from './io-mixin';
 
-const MAX_INT = Math.pow(2, 31) - 1;
-const MIN_INT = -Math.pow(2, 31);
-
 export var Int = {
 
   read(io) {
@@ -27,8 +24,12 @@ export var Int = {
     if (!isNumber(value)){ return false; }
     if (Math.floor(value) !== value ){ return false; }
 
-    return value >= MIN_INT && value <= MAX_INT; 
+    return value >= Int.MIN_VALUE && value <= Int.MAX_VALUE; 
   },
 };
+
+Int.MAX_VALUE = Math.pow(2, 31) - 1;
+Int.MIN_VALUE = -Math.pow(2, 31);
+
 
 includeIoMixin(Int);

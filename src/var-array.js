@@ -1,9 +1,10 @@
 import { Int } from "./int";
+import { UnsignedInt } from "./unsigned-int";
 import { all, each, times, isArray } from 'lodash';
 import includeIoMixin from './io-mixin';
 
 export class VarArray {
-  constructor(childType, maxLength) {
+  constructor(childType, maxLength=UnsignedInt.MAX_VALUE) {
     this._childType = childType;
     this._maxLength = maxLength;
   }

@@ -1,9 +1,6 @@
 import {isNumber} from 'lodash';
 import includeIoMixin from './io-mixin';
 
-const MAX_UINT = Math.pow(2, 32) - 1;
-const MIN_UINT = 0;
-
 export var UnsignedInt = {
 
   read(io) {
@@ -30,8 +27,11 @@ export var UnsignedInt = {
     if (!isNumber(value)){ return false; }
     if (Math.floor(value) !== value ){ return false; }
 
-    return value >= MIN_UINT && value <= MAX_UINT; 
+    return value >= UnsignedInt.MIN_VALUE && value <= UnsignedInt.MAX_VALUE; 
   },
 };
+
+UnsignedInt.MAX_VALUE = Math.pow(2, 32) - 1;
+UnsignedInt.MIN_VALUE = 0;
 
 includeIoMixin(UnsignedInt);

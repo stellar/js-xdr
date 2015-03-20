@@ -1,10 +1,11 @@
 import { Int } from "./int";
+import { UnsignedInt } from "./unsigned-int";
 import {calculatePadding} from "./util";
 import {isString} from "lodash";
 import includeIoMixin from './io-mixin';
 
 export class String {
-  constructor(maxLength) {
+  constructor(maxLength=UnsignedInt.MAX_VALUE) {
     this._maxLength = maxLength;
   }
 
