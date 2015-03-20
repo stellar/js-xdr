@@ -1,4 +1,5 @@
 import Long  from 'long';
+import includeIoMixin from './io-mixin';
 
 export class UnsignedHyper extends Long {
   static read(io) {
@@ -36,6 +37,8 @@ export class UnsignedHyper extends Long {
     super(low, high, false);
   }
 }
+
+includeIoMixin(UnsignedHyper);
 
 UnsignedHyper.MAX_VALUE = new UnsignedHyper(
   Long.MAX_UNSIGNED_VALUE.low, 

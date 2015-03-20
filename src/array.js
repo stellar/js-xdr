@@ -1,4 +1,5 @@
 import { all, each, times, isArray } from 'lodash';
+import includeIoMixin from './io-mixin';
 
 export class Array {
   constructor(childType, length) {
@@ -33,3 +34,5 @@ export class Array {
     return all(value, child => this._childType.isValid(child));
   }
 }
+
+includeIoMixin(Array.prototype);

@@ -1,4 +1,5 @@
 import {calculatePadding} from "./util";
+import includeIoMixin from './io-mixin';
 
 export class Opaque {
   constructor(length) {
@@ -24,3 +25,5 @@ export class Opaque {
     return Buffer.isBuffer(value) && value.length === this._length;
   }
 }
+
+includeIoMixin(Opaque.prototype);

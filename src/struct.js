@@ -1,5 +1,6 @@
 import { each, map, isUndefined } from "lodash";
 import { cloneDeep, partial, zipObject } from "lodash";
+import includeIoMixin from './io-mixin';
 
 export class Struct {
 
@@ -48,10 +49,13 @@ export class Struct {
 
       ChildStruct.prototype[fieldName] = partial(readOrWriteAttribute, fieldName);
     });
+    
 
     return ChildStruct;
   }
 }
+
+includeIoMixin(Struct);
 
 function readOrWriteAttribute(name, value) {
   if(!isUndefined(value)) {

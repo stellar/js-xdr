@@ -1,5 +1,6 @@
 import { Int }  from "./int";
 import {each, values as vals} from "lodash";
+import includeIoMixin from './io-mixin';
 
 export class Enum {
 
@@ -75,3 +76,5 @@ export class Enum {
     return ChildEnum;
   }
 }
+
+includeIoMixin(Enum);

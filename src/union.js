@@ -1,6 +1,7 @@
 import { each, isUndefined } from "lodash";
 import { cloneDeep } from "lodash";
 import { Void } from "./void";
+import includeIoMixin from './io-mixin';
 
 export class Union {
 
@@ -124,3 +125,5 @@ export class Union {
     return ChildUnion;
   }
 }
+
+includeIoMixin(Union);

@@ -1,4 +1,5 @@
 import { isUndefined } from 'lodash';
+import includeIoMixin from './io-mixin';
 
 export var Void = {
   /* jshint unused: false */
@@ -17,3 +18,5 @@ export var Void = {
     return isUndefined(value);
   },
 };
+
+includeIoMixin(Void);

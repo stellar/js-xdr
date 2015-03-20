@@ -1,5 +1,6 @@
 import { Int } from "./int";
 import {calculatePadding} from "./util";
+import includeIoMixin from './io-mixin';
 
 export class VarOpaque {
   constructor(maxLength) {
@@ -35,3 +36,5 @@ export class VarOpaque {
     return Buffer.isBuffer(value) && value.length <= this._maxLength;
   }
 }
+
+includeIoMixin(VarOpaque.prototype);

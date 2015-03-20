@@ -1,5 +1,6 @@
 import { Int } from "./int";
 import { all, each, times, isArray } from 'lodash';
+import includeIoMixin from './io-mixin';
 
 export class VarArray {
   constructor(childType, maxLength) {
@@ -43,3 +44,5 @@ export class VarArray {
     return all(value, child => this._childType.isValid(child));
   }
 }
+
+includeIoMixin(VarArray.prototype);

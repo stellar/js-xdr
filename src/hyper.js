@@ -1,4 +1,5 @@
 import Long  from 'long';
+import includeIoMixin from './io-mixin';
 
 export class Hyper extends Long {
   static read(io) {
@@ -36,6 +37,8 @@ export class Hyper extends Long {
     super(low, high, false);
   }
 }
+
+includeIoMixin(Hyper);
 
 Hyper.MAX_VALUE = new Hyper(Long.MAX_VALUE.low, Long.MAX_VALUE.high);
 Hyper.MIN_VALUE = new Hyper(Long.MIN_VALUE.low, Long.MIN_VALUE.high);

@@ -1,4 +1,5 @@
 import {isNumber} from 'lodash';
+import includeIoMixin from './io-mixin';
 
 const MAX_UINT = Math.pow(2, 32) - 1;
 const MIN_UINT = 0;
@@ -32,3 +33,5 @@ export var UnsignedInt = {
     return value >= MIN_UINT && value <= MAX_UINT; 
   },
 };
+
+includeIoMixin(UnsignedInt);

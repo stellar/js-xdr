@@ -44,6 +44,10 @@ describe('Enum.write', function() {
     expect(write(Color.red())).to.eql([0x00,0x00,0x00,0x00]);
     expect(write(Color.green())).to.eql([0x00,0x00,0x00,0x01]);
     expect(write(Color.evenMoreGreen())).to.eql([0x00,0x00,0x00,0x03]);
+
+    expect(Color.red().toXDR("hex")).to.eql("00000000");
+    expect(Color.green().toXDR("hex")).to.eql("00000001");
+    expect(Color.evenMoreGreen().toXDR("hex")).to.eql("00000003");
   });
 
   it("throws a write error if the value is not the correct type", function() {

@@ -1,5 +1,6 @@
 import { Int } from "./int";
 import { isBoolean } from "lodash";
+import includeIoMixin from './io-mixin';
 
 export var Bool = {
   read(io) {
@@ -21,3 +22,5 @@ export var Bool = {
     return isBoolean(value);
   }
 };
+
+includeIoMixin(Bool);

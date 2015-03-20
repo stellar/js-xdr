@@ -1,5 +1,6 @@
 import { Bool } from "./bool";
 import { isNull, isUndefined } from 'lodash';
+import includeIoMixin from './io-mixin';
 
 export class Option {
   constructor(childType) {
@@ -29,3 +30,5 @@ export class Option {
     return this._childType.isValid(value);
   }
 }
+
+includeIoMixin(Option.prototype);

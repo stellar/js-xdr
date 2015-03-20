@@ -1,6 +1,7 @@
 import { Int } from "./int";
 import {calculatePadding} from "./util";
 import {isString} from "lodash";
+import includeIoMixin from './io-mixin';
 
 export class String {
   constructor(maxLength) {
@@ -42,3 +43,5 @@ export class String {
     return isString(value) && value.length <= this._maxLength;
   }
 }
+
+includeIoMixin(String.prototype);

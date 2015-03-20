@@ -1,4 +1,5 @@
 import {isNumber} from 'lodash';
+import includeIoMixin from './io-mixin';
 
 export var Float = {
 
@@ -18,3 +19,5 @@ export var Float = {
     return isNumber(value);
   },
 };
+
+includeIoMixin(Float);

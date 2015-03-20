@@ -1,3 +1,5 @@
+import includeIoMixin from './io-mixin';
+
 export var Quadruple = {
   /* jshint unused: false */
 
@@ -13,3 +15,5 @@ export var Quadruple = {
     return false;
   },
 };
+
+includeIoMixin(Quadruple);
