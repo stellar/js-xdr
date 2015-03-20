@@ -20,4 +20,6 @@ export * from './var-array';
 
 export * from './option';
 export * from './void';
+
 export * from './enum';
+export * from './struct';

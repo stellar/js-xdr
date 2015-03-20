@@ -1,15 +1,15 @@
 import XDR from "xdr";
 
-let Signature = XDR.Struct.create('Signature', {
-  publicKey: new XDR.Opaque(32),
-  data: new XDR.Opaque(32),
-});
+let Signature = XDR.Struct.create('Signature', [
+  ["publicKey", new XDR.Opaque(32)],
+  ["data", new XDR.Opaque(32)],
+]);
 
-let Envelope = XDR.Struct.create('Envelope', {
-  body: new XDR.VarOpaque(1000),
-  timestamp: XDR.Int,
-  signature: Signature,
-});
+let Envelope = XDR.Struct.create('Envelope', [
+  ["body", new XDR.VarOpaque(1000)],
+  ["timestamp", XDR.Int],
+  ["signature", Signature],
+]);
 
 let sig = Signature.new();
 sig.publicKey = new Buffer(32);
