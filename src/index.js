@@ -23,3 +23,4 @@ export * from './void';
 
 export * from './enum';
 export * from './struct';
+export * from './union';
