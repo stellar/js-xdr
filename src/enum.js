@@ -1,5 +1,5 @@
 import { Int }  from "./int";
-import { each } from "lodash";
+import {each, values as vals} from "lodash";
 
 export class Enum {
 
@@ -34,6 +34,24 @@ export class Enum {
     return value instanceof this;
   }
 
+  static members() {
+    return this._members;
+  }
+
+  static values() {
+    return vals(this._members);
+  }
+
+  static fromName(name) {
+    let result = this._members[name];
+
+    if(!result) { 
+      throw new Error(`${name} is not a member of ${this.enumName}`); 
+    }
+
+    return result;
+  }
+
   static create(name, members) {
     let ChildEnum = class extends Enum {
       constructor(...args) {
@@ -42,12 +60,12 @@ export class Enum {
     };
 
     ChildEnum.enumName = name;
-    ChildEnum._members = new Map();
+    ChildEnum._members = {};
     ChildEnum._byValue = new Map();
     
     each(members, (value, key) => {
       let inst = new ChildEnum(key, value);
-      ChildEnum._members.set(key, inst);
+      ChildEnum._members[key] = inst;
       ChildEnum._byValue.set(value, inst);
       ChildEnum[key] = function() {
         return inst;

@@ -7,6 +7,19 @@ let Color = XDR.Enum.create('Color', {
   evenMoreGreen: 3,
 });
 
+describe('Enum.fromName', function() {
+  it("returns the member with the provided name", function() {
+    expect(Color.fromName("red")).to.eql(Color.red());
+    expect(Color.fromName("green")).to.eql(Color.green());
+    expect(Color.fromName("evenMoreGreen")).to.eql(Color.evenMoreGreen());
+  });
+
+  it("throws an error if the name is not correct", function() {
+    expect(() => Color.fromName("obviouslyNotAColor")).to.throw(/not a member/i);
+  });
+
+});
+
 describe('Enum.read', function() {
   
   it('decodes correctly', function() {
