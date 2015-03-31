@@ -22,7 +22,6 @@ export class Struct {
     if(!(value instanceof this)) {
       throw new Error(`XDR Write Error: ${value} is not a ${this.structName}`);
     }
-
     each(this._fields, field => {
       let [name, type] = field;
       let attribute = value._attributes[name];
@@ -42,7 +41,8 @@ export class Struct {
     };
 
     ChildStruct.structName = name;
-    ChildStruct._fields = cloneDeep(fields);
+    
+    ChildStruct._fields = fields;
     
     each(fields, field => {
       let [fieldName] = field;
