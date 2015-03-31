@@ -10,18 +10,17 @@ export class Union {
   }
 
   set(aSwitch, value) {
-    if (aSwitch instanceof this.constructor._switchOn) {
-      this._switch = aSwitch;
-    } else {
-      this._switch = this.constructor._switchOn.fromName(aSwitch);
+    if (!(aSwitch instanceof this.constructor._switchOn)) {
+      aSwitch = this.constructor._switchOn.fromName(aSwitch);
     }
 
-    this._arm     = this.constructor.armForSwitch(aSwitch);
+    this._switch  = aSwitch;
+    this._arm     = this.constructor.armForSwitch(this._switch);
     this._armType = this.constructor.armTypeForArm(this._arm);
     this._value   = value;
   }
 
-  get(armName) {
+  get(armName=this._arm) {
     if (this._arm !== Void && this._arm !== armName) {
       throw new Error(`${armName} not set`);
     }
