@@ -36,7 +36,7 @@ describe('XDR.define', function() {
           ok:      XDR.Void,
           error:   "message"
         },
-        defaultSwitch: XDR.Void,
+        defaultArm: XDR.Void,
         arms: {
           message: new XDR.String(100)
         }

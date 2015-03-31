@@ -13,7 +13,7 @@ let xdr = XDR.define(xdr => {
       ok:     xdr.void(),
       error:   "message"
     },
-    defaultSwitch: xdr.void(),
+    defaultArm: xdr.void(),
     arms: {
       message: xdr.string(100)
     }

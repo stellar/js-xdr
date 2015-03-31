@@ -98,7 +98,7 @@ export class Union {
     each(ChildUnion._switchOn.values(), aSwitch => {
 
       // build the enum => arm map
-      let arm = config.switches[aSwitch.name] || config.defaultSwitch;
+      let arm = config.switches[aSwitch.name] || config.defaultArm;
       ChildUnion._switches.set(aSwitch, arm);
 
       // Add enum-based constrocutors

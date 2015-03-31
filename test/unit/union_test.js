@@ -13,7 +13,7 @@ let Result = XDR.Union.create('Result', {
     ok:      XDR.Void,
     error:   "code"
   },
-  defaultSwitch: XDR.Void,
+  defaultArm: XDR.Void,
   arms: {
     code: XDR.Int
   }
