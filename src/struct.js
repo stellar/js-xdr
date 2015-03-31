@@ -1,11 +1,11 @@
 import { each, map, isUndefined } from "lodash";
-import { cloneDeep, partial, zipObject } from "lodash";
+import { zipObject } from "lodash";
 import includeIoMixin from './io-mixin';
 
 export class Struct {
 
   constructor(attributes) {
-    this._attributes = cloneDeep(attributes);
+    this._attributes = attributes || {};
   }
 
   static read(io) {
@@ -47,7 +47,7 @@ export class Struct {
     each(fields, field => {
       let [fieldName] = field;
 
-      ChildStruct.prototype[fieldName] = partial(readOrWriteAttribute, fieldName);
+      ChildStruct.prototype[fieldName] = readOrWriteAttribute(fieldName);
     });
     
 
@@ -57,10 +57,12 @@ export class Struct {
 
 includeIoMixin(Struct);
 
-function readOrWriteAttribute(name, value) {
-  if(!isUndefined(value)) {
-    this._attributes[name] = value;
-  }
+function readOrWriteAttribute(name) {
+  return function(value) {
+    if(!isUndefined(value)) {
+      this._attributes[name] = value;
+    }
 
-  return this._attributes[name];
+    return this._attributes[name];
+  };
 }
