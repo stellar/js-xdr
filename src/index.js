@@ -24,3 +24,11 @@ export * from './void';
 export * from './enum';
 export * from './struct';
 export * from './union';
+
+export * from './define';
+
+import {define} from './define';
+
+export default function(fn) {
+  return define(fn);
+}

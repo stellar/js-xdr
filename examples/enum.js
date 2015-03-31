@@ -1,26 +1,30 @@
-import { Enum } from "xdr";
+import * as XDR from "../src";
 
-let Color = Enum.create('Color', {
-  red: 0,
-  green: 1,
-  blue: 2,
+let xdr = XDR.define(xdr => {
+
+  xdr.enum('Color', {
+    red: 0,
+    green: 1,
+    blue: 2,
+  });
+
+  xdr.enum('ResultType', {
+    ok: 0,
+    error: 1
+  });
+  
 });
 
+console.log(xdr);
 
-let ResultType = Enum.create('ResultType', {
-  ok: 0,
-  error: 1
-});
+//
+console.log(xdr.Color.members()); // { red: 0, green: 1, blue: 2, }
 
-Color.members(); // { red: 0, green: 1, blue: 2, }
+console.log(xdr.Color.fromName("red"));
 
-Color.fromName("red");
-Color.fromName("RED");
-
-Color.fromXDR(new Buffer([0,0,0,0])); // Color.red
-Color.red().toXDR(); // Buffer
-Color.red().toXDR("hex"); //
+console.log(xdr.Color.fromXDR(new Buffer([0,0,0,0]))); // Color.red
+console.log(xdr.Color.red().toXDR()); // Buffer
+console.log(xdr.Color.red().toXDR("hex")); //
 
 
-
-console.log( Color.red() !== ResultType.ok() );
+console.log( xdr.Color.red() !== xdr.ResultType.ok() );

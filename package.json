@@ -48,6 +48,7 @@
   "dependencies": {
     "cursor": "^0.1.5",
     "lodash": "^3.5.0",
-    "long": "^2.2.3"
+    "long": "^2.2.3",
+    "sequencify": "0.0.7"
   }
 }
