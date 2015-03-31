@@ -9,7 +9,7 @@ export class Cursor extends BaseCursor {
     paddingBuffer.fill(0);
     
     return this
-      .copyFrom(buffer)
-      .copyFrom(paddingBuffer);
+      .copyFrom(new Cursor(buffer))
+      .copyFrom(new Cursor(paddingBuffer));
   }
 }
