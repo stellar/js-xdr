@@ -10,6 +10,6 @@ export class Cursor extends BaseCursor {
     
     return this
       .copyFrom(buffer)
-      .copyFrom(new Buffer(paddingBuffer));
+      .copyFrom(paddingBuffer);
   }
 }
