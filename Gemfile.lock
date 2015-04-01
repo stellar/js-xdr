@@ -1,5 +1,6 @@
-PATH
-  remote: ../xdrgen
+GIT
+  remote: git@github.com:stellar/xdrgen.git
+  revision: 92864f54ea0971d9661a785fe53cbbe25fd88df0
   specs:
     xdrgen (0.0.1)
       activesupport (~> 4)
