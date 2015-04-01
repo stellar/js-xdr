@@ -86,8 +86,8 @@ describe('Union.write', function() {
   }
 });
 
-describe('Struct.isValid', function() {
-  it("returns true for instances of the struct", function() {
+describe('Union.isValid', function() {
+  it("returns true for instances of the union", function() {
     expect(Result.isValid(Result.ok())).to.be.true;
     expect(Result.isValid(Result.error(1))).to.be.true;
     expect(Result.isValid(Result.nonsense())).to.be.true;

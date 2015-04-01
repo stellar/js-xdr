@@ -136,3 +136,29 @@ struct Exhaustive
   struct { int  value; } anUnboundedNestedStructVarArray<>;
 
 };
+
+enum ExhaustiveUnionType {
+  VOID_ARM               = 0,
+
+  PRIMITIVE_SIMPLE_ARM   = 1,
+  PRIMITIVE_OPTIONAL_ARM = 2,
+  PRIMITIVE_ARRAY_ARM    = 2,
+  PRIMITIVE_VARARRAY_ARM = 3,
+
+  CUSTOM_SIMPLE_ARM      = 4,
+  CUSTOM_OPTIONAL_ARM    = 5,
+  CUSTOM_ARRAY_ARM       = 6,
+  CUSTOM_VARARRAY_ARM    = 7,
+
+  FOR_DEFAULT            = -1
+};
+
+
+union ExhaustiveUnion switch(ExhaustiveUnionType type)
+{
+  case VOID_ARM:               void;
+  case PRIMITIVE_SIMPLE_ARM:   int aPrimitiveSimpleArm;
+  case PRIMITIVE_OPTIONAL_ARM: int* aPrimitiveOptionalArm;
+
+  default: int aPrimitiveDefault;
+};
