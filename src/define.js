@@ -1,4 +1,4 @@
-import * as XDR from "./";
+import * as XDR from "./types";
 import {isUndefined, isPlainObject, isArray} from "lodash";
 import {each, map, pick} from "lodash";
 import sequencify from "sequencify";
