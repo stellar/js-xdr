@@ -1,5 +1,5 @@
 {
-  "name": "xdr",
+  "name": "js-xdr",
   "version": "0.0.1",
   "private": false,
   "main": "dist/xdr.js",
