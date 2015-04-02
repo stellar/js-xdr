@@ -1,10 +1,4 @@
-require("babel/polyfill");
-
 export * from './types';
-export * from './define';
+export * from './config';
 
-import {define} from './define';
-
-export default function(fn) {
-  return define(fn);
-}
+import {config} from './config';

@@ -8,7 +8,7 @@ import sequencify from "sequencify";
 var types = {};
 
 
-export function define(fn) {
+export function config(fn) {
   if (fn) {
     let builder = new TypeBuilder(types);
     fn(builder);

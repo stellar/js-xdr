@@ -1,9 +1,8 @@
-global["XDR"] = require('../../src/index');
-global.chai = require('chai');
-global.sinon = require('sinon');
-global.chai.use(require('sinon-chai'));
+window.chai = require('chai');
+window.sinon = require('sinon');
+window.chai.use(require('sinon-chai'));
 
-global.expect = global.chai.expect;
+window.expect = window.chai.expect;
 
 beforeEach(function() {
   this.sandbox = global.sinon.sandbox.create();

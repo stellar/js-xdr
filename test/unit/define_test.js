@@ -1,16 +1,16 @@
 import * as XDR from "../../src";
 import { keys, each } from "lodash";
 
-describe('XDR.define', function() {
+describe('XDR.config', function() {
 
   beforeEach(function() {
-    this.types = XDR.define(); // get the xdr object root
+    this.types = XDR.config(); // get the xdr object root
     let toDelete = keys(this.types);
     each(toDelete, k => delete this.types[k]);
   });
   
   it('can define objects that have no dependency', function() {
-    XDR.define(xdr => {
+    XDR.config(xdr => {
       xdr.enum('Color', {
         red: 0,
         green: 1,
@@ -29,7 +29,7 @@ describe('XDR.define', function() {
 
 
   it('can define objects that have simple dependencies', function() {
-    XDR.define(xdr => {
+    XDR.config(xdr => {
       xdr.union('Result', {
         switchOn: xdr.lookup('ResultType'),
         switches: {
@@ -61,7 +61,7 @@ describe('XDR.define', function() {
 
 
   it('can define structs', function() {
-    XDR.define(xdr => {
+    XDR.config(xdr => {
       xdr.struct("Color", [
         ["red", xdr.int()],
         ["green", xdr.int()],
@@ -83,21 +83,21 @@ describe('XDR.define', function() {
 
 
   it('can define typedefs', function() {
-    let xdr = XDR.define(xdr => {
+    let xdr = XDR.config(xdr => {
       xdr.typedef("Uint256", xdr.opaque(32) );
     });
     expect(xdr.Uint256).to.be.instanceof(XDR.Opaque);
   });
 
   it('can define consts', function() {
-    let xdr = XDR.define(xdr => {
+    let xdr = XDR.config(xdr => {
       xdr.typedef("MAX_SIZE", 300 );
     });
     expect(xdr.MAX_SIZE).to.eql(300);
   });
 
   it('can define arrays', function() {
-    let xdr = XDR.define(xdr => {
+    let xdr = XDR.config(xdr => {
       xdr.typedef("ArrayOfInts", xdr.array(xdr.int(), 3) );
       xdr.struct('MyStruct', [["red", xdr.int()]]);
       xdr.typedef("ArrayOfEmpty", xdr.array(xdr.lookup("MyStruct"), 5) );
@@ -114,7 +114,7 @@ describe('XDR.define', function() {
   });
 
   it('can define vararrays', function() {
-    let xdr = XDR.define(xdr => {
+    let xdr = XDR.config(xdr => {
       xdr.typedef("ArrayOfInts", xdr.varArray(xdr.int(), 3) );
     });
 
@@ -126,7 +126,7 @@ describe('XDR.define', function() {
   });
 
   it('can define options', function() {
-    let xdr = XDR.define(xdr => {
+    let xdr = XDR.config(xdr => {
       xdr.typedef("OptionalInt", xdr.option(xdr.int()) );
     });
 
