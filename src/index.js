@@ -1,3 +1,5 @@
+require("babel/polyfill");
+
 export * from './types';
 export * from './define';
 
