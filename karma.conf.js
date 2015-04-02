@@ -24,6 +24,8 @@ module.exports = function(config) {
       noInfo: true
     },
 
-    singleRun: true
+    singleRun: true,
+
+    reporters: ['dots'],
   });
 };

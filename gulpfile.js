@@ -64,7 +64,7 @@ gulp.task('test:node', function() {
   require("babel/register", {
     ignore: /node_modules/
   });
-  gulp.src(["test/setup/node.js", "test/unit/**/*.js"])
+  return gulp.src(["test/setup/node.js", "test/unit/**/*.js"])
     .pipe(plugins.mocha({
       reporter: ['dot']
     }));
