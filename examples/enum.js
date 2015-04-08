@@ -1,6 +1,6 @@
 import * as XDR from "../src";
 
-let xdr = XDR.define(xdr => {
+let xdr = XDR.config(xdr => {
 
   xdr.enum('Color', {
     red: 0,
