@@ -78,3 +78,7 @@ js-xdr by itself does not have any ability to parse XDR IDL files and produce a 
 
 See [js-stellar-base](http://github.com/stellar/js-stellar-base) for an example (check out the src/generated directory)
 
+## Contributing
+
+Please [see CONTRIBUTING.md for details](CONTRIBUTING.md).
+
