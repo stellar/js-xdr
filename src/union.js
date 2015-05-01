@@ -1,5 +1,4 @@
 import { each, isUndefined } from "lodash";
-import { cloneDeep } from "lodash";
 import { Void } from "./void";
 import includeIoMixin from './io-mixin';
 
@@ -93,7 +92,7 @@ export class Union {
     ChildUnion.unionName      = name;
     ChildUnion._switchOn      = config.switchOn;
     ChildUnion._switches      = new Map();
-    ChildUnion._arms          = cloneDeep(config.arms);
+    ChildUnion._arms          = config.arms;
     
     each(ChildUnion._switchOn.values(), aSwitch => {
 
