@@ -77,7 +77,7 @@ var XDR =
 /* 2 */
 /***/ function(module, exports, __webpack_require__) {
 
-	module.exports = __webpack_require__(5);
+	module.exports = __webpack_require__(23);
 
 
 /***/ },
@@ -93,6 +93,8 @@ var XDR =
 	Object.defineProperty(exports, "__esModule", {
 	  value: true
 	});
+
+	_defaults(exports, _interopRequireWildcard(__webpack_require__(5)));
 
 	_defaults(exports, _interopRequireWildcard(__webpack_require__(6)));
 
@@ -127,8 +129,6 @@ var XDR =
 	_defaults(exports, _interopRequireWildcard(__webpack_require__(21)));
 
 	_defaults(exports, _interopRequireWildcard(__webpack_require__(22)));
-
-	_defaults(exports, _interopRequireWildcard(__webpack_require__(23)));
 
 /***/ },
 /* 4 */
@@ -516,22 +516,6 @@ var XDR =
 /* 5 */
 /***/ function(module, exports, __webpack_require__) {
 
-	/* WEBPACK VAR INJECTION */(function(global) {"use strict";
-
-	if (global._babelPolyfill) {
-	  throw new Error("only one instance of babel/polyfill is allowed");
-	}
-	global._babelPolyfill = true;
-
-	__webpack_require__(30);
-
-	__webpack_require__(31);
-	/* WEBPACK VAR INJECTION */}.call(exports, (function() { return this; }())))
-
-/***/ },
-/* 6 */
-/***/ function(module, exports, __webpack_require__) {
-
 	"use strict";
 
 	var _interopRequire = function (obj) { return obj && obj.__esModule ? obj["default"] : obj; };
@@ -580,7 +564,7 @@ var XDR =
 	includeIoMixin(Int);
 
 /***/ },
-/* 7 */
+/* 6 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
@@ -658,7 +642,7 @@ var XDR =
 	Hyper.MIN_VALUE = new Hyper(Long.MIN_VALUE.low, Long.MIN_VALUE.high);
 
 /***/ },
-/* 8 */
+/* 7 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
@@ -713,7 +697,7 @@ var XDR =
 	includeIoMixin(UnsignedInt);
 
 /***/ },
-/* 9 */
+/* 8 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
@@ -740,7 +724,7 @@ var XDR =
 	  function UnsignedHyper(low, high) {
 	    _classCallCheck(this, UnsignedHyper);
 
-	    _get(Object.getPrototypeOf(UnsignedHyper.prototype), "constructor", this).call(this, low, high, false);
+	    _get(Object.getPrototypeOf(UnsignedHyper.prototype), "constructor", this).call(this, low, high, true);
 	  }
 
 	  _inherits(UnsignedHyper, _Long);
@@ -792,7 +776,7 @@ var XDR =
 	UnsignedHyper.MIN_VALUE = new UnsignedHyper(Long.MIN_VALUE.low, Long.MIN_VALUE.high);
 
 /***/ },
-/* 10 */
+/* 9 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
@@ -829,7 +813,7 @@ var XDR =
 	includeIoMixin(Float);
 
 /***/ },
-/* 11 */
+/* 10 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
@@ -866,7 +850,7 @@ var XDR =
 	includeIoMixin(Double);
 
 /***/ },
-/* 12 */
+/* 11 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
@@ -898,7 +882,7 @@ var XDR =
 	includeIoMixin(Quadruple);
 
 /***/ },
-/* 13 */
+/* 12 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
@@ -909,7 +893,7 @@ var XDR =
 	  value: true
 	});
 
-	var Int = __webpack_require__(6).Int;
+	var Int = __webpack_require__(5).Int;
 
 	var isBoolean = __webpack_require__(24).isBoolean;
 
@@ -943,7 +927,7 @@ var XDR =
 	includeIoMixin(Bool);
 
 /***/ },
-/* 14 */
+/* 13 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/* WEBPACK VAR INJECTION */(function(Buffer) {"use strict";
@@ -958,9 +942,9 @@ var XDR =
 	  value: true
 	});
 
-	var Int = __webpack_require__(6).Int;
+	var Int = __webpack_require__(5).Int;
 
-	var UnsignedInt = __webpack_require__(8).UnsignedInt;
+	var UnsignedInt = __webpack_require__(7).UnsignedInt;
 
 	var calculatePadding = __webpack_require__(27).calculatePadding;
 
@@ -1020,7 +1004,7 @@ var XDR =
 	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(29).Buffer))
 
 /***/ },
-/* 15 */
+/* 14 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/* WEBPACK VAR INJECTION */(function(Buffer) {"use strict";
@@ -1078,7 +1062,7 @@ var XDR =
 	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(29).Buffer))
 
 /***/ },
-/* 16 */
+/* 15 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/* WEBPACK VAR INJECTION */(function(Buffer) {"use strict";
@@ -1093,9 +1077,9 @@ var XDR =
 	  value: true
 	});
 
-	var Int = __webpack_require__(6).Int;
+	var Int = __webpack_require__(5).Int;
 
-	var UnsignedInt = __webpack_require__(8).UnsignedInt;
+	var UnsignedInt = __webpack_require__(7).UnsignedInt;
 
 	var calculatePadding = __webpack_require__(27).calculatePadding;
 
@@ -1147,7 +1131,7 @@ var XDR =
 	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(29).Buffer))
 
 /***/ },
-/* 17 */
+/* 16 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
@@ -1230,7 +1214,7 @@ var XDR =
 	includeIoMixin(Array.prototype);
 
 /***/ },
-/* 18 */
+/* 17 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
@@ -1245,9 +1229,9 @@ var XDR =
 	  value: true
 	});
 
-	var Int = __webpack_require__(6).Int;
+	var Int = __webpack_require__(5).Int;
 
-	var UnsignedInt = __webpack_require__(8).UnsignedInt;
+	var UnsignedInt = __webpack_require__(7).UnsignedInt;
 
 	var _lodash = __webpack_require__(24);
 
@@ -1326,7 +1310,7 @@ var XDR =
 	includeIoMixin(VarArray.prototype);
 
 /***/ },
-/* 19 */
+/* 18 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
@@ -1341,7 +1325,7 @@ var XDR =
 	  value: true
 	});
 
-	var Bool = __webpack_require__(13).Bool;
+	var Bool = __webpack_require__(12).Bool;
 
 	var _lodash = __webpack_require__(24);
 
@@ -1396,7 +1380,7 @@ var XDR =
 	includeIoMixin(Option.prototype);
 
 /***/ },
-/* 20 */
+/* 19 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
@@ -1432,7 +1416,7 @@ var XDR =
 	includeIoMixin(Void);
 
 /***/ },
-/* 21 */
+/* 20 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
@@ -1451,7 +1435,7 @@ var XDR =
 	  value: true
 	});
 
-	var Int = __webpack_require__(6).Int;
+	var Int = __webpack_require__(5).Int;
 
 	var _lodash = __webpack_require__(24);
 
@@ -1557,7 +1541,7 @@ var XDR =
 	includeIoMixin(Enum);
 
 /***/ },
-/* 22 */
+/* 21 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
@@ -1682,7 +1666,7 @@ var XDR =
 	}
 
 /***/ },
-/* 23 */
+/* 22 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
@@ -1706,7 +1690,7 @@ var XDR =
 	var each = _lodash.each;
 	var isUndefined = _lodash.isUndefined;
 
-	var Void = __webpack_require__(20).Void;
+	var Void = __webpack_require__(19).Void;
 
 	var includeIoMixin = _interopRequire(__webpack_require__(26));
 
@@ -1868,15 +1852,31 @@ var XDR =
 	includeIoMixin(Union);
 
 /***/ },
+/* 23 */
+/***/ function(module, exports, __webpack_require__) {
+
+	/* WEBPACK VAR INJECTION */(function(global) {"use strict";
+
+	if (global._babelPolyfill) {
+	  throw new Error("only one instance of babel/polyfill is allowed");
+	}
+	global._babelPolyfill = true;
+
+	__webpack_require__(33);
+
+	__webpack_require__(32);
+	/* WEBPACK VAR INJECTION */}.call(exports, (function() { return this; }())))
+
+/***/ },
 /* 24 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var __WEBPACK_AMD_DEFINE_RESULT__;/* WEBPACK VAR INJECTION */(function(module, global) {/**
 	 * @license
-	 * lodash 3.6.0 (Custom Build) <https://lodash.com/>
+	 * lodash 3.8.0 (Custom Build) <https://lodash.com/>
 	 * Build: `lodash modern -d -o ./index.js`
 	 * Copyright 2012-2015 The Dojo Foundation <http://dojofoundation.org/>
-	 * Based on Underscore.js 1.8.2 <http://underscorejs.org/LICENSE>
+	 * Based on Underscore.js 1.8.3 <http://underscorejs.org/LICENSE>
 	 * Copyright 2009-2015 Jeremy Ashkenas, DocumentCloud and Investigative Reporters & Editors
 	 * Available under MIT license <https://lodash.com/license>
 	 */
@@ -1886,7 +1886,7 @@ var XDR =
 	  var undefined;
 
 	  /** Used as the semantic version number. */
-	  var VERSION = '3.6.0';
+	  var VERSION = '3.8.0';
 
 	  /** Used to compose bitmasks for wrapper metadata. */
 	  var BIND_FLAG = 1,
@@ -1960,30 +1960,10 @@ var XDR =
 	      reEvaluate = /<%([\s\S]+?)%>/g,
 	      reInterpolate = /<%=([\s\S]+?)%>/g;
 
-	  /**
-	   * Used to match [combining diacritical marks](https://en.wikipedia.org/wiki/Combining_Diacritical_Marks).
-	   */
-	  var reComboMarks = /[\u0300-\u036f\ufe20-\ufe23]/g;
-
-	  /**
-	   * Used to match [ES template delimiters](https://people.mozilla.org/~jorendorff/es6-draft.html#sec-template-literal-lexical-components).
-	   */
-	  var reEsTemplate = /\$\{([^\\}]*(?:\\.[^\\}]*)*)\}/g;
-
-	  /** Used to match `RegExp` flags from their coerced string values. */
-	  var reFlags = /\w*$/;
-
-	  /** Used to detect hexadecimal string values. */
-	  var reHexPrefix = /^0[xX]/;
-
-	  /** Used to detect host constructors (Safari > 5). */
-	  var reHostCtor = /^\[object .+?Constructor\]$/;
-
-	  /** Used to match latin-1 supplementary letters (excluding mathematical operators). */
-	  var reLatin1 = /[\xc0-\xd6\xd8-\xde\xdf-\xf6\xf8-\xff]/g;
-
-	  /** Used to ensure capturing order of template delimiters. */
-	  var reNoMatch = /($^)/;
+	  /** Used to match property names within property paths. */
+	  var reIsDeepProp = /\.|\[(?:[^[\]]*|(["'])(?:(?!\1)[^\n\\]|\\.)*?\1)\]/,
+	      reIsPlainProp = /^\w*$/,
+	      rePropName = /[^.[\]]+|\[(?:(-?\d+(?:\.\d+)?)|(["'])((?:(?!\2)[^\n\\]|\\.)*?)\2)\]/g;
 
 	  /**
 	   * Used to match `RegExp` [special characters](http://www.regular-expressions.info/characters.html#special).
@@ -1992,6 +1972,30 @@ var XDR =
 	   */
 	  var reRegExpChars = /[.*+?^${}()|[\]\/\\]/g,
 	      reHasRegExpChars = RegExp(reRegExpChars.source);
+
+	  /** Used to match [combining diacritical marks](https://en.wikipedia.org/wiki/Combining_Diacritical_Marks). */
+	  var reComboMark = /[\u0300-\u036f\ufe20-\ufe23]/g;
+
+	  /** Used to match backslashes in property paths. */
+	  var reEscapeChar = /\\(\\)?/g;
+
+	  /** Used to match [ES template delimiters](https://people.mozilla.org/~jorendorff/es6-draft.html#sec-template-literal-lexical-components). */
+	  var reEsTemplate = /\$\{([^\\}]*(?:\\.[^\\}]*)*)\}/g;
+
+	  /** Used to match `RegExp` flags from their coerced string values. */
+	  var reFlags = /\w*$/;
+
+	  /** Used to detect hexadecimal string values. */
+	  var reHasHexPrefix = /^0[xX]/;
+
+	  /** Used to detect host constructors (Safari > 5). */
+	  var reIsHostCtor = /^\[object .+?Constructor\]$/;
+
+	  /** Used to match latin-1 supplementary letters (excluding mathematical operators). */
+	  var reLatin1 = /[\xc0-\xd6\xd8-\xde\xdf-\xf6\xf8-\xff]/g;
+
+	  /** Used to ensure capturing order of template delimiters. */
+	  var reNoMatch = /($^)/;
 
 	  /** Used to match unescaped characters in compiled string literals. */
 	  var reUnescapedString = /['\n\r\u2028\u2029\\]/g;
@@ -2130,7 +2134,7 @@ var XDR =
 	  var freeModule = objectTypes[typeof module] && module && !module.nodeType && module;
 
 	  /** Detect free variable `global` from Node.js. */
-	  var freeGlobal = freeExports && freeModule && typeof global == 'object' && global;
+	  var freeGlobal = freeExports && freeModule && typeof global == 'object' && global && global.Object && global;
 
 	  /** Detect free variable `self`. */
 	  var freeSelf = objectTypes[typeof self] && self && self.Object && self;
@@ -2149,8 +2153,6 @@ var XDR =
 	   */
 	  var root = freeGlobal || ((freeWindow !== (this && this.window)) && freeWindow) || freeSelf || this;
 
-	  /*--------------------------------------------------------------------------*/
-
 	  /**
 	   * The base implementation of `compareAscending` which compares values and
 	   * sorts them in ascending order without guaranteeing a stable sort.
@@ -2165,10 +2167,10 @@ var XDR =
 	      var valIsReflexive = value === value,
 	          othIsReflexive = other === other;
 
-	      if (value > other || !valIsReflexive || (typeof value == 'undefined' && othIsReflexive)) {
+	      if (value > other || !valIsReflexive || (value === undefined && othIsReflexive)) {
 	        return 1;
 	      }
-	      if (value < other || !othIsReflexive || (typeof other == 'undefined' && valIsReflexive)) {
+	      if (value < other || !othIsReflexive || (other === undefined && valIsReflexive)) {
 	        return -1;
 	      }
 	    }
@@ -2311,7 +2313,7 @@ var XDR =
 	   * Used by `_.sortByOrder` to compare multiple properties of each element
 	   * in a collection and stable sort them in the following order:
 	   *
-	   * If orders is unspecified, sort in ascending order for all properties.
+	   * If `orders` is unspecified, sort in ascending order for all properties.
 	   * Otherwise, for each property, sort in ascending order if its corresponding value in
 	   * orders is true, and descending order if false.
 	   *
@@ -2521,8 +2523,6 @@ var XDR =
 	    return htmlUnescapes[chr];
 	  }
 
-	  /*--------------------------------------------------------------------------*/
-
 	  /**
 	   * Create a new pristine `lodash` function using the given `context` object.
 	   *
@@ -2588,9 +2588,6 @@ var XDR =
 	    /** Used to resolve the decompiled source of functions. */
 	    var fnToString = Function.prototype.toString;
 
-	    /** Used to the length of n-tuples for `_.unzip`. */
-	    var getLength = baseProperty('length');
-
 	    /** Used to check objects for own properties. */
 	    var hasOwnProperty = objectProto.hasOwnProperty;
 
@@ -2607,7 +2604,7 @@ var XDR =
 	    var oldDash = context._;
 
 	    /** Used to detect if a method is native. */
-	    var reNative = RegExp('^' +
+	    var reIsNative = RegExp('^' +
 	      escapeRegExp(objToString)
 	      .replace(/toString|(function).*?(?=\\\()| for .+?(?=\\\])/g, '$1.*?') + '$'
 	    );
@@ -2618,8 +2615,10 @@ var XDR =
 	        ceil = Math.ceil,
 	        clearTimeout = context.clearTimeout,
 	        floor = Math.floor,
+	        getOwnPropertySymbols = isNative(getOwnPropertySymbols = Object.getOwnPropertySymbols) && getOwnPropertySymbols,
 	        getPrototypeOf = isNative(getPrototypeOf = Object.getPrototypeOf) && getPrototypeOf,
 	        push = arrayProto.push,
+	        preventExtensions = isNative(preventExtensions = Object.preventExtensions) && preventExtensions,
 	        propertyIsEnumerable = objectProto.propertyIsEnumerable,
 	        Set = isNative(Set = context.Set) && Set,
 	        setTimeout = context.setTimeout,
@@ -2637,6 +2636,29 @@ var XDR =
 	            result = new func(new ArrayBuffer(10), 0, 1) && func;
 	      } catch(e) {}
 	      return result;
+	    }());
+
+	    /** Used as `baseAssign`. */
+	    var nativeAssign = (function() {
+	      // Avoid `Object.assign` in Firefox 34-37 which have an early implementation
+	      // with a now defunct try/catch behavior. See https://bugzilla.mozilla.org/show_bug.cgi?id=1103344
+	      // for more details.
+	      //
+	      // Use `Object.preventExtensions` on a plain object instead of simply using
+	      // `Object('x')` because Chrome and IE fail to throw an error when attempting
+	      // to assign values to readonly indexes of strings.
+	      var func = preventExtensions && isNative(func = Object.assign) && func;
+	      try {
+	        if (func) {
+	          var object = preventExtensions({ '1': 0 });
+	          object[0] = 1;
+	        }
+	      } catch(e) {
+	        // Only attempt in strict mode.
+	        try { func(object, 'xo'); } catch(e) {}
+	        return !object[1] && func;
+	      }
+	      return false;
 	    }());
 
 	    /* Native method references for those with the same name as other `lodash` methods. */
@@ -2657,7 +2679,7 @@ var XDR =
 
 	    /** Used as references for the maximum length and index of an array. */
 	    var MAX_ARRAY_LENGTH = Math.pow(2, 32) - 1,
-	        MAX_ARRAY_INDEX =  MAX_ARRAY_LENGTH - 1,
+	        MAX_ARRAY_INDEX = MAX_ARRAY_LENGTH - 1,
 	        HALF_MAX_ARRAY_LENGTH = MAX_ARRAY_LENGTH >>> 1;
 
 	    /** Used as the size, in bytes, of each `Float64Array` element. */
@@ -2674,8 +2696,6 @@ var XDR =
 
 	    /** Used to lookup unminified function names. */
 	    var realNames = {};
-
-	    /*------------------------------------------------------------------------*/
 
 	    /**
 	     * Creates a `lodash` object which wraps `value` to enable implicit chaining.
@@ -2716,8 +2736,8 @@ var XDR =
 	     * `filter`, `flatten`, `flattenDeep`, `flow`, `flowRight`, `forEach`,
 	     * `forEachRight`, `forIn`, `forInRight`, `forOwn`, `forOwnRight`, `functions`,
 	     * `groupBy`, `indexBy`, `initial`, `intersection`, `invert`, `invoke`, `keys`,
-	     * `keysIn`, `map`, `mapValues`, `matches`, `matchesProperty`, `memoize`, `merge`,
-	     * `mixin`, `negate`, `noop`, `omit`, `once`, `pairs`, `partial`, `partialRight`,
+	     * `keysIn`, `map`, `mapValues`, `matches`, `matchesProperty`, `memoize`,
+	     * `merge`, `mixin`, `negate`, `omit`, `once`, `pairs`, `partial`, `partialRight`,
 	     * `partition`, `pick`, `plant`, `pluck`, `property`, `propertyOf`, `pull`,
 	     * `pullAt`, `push`, `range`, `rearg`, `reject`, `remove`, `rest`, `reverse`,
 	     * `shuffle`, `slice`, `sort`, `sortBy`, `sortByAll`, `sortByOrder`, `splice`,
@@ -2731,15 +2751,15 @@ var XDR =
 	     * `endsWith`, `escape`, `escapeRegExp`, `every`, `find`, `findIndex`, `findKey`,
 	     * `findLast`, `findLastIndex`, `findLastKey`, `findWhere`, `first`, `has`,
 	     * `identity`, `includes`, `indexOf`, `inRange`, `isArguments`, `isArray`,
-	     * `isBoolean`, `isDate`, `isElement`, `isEmpty`, `isEqual`, `isError`,
-	     * `isFinite`,`isFunction`, `isMatch`, `isNative`, `isNaN`, `isNull`, `isNumber`,
-	     * `isObject`, `isPlainObject`, `isRegExp`, `isString`, `isUndefined`,
-	     * `isTypedArray`, `join`, `kebabCase`, `last`, `lastIndexOf`, `max`, `min`,
-	     * `noConflict`, `now`, `pad`, `padLeft`, `padRight`, `parseInt`, `pop`,
-	     * `random`, `reduce`, `reduceRight`, `repeat`, `result`, `runInContext`,
-	     * `shift`, `size`, `snakeCase`, `some`, `sortedIndex`, `sortedLastIndex`,
-	     * `startCase`, `startsWith`, `sum`, `template`, `trim`, `trimLeft`,
-	     * `trimRight`, `trunc`, `unescape`, `uniqueId`, `value`, and `words`
+	     * `isBoolean`, `isDate`, `isElement`, `isEmpty`, `isEqual`, `isError`, `isFinite`
+	     * `isFunction`, `isMatch`, `isNative`, `isNaN`, `isNull`, `isNumber`, `isObject`,
+	     * `isPlainObject`, `isRegExp`, `isString`, `isUndefined`, `isTypedArray`,
+	     * `join`, `kebabCase`, `last`, `lastIndexOf`, `max`, `min`, `noConflict`,
+	     * `noop`, `now`, `pad`, `padLeft`, `padRight`, `parseInt`, `pop`, `random`,
+	     * `reduce`, `reduceRight`, `repeat`, `result`, `runInContext`, `shift`, `size`,
+	     * `snakeCase`, `some`, `sortedIndex`, `sortedLastIndex`, `startCase`, `startsWith`,
+	     * `sum`, `template`, `trim`, `trimLeft`, `trimRight`, `trunc`, `unescape`,
+	     * `uniqueId`, `value`, and `words`
 	     *
 	     * The wrapper method `sample` will return a wrapped value when `n` is provided,
 	     * otherwise an unwrapped value is returned.
@@ -2754,8 +2774,8 @@ var XDR =
 	     * var wrapped = _([1, 2, 3]);
 	     *
 	     * // returns an unwrapped value
-	     * wrapped.reduce(function(sum, n) {
-	     *   return sum + n;
+	     * wrapped.reduce(function(total, n) {
+	     *   return total + n;
 	     * });
 	     * // => 6
 	     *
@@ -2815,6 +2835,13 @@ var XDR =
 	    var support = lodash.support = {};
 
 	    (function(x) {
+	      var Ctor = function() { this.x = x; },
+	          args = arguments,
+	          object = { '0': x, 'length': x },
+	          props = [];
+
+	      Ctor.prototype = { 'valueOf': x, 'y': x };
+	      for (var key in new Ctor) { props.push(key); }
 
 	      /**
 	       * Detect if functions can be decompiled by `Function#toString`
@@ -2852,18 +2879,18 @@ var XDR =
 	       * In Firefox < 4, IE < 9, PhantomJS, and Safari < 5.1 `arguments` object
 	       * indexes are non-enumerable. Chrome < 25 and Node.js < 0.11.0 treat
 	       * `arguments` object indexes as non-enumerable and fail `hasOwnProperty`
-	       * checks for indexes that exceed their function's formal parameters with
-	       * associated values of `0`.
+	       * checks for indexes that exceed the number of function parameters and
+	       * whose associated argument values are `0`.
 	       *
 	       * @memberOf _.support
 	       * @type boolean
 	       */
 	      try {
-	        support.nonEnumArgs = !propertyIsEnumerable.call(arguments, 1);
+	        support.nonEnumArgs = !propertyIsEnumerable.call(args, 1);
 	      } catch(e) {
 	        support.nonEnumArgs = true;
 	      }
-	    }(0, 0));
+	    }(1, 0));
 
 	    /**
 	     * By default, the template delimiters used by lodash are like those in
@@ -2925,8 +2952,6 @@ var XDR =
 	        '_': lodash
 	      }
 	    };
-
-	    /*------------------------------------------------------------------------*/
 
 	    /**
 	     * Creates a lazy wrapper object which wraps `value` to enable lazy evaluation.
@@ -3056,8 +3081,6 @@ var XDR =
 	      return result;
 	    }
 
-	    /*------------------------------------------------------------------------*/
-
 	    /**
 	     * Creates a cache object to store key/value pairs.
 	     *
@@ -3110,7 +3133,7 @@ var XDR =
 	    }
 
 	    /**
-	     * Adds `value` to `key` of the cache.
+	     * Sets `value` to `key` of the cache.
 	     *
 	     * @private
 	     * @name set
@@ -3125,8 +3148,6 @@ var XDR =
 	      }
 	      return this;
 	    }
-
-	    /*------------------------------------------------------------------------*/
 
 	    /**
 	     *
@@ -3176,8 +3197,6 @@ var XDR =
 	        data.hash[value] = true;
 	      }
 	    }
-
-	    /*------------------------------------------------------------------------*/
 
 	    /**
 	     * Copies the values of `source` to `array`.
@@ -3443,13 +3462,13 @@ var XDR =
 	     * @returns {*} Returns the value to assign to the destination object.
 	     */
 	    function assignDefaults(objectValue, sourceValue) {
-	      return typeof objectValue == 'undefined' ? sourceValue : objectValue;
+	      return objectValue === undefined ? sourceValue : objectValue;
 	    }
 
 	    /**
 	     * Used by `_.template` to customize its `_.assign` use.
 	     *
-	     * **Note:** This method is like `assignDefaults` except that it ignores
+	     * **Note:** This function is like `assignDefaults` except that it ignores
 	     * inherited property values when checking if a property is `undefined`.
 	     *
 	     * @private
@@ -3460,26 +3479,26 @@ var XDR =
 	     * @returns {*} Returns the value to assign to the destination object.
 	     */
 	    function assignOwnDefaults(objectValue, sourceValue, key, object) {
-	      return (typeof objectValue == 'undefined' || !hasOwnProperty.call(object, key))
+	      return (objectValue === undefined || !hasOwnProperty.call(object, key))
 	        ? sourceValue
 	        : objectValue;
 	    }
 
 	    /**
-	     * The base implementation of `_.assign` without support for argument juggling,
-	     * multiple sources, and `this` binding `customizer` functions.
+	     * A specialized version of `_.assign` for customizing assigned values without
+	     * support for argument juggling, multiple sources, and `this` binding `customizer`
+	     * functions.
 	     *
 	     * @private
 	     * @param {Object} object The destination object.
 	     * @param {Object} source The source object.
-	     * @param {Function} [customizer] The function to customize assigning values.
-	     * @returns {Object} Returns the destination object.
+	     * @param {Function} customizer The function to customize assigned values.
+	     * @returns {Object} Returns `object`.
 	     */
-	    function baseAssign(object, source, customizer) {
+	    function assignWith(object, source, customizer) {
 	      var props = keys(source);
-	      if (!customizer) {
-	        return baseCopy(source, object, props);
-	      }
+	      push.apply(props, getSymbols(source));
+
 	      var index = -1,
 	          length = props.length;
 
@@ -3489,7 +3508,7 @@ var XDR =
 	            result = customizer(value, source[key], key, object, source);
 
 	        if ((result === result ? (result !== value) : (value === value)) ||
-	            (typeof value == 'undefined' && !(key in object))) {
+	            (value === undefined && !(key in object))) {
 	          object[key] = result;
 	        }
 	      }
@@ -3497,47 +3516,60 @@ var XDR =
 	    }
 
 	    /**
-	     * The base implementation of `_.at` without support for strings and individual
-	     * key arguments.
+	     * The base implementation of `_.assign` without support for argument juggling,
+	     * multiple sources, and `customizer` functions.
+	     *
+	     * @private
+	     * @param {Object} object The destination object.
+	     * @param {Object} source The source object.
+	     * @returns {Object} Returns `object`.
+	     */
+	    var baseAssign = nativeAssign || function(object, source) {
+	      return source == null
+	        ? object
+	        : baseCopy(source, getSymbols(source), baseCopy(source, keys(source), object));
+	    };
+
+	    /**
+	     * The base implementation of `_.at` without support for string collections
+	     * and individual key arguments.
 	     *
 	     * @private
 	     * @param {Array|Object} collection The collection to iterate over.
-	     * @param {number[]|string[]} [props] The property names or indexes of elements to pick.
+	     * @param {number[]|string[]} props The property names or indexes of elements to pick.
 	     * @returns {Array} Returns the new array of picked elements.
 	     */
 	    function baseAt(collection, props) {
 	      var index = -1,
-	          length = collection.length,
-	          isArr = isLength(length),
+	          isNil = collection == null,
+	          isArr = !isNil && isArrayLike(collection),
+	          length = isArr && collection.length,
 	          propsLength = props.length,
 	          result = Array(propsLength);
 
 	      while(++index < propsLength) {
 	        var key = props[index];
 	        if (isArr) {
-	          key = parseFloat(key);
 	          result[index] = isIndex(key, length) ? collection[key] : undefined;
 	        } else {
-	          result[index] = collection[key];
+	          result[index] = isNil ? undefined : collection[key];
 	        }
 	      }
 	      return result;
 	    }
 
 	    /**
-	     * Copies the properties of `source` to `object`.
+	     * Copies properties of `source` to `object`.
 	     *
 	     * @private
 	     * @param {Object} source The object to copy properties from.
-	     * @param {Object} [object={}] The object to copy properties to.
 	     * @param {Array} props The property names to copy.
+	     * @param {Object} [object={}] The object to copy properties to.
 	     * @returns {Object} Returns `object`.
 	     */
-	    function baseCopy(source, object, props) {
-	      if (!props) {
-	        props = object;
-	        object = {};
-	      }
+	    function baseCopy(source, props, object) {
+	      object || (object = {});
+
 	      var index = -1,
 	          length = props.length;
 
@@ -3561,7 +3593,7 @@ var XDR =
 	    function baseCallback(func, thisArg, argCount) {
 	      var type = typeof func;
 	      if (type == 'function') {
-	        return typeof thisArg == 'undefined'
+	        return thisArg === undefined
 	          ? func
 	          : bindCallback(func, thisArg, argCount);
 	      }
@@ -3571,9 +3603,9 @@ var XDR =
 	      if (type == 'object') {
 	        return baseMatches(func);
 	      }
-	      return typeof thisArg == 'undefined'
-	        ? baseProperty(func + '')
-	        : baseMatchesProperty(func + '', thisArg);
+	      return thisArg === undefined
+	        ? property(func)
+	        : baseMatchesProperty(func, thisArg);
 	    }
 
 	    /**
@@ -3595,7 +3627,7 @@ var XDR =
 	      if (customizer) {
 	        result = object ? customizer(value, key, object) : customizer(value);
 	      }
-	      if (typeof result != 'undefined') {
+	      if (result !== undefined) {
 	        return result;
 	      }
 	      if (!isObject(value)) {
@@ -3614,7 +3646,7 @@ var XDR =
 	        if (tag == objectTag || tag == argsTag || (isFunc && !object)) {
 	          result = initCloneObject(isFunc ? {} : value);
 	          if (!isDeep) {
-	            return baseCopy(value, result, keys(value));
+	            return baseAssign(result, value);
 	          }
 	        } else {
 	          return cloneableTags[tag]
@@ -3785,7 +3817,7 @@ var XDR =
 	      if (start < 0) {
 	        start = -start > length ? 0 : (length + start);
 	      }
-	      end = (typeof end == 'undefined' || end > length) ? length : (+end || 0);
+	      end = (end === undefined || end > length) ? length : (+end || 0);
 	      if (end < 0) {
 	        end += length;
 	      }
@@ -3847,8 +3879,8 @@ var XDR =
 	     *
 	     * @private
 	     * @param {Array} array The array to flatten.
-	     * @param {boolean} isDeep Specify a deep flatten.
-	     * @param {boolean} isStrict Restrict flattening to arrays and `arguments` objects.
+	     * @param {boolean} [isDeep] Specify a deep flatten.
+	     * @param {boolean} [isStrict] Restrict flattening to arrays-like objects.
 	     * @returns {Array} Returns the new flattened array.
 	     */
 	    function baseFlatten(array, isDeep, isStrict) {
@@ -3859,8 +3891,8 @@ var XDR =
 
 	      while (++index < length) {
 	        var value = array[index];
-
-	        if (isObjectLike(value) && isLength(value.length) && (isArray(value) || isArguments(value))) {
+	        if (isObjectLike(value) && isArrayLike(value) &&
+	            (isStrict || isArray(value) || isArguments(value))) {
 	          if (isDeep) {
 	            // Recursively flatten arrays (susceptible to call stack limits).
 	            value = baseFlatten(value, isDeep, isStrict);
@@ -3868,7 +3900,6 @@ var XDR =
 	          var valIndex = -1,
 	              valLength = value.length;
 
-	          result.length += valLength;
 	          while (++valIndex < valLength) {
 	            result[++resIndex] = value[valIndex];
 	          }
@@ -3882,7 +3913,7 @@ var XDR =
 	    /**
 	     * The base implementation of `baseForIn` and `baseForOwn` which iterates
 	     * over `object` properties returned by `keysFunc` invoking `iteratee` for
-	     * each property. Iterator functions may exit iteration early by explicitly
+	     * each property. Iteratee functions may exit iteration early by explicitly
 	     * returning `false`.
 	     *
 	     * @private
@@ -3969,6 +4000,32 @@ var XDR =
 	    }
 
 	    /**
+	     * The base implementation of `get` without support for string paths
+	     * and default values.
+	     *
+	     * @private
+	     * @param {Object} object The object to query.
+	     * @param {Array} path The path of the property to get.
+	     * @param {string} [pathKey] The key representation of path.
+	     * @returns {*} Returns the resolved value.
+	     */
+	    function baseGet(object, path, pathKey) {
+	      if (object == null) {
+	        return;
+	      }
+	      if (pathKey !== undefined && pathKey in toObject(object)) {
+	        path = [pathKey];
+	      }
+	      var index = -1,
+	          length = path.length;
+
+	      while (object != null && ++index < length) {
+	        object = object[path[index]];
+	      }
+	      return (index && index == length) ? object : undefined;
+	    }
+
+	    /**
 	     * The base implementation of `_.isEqual` without support for `this` binding
 	     * `customizer` functions.
 	     *
@@ -3984,8 +4041,7 @@ var XDR =
 	    function baseIsEqual(value, other, customizer, isLoose, stackA, stackB) {
 	      // Exit early for identical values.
 	      if (value === other) {
-	        // Treat `+0` vs. `-0` as not equal.
-	        return value !== 0 || (1 / value == 1 / other);
+	        return true;
 	      }
 	      var valType = typeof value,
 	          othType = typeof other;
@@ -4036,27 +4092,23 @@ var XDR =
 	          othIsArr = isTypedArray(other);
 	        }
 	      }
-	      var objIsObj = (objTag == objectTag || (isLoose && objTag == funcTag)),
-	          othIsObj = (othTag == objectTag || (isLoose && othTag == funcTag)),
+	      var objIsObj = objTag == objectTag,
+	          othIsObj = othTag == objectTag,
 	          isSameTag = objTag == othTag;
 
 	      if (isSameTag && !(objIsArr || objIsObj)) {
 	        return equalByTag(object, other, objTag);
 	      }
-	      if (isLoose) {
-	        if (!isSameTag && !(objIsObj && othIsObj)) {
-	          return false;
-	        }
-	      } else {
+	      if (!isLoose) {
 	        var valWrapped = objIsObj && hasOwnProperty.call(object, '__wrapped__'),
 	            othWrapped = othIsObj && hasOwnProperty.call(other, '__wrapped__');
 
 	        if (valWrapped || othWrapped) {
 	          return equalFunc(valWrapped ? object.value() : object, othWrapped ? other.value() : other, customizer, isLoose, stackA, stackB);
 	        }
-	        if (!isSameTag) {
-	          return false;
-	        }
+	      }
+	      if (!isSameTag) {
+	        return false;
 	      }
 	      // Assume cyclic values are equal.
 	      // For more information on detecting circular references see https://es5.github.io/#JO.
@@ -4113,10 +4165,10 @@ var XDR =
 	            srcValue = values[index];
 
 	        if (noCustomizer && strictCompareFlags[index]) {
-	          var result = typeof objValue != 'undefined' || (key in object);
+	          var result = objValue !== undefined || (key in object);
 	        } else {
 	          result = customizer ? customizer(objValue, srcValue, key) : undefined;
-	          if (typeof result == 'undefined') {
+	          if (result === undefined) {
 	            result = baseIsEqual(srcValue, objValue, customizer, true);
 	          }
 	        }
@@ -4137,9 +4189,11 @@ var XDR =
 	     * @returns {Array} Returns the new mapped array.
 	     */
 	    function baseMap(collection, iteratee) {
-	      var result = [];
+	      var index = -1,
+	          result = isArrayLike(collection) ? Array(collection.length) : [];
+
 	      baseEach(collection, function(value, key, collection) {
-	        result.push(iteratee(value, key, collection));
+	        result[++index] = iteratee(value, key, collection);
 	      });
 	      return result;
 	    }
@@ -4164,8 +4218,10 @@ var XDR =
 
 	        if (isStrictComparable(value)) {
 	          return function(object) {
-	            return object != null && object[key] === value &&
-	              (typeof value != 'undefined' || (key in toObject(object)));
+	            if (object == null) {
+	              return false;
+	            }
+	            return object[key] === value && (value !== undefined || (key in toObject(object)));
 	          };
 	        }
 	      }
@@ -4183,23 +4239,37 @@ var XDR =
 	    }
 
 	    /**
-	     * The base implementation of `_.matchesProperty` which does not coerce `key`
-	     * to a string.
+	     * The base implementation of `_.matchesProperty` which does not which does
+	     * not clone `value`.
 	     *
 	     * @private
-	     * @param {string} key The key of the property to get.
+	     * @param {string} path The path of the property to get.
 	     * @param {*} value The value to compare.
 	     * @returns {Function} Returns the new function.
 	     */
-	    function baseMatchesProperty(key, value) {
-	      if (isStrictComparable(value)) {
-	        return function(object) {
-	          return object != null && object[key] === value &&
-	            (typeof value != 'undefined' || (key in toObject(object)));
-	        };
-	      }
+	    function baseMatchesProperty(path, value) {
+	      var isArr = isArray(path),
+	          isCommon = isKey(path) && isStrictComparable(value),
+	          pathKey = (path + '');
+
+	      path = toPath(path);
 	      return function(object) {
-	        return object != null && baseIsEqual(value, object[key], null, true);
+	        if (object == null) {
+	          return false;
+	        }
+	        var key = pathKey;
+	        object = toObject(object);
+	        if ((isArr || !isCommon) && !(key in object)) {
+	          object = path.length == 1 ? object : baseGet(object, baseSlice(path, 0, -1));
+	          if (object == null) {
+	            return false;
+	          }
+	          key = last(path);
+	          object = toObject(object);
+	        }
+	        return object[key] === value
+	          ? (value !== undefined || (key in object))
+	          : baseIsEqual(value, object[key], null, true);
 	      };
 	    }
 
@@ -4213,29 +4283,39 @@ var XDR =
 	     * @param {Function} [customizer] The function to customize merging properties.
 	     * @param {Array} [stackA=[]] Tracks traversed source objects.
 	     * @param {Array} [stackB=[]] Associates values with source counterparts.
-	     * @returns {Object} Returns the destination object.
+	     * @returns {Object} Returns `object`.
 	     */
 	    function baseMerge(object, source, customizer, stackA, stackB) {
 	      if (!isObject(object)) {
 	        return object;
 	      }
-	      var isSrcArr = isLength(source.length) && (isArray(source) || isTypedArray(source));
-	      (isSrcArr ? arrayEach : baseForOwn)(source, function(srcValue, key, source) {
+	      var isSrcArr = isArrayLike(source) && (isArray(source) || isTypedArray(source));
+	      if (!isSrcArr) {
+	        var props = keys(source);
+	        push.apply(props, getSymbols(source));
+	      }
+	      arrayEach(props || source, function(srcValue, key) {
+	        if (props) {
+	          key = srcValue;
+	          srcValue = source[key];
+	        }
 	        if (isObjectLike(srcValue)) {
 	          stackA || (stackA = []);
 	          stackB || (stackB = []);
-	          return baseMergeDeep(object, source, key, baseMerge, customizer, stackA, stackB);
+	          baseMergeDeep(object, source, key, baseMerge, customizer, stackA, stackB);
 	        }
-	        var value = object[key],
-	            result = customizer ? customizer(value, srcValue, key, object, source) : undefined,
-	            isCommon = typeof result == 'undefined';
+	        else {
+	          var value = object[key],
+	              result = customizer ? customizer(value, srcValue, key, object, source) : undefined,
+	              isCommon = result === undefined;
 
-	        if (isCommon) {
-	          result = srcValue;
-	        }
-	        if ((isSrcArr || typeof result != 'undefined') &&
-	            (isCommon || (result === result ? (result !== value) : (value === value)))) {
-	          object[key] = result;
+	          if (isCommon) {
+	            result = srcValue;
+	          }
+	          if ((isSrcArr || result !== undefined) &&
+	              (isCommon || (result === result ? (result !== value) : (value === value)))) {
+	            object[key] = result;
+	          }
 	        }
 	      });
 	      return object;
@@ -4268,14 +4348,14 @@ var XDR =
 	      }
 	      var value = object[key],
 	          result = customizer ? customizer(value, srcValue, key, object, source) : undefined,
-	          isCommon = typeof result == 'undefined';
+	          isCommon = result === undefined;
 
 	      if (isCommon) {
 	        result = srcValue;
-	        if (isLength(srcValue.length) && (isArray(srcValue) || isTypedArray(srcValue))) {
+	        if (isArrayLike(srcValue) && (isArray(srcValue) || isTypedArray(srcValue))) {
 	          result = isArray(value)
 	            ? value
-	            : ((value && value.length) ? arrayCopy(value) : []);
+	            : (isArrayLike(value) ? arrayCopy(value) : []);
 	        }
 	        else if (isPlainObject(srcValue) || isArguments(srcValue)) {
 	          result = isArguments(value)
@@ -4300,7 +4380,7 @@ var XDR =
 	    }
 
 	    /**
-	     * The base implementation of `_.property` which does not coerce `key` to a string.
+	     * The base implementation of `_.property` without support for deep paths.
 	     *
 	     * @private
 	     * @param {string} key The key of the property to get.
@@ -4310,6 +4390,42 @@ var XDR =
 	      return function(object) {
 	        return object == null ? undefined : object[key];
 	      };
+	    }
+
+	    /**
+	     * A specialized version of `baseProperty` which supports deep paths.
+	     *
+	     * @private
+	     * @param {Array|string} path The path of the property to get.
+	     * @returns {Function} Returns the new function.
+	     */
+	    function basePropertyDeep(path) {
+	      var pathKey = (path + '');
+	      path = toPath(path);
+	      return function(object) {
+	        return baseGet(object, path, pathKey);
+	      };
+	    }
+
+	    /**
+	     * The base implementation of `_.pullAt` without support for individual
+	     * index arguments and capturing the removed elements.
+	     *
+	     * @private
+	     * @param {Array} array The array to modify.
+	     * @param {number[]} indexes The indexes of elements to remove.
+	     * @returns {Array} Returns `array`.
+	     */
+	    function basePullAt(array, indexes) {
+	      var length = array ? indexes.length : 0;
+	      while (length--) {
+	        var index = parseFloat(indexes[length]);
+	        if (index != previous && isIndex(index)) {
+	          var previous = index;
+	          splice.call(array, index, 1);
+	        }
+	      }
+	      return array;
 	    }
 
 	    /**
@@ -4378,7 +4494,7 @@ var XDR =
 	      if (start < 0) {
 	        start = -start > length ? 0 : (length + start);
 	      }
-	      end = (typeof end == 'undefined' || end > length) ? length : (+end || 0);
+	      end = (end === undefined || end > length) ? length : (+end || 0);
 	      if (end < 0) {
 	        end += length;
 	      }
@@ -4437,23 +4553,19 @@ var XDR =
 	     *
 	     * @private
 	     * @param {Array|Object|string} collection The collection to iterate over.
-	     * @param {string[]} props The property names to sort by.
-	     * @param {boolean[]} orders The sort orders of `props`.
+	     * @param {Function[]|Object[]|string[]} iteratees The iteratees to sort by.
+	     * @param {boolean[]} orders The sort orders of `iteratees`.
 	     * @returns {Array} Returns the new sorted array.
 	     */
-	    function baseSortByOrder(collection, props, orders) {
-	      var index = -1,
-	          length = collection.length,
-	          result = isLength(length) ? Array(length) : [];
+	    function baseSortByOrder(collection, iteratees, orders) {
+	      var callback = getCallback(),
+	          index = -1;
 
-	      baseEach(collection, function(value) {
-	        var length = props.length,
-	            criteria = Array(length);
+	      iteratees = arrayMap(iteratees, function(iteratee) { return callback(iteratee); });
 
-	        while (length--) {
-	          criteria[length] = value == null ? undefined : value[props[length]];
-	        }
-	        result[++index] = { 'criteria': criteria, 'index': index, 'value': value };
+	      var result = baseMap(collection, function(value) {
+	        var criteria = arrayMap(iteratees, function(iteratee) { return iteratee(value); });
+	        return { 'criteria': criteria, 'index': ++index, 'value': value };
 	      });
 
 	      return baseSortBy(result, function(object, other) {
@@ -4533,7 +4645,7 @@ var XDR =
 	    /**
 	     * The base implementation of `_.values` and `_.valuesIn` which creates an
 	     * array of `object` property values corresponding to the property names
-	     * returned by `keysFunc`.
+	     * of `props`.
 	     *
 	     * @private
 	     * @param {Object} object The object to query.
@@ -4650,7 +4762,7 @@ var XDR =
 	      var low = 0,
 	          high = array ? array.length : 0,
 	          valIsNaN = value !== value,
-	          valIsUndef = typeof value == 'undefined';
+	          valIsUndef = value === undefined;
 
 	      while (low < high) {
 	        var mid = floor((low + high) / 2),
@@ -4660,7 +4772,7 @@ var XDR =
 	        if (valIsNaN) {
 	          var setLow = isReflexive || retHighest;
 	        } else if (valIsUndef) {
-	          setLow = isReflexive && (retHighest || typeof computed != 'undefined');
+	          setLow = isReflexive && (retHighest || computed !== undefined);
 	        } else {
 	          setLow = retHighest ? (computed <= value) : (computed < value);
 	        }
@@ -4687,7 +4799,7 @@ var XDR =
 	      if (typeof func != 'function') {
 	        return identity;
 	      }
-	      if (typeof thisArg == 'undefined') {
+	      if (thisArg === undefined) {
 	        return func;
 	      }
 	      switch (argCount) {
@@ -4791,12 +4903,12 @@ var XDR =
 	      while (++argsIndex < argsLength) {
 	        result[argsIndex] = args[argsIndex];
 	      }
-	      var pad = argsIndex;
+	      var offset = argsIndex;
 	      while (++rightIndex < rightLength) {
-	        result[pad + rightIndex] = partials[rightIndex];
+	        result[offset + rightIndex] = partials[rightIndex];
 	      }
 	      while (++holdersIndex < holdersLength) {
-	        result[pad + holders[holdersIndex]] = args[argsIndex++];
+	        result[offset + holders[holdersIndex]] = args[argsIndex++];
 	      }
 	      return result;
 	    }
@@ -4847,38 +4959,32 @@ var XDR =
 	     * @returns {Function} Returns the new assigner function.
 	     */
 	    function createAssigner(assigner) {
-	      return function() {
-	        var args = arguments,
-	            length = args.length,
-	            object = args[0];
+	      return restParam(function(object, sources) {
+	        var index = -1,
+	            length = object == null ? 0 : sources.length,
+	            customizer = length > 2 && sources[length - 2],
+	            guard = length > 2 && sources[2],
+	            thisArg = length > 1 && sources[length - 1];
 
-	        if (length < 2 || object == null) {
-	          return object;
-	        }
-	        var customizer = args[length - 2],
-	            thisArg = args[length - 1],
-	            guard = args[3];
-
-	        if (length > 3 && typeof customizer == 'function') {
+	        if (typeof customizer == 'function') {
 	          customizer = bindCallback(customizer, thisArg, 5);
 	          length -= 2;
 	        } else {
-	          customizer = (length > 2 && typeof thisArg == 'function') ? thisArg : null;
+	          customizer = typeof thisArg == 'function' ? thisArg : null;
 	          length -= (customizer ? 1 : 0);
 	        }
-	        if (guard && isIterateeCall(args[1], args[2], guard)) {
-	          customizer = length == 3 ? null : customizer;
-	          length = 2;
+	        if (guard && isIterateeCall(sources[0], sources[1], guard)) {
+	          customizer = length < 3 ? null : customizer;
+	          length = 1;
 	        }
-	        var index = 0;
 	        while (++index < length) {
-	          var source = args[index];
+	          var source = sources[index];
 	          if (source) {
 	            assigner(object, source, customizer);
 	          }
 	        }
 	        return object;
-	      };
+	      });
 	    }
 
 	    /**
@@ -4891,7 +4997,7 @@ var XDR =
 	     */
 	    function createBaseEach(eachFunc, fromRight) {
 	      return function(collection, iteratee) {
-	        var length = collection ? collection.length : 0;
+	        var length = collection ? getLength(collection) : 0;
 	        if (!isLength(length)) {
 	          return eachFunc(collection, iteratee);
 	        }
@@ -5070,7 +5176,7 @@ var XDR =
 	          return index > -1 ? collection[index] : undefined;
 	        }
 	        return baseFind(collection, predicate, eachFunc);
-	      }
+	      };
 	    }
 
 	    /**
@@ -5136,7 +5242,7 @@ var XDR =
 	          funcName = getFuncName(func);
 
 	          var data = funcName == 'wrapper' ? getData(func) : null;
-	          if (data && isLaziable(data[0])) {
+	          if (data && isLaziable(data[0]) && data[1] == (ARY_FLAG | CURRY_FLAG | PARTIAL_FLAG | REARG_FLAG) && !data[4].length && data[9] == 1) {
 	            wrapper = wrapper[getFuncName(data[0])].apply(wrapper, data[3]);
 	          } else {
 	            wrapper = (func.length == 1 && isLaziable(func)) ? wrapper[funcName]() : wrapper.thru(func);
@@ -5168,7 +5274,7 @@ var XDR =
 	     */
 	    function createForEach(arrayFunc, eachFunc) {
 	      return function(collection, iteratee, thisArg) {
-	        return (typeof iteratee == 'function' && typeof thisArg == 'undefined' && isArray(collection))
+	        return (typeof iteratee == 'function' && thisArg === undefined && isArray(collection))
 	          ? arrayFunc(collection, iteratee)
 	          : eachFunc(collection, bindCallback(iteratee, thisArg, 3));
 	      };
@@ -5183,7 +5289,7 @@ var XDR =
 	     */
 	    function createForIn(objectFunc) {
 	      return function(object, iteratee, thisArg) {
-	        if (typeof iteratee != 'function' || typeof thisArg != 'undefined') {
+	        if (typeof iteratee != 'function' || thisArg !== undefined) {
 	          iteratee = bindCallback(iteratee, thisArg, 3);
 	        }
 	        return objectFunc(object, iteratee, keysIn);
@@ -5199,10 +5305,32 @@ var XDR =
 	     */
 	    function createForOwn(objectFunc) {
 	      return function(object, iteratee, thisArg) {
-	        if (typeof iteratee != 'function' || typeof thisArg != 'undefined') {
+	        if (typeof iteratee != 'function' || thisArg !== undefined) {
 	          iteratee = bindCallback(iteratee, thisArg, 3);
 	        }
 	        return objectFunc(object, iteratee);
+	      };
+	    }
+
+	    /**
+	     * Creates a function for `_.mapKeys` or `_.mapValues`.
+	     *
+	     * @private
+	     * @param {boolean} [isMapKeys] Specify mapping keys instead of values.
+	     * @returns {Function} Returns the new map function.
+	     */
+	    function createObjectMapper(isMapKeys) {
+	      return function(object, iteratee, thisArg) {
+	        var result = {};
+	        iteratee = getCallback(iteratee, thisArg, 3);
+
+	        baseForOwn(object, function(value, key, object) {
+	          var mapped = iteratee(value, key, object);
+	          key = isMapKeys ? mapped : key;
+	          value = isMapKeys ? value : mapped;
+	          result[key] = value;
+	        });
+	        return result;
 	      };
 	    }
 
@@ -5216,7 +5344,7 @@ var XDR =
 	    function createPadDir(fromRight) {
 	      return function(string, length, chars) {
 	        string = baseToString(string);
-	        return string && ((fromRight ? string : '') + createPadding(string, length, chars) + (fromRight ? '' : string));
+	        return (fromRight ? string : '') + createPadding(string, length, chars) + (fromRight ? '' : string);
 	      };
 	    }
 
@@ -5246,7 +5374,7 @@ var XDR =
 	    function createReduce(arrayFunc, eachFunc) {
 	      return function(collection, iteratee, accumulator, thisArg) {
 	        var initFromArray = arguments.length < 3;
-	        return (typeof iteratee == 'function' && typeof thisArg == 'undefined' && isArray(collection))
+	        return (typeof iteratee == 'function' && thisArg === undefined && isArray(collection))
 	          ? arrayFunc(collection, iteratee, accumulator, initFromArray)
 	          : baseReduce(collection, getCallback(iteratee, thisArg, 4), accumulator, initFromArray, eachFunc);
 	      };
@@ -5515,7 +5643,7 @@ var XDR =
 	            ? customizer(othValue, arrValue, index)
 	            : customizer(arrValue, othValue, index);
 	        }
-	        if (typeof result == 'undefined') {
+	        if (result === undefined) {
 	          // Recursively compare arrays (susceptible to call stack limits).
 	          if (isLoose) {
 	            var othIndex = othLength;
@@ -5562,8 +5690,7 @@ var XDR =
 	          // Treat `NaN` vs. `NaN` as equal.
 	          return (object != +object)
 	            ? other != +other
-	            // But, treat `-0` vs. `+0` as not equal.
-	            : (object == 0 ? ((1 / object) == (1 / other)) : object == +other);
+	            : object == +other;
 
 	        case regexpTag:
 	        case stringTag:
@@ -5614,7 +5741,7 @@ var XDR =
 	              ? customizer(othValue, objValue, key)
 	              : customizer(objValue, othValue, key);
 	          }
-	          if (typeof result == 'undefined') {
+	          if (result === undefined) {
 	            // Recursively compare objects (susceptible to call stack limits).
 	            result = (objValue && objValue === othValue) || equalFunc(objValue, othValue, customizer, isLoose, stackA, stackB);
 	          }
@@ -5740,6 +5867,29 @@ var XDR =
 	    }
 
 	    /**
+	     * Gets the "length" property value of `object`.
+	     *
+	     * **Note:** This function is used to avoid a [JIT bug](https://bugs.webkit.org/show_bug.cgi?id=142792)
+	     * that affects Safari on at least iOS 8.1-8.3 ARM64.
+	     *
+	     * @private
+	     * @param {Object} object The object to query.
+	     * @returns {*} Returns the "length" value.
+	     */
+	    var getLength = baseProperty('length');
+
+	    /**
+	     * Creates an array of the own symbols of `object`.
+	     *
+	     * @private
+	     * @param {Object} object The object to query.
+	     * @returns {Array} Returns the array of symbols.
+	     */
+	    var getSymbols = !getOwnPropertySymbols ? constant([]) : function(object) {
+	      return getOwnPropertySymbols(toObject(object));
+	    };
+
+	    /**
 	     * Gets the view, applying any `transforms` to the `start` and `end` positions.
 	     *
 	     * @private
@@ -5807,7 +5957,6 @@ var XDR =
 	     * **Note:** This function only supports cloning values with tags of
 	     * `Boolean`, `Date`, `Error`, `Number`, `RegExp`, or `String`.
 	     *
-	     *
 	     * @private
 	     * @param {Object} object The object to clone.
 	     * @param {string} tag The `toStringTag` of the object to clone.
@@ -5842,6 +5991,36 @@ var XDR =
 	    }
 
 	    /**
+	     * Invokes the method at `path` on `object`.
+	     *
+	     * @private
+	     * @param {Object} object The object to query.
+	     * @param {Array|string} path The path of the method to invoke.
+	     * @param {Array} args The arguments to invoke the method with.
+	     * @returns {*} Returns the result of the invoked method.
+	     */
+	    function invokePath(object, path, args) {
+	      if (object != null && !isKey(path, object)) {
+	        path = toPath(path);
+	        object = path.length == 1 ? object : baseGet(object, baseSlice(path, 0, -1));
+	        path = last(path);
+	      }
+	      var func = object == null ? object : object[path];
+	      return func == null ? undefined : func.apply(object, args);
+	    }
+
+	    /**
+	     * Checks if `value` is array-like.
+	     *
+	     * @private
+	     * @param {*} value The value to check.
+	     * @returns {boolean} Returns `true` if `value` is array-like, else `false`.
+	     */
+	    function isArrayLike(value) {
+	      return value != null && isLength(getLength(value));
+	    }
+
+	    /**
 	     * Checks if `value` is a valid array-like index.
 	     *
 	     * @private
@@ -5869,17 +6048,33 @@ var XDR =
 	        return false;
 	      }
 	      var type = typeof index;
-	      if (type == 'number') {
-	        var length = object.length,
-	            prereq = isLength(length) && isIndex(index, length);
-	      } else {
-	        prereq = type == 'string' && index in object;
-	      }
-	      if (prereq) {
+	      if (type == 'number'
+	          ? (isArrayLike(object) && isIndex(index, object.length))
+	          : (type == 'string' && index in object)) {
 	        var other = object[index];
 	        return value === value ? (value === other) : (other !== other);
 	      }
 	      return false;
+	    }
+
+	    /**
+	     * Checks if `value` is a property name and not a property path.
+	     *
+	     * @private
+	     * @param {*} value The value to check.
+	     * @param {Object} [object] The object to query keys on.
+	     * @returns {boolean} Returns `true` if `value` is a property name, else `false`.
+	     */
+	    function isKey(value, object) {
+	      var type = typeof value;
+	      if ((type == 'string' && reIsPlainProp.test(value)) || type == 'number') {
+	        return true;
+	      }
+	      if (isArray(value)) {
+	        return false;
+	      }
+	      var result = !reIsDeepProp.test(value);
+	      return result || (object != null && value in toObject(object));
 	    }
 
 	    /**
@@ -5916,7 +6111,7 @@ var XDR =
 	     *  equality comparisons, else `false`.
 	     */
 	    function isStrictComparable(value) {
-	      return value === value && (value === 0 ? ((1 / value) > 0) : !isObject(value));
+	      return value === value && !isObject(value);
 	    }
 
 	    /**
@@ -5990,8 +6185,8 @@ var XDR =
 	    }
 
 	    /**
-	     * A specialized version of `_.pick` that picks `object` properties specified
-	     * by the `props` array.
+	     * A specialized version of `_.pick` which picks `object` properties specified
+	     * by `props`.
 	     *
 	     * @private
 	     * @param {Object} object The source object.
@@ -6015,7 +6210,7 @@ var XDR =
 	    }
 
 	    /**
-	     * A specialized version of `_.pick` that picks `object` properties `predicate`
+	     * A specialized version of `_.pick` which picks `object` properties `predicate`
 	     * returns truthy for.
 	     *
 	     * @private
@@ -6117,7 +6312,7 @@ var XDR =
 	      baseForIn(value, function(subValue, key) {
 	        result = key;
 	      });
-	      return typeof result == 'undefined' || hasOwnProperty.call(value, result);
+	      return result === undefined || hasOwnProperty.call(value, result);
 	    }
 
 	    /**
@@ -6125,7 +6320,7 @@ var XDR =
 	     * own enumerable property names of `object`.
 	     *
 	     * @private
-	     * @param {Object} object The object to inspect.
+	     * @param {Object} object The object to query.
 	     * @returns {Array} Returns the array of property names.
 	     */
 	    function shimKeys(object) {
@@ -6160,7 +6355,7 @@ var XDR =
 	      if (value == null) {
 	        return [];
 	      }
-	      if (!isLength(value.length)) {
+	      if (!isArrayLike(value)) {
 	        return values(value);
 	      }
 	      return isObject(value) ? value : Object(value);
@@ -6178,6 +6373,24 @@ var XDR =
 	    }
 
 	    /**
+	     * Converts `value` to property path array if it is not one.
+	     *
+	     * @private
+	     * @param {*} value The value to process.
+	     * @returns {Array} Returns the property path array.
+	     */
+	    function toPath(value) {
+	      if (isArray(value)) {
+	        return value;
+	      }
+	      var result = [];
+	      baseToString(value).replace(rePropName, function(match, number, quote, string) {
+	        result.push(quote ? string.replace(reEscapeChar, '$1') : (number || match));
+	      });
+	      return result;
+	    }
+
+	    /**
 	     * Creates a clone of `wrapper`.
 	     *
 	     * @private
@@ -6189,8 +6402,6 @@ var XDR =
 	        ? wrapper.clone()
 	        : new LodashWrapper(wrapper.__wrapped__, wrapper.__chain__, arrayCopy(wrapper.__actions__));
 	    }
-
-	    /*------------------------------------------------------------------------*/
 
 	    /**
 	     * Creates an array of elements split into groups the length of `size`.
@@ -6260,11 +6471,8 @@ var XDR =
 
 	    /**
 	     * Creates an array excluding all values of the provided arrays using
-	     * `SameValueZero` for equality comparisons.
-	     *
-	     * **Note:** [`SameValueZero`](https://people.mozilla.org/~jorendorff/es6-draft.html#sec-samevaluezero)
-	     * comparisons are like strict equality comparisons, e.g. `===`, except that
-	     * `NaN` matches `NaN`.
+	     * [`SameValueZero`](https://people.mozilla.org/~jorendorff/es6-draft.html#sec-samevaluezero)
+	     * for equality comparisons.
 	     *
 	     * @static
 	     * @memberOf _
@@ -6278,7 +6486,7 @@ var XDR =
 	     * // => [1, 3]
 	     */
 	    var difference = restParam(function(array, values) {
-	      return (isArray(array) || isArguments(array))
+	      return isArrayLike(array)
 	        ? baseDifference(array, baseFlatten(values, false, true))
 	        : [];
 	    });
@@ -6673,13 +6881,10 @@ var XDR =
 
 	    /**
 	     * Gets the index at which the first occurrence of `value` is found in `array`
-	     * using `SameValueZero` for equality comparisons. If `fromIndex` is negative,
-	     * it is used as the offset from the end of `array`. If `array` is sorted
-	     * providing `true` for `fromIndex` performs a faster binary search.
-	     *
-	     * **Note:** [`SameValueZero`](https://people.mozilla.org/~jorendorff/es6-draft.html#sec-samevaluezero)
-	     * comparisons are like strict equality comparisons, e.g. `===`, except that
-	     * `NaN` matches `NaN`.
+	     * using [`SameValueZero`](https://people.mozilla.org/~jorendorff/es6-draft.html#sec-samevaluezero)
+	     * for equality comparisons. If `fromIndex` is negative, it is used as the offset
+	     * from the end of `array`. If `array` is sorted providing `true` for `fromIndex`
+	     * performs a faster binary search.
 	     *
 	     * @static
 	     * @memberOf _
@@ -6739,12 +6944,9 @@ var XDR =
 	    }
 
 	    /**
-	     * Creates an array of unique values in all provided arrays using `SameValueZero`
+	     * Creates an array of unique values in all provided arrays using
+	     * [`SameValueZero`](https://people.mozilla.org/~jorendorff/es6-draft.html#sec-samevaluezero)
 	     * for equality comparisons.
-	     *
-	     * **Note:** [`SameValueZero`](https://people.mozilla.org/~jorendorff/es6-draft.html#sec-samevaluezero)
-	     * comparisons are like strict equality comparisons, e.g. `===`, except that
-	     * `NaN` matches `NaN`.
 	     *
 	     * @static
 	     * @memberOf _
@@ -6761,20 +6963,23 @@ var XDR =
 	          argsLength = arguments.length,
 	          caches = [],
 	          indexOf = getIndexOf(),
-	          isCommon = indexOf == baseIndexOf;
+	          isCommon = indexOf == baseIndexOf,
+	          result = [];
 
 	      while (++argsIndex < argsLength) {
 	        var value = arguments[argsIndex];
-	        if (isArray(value) || isArguments(value)) {
+	        if (isArrayLike(value)) {
 	          args.push(value);
 	          caches.push((isCommon && value.length >= 120) ? createCache(argsIndex && value) : null);
 	        }
 	      }
 	      argsLength = args.length;
+	      if (argsLength < 2) {
+	        return result;
+	      }
 	      var array = args[0],
 	          index = -1,
 	          length = array ? array.length : 0,
-	          result = [],
 	          seen = caches[0];
 
 	      outer:
@@ -6868,14 +7073,11 @@ var XDR =
 	    }
 
 	    /**
-	     * Removes all provided values from `array` using `SameValueZero` for equality
-	     * comparisons.
+	     * Removes all provided values from `array` using
+	     * [`SameValueZero`](https://people.mozilla.org/~jorendorff/es6-draft.html#sec-samevaluezero)
+	     * for equality comparisons.
 	     *
-	     * **Notes:**
-	     *  - Unlike `_.without`, this method mutates `array`
-	     *  - [`SameValueZero`](https://people.mozilla.org/~jorendorff/es6-draft.html#sec-samevaluezero)
-	     *    comparisons are like strict equality comparisons, e.g. `===`, except
-	     *    that `NaN` matches `NaN`
+	     * **Note:** Unlike `_.without`, this method mutates `array`.
 	     *
 	     * @static
 	     * @memberOf _
@@ -6939,20 +7141,10 @@ var XDR =
 	     * // => [10, 20]
 	     */
 	    var pullAt = restParam(function(array, indexes) {
-	      array || (array = []);
 	      indexes = baseFlatten(indexes);
 
-	      var length = indexes.length,
-	          result = baseAt(array, indexes);
-
-	      indexes.sort(baseCompareAscending);
-	      while (length--) {
-	        var index = parseFloat(indexes[length]);
-	        if (index != previous && isIndex(index)) {
-	          var previous = index;
-	          splice.call(array, index, 1);
-	        }
-	      }
+	      var result = baseAt(array, indexes);
+	      basePullAt(array, indexes.sort(baseCompareAscending));
 	      return result;
 	    });
 
@@ -6996,19 +7188,23 @@ var XDR =
 	     * // => [2, 4]
 	     */
 	    function remove(array, predicate, thisArg) {
+	      var result = [];
+	      if (!(array && array.length)) {
+	        return result;
+	      }
 	      var index = -1,
-	          length = array ? array.length : 0,
-	          result = [];
+	          indexes = [],
+	          length = array.length;
 
 	      predicate = getCallback(predicate, thisArg, 3);
 	      while (++index < length) {
 	        var value = array[index];
 	        if (predicate(value, index, array)) {
 	          result.push(value);
-	          splice.call(array, index--, 1);
-	          length--;
+	          indexes.push(index);
 	        }
 	      }
+	      basePullAt(array, indexes);
 	      return result;
 	    }
 
@@ -7033,7 +7229,7 @@ var XDR =
 	    /**
 	     * Creates a slice of `array` from `start` up to, but not including, `end`.
 	     *
-	     * **Note:** This function is used instead of `Array#slice` to support node
+	     * **Note:** This method is used instead of `Array#slice` to support node
 	     * lists in IE < 9 and to ensure dense arrays are returned.
 	     *
 	     * @static
@@ -7311,11 +7507,8 @@ var XDR =
 
 	    /**
 	     * Creates an array of unique values, in order, of the provided arrays using
-	     * `SameValueZero` for equality comparisons.
-	     *
-	     * **Note:** [`SameValueZero`](https://people.mozilla.org/~jorendorff/es6-draft.html#sec-samevaluezero)
-	     * comparisons are like strict equality comparisons, e.g. `===`, except that
-	     * `NaN` matches `NaN`.
+	     * [`SameValueZero`](https://people.mozilla.org/~jorendorff/es6-draft.html#sec-samevaluezero)
+	     * for equality comparisons.
 	     *
 	     * @static
 	     * @memberOf _
@@ -7332,12 +7525,14 @@ var XDR =
 	    });
 
 	    /**
-	     * Creates a duplicate-value-free version of an array using `SameValueZero`
-	     * for equality comparisons. Providing `true` for `isSorted` performs a faster
-	     * search algorithm for sorted arrays. If an iteratee function is provided it
-	     * is invoked for each value in the array to generate the criterion by which
-	     * uniqueness is computed. The `iteratee` is bound to `thisArg` and invoked
-	     * with three arguments: (value, index, array).
+	     * Creates a duplicate-free version of an array, using
+	     * [`SameValueZero`](https://people.mozilla.org/~jorendorff/es6-draft.html#sec-samevaluezero)
+	     * for equality comparisons, in which only the first occurence of each element
+	     * is kept. Providing `true` for `isSorted` performs a faster search algorithm
+	     * for sorted arrays. If an iteratee function is provided it is invoked for
+	     * each element in the array to generate the criterion by which uniqueness
+	     * is computed. The `iteratee` is bound to `thisArg` and invoked with three
+	     * arguments: (value, index, array).
 	     *
 	     * If a property name is provided for `iteratee` the created `_.property`
 	     * style callback returns the property value of the given element.
@@ -7350,10 +7545,6 @@ var XDR =
 	     * callback returns `true` for elements that have the properties of the given
 	     * object, else `false`.
 	     *
-	     * **Note:** [`SameValueZero`](https://people.mozilla.org/~jorendorff/es6-draft.html#sec-samevaluezero)
-	     * comparisons are like strict equality comparisons, e.g. `===`, except that
-	     * `NaN` matches `NaN`.
-	     *
 	     * @static
 	     * @memberOf _
 	     * @alias unique
@@ -7365,8 +7556,8 @@ var XDR =
 	     * @returns {Array} Returns the new duplicate-value-free array.
 	     * @example
 	     *
-	     * _.uniq([1, 2, 1]);
-	     * // => [1, 2]
+	     * _.uniq([2, 1, 2]);
+	     * // => [2, 1]
 	     *
 	     * // using `isSorted`
 	     * _.uniq([1, 1, 2], true);
@@ -7403,7 +7594,7 @@ var XDR =
 
 	    /**
 	     * This method is like `_.zip` except that it accepts an array of grouped
-	     * elements and creates an array regrouping the elements to their pre-`_.zip`
+	     * elements and creates an array regrouping the elements to their pre-zip
 	     * configuration.
 	     *
 	     * @static
@@ -7420,10 +7611,19 @@ var XDR =
 	     * // => [['fred', 'barney'], [30, 40], [true, false]]
 	     */
 	    function unzip(array) {
+	      if (!(array && array.length)) {
+	        return [];
+	      }
 	      var index = -1,
-	          length = (array && array.length && arrayMax(arrayMap(array, getLength))) >>> 0,
-	          result = Array(length);
+	          length = 0;
 
+	      array = arrayFilter(array, function(group) {
+	        if (isArrayLike(group)) {
+	          length = nativeMax(group.length, length);
+	          return true;
+	        }
+	      });
+	      var result = Array(length);
 	      while (++index < length) {
 	        result[index] = arrayMap(array, baseProperty(index));
 	      }
@@ -7431,12 +7631,44 @@ var XDR =
 	    }
 
 	    /**
-	     * Creates an array excluding all provided values using `SameValueZero` for
-	     * equality comparisons.
+	     * This method is like `_.unzip` except that it accepts an iteratee to specify
+	     * how regrouped values should be combined. The `iteratee` is bound to `thisArg`
+	     * and invoked with four arguments: (accumulator, value, index, group).
 	     *
-	     * **Note:** [`SameValueZero`](https://people.mozilla.org/~jorendorff/es6-draft.html#sec-samevaluezero)
-	     * comparisons are like strict equality comparisons, e.g. `===`, except that
-	     * `NaN` matches `NaN`.
+	     * @static
+	     * @memberOf _
+	     * @category Array
+	     * @param {Array} array The array of grouped elements to process.
+	     * @param {Function} [iteratee] The function to combine regrouped values.
+	     * @param {*} [thisArg] The `this` binding of `iteratee`.
+	     * @returns {Array} Returns the new array of regrouped elements.
+	     * @example
+	     *
+	     * var zipped = _.zip([1, 2], [10, 20], [100, 200]);
+	     * // => [[1, 10, 100], [2, 20, 200]]
+	     *
+	     * _.unzipWith(zipped, _.add);
+	     * // => [3, 30, 300]
+	     */
+	    function unzipWith(array, iteratee, thisArg) {
+	      var length = array ? array.length : 0;
+	      if (!length) {
+	        return [];
+	      }
+	      var result = unzip(array);
+	      if (iteratee == null) {
+	        return result;
+	      }
+	      iteratee = bindCallback(iteratee, thisArg, 4);
+	      return arrayMap(result, function(group) {
+	        return arrayReduce(group, iteratee, undefined, true);
+	      });
+	    }
+
+	    /**
+	     * Creates an array excluding all provided values using
+	     * [`SameValueZero`](https://people.mozilla.org/~jorendorff/es6-draft.html#sec-samevaluezero)
+	     * for equality comparisons.
 	     *
 	     * @static
 	     * @memberOf _
@@ -7450,7 +7682,7 @@ var XDR =
 	     * // => [3]
 	     */
 	    var without = restParam(function(array, values) {
-	      return (isArray(array) || isArguments(array))
+	      return isArrayLike(array)
 	        ? baseDifference(array, values)
 	        : [];
 	    });
@@ -7475,7 +7707,7 @@ var XDR =
 
 	      while (++index < length) {
 	        var array = arguments[index];
-	        if (isArray(array) || isArguments(array)) {
+	        if (isArrayLike(array)) {
 	          var result = result
 	            ? baseDifference(result, array).concat(baseDifference(array, result))
 	            : array;
@@ -7541,7 +7773,37 @@ var XDR =
 	      return result;
 	    }
 
-	    /*------------------------------------------------------------------------*/
+	    /**
+	     * This method is like `_.zip` except that it accepts an iteratee to specify
+	     * how grouped values should be combined. The `iteratee` is bound to `thisArg`
+	     * and invoked with four arguments: (accumulator, value, index, group).
+	     *
+	     * @static
+	     * @memberOf _
+	     * @category Array
+	     * @param {...Array} [arrays] The arrays to process.
+	     * @param {Function} [iteratee] The function to combine grouped values.
+	     * @param {*} [thisArg] The `this` binding of `iteratee`.
+	     * @returns {Array} Returns the new array of grouped elements.
+	     * @example
+	     *
+	     * _.zipWith([1, 2], [10, 20], [100, 200], _.add);
+	     * // => [111, 222]
+	     */
+	    var zipWith = restParam(function(arrays) {
+	      var length = arrays.length,
+	          iteratee = arrays[length - 2],
+	          thisArg = arrays[length - 1];
+
+	      if (length > 2 && typeof iteratee == 'function') {
+	        length -= 2;
+	      } else {
+	        iteratee = (length > 1 && typeof thisArg == 'function') ? (--length, thisArg) : undefined;
+	        thisArg = undefined;
+	      }
+	      arrays.length = length;
+	      return unzipWith(arrays, iteratee, thisArg);
+	    });
 
 	    /**
 	     * Creates a `lodash` object that wraps `value` with explicit method
@@ -7793,8 +8055,6 @@ var XDR =
 	      return baseWrapperValue(this.__wrapped__, this.__actions__);
 	    }
 
-	    /*------------------------------------------------------------------------*/
-
 	    /**
 	     * Creates an array of elements corresponding to the given keys, or indexes,
 	     * of `collection`. Keys may be specified as individual arguments or as arrays
@@ -7816,10 +8076,6 @@ var XDR =
 	     * // => ['barney', 'pebbles']
 	     */
 	    var at = restParam(function(collection, props) {
-	      var length = collection ? collection.length : 0;
-	      if (isLength(length)) {
-	        collection = toIterable(collection);
-	      }
 	      return baseAt(collection, baseFlatten(props));
 	    });
 
@@ -7921,7 +8177,7 @@ var XDR =
 	      if (thisArg && isIterateeCall(collection, predicate, thisArg)) {
 	        predicate = null;
 	      }
-	      if (typeof predicate != 'function' || typeof thisArg != 'undefined') {
+	      if (typeof predicate != 'function' || thisArg !== undefined) {
 	        predicate = getCallback(predicate, thisArg, 3);
 	      }
 	      return func(collection, predicate);
@@ -8091,10 +8347,10 @@ var XDR =
 	    /**
 	     * Iterates over elements of `collection` invoking `iteratee` for each element.
 	     * The `iteratee` is bound to `thisArg` and invoked with three arguments:
-	     * (value, index|key, collection). Iterator functions may exit iteration early
+	     * (value, index|key, collection). Iteratee functions may exit iteration early
 	     * by explicitly returning `false`.
 	     *
-	     * **Note:** As with other "Collections" methods, objects with a `length` property
+	     * **Note:** As with other "Collections" methods, objects with a "length" property
 	     * are iterated like arrays. To avoid this behavior `_.forIn` or `_.forOwn`
 	     * may be used for object iteration.
 	     *
@@ -8192,13 +8448,10 @@ var XDR =
 	    });
 
 	    /**
-	     * Checks if `value` is in `collection` using `SameValueZero` for equality
-	     * comparisons. If `fromIndex` is negative, it is used as the offset from
-	     * the end of `collection`.
-	     *
-	     * **Note:** [`SameValueZero`](https://people.mozilla.org/~jorendorff/es6-draft.html#sec-samevaluezero)
-	     * comparisons are like strict equality comparisons, e.g. `===`, except that
-	     * `NaN` matches `NaN`.
+	     * Checks if `value` is in `collection` using
+	     * [`SameValueZero`](https://people.mozilla.org/~jorendorff/es6-draft.html#sec-samevaluezero)
+	     * for equality comparisons. If `fromIndex` is negative, it is used as the offset
+	     * from the end of `collection`.
 	     *
 	     * @static
 	     * @memberOf _
@@ -8224,7 +8477,7 @@ var XDR =
 	     * // => true
 	     */
 	    function includes(collection, target, fromIndex, guard) {
-	      var length = collection ? collection.length : 0;
+	      var length = collection ? getLength(collection) : 0;
 	      if (!isLength(length)) {
 	        collection = values(collection);
 	        length = collection.length;
@@ -8293,16 +8546,16 @@ var XDR =
 	    });
 
 	    /**
-	     * Invokes the method named by `methodName` on each element in `collection`,
-	     * returning an array of the results of each invoked method. Any additional
-	     * arguments are provided to each invoked method. If `methodName` is a function
-	     * it is invoked for, and `this` bound to, each element in `collection`.
+	     * Invokes the method at `path` on each element in `collection`, returning
+	     * an array of the results of each invoked method. Any additional arguments
+	     * are provided to each invoked method. If `methodName` is a function it is
+	     * invoked for, and `this` bound to, each element in `collection`.
 	     *
 	     * @static
 	     * @memberOf _
 	     * @category Collection
 	     * @param {Array|Object|string} collection The collection to iterate over.
-	     * @param {Function|string} methodName The name of the method to invoke or
+	     * @param {Array|Function|string} path The path of the method to invoke or
 	     *  the function invoked per iteration.
 	     * @param {...*} [args] The arguments to invoke the method with.
 	     * @returns {Array} Returns the array of results.
@@ -8314,15 +8567,15 @@ var XDR =
 	     * _.invoke([123, 456], String.prototype.split, '');
 	     * // => [['1', '2', '3'], ['4', '5', '6']]
 	     */
-	    var invoke = restParam(function(collection, methodName, args) {
+	    var invoke = restParam(function(collection, path, args) {
 	      var index = -1,
-	          isFunc = typeof methodName == 'function',
-	          length = collection ? collection.length : 0,
-	          result = isLength(length) ? Array(length) : [];
+	          isFunc = typeof path == 'function',
+	          isProp = isKey(path),
+	          result = isArrayLike(collection) ? Array(collection.length) : [];
 
 	      baseEach(collection, function(value) {
-	        var func = isFunc ? methodName : (value != null && value[methodName]);
-	        result[++index] = func ? func.apply(value, args) : undefined;
+	        var func = isFunc ? path : (isProp && value != null && value[path]);
+	        result[++index] = func ? func.apply(value, args) : invokePath(value, path, args);
 	      });
 	      return result;
 	    });
@@ -8347,10 +8600,11 @@ var XDR =
 	     * `_.every`, `_.filter`, `_.map`, `_.mapValues`, `_.reject`, and `_.some`.
 	     *
 	     * The guarded methods are:
-	     * `ary`, `callback`, `chunk`, `clone`, `create`, `curry`, `curryRight`, `drop`,
-	     * `dropRight`, `every`, `fill`, `flatten`, `invert`, `max`, `min`, `parseInt`,
-	     * `slice`, `sortBy`, `take`, `takeRight`, `template`, `trim`, `trimLeft`,
-	     * `trimRight`, `trunc`, `random`, `range`, `sample`, `some`, `uniq`, and `words`
+	     * `ary`, `callback`, `chunk`, `clone`, `create`, `curry`, `curryRight`,
+	     * `drop`, `dropRight`, `every`, `fill`, `flatten`, `invert`, `max`, `min`,
+	     * `parseInt`, `slice`, `sortBy`, `take`, `takeRight`, `template`, `trim`,
+	     * `trimLeft`, `trimRight`, `trunc`, `random`, `range`, `sample`, `some`,
+	     * `sum`, `uniq`, and `words`
 	     *
 	     * @static
 	     * @memberOf _
@@ -8359,7 +8613,6 @@ var XDR =
 	     * @param {Array|Object|string} collection The collection to iterate over.
 	     * @param {Function|Object|string} [iteratee=_.identity] The function invoked
 	     *  per iteration.
-	     *  create a `_.property` or `_.matches` style callback respectively.
 	     * @param {*} [thisArg] The `this` binding of `iteratee`.
 	     * @returns {Array} Returns the new mapped array.
 	     * @example
@@ -8453,13 +8706,13 @@ var XDR =
 	    }, function() { return [[], []]; });
 
 	    /**
-	     * Gets the value of `key` from all elements in `collection`.
+	     * Gets the property value of `path` from all elements in `collection`.
 	     *
 	     * @static
 	     * @memberOf _
 	     * @category Collection
 	     * @param {Array|Object|string} collection The collection to iterate over.
-	     * @param {string} key The key of the property to pluck.
+	     * @param {Array|string} path The path of the property to pluck.
 	     * @returns {Array} Returns the property values.
 	     * @example
 	     *
@@ -8475,8 +8728,8 @@ var XDR =
 	     * _.pluck(userIndex, 'age');
 	     * // => [36, 40] (iteration order is not guaranteed)
 	     */
-	    function pluck(collection, key) {
-	      return map(collection, baseProperty(key));
+	    function pluck(collection, path) {
+	      return map(collection, property(path));
 	    }
 
 	    /**
@@ -8504,8 +8757,8 @@ var XDR =
 	     * @returns {*} Returns the accumulated value.
 	     * @example
 	     *
-	     * _.reduce([1, 2], function(sum, n) {
-	     *   return sum + n;
+	     * _.reduce([1, 2], function(total, n) {
+	     *   return total + n;
 	     * });
 	     * // => 3
 	     *
@@ -8539,22 +8792,11 @@ var XDR =
 	     * }, []);
 	     * // => [4, 5, 2, 3, 0, 1]
 	     */
-	    var reduceRight =  createReduce(arrayReduceRight, baseEachRight);
+	    var reduceRight = createReduce(arrayReduceRight, baseEachRight);
 
 	    /**
 	     * The opposite of `_.filter`; this method returns the elements of `collection`
 	     * that `predicate` does **not** return truthy for.
-	     *
-	     * If a property name is provided for `predicate` the created `_.property`
-	     * style callback returns the property value of the given element.
-	     *
-	     * If a value is also provided for `thisArg` the created `_.matchesProperty`
-	     * style callback returns `true` for elements that have a matching property
-	     * value, else `false`.
-	     *
-	     * If an object is provided for `predicate` the created `_.matches` style
-	     * callback returns `true` for elements that have the properties of the given
-	     * object, else `false`.
 	     *
 	     * @static
 	     * @memberOf _
@@ -8677,7 +8919,7 @@ var XDR =
 	     * // => 7
 	     */
 	    function size(collection) {
-	      var length = collection ? collection.length : 0;
+	      var length = collection ? getLength(collection) : 0;
 	      return isLength(length) ? length : keys(collection).length;
 	    }
 
@@ -8735,7 +8977,7 @@ var XDR =
 	      if (thisArg && isIterateeCall(collection, predicate, thisArg)) {
 	        predicate = null;
 	      }
-	      if (typeof predicate != 'function' || typeof thisArg != 'undefined') {
+	      if (typeof predicate != 'function' || thisArg !== undefined) {
 	        predicate = getCallback(predicate, thisArg, 3);
 	      }
 	      return func(collection, predicate);
@@ -8763,9 +9005,8 @@ var XDR =
 	     * @memberOf _
 	     * @category Collection
 	     * @param {Array|Object|string} collection The collection to iterate over.
-	     * @param {Array|Function|Object|string} [iteratee=_.identity] The function
-	     *  invoked per iteration. If a property name or an object is provided it is
-	     *  used to create a `_.property` or `_.matches` style callback respectively.
+	     * @param {Function|Object|string} [iteratee=_.identity] The function invoked
+	     *  per iteration.
 	     * @param {*} [thisArg] The `this` binding of `iteratee`.
 	     * @returns {Array} Returns the new sorted array.
 	     * @example
@@ -8794,104 +9035,112 @@ var XDR =
 	      if (collection == null) {
 	        return [];
 	      }
-	      var index = -1,
-	          length = collection.length,
-	          result = isLength(length) ? Array(length) : [];
-
 	      if (thisArg && isIterateeCall(collection, iteratee, thisArg)) {
 	        iteratee = null;
 	      }
+	      var index = -1;
 	      iteratee = getCallback(iteratee, thisArg, 3);
-	      baseEach(collection, function(value, key, collection) {
-	        result[++index] = { 'criteria': iteratee(value, key, collection), 'index': index, 'value': value };
+
+	      var result = baseMap(collection, function(value, key, collection) {
+	        return { 'criteria': iteratee(value, key, collection), 'index': ++index, 'value': value };
 	      });
 	      return baseSortBy(result, compareAscending);
 	    }
 
 	    /**
-	     * This method is like `_.sortBy` except that it sorts by property names
-	     * instead of an iteratee function.
+	     * This method is like `_.sortBy` except that it can sort by multiple iteratees
+	     * or property names.
+	     *
+	     * If a property name is provided for an iteratee the created `_.property`
+	     * style callback returns the property value of the given element.
+	     *
+	     * If an object is provided for an iteratee the created `_.matches` style
+	     * callback returns `true` for elements that have the properties of the given
+	     * object, else `false`.
 	     *
 	     * @static
 	     * @memberOf _
 	     * @category Collection
 	     * @param {Array|Object|string} collection The collection to iterate over.
-	     * @param {...(string|string[])} props The property names to sort by,
-	     *  specified as individual property names or arrays of property names.
+	     * @param {...(Function|Function[]|Object|Object[]|string|string[])} iteratees
+	     *  The iteratees to sort by, specified as individual values or arrays of values.
 	     * @returns {Array} Returns the new sorted array.
 	     * @example
 	     *
 	     * var users = [
+	     *   { 'user': 'fred',   'age': 48 },
 	     *   { 'user': 'barney', 'age': 36 },
-	     *   { 'user': 'fred',   'age': 40 },
-	     *   { 'user': 'barney', 'age': 26 },
-	     *   { 'user': 'fred',   'age': 30 }
+	     *   { 'user': 'fred',   'age': 42 },
+	     *   { 'user': 'barney', 'age': 34 }
 	     * ];
 	     *
 	     * _.map(_.sortByAll(users, ['user', 'age']), _.values);
-	     * // => [['barney', 26], ['barney', 36], ['fred', 30], ['fred', 40]]
+	     * // => [['barney', 34], ['barney', 36], ['fred', 42], ['fred', 48]]
+	     *
+	     * _.map(_.sortByAll(users, 'user', function(chr) {
+	     *   return Math.floor(chr.age / 10);
+	     * }), _.values);
+	     * // => [['barney', 36], ['barney', 34], ['fred', 48], ['fred', 42]]
 	     */
-	    function sortByAll() {
-	      var args = arguments,
-	          collection = args[0],
-	          guard = args[3],
-	          index = 0,
-	          length = args.length - 1;
-
+	    var sortByAll = restParam(function(collection, iteratees) {
 	      if (collection == null) {
 	        return [];
 	      }
-	      var props = Array(length);
-	      while (index < length) {
-	        props[index] = args[++index];
+	      var guard = iteratees[2];
+	      if (guard && isIterateeCall(iteratees[0], iteratees[1], guard)) {
+	        iteratees.length = 1;
 	      }
-	      if (guard && isIterateeCall(args[1], args[2], guard)) {
-	        props = args[1];
-	      }
-	      return baseSortByOrder(collection, baseFlatten(props), []);
-	    }
+	      return baseSortByOrder(collection, baseFlatten(iteratees), []);
+	    });
 
 	    /**
 	     * This method is like `_.sortByAll` except that it allows specifying the
-	     * sort orders of the property names to sort by. A truthy value in `orders`
-	     * will sort the corresponding property name in ascending order while a
-	     * falsey value will sort it in descending order.
+	     * sort orders of the iteratees to sort by. A truthy value in `orders` will
+	     * sort the corresponding property name in ascending order while a falsey
+	     * value will sort it in descending order.
+	     *
+	     * If a property name is provided for an iteratee the created `_.property`
+	     * style callback returns the property value of the given element.
+	     *
+	     * If an object is provided for an iteratee the created `_.matches` style
+	     * callback returns `true` for elements that have the properties of the given
+	     * object, else `false`.
 	     *
 	     * @static
 	     * @memberOf _
 	     * @category Collection
 	     * @param {Array|Object|string} collection The collection to iterate over.
-	     * @param {string[]} props The property names to sort by.
-	     * @param {boolean[]} orders The sort orders of `props`.
+	     * @param {Function[]|Object[]|string[]} iteratees The iteratees to sort by.
+	     * @param {boolean[]} orders The sort orders of `iteratees`.
 	     * @param- {Object} [guard] Enables use as a callback for functions like `_.reduce`.
 	     * @returns {Array} Returns the new sorted array.
 	     * @example
 	     *
 	     * var users = [
-	     *   { 'user': 'barney', 'age': 26 },
-	     *   { 'user': 'fred',   'age': 40 },
-	     *   { 'user': 'barney', 'age': 36 },
-	     *   { 'user': 'fred',   'age': 30 }
+	     *   { 'user': 'fred',   'age': 48 },
+	     *   { 'user': 'barney', 'age': 34 },
+	     *   { 'user': 'fred',   'age': 42 },
+	     *   { 'user': 'barney', 'age': 36 }
 	     * ];
 	     *
 	     * // sort by `user` in ascending order and by `age` in descending order
 	     * _.map(_.sortByOrder(users, ['user', 'age'], [true, false]), _.values);
-	     * // => [['barney', 36], ['barney', 26], ['fred', 40], ['fred', 30]]
+	     * // => [['barney', 36], ['barney', 34], ['fred', 48], ['fred', 42]]
 	     */
-	    function sortByOrder(collection, props, orders, guard) {
+	    function sortByOrder(collection, iteratees, orders, guard) {
 	      if (collection == null) {
 	        return [];
 	      }
-	      if (guard && isIterateeCall(props, orders, guard)) {
+	      if (guard && isIterateeCall(iteratees, orders, guard)) {
 	        orders = null;
 	      }
-	      if (!isArray(props)) {
-	        props = props == null ? [] : [props];
+	      if (!isArray(iteratees)) {
+	        iteratees = iteratees == null ? [] : [iteratees];
 	      }
 	      if (!isArray(orders)) {
 	        orders = orders == null ? [] : [orders];
 	      }
-	      return baseSortByOrder(collection, props, orders);
+	      return baseSortByOrder(collection, iteratees, orders);
 	    }
 
 	    /**
@@ -8927,8 +9176,6 @@ var XDR =
 	      return filter(collection, baseMatches(source));
 	    }
 
-	    /*------------------------------------------------------------------------*/
-
 	    /**
 	     * Gets the number of milliseconds that have elapsed since the Unix epoch
 	     * (1 January 1970 00:00:00 UTC).
@@ -8946,8 +9193,6 @@ var XDR =
 	    var now = nativeNow || function() {
 	      return new Date().getTime();
 	    };
-
-	    /*------------------------------------------------------------------------*/
 
 	    /**
 	     * The opposite of `_.before`; this method creates a function that invokes
@@ -9044,7 +9289,8 @@ var XDR =
 	      return function() {
 	        if (--n > 0) {
 	          result = func.apply(this, arguments);
-	        } else {
+	        }
+	        if (n <= 1) {
 	          func = null;
 	        }
 	        return result;
@@ -9059,7 +9305,7 @@ var XDR =
 	     * The `_.bind.placeholder` value, which defaults to `_` in monolithic builds,
 	     * may be used as a placeholder for partially applied arguments.
 	     *
-	     * **Note:** Unlike native `Function#bind` this method does not set the `length`
+	     * **Note:** Unlike native `Function#bind` this method does not set the "length"
 	     * property of bound functions.
 	     *
 	     * @static
@@ -9101,7 +9347,7 @@ var XDR =
 	     * of method names. If no method names are provided all enumerable function
 	     * properties, own and inherited, of `object` are bound.
 	     *
-	     * **Note:** This method does not set the `length` property of bound functions.
+	     * **Note:** This method does not set the "length" property of bound functions.
 	     *
 	     * @static
 	     * @memberOf _
@@ -9142,7 +9388,7 @@ var XDR =
 	     *
 	     * This method differs from `_.bind` by allowing bound functions to reference
 	     * methods that may be redefined or don't yet exist.
-	     * See [Peter Michaux's article](http://michaux.ca/articles/lazy-function-definition-pattern)
+	     * See [Peter Michaux's article](http://peter.michaux.ca/articles/lazy-function-definition-pattern)
 	     * for more details.
 	     *
 	     * The `_.bindKey.placeholder` value, which defaults to `_` in monolithic
@@ -9199,7 +9445,7 @@ var XDR =
 	     * The `_.curry.placeholder` value, which defaults to `_` in monolithic builds,
 	     * may be used as a placeholder for provided arguments.
 	     *
-	     * **Note:** This method does not set the `length` property of curried functions.
+	     * **Note:** This method does not set the "length" property of curried functions.
 	     *
 	     * @static
 	     * @memberOf _
@@ -9238,7 +9484,7 @@ var XDR =
 	     * The `_.curryRight.placeholder` value, which defaults to `_` in monolithic
 	     * builds, may be used as a placeholder for provided arguments.
 	     *
-	     * **Note:** This method does not set the `length` property of curried functions.
+	     * **Note:** This method does not set the "length" property of curried functions.
 	     *
 	     * @static
 	     * @memberOf _
@@ -9650,7 +9896,7 @@ var XDR =
 	     * // `initialize` invokes `createApplication` once
 	     */
 	    function once(func) {
-	      return before(func, 2);
+	      return before(2, func);
 	    }
 
 	    /**
@@ -9661,7 +9907,7 @@ var XDR =
 	     * The `_.partial.placeholder` value, which defaults to `_` in monolithic
 	     * builds, may be used as a placeholder for partially applied arguments.
 	     *
-	     * **Note:** This method does not set the `length` property of partially
+	     * **Note:** This method does not set the "length" property of partially
 	     * applied functions.
 	     *
 	     * @static
@@ -9694,7 +9940,7 @@ var XDR =
 	     * The `_.partialRight.placeholder` value, which defaults to `_` in monolithic
 	     * builds, may be used as a placeholder for partially applied arguments.
 	     *
-	     * **Note:** This method does not set the `length` property of partially
+	     * **Note:** This method does not set the "length" property of partially
 	     * applied functions.
 	     *
 	     * @static
@@ -9778,7 +10024,7 @@ var XDR =
 	      if (typeof func != 'function') {
 	        throw new TypeError(FUNC_ERROR_TEXT);
 	      }
-	      start = nativeMax(typeof start == 'undefined' ? (func.length - 1) : (+start || 0), 0);
+	      start = nativeMax(start === undefined ? (func.length - 1) : (+start || 0), 0);
 	      return function() {
 	        var args = arguments,
 	            index = -1,
@@ -9927,8 +10173,6 @@ var XDR =
 	      return createWrapper(wrapper, PARTIAL_FLAG, null, [value], []);
 	    }
 
-	    /*------------------------------------------------------------------------*/
-
 	    /**
 	     * Creates a clone of `value`. If `isDeep` is `true` nested objects are cloned,
 	     * otherwise they are assigned by reference. If `customizer` is provided it is
@@ -10060,8 +10304,7 @@ var XDR =
 	     * // => false
 	     */
 	    function isArguments(value) {
-	      var length = isObjectLike(value) ? value.length : undefined;
-	      return isLength(length) && objToString.call(value) == argsTag;
+	      return isObjectLike(value) && isArrayLike(value) && objToString.call(value) == argsTag;
 	    }
 
 	    /**
@@ -10182,10 +10425,9 @@ var XDR =
 	      if (value == null) {
 	        return true;
 	      }
-	      var length = value.length;
-	      if (isLength(length) && (isArray(value) || isString(value) || isArguments(value) ||
+	      if (isArrayLike(value) && (isArray(value) || isString(value) || isArguments(value) ||
 	          (isObjectLike(value) && isFunction(value.splice)))) {
-	        return !length;
+	        return !value.length;
 	      }
 	      return !keys(value).length;
 	    }
@@ -10208,7 +10450,7 @@ var XDR =
 	     * @category Lang
 	     * @param {*} value The value to compare.
 	     * @param {*} other The other value to compare.
-	     * @param {Function} [customizer] The function to customize comparing values.
+	     * @param {Function} [customizer] The function to customize value comparisons.
 	     * @param {*} [thisArg] The `this` binding of `customizer`.
 	     * @returns {boolean} Returns `true` if the values are equivalent, else `false`.
 	     * @example
@@ -10239,7 +10481,7 @@ var XDR =
 	        return value === other;
 	      }
 	      var result = customizer ? customizer(value, other) : undefined;
-	      return typeof result == 'undefined' ? baseIsEqual(value, other, customizer) : !!result;
+	      return result === undefined ? baseIsEqual(value, other, customizer) : !!result;
 	    }
 
 	    /**
@@ -10361,7 +10603,7 @@ var XDR =
 	     * @category Lang
 	     * @param {Object} object The object to inspect.
 	     * @param {Object} source The object of property values to match.
-	     * @param {Function} [customizer] The function to customize comparing values.
+	     * @param {Function} [customizer] The function to customize value comparisons.
 	     * @param {*} [thisArg] The `this` binding of `customizer`.
 	     * @returns {boolean} Returns `true` if `object` is a match, else `false`.
 	     * @example
@@ -10394,12 +10636,13 @@ var XDR =
 	        return false;
 	      }
 	      customizer = typeof customizer == 'function' && bindCallback(customizer, thisArg, 3);
+	      object = toObject(object);
 	      if (!customizer && length == 1) {
 	        var key = props[0],
 	            value = source[key];
 
 	        if (isStrictComparable(value)) {
-	          return value === object[key] && (typeof value != 'undefined' || (key in toObject(object)));
+	          return value === object[key] && (value !== undefined || (key in object));
 	        }
 	      }
 	      var values = Array(length),
@@ -10409,7 +10652,7 @@ var XDR =
 	        value = values[length] = source[props[length]];
 	        strictCompareFlags[length] = isStrictComparable(value);
 	      }
-	      return baseIsMatch(toObject(object), props, values, strictCompareFlags, customizer);
+	      return baseIsMatch(object, props, values, strictCompareFlags, customizer);
 	    }
 
 	    /**
@@ -10464,9 +10707,9 @@ var XDR =
 	        return false;
 	      }
 	      if (objToString.call(value) == funcTag) {
-	        return reNative.test(fnToString.call(value));
+	        return reIsNative.test(fnToString.call(value));
 	      }
-	      return isObjectLike(value) && reHostCtor.test(value);
+	      return isObjectLike(value) && reIsHostCtor.test(value);
 	    }
 
 	    /**
@@ -10574,7 +10817,7 @@ var XDR =
 	     * // => false
 	     */
 	    function isRegExp(value) {
-	      return (isObjectLike(value) && objToString.call(value) == regexpTag) || false;
+	      return isObjectLike(value) && objToString.call(value) == regexpTag;
 	    }
 
 	    /**
@@ -10634,7 +10877,7 @@ var XDR =
 	     * // => false
 	     */
 	    function isUndefined(value) {
-	      return typeof value == 'undefined';
+	      return value === undefined;
 	    }
 
 	    /**
@@ -10653,7 +10896,7 @@ var XDR =
 	     * // => [2, 3]
 	     */
 	    function toArray(value) {
-	      var length = value ? value.length : 0;
+	      var length = value ? getLength(value) : 0;
 	      if (!isLength(length)) {
 	        return values(value);
 	      }
@@ -10690,8 +10933,6 @@ var XDR =
 	      return baseCopy(value, keysIn(value));
 	    }
 
-	    /*------------------------------------------------------------------------*/
-
 	    /**
 	     * Assigns own enumerable properties of source object(s) to the destination
 	     * object. Subsequent sources overwrite property assignments of previous sources.
@@ -10699,13 +10940,16 @@ var XDR =
 	     * The `customizer` is bound to `thisArg` and invoked with five arguments:
 	     * (objectValue, sourceValue, key, object, source).
 	     *
+	     * **Note:** This method mutates `object` and is based on
+	     * [`Object.assign`](https://people.mozilla.org/~jorendorff/es6-draft.html#sec-object.assign).
+	     *
 	     * @static
 	     * @memberOf _
 	     * @alias extend
 	     * @category Object
 	     * @param {Object} object The destination object.
 	     * @param {...Object} [sources] The source objects.
-	     * @param {Function} [customizer] The function to customize assigning values.
+	     * @param {Function} [customizer] The function to customize assigned values.
 	     * @param {*} [thisArg] The `this` binding of `customizer`.
 	     * @returns {Object} Returns `object`.
 	     * @example
@@ -10715,13 +10959,17 @@ var XDR =
 	     *
 	     * // using a customizer callback
 	     * var defaults = _.partialRight(_.assign, function(value, other) {
-	     *   return typeof value == 'undefined' ? other : value;
+	     *   return _.isUndefined(value) ? other : value;
 	     * });
 	     *
 	     * defaults({ 'user': 'barney' }, { 'age': 36 }, { 'user': 'fred' });
 	     * // => { 'user': 'barney', 'age': 36 }
 	     */
-	    var assign = createAssigner(baseAssign);
+	    var assign = createAssigner(function(object, source, customizer) {
+	      return customizer
+	        ? assignWith(object, source, customizer)
+	        : baseAssign(object, source);
+	    });
 
 	    /**
 	     * Creates an object that inherits from the given `prototype` object. If a
@@ -10762,13 +11010,15 @@ var XDR =
 	      if (guard && isIterateeCall(prototype, properties, guard)) {
 	        properties = null;
 	      }
-	      return properties ? baseCopy(properties, result, keys(properties)) : result;
+	      return properties ? baseAssign(result, properties) : result;
 	    }
 
 	    /**
 	     * Assigns own enumerable properties of source object(s) to the destination
 	     * object for all destination properties that resolve to `undefined`. Once a
 	     * property is set, additional values of the same property are ignored.
+	     *
+	     * **Note:** This method mutates `object`.
 	     *
 	     * @static
 	     * @memberOf _
@@ -10893,7 +11143,7 @@ var XDR =
 	    /**
 	     * Iterates over own and inherited enumerable properties of an object invoking
 	     * `iteratee` for each property. The `iteratee` is bound to `thisArg` and invoked
-	     * with three arguments: (value, key, object). Iterator functions may exit
+	     * with three arguments: (value, key, object). Iteratee functions may exit
 	     * iteration early by explicitly returning `false`.
 	     *
 	     * @static
@@ -10949,7 +11199,7 @@ var XDR =
 	    /**
 	     * Iterates over own enumerable properties of an object invoking `iteratee`
 	     * for each property. The `iteratee` is bound to `thisArg` and invoked with
-	     * three arguments: (value, key, object). Iterator functions may exit iteration
+	     * three arguments: (value, key, object). Iteratee functions may exit iteration
 	     * early by explicitly returning `false`.
 	     *
 	     * @static
@@ -11022,24 +11272,68 @@ var XDR =
 	    }
 
 	    /**
-	     * Checks if `key` exists as a direct property of `object` instead of an
-	     * inherited property.
+	     * Gets the property value of `path` on `object`. If the resolved value is
+	     * `undefined` the `defaultValue` is used in its place.
 	     *
 	     * @static
 	     * @memberOf _
 	     * @category Object
-	     * @param {Object} object The object to inspect.
-	     * @param {string} key The key to check.
-	     * @returns {boolean} Returns `true` if `key` is a direct property, else `false`.
+	     * @param {Object} object The object to query.
+	     * @param {Array|string} path The path of the property to get.
+	     * @param {*} [defaultValue] The value returned if the resolved value is `undefined`.
+	     * @returns {*} Returns the resolved value.
 	     * @example
 	     *
-	     * var object = { 'a': 1, 'b': 2, 'c': 3 };
+	     * var object = { 'a': [{ 'b': { 'c': 3 } }] };
 	     *
-	     * _.has(object, 'b');
+	     * _.get(object, 'a[0].b.c');
+	     * // => 3
+	     *
+	     * _.get(object, ['a', '0', 'b', 'c']);
+	     * // => 3
+	     *
+	     * _.get(object, 'a.b.c', 'default');
+	     * // => 'default'
+	     */
+	    function get(object, path, defaultValue) {
+	      var result = object == null ? undefined : baseGet(object, toPath(path), path + '');
+	      return result === undefined ? defaultValue : result;
+	    }
+
+	    /**
+	     * Checks if `path` is a direct property.
+	     *
+	     * @static
+	     * @memberOf _
+	     * @category Object
+	     * @param {Object} object The object to query.
+	     * @param {Array|string} path The path to check.
+	     * @returns {boolean} Returns `true` if `path` is a direct property, else `false`.
+	     * @example
+	     *
+	     * var object = { 'a': { 'b': { 'c': 3 } } };
+	     *
+	     * _.has(object, 'a');
+	     * // => true
+	     *
+	     * _.has(object, 'a.b.c');
+	     * // => true
+	     *
+	     * _.has(object, ['a', 'b', 'c']);
 	     * // => true
 	     */
-	    function has(object, key) {
-	      return object ? hasOwnProperty.call(object, key) : false;
+	    function has(object, path) {
+	      if (object == null) {
+	        return false;
+	      }
+	      var result = hasOwnProperty.call(object, path);
+	      if (!result && !isKey(path)) {
+	        path = toPath(path);
+	        object = path.length == 1 ? object : baseGet(object, baseSlice(path, 0, -1));
+	        path = last(path);
+	        result = object != null && hasOwnProperty.call(object, path);
+	      }
+	      return result;
 	    }
 
 	    /**
@@ -11102,7 +11396,7 @@ var XDR =
 	     * @static
 	     * @memberOf _
 	     * @category Object
-	     * @param {Object} object The object to inspect.
+	     * @param {Object} object The object to query.
 	     * @returns {Array} Returns the array of property names.
 	     * @example
 	     *
@@ -11120,12 +11414,9 @@ var XDR =
 	     * // => ['0', '1']
 	     */
 	    var keys = !nativeKeys ? shimKeys : function(object) {
-	      if (object) {
-	        var Ctor = object.constructor,
-	            length = object.length;
-	      }
+	      var Ctor = object != null && object.constructor;
 	      if ((typeof Ctor == 'function' && Ctor.prototype === object) ||
-	          (typeof object != 'function' && (length && isLength(length)))) {
+	          (typeof object != 'function' && isArrayLike(object))) {
 	        return shimKeys(object);
 	      }
 	      return isObject(object) ? nativeKeys(object) : [];
@@ -11139,7 +11430,7 @@ var XDR =
 	     * @static
 	     * @memberOf _
 	     * @category Object
-	     * @param {Object} object The object to inspect.
+	     * @param {Object} object The object to query.
 	     * @returns {Array} Returns the array of property names.
 	     * @example
 	     *
@@ -11183,6 +11474,28 @@ var XDR =
 	    }
 
 	    /**
+	     * The opposite of `_.mapValues`; this method creates an object with the
+	     * same values as `object` and keys generated by running each own enumerable
+	     * property of `object` through `iteratee`.
+	     *
+	     * @static
+	     * @memberOf _
+	     * @category Object
+	     * @param {Object} object The object to iterate over.
+	     * @param {Function|Object|string} [iteratee=_.identity] The function invoked
+	     *  per iteration.
+	     * @param {*} [thisArg] The `this` binding of `iteratee`.
+	     * @returns {Object} Returns the new mapped object.
+	     * @example
+	     *
+	     * _.mapKeys({ 'a': 1, 'b': 2 }, function(value, key) {
+	     *   return key + value;
+	     * });
+	     * // => { 'a1': 1, 'b2': 2 }
+	     */
+	    var mapKeys = createObjectMapper(true);
+
+	    /**
 	     * Creates an object with the same keys as `object` and values generated by
 	     * running each own enumerable property of `object` through `iteratee`. The
 	     * iteratee function is bound to `thisArg` and invoked with three arguments:
@@ -11223,15 +11536,7 @@ var XDR =
 	     * _.mapValues(users, 'age');
 	     * // => { 'fred': 40, 'pebbles': 1 } (iteration order is not guaranteed)
 	     */
-	    function mapValues(object, iteratee, thisArg) {
-	      var result = {};
-	      iteratee = getCallback(iteratee, thisArg, 3);
-
-	      baseForOwn(object, function(value, key, object) {
-	        result[key] = iteratee(value, key, object);
-	      });
-	      return result;
-	    }
+	    var mapValues = createObjectMapper();
 
 	    /**
 	     * Recursively merges own enumerable properties of the source object(s), that
@@ -11247,7 +11552,7 @@ var XDR =
 	     * @category Object
 	     * @param {Object} object The destination object.
 	     * @param {...Object} [sources] The source objects.
-	     * @param {Function} [customizer] The function to customize merging properties.
+	     * @param {Function} [customizer] The function to customize assigned values.
 	     * @param {*} [thisArg] The `this` binding of `customizer`.
 	     * @returns {Object} Returns `object`.
 	     * @example
@@ -11286,11 +11591,6 @@ var XDR =
 	    /**
 	     * The opposite of `_.pick`; this method creates an object composed of the
 	     * own and inherited enumerable properties of `object` that are not omitted.
-	     * Property names may be specified as individual arguments or as arrays of
-	     * property names. If `predicate` is provided it is invoked for each property
-	     * of `object` omitting the properties `predicate` returns truthy for. The
-	     * predicate is bound to `thisArg` and invoked with three arguments:
-	     * (value, key, object).
 	     *
 	     * @static
 	     * @memberOf _
@@ -11332,7 +11632,7 @@ var XDR =
 	     * @static
 	     * @memberOf _
 	     * @category Object
-	     * @param {Object} object The object to inspect.
+	     * @param {Object} object The object to query.
 	     * @returns {Array} Returns the new array of key-value pairs.
 	     * @example
 	     *
@@ -11388,41 +11688,93 @@ var XDR =
 	    });
 
 	    /**
-	     * Resolves the value of property `key` on `object`. If the value of `key` is
-	     * a function it is invoked with the `this` binding of `object` and its result
-	     * is returned, else the property value is returned. If the property value is
-	     * `undefined` the `defaultValue` is used in its place.
+	     * This method is like `_.get` except that if the resolved value is a function
+	     * it is invoked with the `this` binding of its parent object and its result
+	     * is returned.
 	     *
 	     * @static
 	     * @memberOf _
 	     * @category Object
 	     * @param {Object} object The object to query.
-	     * @param {string} key The key of the property to resolve.
-	     * @param {*} [defaultValue] The value returned if the property value
-	     *  resolves to `undefined`.
+	     * @param {Array|string} path The path of the property to resolve.
+	     * @param {*} [defaultValue] The value returned if the resolved value is `undefined`.
 	     * @returns {*} Returns the resolved value.
 	     * @example
 	     *
-	     * var object = { 'user': 'fred', 'age': _.constant(40) };
+	     * var object = { 'a': [{ 'b': { 'c1': 3, 'c2': _.constant(4) } }] };
 	     *
-	     * _.result(object, 'user');
-	     * // => 'fred'
+	     * _.result(object, 'a[0].b.c1');
+	     * // => 3
 	     *
-	     * _.result(object, 'age');
-	     * // => 40
+	     * _.result(object, 'a[0].b.c2');
+	     * // => 4
 	     *
-	     * _.result(object, 'status', 'busy');
-	     * // => 'busy'
+	     * _.result(object, 'a.b.c', 'default');
+	     * // => 'default'
 	     *
-	     * _.result(object, 'status', _.constant('busy'));
-	     * // => 'busy'
+	     * _.result(object, 'a.b.c', _.constant('default'));
+	     * // => 'default'
 	     */
-	    function result(object, key, defaultValue) {
-	      var value = object == null ? undefined : object[key];
-	      if (typeof value == 'undefined') {
-	        value = defaultValue;
+	    function result(object, path, defaultValue) {
+	      var result = object == null ? undefined : object[path];
+	      if (result === undefined) {
+	        if (object != null && !isKey(path, object)) {
+	          path = toPath(path);
+	          object = path.length == 1 ? object : baseGet(object, baseSlice(path, 0, -1));
+	          result = object == null ? undefined : object[last(path)];
+	        }
+	        result = result === undefined ? defaultValue : result;
 	      }
-	      return isFunction(value) ? value.call(object) : value;
+	      return isFunction(result) ? result.call(object) : result;
+	    }
+
+	    /**
+	     * Sets the property value of `path` on `object`. If a portion of `path`
+	     * does not exist it is created.
+	     *
+	     * @static
+	     * @memberOf _
+	     * @category Object
+	     * @param {Object} object The object to augment.
+	     * @param {Array|string} path The path of the property to set.
+	     * @param {*} value The value to set.
+	     * @returns {Object} Returns `object`.
+	     * @example
+	     *
+	     * var object = { 'a': [{ 'b': { 'c': 3 } }] };
+	     *
+	     * _.set(object, 'a[0].b.c', 4);
+	     * console.log(object.a[0].b.c);
+	     * // => 4
+	     *
+	     * _.set(object, 'x[0].y.z', 5);
+	     * console.log(object.x[0].y.z);
+	     * // => 5
+	     */
+	    function set(object, path, value) {
+	      if (object == null) {
+	        return object;
+	      }
+	      var pathKey = (path + '');
+	      path = (object[pathKey] != null || isKey(path, object)) ? [pathKey] : toPath(path);
+
+	      var index = -1,
+	          length = path.length,
+	          endIndex = length - 1,
+	          nested = object;
+
+	      while (nested != null && ++index < length) {
+	        var key = path[index];
+	        if (isObject(nested)) {
+	          if (index == endIndex) {
+	            nested[key] = value;
+	          } else if (nested[key] == null) {
+	            nested[key] = isIndex(path[index + 1]) ? [] : {};
+	          }
+	        }
+	        nested = nested[key];
+	      }
+	      return object;
 	    }
 
 	    /**
@@ -11430,7 +11782,7 @@ var XDR =
 	     * `accumulator` object which is the result of running each of its own enumerable
 	     * properties through `iteratee`, with each invocation potentially mutating
 	     * the `accumulator` object. The `iteratee` is bound to `thisArg` and invoked
-	     * with four arguments: (accumulator, value, key, object). Iterator functions
+	     * with four arguments: (accumulator, value, key, object). Iteratee functions
 	     * may exit iteration early by explicitly returning `false`.
 	     *
 	     * @static
@@ -11532,8 +11884,6 @@ var XDR =
 	      return baseValues(object, keysIn(object));
 	    }
 
-	    /*------------------------------------------------------------------------*/
-
 	    /**
 	     * Checks if `n` is between `start` and up to but not including, `end`. If
 	     * `end` is not specified it is set to `start` with `start` then set to `0`.
@@ -11573,7 +11923,7 @@ var XDR =
 	      } else {
 	        end = +end || 0;
 	      }
-	      return value >= start && value < end;
+	      return value >= nativeMin(start, end) && value < nativeMax(start, end);
 	    }
 
 	    /**
@@ -11638,8 +11988,6 @@ var XDR =
 	      return baseRandom(min, max);
 	    }
 
-	    /*------------------------------------------------------------------------*/
-
 	    /**
 	     * Converts `string` to [camel case](https://en.wikipedia.org/wiki/CamelCase).
 	     *
@@ -11698,7 +12046,7 @@ var XDR =
 	     */
 	    function deburr(string) {
 	      string = baseToString(string);
-	      return string && string.replace(reLatin1, deburrLetter).replace(reComboMarks, '');
+	      return string && string.replace(reLatin1, deburrLetter).replace(reComboMark, '');
 	    }
 
 	    /**
@@ -11727,7 +12075,7 @@ var XDR =
 	      target = (target + '');
 
 	      var length = string.length;
-	      position = typeof position == 'undefined'
+	      position = position === undefined
 	        ? length
 	        : nativeMin(position < 0 ? 0 : (+position || 0), length);
 
@@ -11749,9 +12097,10 @@ var XDR =
 	     * (under "semi-related fun fact") for more details.
 	     *
 	     * Backticks are escaped because in Internet Explorer < 9, they can break out
-	     * of attribute values or HTML comments. See [#102](https://html5sec.org/#102),
-	     * [#108](https://html5sec.org/#108), and [#133](https://html5sec.org/#133) of
-	     * the [HTML5 Security Cheatsheet](https://html5sec.org/) for more details.
+	     * of attribute values or HTML comments. See [#59](https://html5sec.org/#59),
+	     * [#102](https://html5sec.org/#102), [#108](https://html5sec.org/#108), and
+	     * [#133](https://html5sec.org/#133) of the [HTML5 Security Cheatsheet](https://html5sec.org/)
+	     * for more details.
 	     *
 	     * When working with HTML you should always [quote attribute values](http://wonko.com/post/html-escaping)
 	     * to reduce XSS vectors.
@@ -11945,7 +12294,7 @@ var XDR =
 	          radix = +radix;
 	        }
 	        string = trim(string);
-	        return nativeParseInt(string, radix || (reHexPrefix.test(string) ? 16 : 10));
+	        return nativeParseInt(string, radix || (reHasHexPrefix.test(string) ? 16 : 10));
 	      };
 	    }
 
@@ -12170,9 +12519,9 @@ var XDR =
 	        options = otherOptions = null;
 	      }
 	      string = baseToString(string);
-	      options = baseAssign(baseAssign({}, otherOptions || options), settings, assignOwnDefaults);
+	      options = assignWith(baseAssign({}, otherOptions || options), settings, assignOwnDefaults);
 
-	      var imports = baseAssign(baseAssign({}, options.imports), settings.imports, assignOwnDefaults),
+	      var imports = assignWith(baseAssign({}, options.imports), settings.imports, assignOwnDefaults),
 	          importsKeys = keys(imports),
 	          importsValues = baseValues(imports, importsKeys);
 
@@ -12504,8 +12853,6 @@ var XDR =
 	      return string.match(pattern || reWords) || [];
 	    }
 
-	    /*------------------------------------------------------------------------*/
-
 	    /**
 	     * Attempts to invoke `func`, returning either the result or the caught error
 	     * object. Any additional arguments are provided to `func` when it is invoked.
@@ -12652,7 +12999,7 @@ var XDR =
 	    }
 
 	    /**
-	     * Creates a function which compares the property value of `key` on a given
+	     * Creates a function which compares the property value of `path` on a given
 	     * object to `value`.
 	     *
 	     * **Note:** This method supports comparing arrays, booleans, `Date` objects,
@@ -12662,7 +13009,7 @@ var XDR =
 	     * @static
 	     * @memberOf _
 	     * @category Utility
-	     * @param {string} key The key of the property to get.
+	     * @param {Array|string} path The path of the property to get.
 	     * @param {*} value The value to compare.
 	     * @returns {Function} Returns the new function.
 	     * @example
@@ -12675,22 +13022,75 @@ var XDR =
 	     * _.find(users, _.matchesProperty('user', 'fred'));
 	     * // => { 'user': 'fred' }
 	     */
-	    function matchesProperty(key, value) {
-	      return baseMatchesProperty(key + '', baseClone(value, true));
+	    function matchesProperty(path, value) {
+	      return baseMatchesProperty(path, baseClone(value, true));
 	    }
+
+	    /**
+	     * Creates a function which invokes the method at `path` on a given object.
+	     *
+	     * @static
+	     * @memberOf _
+	     * @category Utility
+	     * @param {Array|string} path The path of the method to invoke.
+	     * @returns {Function} Returns the new function.
+	     * @example
+	     *
+	     * var objects = [
+	     *   { 'a': { 'b': { 'c': _.constant(2) } } },
+	     *   { 'a': { 'b': { 'c': _.constant(1) } } }
+	     * ];
+	     *
+	     * _.map(objects, _.method('a.b.c'));
+	     * // => [2, 1]
+	     *
+	     * _.invoke(_.sortBy(objects, _.method(['a', 'b', 'c'])), 'a.b.c');
+	     * // => [1, 2]
+	     */
+	    var method = restParam(function(path, args) {
+	      return function(object) {
+	        return invokePath(object, path, args);
+	      };
+	    });
+
+	    /**
+	     * The opposite of `_.method`; this method creates a function which invokes
+	     * the method at a given path on `object`.
+	     *
+	     * @static
+	     * @memberOf _
+	     * @category Utility
+	     * @param {Object} object The object to query.
+	     * @returns {Function} Returns the new function.
+	     * @example
+	     *
+	     * var array = _.times(3, _.constant),
+	     *     object = { 'a': array, 'b': array, 'c': array };
+	     *
+	     * _.map(['a[2]', 'c[0]'], _.methodOf(object));
+	     * // => [2, 0]
+	     *
+	     * _.map([['a', '2'], ['c', '0']], _.methodOf(object));
+	     * // => [2, 0]
+	     */
+	    var methodOf = restParam(function(object, args) {
+	      return function(path) {
+	        return invokePath(object, path, args);
+	      };
+	    });
 
 	    /**
 	     * Adds all own enumerable function properties of a source object to the
 	     * destination object. If `object` is a function then methods are added to
 	     * its prototype as well.
 	     *
-	     * **Note:** Use `_.runInContext` to create a pristine `lodash` function
-	     * for mixins to avoid conflicts caused by modifying the original.
+	     * **Note:** Use `_.runInContext` to create a pristine `lodash` function to
+	     * avoid conflicts caused by modifying the original.
 	     *
 	     * @static
 	     * @memberOf _
 	     * @category Utility
-	     * @param {Function|Object} [object=this] object The destination object.
+	     * @param {Function|Object} [object=lodash] The destination object.
 	     * @param {Object} source The object of functions to add.
 	     * @param {Object} [options] The options object.
 	     * @param {boolean} [options.chain=true] Specify whether the functions added
@@ -12807,61 +13207,61 @@ var XDR =
 	    }
 
 	    /**
-	     * Creates a function which returns the property value of `key` on a given object.
+	     * Creates a function which returns the property value at `path` on a
+	     * given object.
 	     *
 	     * @static
 	     * @memberOf _
 	     * @category Utility
-	     * @param {string} key The key of the property to get.
+	     * @param {Array|string} path The path of the property to get.
 	     * @returns {Function} Returns the new function.
 	     * @example
 	     *
-	     * var users = [
-	     *   { 'user': 'fred' },
-	     *   { 'user': 'barney' }
+	     * var objects = [
+	     *   { 'a': { 'b': { 'c': 2 } } },
+	     *   { 'a': { 'b': { 'c': 1 } } }
 	     * ];
 	     *
-	     * var getName = _.property('user');
+	     * _.map(objects, _.property('a.b.c'));
+	     * // => [2, 1]
 	     *
-	     * _.map(users, getName);
-	     * // => ['fred', 'barney']
-	     *
-	     * _.pluck(_.sortBy(users, getName), 'user');
-	     * // => ['barney', 'fred']
+	     * _.pluck(_.sortBy(objects, _.property(['a', 'b', 'c'])), 'a.b.c');
+	     * // => [1, 2]
 	     */
-	    function property(key) {
-	      return baseProperty(key + '');
+	    function property(path) {
+	      return isKey(path) ? baseProperty(path) : basePropertyDeep(path);
 	    }
 
 	    /**
 	     * The opposite of `_.property`; this method creates a function which returns
-	     * the property value of a given key on `object`.
+	     * the property value at a given path on `object`.
 	     *
 	     * @static
 	     * @memberOf _
 	     * @category Utility
-	     * @param {Object} object The object to inspect.
+	     * @param {Object} object The object to query.
 	     * @returns {Function} Returns the new function.
 	     * @example
 	     *
-	     * var object = { 'a': 3, 'b': 1, 'c': 2 };
+	     * var array = [0, 1, 2],
+	     *     object = { 'a': array, 'b': array, 'c': array };
 	     *
-	     * _.map(['a', 'c'], _.propertyOf(object));
-	     * // => [3, 2]
+	     * _.map(['a[2]', 'c[0]'], _.propertyOf(object));
+	     * // => [2, 0]
 	     *
-	     * _.sortBy(['a', 'b', 'c'], _.propertyOf(object));
-	     * // => ['b', 'c', 'a']
+	     * _.map([['a', '2'], ['c', '0']], _.propertyOf(object));
+	     * // => [2, 0]
 	     */
 	    function propertyOf(object) {
-	      return function(key) {
-	        return object == null ? undefined : object[key];
+	      return function(path) {
+	        return baseGet(object, toPath(path), path + '');
 	      };
 	    }
 
 	    /**
 	     * Creates an array of numbers (positive and/or negative) progressing from
 	     * `start` up to, but not including, `end`. If `end` is not specified it is
-	     * set to `start` with `start` then set to `0`. If `start` is less than `end`
+	     * set to `start` with `start` then set to `0`. If `end` is less than `start`
 	     * a zero-length range is created unless a negative `step` is specified.
 	     *
 	     * @static
@@ -12937,7 +13337,7 @@ var XDR =
 	     * _.times(3, function(n) {
 	     *   mage.castSpell(n);
 	     * });
-	     * // => invokes `mage.castSpell(n)` three times with `n` of `0`, `1`, and `2` respectively
+	     * // => invokes `mage.castSpell(n)` three times with `n` of `0`, `1`, and `2`
 	     *
 	     * _.times(3, function(n) {
 	     *   this.cast(n);
@@ -12945,7 +13345,7 @@ var XDR =
 	     * // => also invokes `mage.castSpell(n)` three times
 	     */
 	    function times(n, iteratee, thisArg) {
-	      n = +n;
+	      n = floor(n);
 
 	      // Exit early to avoid a JSC JIT bug in Safari 8
 	      // where `Array(0)` is treated as `Array(1)`.
@@ -12987,8 +13387,6 @@ var XDR =
 	      return baseToString(prefix) + id;
 	    }
 
-	    /*------------------------------------------------------------------------*/
-
 	    /**
 	     * Adds two numbers.
 	     *
@@ -13004,7 +13402,7 @@ var XDR =
 	     * // => 10
 	     */
 	    function add(augend, addend) {
-	      return augend + addend;
+	      return (+augend || 0) + (+addend || 0);
 	    }
 
 	    /**
@@ -13153,8 +13551,6 @@ var XDR =
 	        : baseSum(collection, iteratee);
 	    }
 
-	    /*------------------------------------------------------------------------*/
-
 	    // Ensure wrappers are instances of `baseLodash`.
 	    lodash.prototype = baseLodash.prototype;
 
@@ -13225,11 +13621,14 @@ var XDR =
 	    lodash.keys = keys;
 	    lodash.keysIn = keysIn;
 	    lodash.map = map;
+	    lodash.mapKeys = mapKeys;
 	    lodash.mapValues = mapValues;
 	    lodash.matches = matches;
 	    lodash.matchesProperty = matchesProperty;
 	    lodash.memoize = memoize;
 	    lodash.merge = merge;
+	    lodash.method = method;
+	    lodash.methodOf = methodOf;
 	    lodash.mixin = mixin;
 	    lodash.negate = negate;
 	    lodash.omit = omit;
@@ -13250,6 +13649,7 @@ var XDR =
 	    lodash.remove = remove;
 	    lodash.rest = rest;
 	    lodash.restParam = restParam;
+	    lodash.set = set;
 	    lodash.shuffle = shuffle;
 	    lodash.slice = slice;
 	    lodash.sortBy = sortBy;
@@ -13270,6 +13670,7 @@ var XDR =
 	    lodash.union = union;
 	    lodash.uniq = uniq;
 	    lodash.unzip = unzip;
+	    lodash.unzipWith = unzipWith;
 	    lodash.values = values;
 	    lodash.valuesIn = valuesIn;
 	    lodash.where = where;
@@ -13278,6 +13679,7 @@ var XDR =
 	    lodash.xor = xor;
 	    lodash.zip = zip;
 	    lodash.zipObject = zipObject;
+	    lodash.zipWith = zipWith;
 
 	    // Add aliases.
 	    lodash.backflow = flowRight;
@@ -13295,8 +13697,6 @@ var XDR =
 
 	    // Add functions to `lodash.prototype`.
 	    mixin(lodash, lodash);
-
-	    /*------------------------------------------------------------------------*/
 
 	    // Add functions that return unwrapped values when chaining.
 	    lodash.add = add;
@@ -13318,6 +13718,7 @@ var XDR =
 	    lodash.findLastKey = findLastKey;
 	    lodash.findWhere = findWhere;
 	    lodash.first = first;
+	    lodash.get = get;
 	    lodash.has = has;
 	    lodash.identity = identity;
 	    lodash.includes = includes;
@@ -13400,8 +13801,6 @@ var XDR =
 	      return source;
 	    }()), false);
 
-	    /*------------------------------------------------------------------------*/
-
 	    // Add functions capable of returning wrapped and unwrapped values when chaining.
 	    lodash.sample = sample;
 
@@ -13413,8 +13812,6 @@ var XDR =
 	        return sample(value, n);
 	      });
 	    };
-
-	    /*------------------------------------------------------------------------*/
 
 	    /**
 	     * The semantic version number.
@@ -13506,7 +13903,7 @@ var XDR =
 	    // Add `LazyWrapper` methods for `_.pluck` and `_.where`.
 	    arrayEach(['pluck', 'where'], function(methodName, index) {
 	      var operationName = index ? 'filter' : 'map',
-	          createCallback = index ? baseMatches : baseProperty;
+	          createCallback = index ? baseMatches : property;
 
 	      LazyWrapper.prototype[methodName] = function(value) {
 	        return this[operationName](createCallback(value));
@@ -13526,9 +13923,14 @@ var XDR =
 
 	    LazyWrapper.prototype.slice = function(start, end) {
 	      start = start == null ? 0 : (+start || 0);
-	      var result = start < 0 ? this.takeRight(-start) : this.drop(start);
 
-	      if (typeof end != 'undefined') {
+	      var result = this;
+	      if (start < 0) {
+	        result = this.takeRight(-start);
+	      } else if (start) {
+	        result = this.drop(start);
+	      }
+	      if (end !== undefined) {
 	        end = (+end || 0);
 	        result = end < 0 ? result.dropRight(-end) : result.take(end - start);
 	      }
@@ -13550,7 +13952,6 @@ var XDR =
 
 	      lodash.prototype[methodName] = function() {
 	        var args = arguments,
-	            length = args.length,
 	            chainAll = this.__chain__,
 	            value = this.__wrapped__,
 	            isHybrid = !!this.__actions__.length,
@@ -13559,7 +13960,7 @@ var XDR =
 	            useLazy = isLazy || isArray(value);
 
 	        if (useLazy && checkIteratee && typeof iteratee == 'function' && iteratee.length != 1) {
-	          // avoid lazy use if the iteratee has a `length` other than `1`
+	          // avoid lazy use if the iteratee has a "length" value other than `1`
 	          isLazy = useLazy = false;
 	        }
 	        var onlyLazy = isLazy && !isHybrid;
@@ -13639,8 +14040,6 @@ var XDR =
 	    return lodash;
 	  }
 
-	  /*--------------------------------------------------------------------------*/
-
 	  // Export lodash.
 	  var _ = runInContext();
 
@@ -13675,7 +14074,7 @@ var XDR =
 	  }
 	}.call(this));
 
-	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(33)(module), (function() { return this; }())))
+	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(31)(module), (function() { return this; }())))
 
 /***/ },
 /* 25 */
@@ -13737,7 +14136,7 @@ var XDR =
 
 	module.exports = includeIoMixin;
 
-	var Cursor = __webpack_require__(32).Cursor;
+	var Cursor = __webpack_require__(30).Cursor;
 
 	var _lodash = __webpack_require__(24);
 
@@ -13852,8 +14251,8 @@ var XDR =
 	 */
 
 	var base64 = __webpack_require__(39)
-	var ieee754 = __webpack_require__(35)
-	var isArray = __webpack_require__(36)
+	var ieee754 = __webpack_require__(36)
+	var isArray = __webpack_require__(37)
 
 	exports.Buffer = Buffer
 	exports.SlowBuffer = SlowBuffer
@@ -13910,68 +14309,149 @@ var XDR =
 	 * By augmenting the instances, we can avoid modifying the `Uint8Array`
 	 * prototype.
 	 */
-	function Buffer (subject, encoding) {
-	  var self = this
-	  if (!(self instanceof Buffer)) return new Buffer(subject, encoding)
+	function Buffer (arg) {
+	  if (!(this instanceof Buffer)) {
+	    // Avoid going through an ArgumentsAdaptorTrampoline in the common case.
+	    if (arguments.length > 1) return new Buffer(arg, arguments[1])
+	    return new Buffer(arg)
+	  }
 
-	  var type = typeof subject
-	  var length
+	  this.length = 0
+	  this.parent = undefined
 
-	  if (type === 'number') {
-	    length = +subject
-	  } else if (type === 'string') {
-	    length = Buffer.byteLength(subject, encoding)
-	  } else if (type === 'object' && subject !== null) {
-	    // assume object is array-like
-	    if (subject.type === 'Buffer' && isArray(subject.data)) subject = subject.data
-	    length = +subject.length
-	  } else {
+	  // Common case.
+	  if (typeof arg === 'number') {
+	    return fromNumber(this, arg)
+	  }
+
+	  // Slightly less common case.
+	  if (typeof arg === 'string') {
+	    return fromString(this, arg, arguments.length > 1 ? arguments[1] : 'utf8')
+	  }
+
+	  // Unusual.
+	  return fromObject(this, arg)
+	}
+
+	function fromNumber (that, length) {
+	  that = allocate(that, length < 0 ? 0 : checked(length) | 0)
+	  if (!Buffer.TYPED_ARRAY_SUPPORT) {
+	    for (var i = 0; i < length; i++) {
+	      that[i] = 0
+	    }
+	  }
+	  return that
+	}
+
+	function fromString (that, string, encoding) {
+	  if (typeof encoding !== 'string' || encoding === '') encoding = 'utf8'
+
+	  // Assumption: byteLength() return value is always < kMaxLength.
+	  var length = byteLength(string, encoding) | 0
+	  that = allocate(that, length)
+
+	  that.write(string, encoding)
+	  return that
+	}
+
+	function fromObject (that, object) {
+	  if (Buffer.isBuffer(object)) return fromBuffer(that, object)
+
+	  if (isArray(object)) return fromArray(that, object)
+
+	  if (object == null) {
 	    throw new TypeError('must start with number, buffer, array or string')
 	  }
 
-	  if (length > kMaxLength) {
-	    throw new RangeError('Attempt to allocate Buffer larger than maximum size: 0x' +
-	      kMaxLength.toString(16) + ' bytes')
+	  if (typeof ArrayBuffer !== 'undefined' && object.buffer instanceof ArrayBuffer) {
+	    return fromTypedArray(that, object)
 	  }
 
-	  if (length < 0) length = 0
-	  else length >>>= 0 // coerce to uint32
+	  if (object.length) return fromArrayLike(that, object)
 
+	  return fromJsonObject(that, object)
+	}
+
+	function fromBuffer (that, buffer) {
+	  var length = checked(buffer.length) | 0
+	  that = allocate(that, length)
+	  buffer.copy(that, 0, 0, length)
+	  return that
+	}
+
+	function fromArray (that, array) {
+	  var length = checked(array.length) | 0
+	  that = allocate(that, length)
+	  for (var i = 0; i < length; i += 1) {
+	    that[i] = array[i] & 255
+	  }
+	  return that
+	}
+
+	// Duplicate of fromArray() to keep fromArray() monomorphic.
+	function fromTypedArray (that, array) {
+	  var length = checked(array.length) | 0
+	  that = allocate(that, length)
+	  // Truncating the elements is probably not what people expect from typed
+	  // arrays with BYTES_PER_ELEMENT > 1 but it's compatible with the behavior
+	  // of the old Buffer constructor.
+	  for (var i = 0; i < length; i += 1) {
+	    that[i] = array[i] & 255
+	  }
+	  return that
+	}
+
+	function fromArrayLike (that, array) {
+	  var length = checked(array.length) | 0
+	  that = allocate(that, length)
+	  for (var i = 0; i < length; i += 1) {
+	    that[i] = array[i] & 255
+	  }
+	  return that
+	}
+
+	// Deserialize { type: 'Buffer', data: [1,2,3,...] } into a Buffer object.
+	// Returns a zero-length buffer for inputs that don't conform to the spec.
+	function fromJsonObject (that, object) {
+	  var array
+	  var length = 0
+
+	  if (object.type === 'Buffer' && isArray(object.data)) {
+	    array = object.data
+	    length = checked(array.length) | 0
+	  }
+	  that = allocate(that, length)
+
+	  for (var i = 0; i < length; i += 1) {
+	    that[i] = array[i] & 255
+	  }
+	  return that
+	}
+
+	function allocate (that, length) {
 	  if (Buffer.TYPED_ARRAY_SUPPORT) {
-	    // Preferred: Return an augmented `Uint8Array` instance for best performance
-	    self = Buffer._augment(new Uint8Array(length)) // eslint-disable-line consistent-this
+	    // Return an augmented `Uint8Array` instance, for best performance
+	    that = Buffer._augment(new Uint8Array(length))
 	  } else {
-	    // Fallback: Return THIS instance of Buffer (created by `new`)
-	    self.length = length
-	    self._isBuffer = true
+	    // Fallback: Return an object instance of the Buffer class
+	    that.length = length
+	    that._isBuffer = true
 	  }
 
-	  var i
-	  if (Buffer.TYPED_ARRAY_SUPPORT && typeof subject.byteLength === 'number') {
-	    // Speed optimization -- use set if we're copying from a typed array
-	    self._set(subject)
-	  } else if (isArrayish(subject)) {
-	    // Treat array-ish objects as a byte array
-	    if (Buffer.isBuffer(subject)) {
-	      for (i = 0; i < length; i++) {
-	        self[i] = subject.readUInt8(i)
-	      }
-	    } else {
-	      for (i = 0; i < length; i++) {
-	        self[i] = ((subject[i] % 256) + 256) % 256
-	      }
-	    }
-	  } else if (type === 'string') {
-	    self.write(subject, 0, encoding)
-	  } else if (type === 'number' && !Buffer.TYPED_ARRAY_SUPPORT) {
-	    for (i = 0; i < length; i++) {
-	      self[i] = 0
-	    }
+	  var fromPool = length !== 0 && length <= Buffer.poolSize >>> 1
+	  if (fromPool) that.parent = rootParent
+
+	  return that
+	}
+
+	function checked (length) {
+	  // Note: cannot use `length < kMaxLength` here because that fails when
+	  // length is NaN (which is otherwise coerced to zero.)
+	  if (length >= kMaxLength) {
+	    throw new RangeError('Attempt to allocate Buffer larger than maximum ' +
+	                         'size: 0x' + kMaxLength.toString(16) + ' bytes')
 	  }
-
-	  if (length > 0 && length <= Buffer.poolSize) self.parent = rootParent
-
-	  return self
+	  return length | 0
 	}
 
 	function SlowBuffer (subject, encoding) {
@@ -13995,11 +14475,20 @@ var XDR =
 
 	  var x = a.length
 	  var y = b.length
-	  for (var i = 0, len = Math.min(x, y); i < len && a[i] === b[i]; i++) {}
+
+	  var i = 0
+	  var len = Math.min(x, y)
+	  while (i < len) {
+	    if (a[i] !== b[i]) break
+
+	    ++i
+	  }
+
 	  if (i !== len) {
 	    x = a[i]
 	    y = b[i]
 	  }
+
 	  if (x < y) return -1
 	  if (y < x) return 1
 	  return 0
@@ -14024,7 +14513,7 @@ var XDR =
 	  }
 	}
 
-	Buffer.concat = function concat (list, totalLength) {
+	Buffer.concat = function concat (list, length) {
 	  if (!isArray(list)) throw new TypeError('list argument must be an Array of Buffers.')
 
 	  if (list.length === 0) {
@@ -14034,14 +14523,14 @@ var XDR =
 	  }
 
 	  var i
-	  if (totalLength === undefined) {
-	    totalLength = 0
+	  if (length === undefined) {
+	    length = 0
 	    for (i = 0; i < list.length; i++) {
-	      totalLength += list[i].length
+	      length += list[i].length
 	    }
 	  }
 
-	  var buf = new Buffer(totalLength)
+	  var buf = new Buffer(length)
 	  var pos = 0
 	  for (i = 0; i < list.length; i++) {
 	    var item = list[i]
@@ -14051,36 +14540,33 @@ var XDR =
 	  return buf
 	}
 
-	Buffer.byteLength = function byteLength (str, encoding) {
-	  var ret
-	  str = str + ''
+	function byteLength (string, encoding) {
+	  if (typeof string !== 'string') string = String(string)
+
+	  if (string.length === 0) return 0
+
 	  switch (encoding || 'utf8') {
 	    case 'ascii':
 	    case 'binary':
 	    case 'raw':
-	      ret = str.length
-	      break
+	      return string.length
 	    case 'ucs2':
 	    case 'ucs-2':
 	    case 'utf16le':
 	    case 'utf-16le':
-	      ret = str.length * 2
-	      break
+	      return string.length * 2
 	    case 'hex':
-	      ret = str.length >>> 1
-	      break
+	      return string.length >>> 1
 	    case 'utf8':
 	    case 'utf-8':
-	      ret = utf8ToBytes(str).length
-	      break
+	      return utf8ToBytes(string).length
 	    case 'base64':
-	      ret = base64ToBytes(str).length
-	      break
+	      return base64ToBytes(string).length
 	    default:
-	      ret = str.length
+	      return string.length
 	  }
-	  return ret
 	}
+	Buffer.byteLength = byteLength
 
 	// pre-set for values that may exist in the future
 	Buffer.prototype.length = undefined
@@ -14090,8 +14576,8 @@ var XDR =
 	Buffer.prototype.toString = function toString (encoding, start, end) {
 	  var loweredCase = false
 
-	  start = start >>> 0
-	  end = end === undefined || end === Infinity ? this.length : end >>> 0
+	  start = start | 0
+	  end = end === undefined || end === Infinity ? this.length : end | 0
 
 	  if (!encoding) encoding = 'utf8'
 	  if (start < 0) start = 0
@@ -14233,13 +14719,11 @@ var XDR =
 	}
 
 	function utf8Write (buf, string, offset, length) {
-	  var charsWritten = blitBuffer(utf8ToBytes(string, buf.length - offset), buf, offset, length)
-	  return charsWritten
+	  return blitBuffer(utf8ToBytes(string, buf.length - offset), buf, offset, length)
 	}
 
 	function asciiWrite (buf, string, offset, length) {
-	  var charsWritten = blitBuffer(asciiToBytes(string), buf, offset, length)
-	  return charsWritten
+	  return blitBuffer(asciiToBytes(string), buf, offset, length)
 	}
 
 	function binaryWrite (buf, string, offset, length) {
@@ -14247,75 +14731,83 @@ var XDR =
 	}
 
 	function base64Write (buf, string, offset, length) {
-	  var charsWritten = blitBuffer(base64ToBytes(string), buf, offset, length)
-	  return charsWritten
+	  return blitBuffer(base64ToBytes(string), buf, offset, length)
 	}
 
-	function utf16leWrite (buf, string, offset, length) {
-	  var charsWritten = blitBuffer(utf16leToBytes(string, buf.length - offset), buf, offset, length)
-	  return charsWritten
+	function ucs2Write (buf, string, offset, length) {
+	  return blitBuffer(utf16leToBytes(string, buf.length - offset), buf, offset, length)
 	}
 
 	Buffer.prototype.write = function write (string, offset, length, encoding) {
-	  // Support both (string, offset, length, encoding)
-	  // and the legacy (string, encoding, offset, length)
-	  if (isFinite(offset)) {
-	    if (!isFinite(length)) {
+	  // Buffer#write(string)
+	  if (offset === undefined) {
+	    encoding = 'utf8'
+	    length = this.length
+	    offset = 0
+	  // Buffer#write(string, encoding)
+	  } else if (length === undefined && typeof offset === 'string') {
+	    encoding = offset
+	    length = this.length
+	    offset = 0
+	  // Buffer#write(string, offset[, length][, encoding])
+	  } else if (isFinite(offset)) {
+	    offset = offset | 0
+	    if (isFinite(length)) {
+	      length = length | 0
+	      if (encoding === undefined) encoding = 'utf8'
+	    } else {
 	      encoding = length
 	      length = undefined
 	    }
-	  } else {  // legacy
+	  // legacy write(string, encoding, offset, length) - remove in v0.13
+	  } else {
 	    var swap = encoding
 	    encoding = offset
-	    offset = length
+	    offset = length | 0
 	    length = swap
 	  }
 
-	  offset = Number(offset) || 0
+	  var remaining = this.length - offset
+	  if (length === undefined || length > remaining) length = remaining
 
-	  if (length < 0 || offset < 0 || offset > this.length) {
+	  if ((string.length > 0 && (length < 0 || offset < 0)) || offset > this.length) {
 	    throw new RangeError('attempt to write outside buffer bounds')
 	  }
 
-	  var remaining = this.length - offset
-	  if (!length) {
-	    length = remaining
-	  } else {
-	    length = Number(length)
-	    if (length > remaining) {
-	      length = remaining
+	  if (!encoding) encoding = 'utf8'
+
+	  var loweredCase = false
+	  for (;;) {
+	    switch (encoding) {
+	      case 'hex':
+	        return hexWrite(this, string, offset, length)
+
+	      case 'utf8':
+	      case 'utf-8':
+	        return utf8Write(this, string, offset, length)
+
+	      case 'ascii':
+	        return asciiWrite(this, string, offset, length)
+
+	      case 'binary':
+	        return binaryWrite(this, string, offset, length)
+
+	      case 'base64':
+	        // Warning: maxLength not taken into account in base64Write
+	        return base64Write(this, string, offset, length)
+
+	      case 'ucs2':
+	      case 'ucs-2':
+	      case 'utf16le':
+	      case 'utf-16le':
+	        return ucs2Write(this, string, offset, length)
+
+	      default:
+	        if (loweredCase) throw new TypeError('Unknown encoding: ' + encoding)
+	        encoding = ('' + encoding).toLowerCase()
+	        loweredCase = true
 	    }
 	  }
-	  encoding = String(encoding || 'utf8').toLowerCase()
-
-	  var ret
-	  switch (encoding) {
-	    case 'hex':
-	      ret = hexWrite(this, string, offset, length)
-	      break
-	    case 'utf8':
-	    case 'utf-8':
-	      ret = utf8Write(this, string, offset, length)
-	      break
-	    case 'ascii':
-	      ret = asciiWrite(this, string, offset, length)
-	      break
-	    case 'binary':
-	      ret = binaryWrite(this, string, offset, length)
-	      break
-	    case 'base64':
-	      ret = base64Write(this, string, offset, length)
-	      break
-	    case 'ucs2':
-	    case 'ucs-2':
-	    case 'utf16le':
-	    case 'utf-16le':
-	      ret = utf16leWrite(this, string, offset, length)
-	      break
-	    default:
-	      throw new TypeError('Unknown encoding: ' + encoding)
-	  }
-	  return ret
 	}
 
 	Buffer.prototype.toJSON = function toJSON () {
@@ -14438,8 +14930,8 @@ var XDR =
 	}
 
 	Buffer.prototype.readUIntLE = function readUIntLE (offset, byteLength, noAssert) {
-	  offset = offset >>> 0
-	  byteLength = byteLength >>> 0
+	  offset = offset | 0
+	  byteLength = byteLength | 0
 	  if (!noAssert) checkOffset(offset, byteLength, this.length)
 
 	  var val = this[offset]
@@ -14453,8 +14945,8 @@ var XDR =
 	}
 
 	Buffer.prototype.readUIntBE = function readUIntBE (offset, byteLength, noAssert) {
-	  offset = offset >>> 0
-	  byteLength = byteLength >>> 0
+	  offset = offset | 0
+	  byteLength = byteLength | 0
 	  if (!noAssert) {
 	    checkOffset(offset, byteLength, this.length)
 	  }
@@ -14502,8 +14994,8 @@ var XDR =
 	}
 
 	Buffer.prototype.readIntLE = function readIntLE (offset, byteLength, noAssert) {
-	  offset = offset >>> 0
-	  byteLength = byteLength >>> 0
+	  offset = offset | 0
+	  byteLength = byteLength | 0
 	  if (!noAssert) checkOffset(offset, byteLength, this.length)
 
 	  var val = this[offset]
@@ -14520,8 +15012,8 @@ var XDR =
 	}
 
 	Buffer.prototype.readIntBE = function readIntBE (offset, byteLength, noAssert) {
-	  offset = offset >>> 0
-	  byteLength = byteLength >>> 0
+	  offset = offset | 0
+	  byteLength = byteLength | 0
 	  if (!noAssert) checkOffset(offset, byteLength, this.length)
 
 	  var i = byteLength
@@ -14601,15 +15093,15 @@ var XDR =
 
 	Buffer.prototype.writeUIntLE = function writeUIntLE (value, offset, byteLength, noAssert) {
 	  value = +value
-	  offset = offset >>> 0
-	  byteLength = byteLength >>> 0
+	  offset = offset | 0
+	  byteLength = byteLength | 0
 	  if (!noAssert) checkInt(this, value, offset, byteLength, Math.pow(2, 8 * byteLength), 0)
 
 	  var mul = 1
 	  var i = 0
 	  this[offset] = value & 0xFF
 	  while (++i < byteLength && (mul *= 0x100)) {
-	    this[offset + i] = (value / mul) >>> 0 & 0xFF
+	    this[offset + i] = (value / mul) & 0xFF
 	  }
 
 	  return offset + byteLength
@@ -14617,15 +15109,15 @@ var XDR =
 
 	Buffer.prototype.writeUIntBE = function writeUIntBE (value, offset, byteLength, noAssert) {
 	  value = +value
-	  offset = offset >>> 0
-	  byteLength = byteLength >>> 0
+	  offset = offset | 0
+	  byteLength = byteLength | 0
 	  if (!noAssert) checkInt(this, value, offset, byteLength, Math.pow(2, 8 * byteLength), 0)
 
 	  var i = byteLength - 1
 	  var mul = 1
 	  this[offset + i] = value & 0xFF
 	  while (--i >= 0 && (mul *= 0x100)) {
-	    this[offset + i] = (value / mul) >>> 0 & 0xFF
+	    this[offset + i] = (value / mul) & 0xFF
 	  }
 
 	  return offset + byteLength
@@ -14633,7 +15125,7 @@ var XDR =
 
 	Buffer.prototype.writeUInt8 = function writeUInt8 (value, offset, noAssert) {
 	  value = +value
-	  offset = offset >>> 0
+	  offset = offset | 0
 	  if (!noAssert) checkInt(this, value, offset, 1, 0xff, 0)
 	  if (!Buffer.TYPED_ARRAY_SUPPORT) value = Math.floor(value)
 	  this[offset] = value
@@ -14650,7 +15142,7 @@ var XDR =
 
 	Buffer.prototype.writeUInt16LE = function writeUInt16LE (value, offset, noAssert) {
 	  value = +value
-	  offset = offset >>> 0
+	  offset = offset | 0
 	  if (!noAssert) checkInt(this, value, offset, 2, 0xffff, 0)
 	  if (Buffer.TYPED_ARRAY_SUPPORT) {
 	    this[offset] = value
@@ -14663,7 +15155,7 @@ var XDR =
 
 	Buffer.prototype.writeUInt16BE = function writeUInt16BE (value, offset, noAssert) {
 	  value = +value
-	  offset = offset >>> 0
+	  offset = offset | 0
 	  if (!noAssert) checkInt(this, value, offset, 2, 0xffff, 0)
 	  if (Buffer.TYPED_ARRAY_SUPPORT) {
 	    this[offset] = (value >>> 8)
@@ -14683,7 +15175,7 @@ var XDR =
 
 	Buffer.prototype.writeUInt32LE = function writeUInt32LE (value, offset, noAssert) {
 	  value = +value
-	  offset = offset >>> 0
+	  offset = offset | 0
 	  if (!noAssert) checkInt(this, value, offset, 4, 0xffffffff, 0)
 	  if (Buffer.TYPED_ARRAY_SUPPORT) {
 	    this[offset + 3] = (value >>> 24)
@@ -14698,7 +15190,7 @@ var XDR =
 
 	Buffer.prototype.writeUInt32BE = function writeUInt32BE (value, offset, noAssert) {
 	  value = +value
-	  offset = offset >>> 0
+	  offset = offset | 0
 	  if (!noAssert) checkInt(this, value, offset, 4, 0xffffffff, 0)
 	  if (Buffer.TYPED_ARRAY_SUPPORT) {
 	    this[offset] = (value >>> 24)
@@ -14713,13 +15205,11 @@ var XDR =
 
 	Buffer.prototype.writeIntLE = function writeIntLE (value, offset, byteLength, noAssert) {
 	  value = +value
-	  offset = offset >>> 0
+	  offset = offset | 0
 	  if (!noAssert) {
-	    checkInt(
-	      this, value, offset, byteLength,
-	      Math.pow(2, 8 * byteLength - 1) - 1,
-	      -Math.pow(2, 8 * byteLength - 1)
-	    )
+	    var limit = Math.pow(2, 8 * byteLength - 1)
+
+	    checkInt(this, value, offset, byteLength, limit - 1, -limit)
 	  }
 
 	  var i = 0
@@ -14735,13 +15225,11 @@ var XDR =
 
 	Buffer.prototype.writeIntBE = function writeIntBE (value, offset, byteLength, noAssert) {
 	  value = +value
-	  offset = offset >>> 0
+	  offset = offset | 0
 	  if (!noAssert) {
-	    checkInt(
-	      this, value, offset, byteLength,
-	      Math.pow(2, 8 * byteLength - 1) - 1,
-	      -Math.pow(2, 8 * byteLength - 1)
-	    )
+	    var limit = Math.pow(2, 8 * byteLength - 1)
+
+	    checkInt(this, value, offset, byteLength, limit - 1, -limit)
 	  }
 
 	  var i = byteLength - 1
@@ -14757,7 +15245,7 @@ var XDR =
 
 	Buffer.prototype.writeInt8 = function writeInt8 (value, offset, noAssert) {
 	  value = +value
-	  offset = offset >>> 0
+	  offset = offset | 0
 	  if (!noAssert) checkInt(this, value, offset, 1, 0x7f, -0x80)
 	  if (!Buffer.TYPED_ARRAY_SUPPORT) value = Math.floor(value)
 	  if (value < 0) value = 0xff + value + 1
@@ -14767,7 +15255,7 @@ var XDR =
 
 	Buffer.prototype.writeInt16LE = function writeInt16LE (value, offset, noAssert) {
 	  value = +value
-	  offset = offset >>> 0
+	  offset = offset | 0
 	  if (!noAssert) checkInt(this, value, offset, 2, 0x7fff, -0x8000)
 	  if (Buffer.TYPED_ARRAY_SUPPORT) {
 	    this[offset] = value
@@ -14780,7 +15268,7 @@ var XDR =
 
 	Buffer.prototype.writeInt16BE = function writeInt16BE (value, offset, noAssert) {
 	  value = +value
-	  offset = offset >>> 0
+	  offset = offset | 0
 	  if (!noAssert) checkInt(this, value, offset, 2, 0x7fff, -0x8000)
 	  if (Buffer.TYPED_ARRAY_SUPPORT) {
 	    this[offset] = (value >>> 8)
@@ -14793,7 +15281,7 @@ var XDR =
 
 	Buffer.prototype.writeInt32LE = function writeInt32LE (value, offset, noAssert) {
 	  value = +value
-	  offset = offset >>> 0
+	  offset = offset | 0
 	  if (!noAssert) checkInt(this, value, offset, 4, 0x7fffffff, -0x80000000)
 	  if (Buffer.TYPED_ARRAY_SUPPORT) {
 	    this[offset] = value
@@ -14808,7 +15296,7 @@ var XDR =
 
 	Buffer.prototype.writeInt32BE = function writeInt32BE (value, offset, noAssert) {
 	  value = +value
-	  offset = offset >>> 0
+	  offset = offset | 0
 	  if (!noAssert) checkInt(this, value, offset, 4, 0x7fffffff, -0x80000000)
 	  if (value < 0) value = 0xffffffff + value + 1
 	  if (Buffer.TYPED_ARRAY_SUPPORT) {
@@ -14861,11 +15349,11 @@ var XDR =
 	}
 
 	// copy(targetBuffer, targetStart=0, sourceStart=0, sourceEnd=buffer.length)
-	Buffer.prototype.copy = function copy (target, target_start, start, end) {
+	Buffer.prototype.copy = function copy (target, targetStart, start, end) {
 	  if (!start) start = 0
 	  if (!end && end !== 0) end = this.length
-	  if (target_start >= target.length) target_start = target.length
-	  if (!target_start) target_start = 0
+	  if (targetStart >= target.length) targetStart = target.length
+	  if (!targetStart) targetStart = 0
 	  if (end > 0 && end < start) end = start
 
 	  // Copy 0 bytes; we're done
@@ -14873,7 +15361,7 @@ var XDR =
 	  if (target.length === 0 || this.length === 0) return 0
 
 	  // Fatal error conditions
-	  if (target_start < 0) {
+	  if (targetStart < 0) {
 	    throw new RangeError('targetStart out of bounds')
 	  }
 	  if (start < 0 || start >= this.length) throw new RangeError('sourceStart out of bounds')
@@ -14881,18 +15369,18 @@ var XDR =
 
 	  // Are we oob?
 	  if (end > this.length) end = this.length
-	  if (target.length - target_start < end - start) {
-	    end = target.length - target_start + start
+	  if (target.length - targetStart < end - start) {
+	    end = target.length - targetStart + start
 	  }
 
 	  var len = end - start
 
 	  if (len < 1000 || !Buffer.TYPED_ARRAY_SUPPORT) {
 	    for (var i = 0; i < len; i++) {
-	      target[i + target_start] = this[i + start]
+	      target[i + targetStart] = this[i + start]
 	    }
 	  } else {
-	    target._set(this.subarray(start, start + len), target_start)
+	    target._set(this.subarray(start, start + len), targetStart)
 	  }
 
 	  return len
@@ -15039,12 +15527,6 @@ var XDR =
 	  return str.replace(/^\s+|\s+$/g, '')
 	}
 
-	function isArrayish (subject) {
-	  return isArray(subject) || Buffer.isBuffer(subject) ||
-	      subject && typeof subject === 'object' &&
-	      typeof subject.length === 'number'
-	}
-
 	function toHex (n) {
 	  if (n < 16) return '0' + n.toString(16)
 	  return n.toString(16)
@@ -15180,6 +15662,615 @@ var XDR =
 
 /***/ },
 /* 30 */
+/***/ function(module, exports, __webpack_require__) {
+
+	/* WEBPACK VAR INJECTION */(function(Buffer) {"use strict";
+
+	var _interopRequire = function (obj) { return obj && obj.__esModule ? obj["default"] : obj; };
+
+	var _createClass = (function () { function defineProperties(target, props) { for (var key in props) { var prop = props[key]; prop.configurable = true; if (prop.value) prop.writable = true; } Object.defineProperties(target, props); } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; })();
+
+	var _inherits = function (subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) subClass.__proto__ = superClass; };
+
+	var _classCallCheck = function (instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } };
+
+	Object.defineProperty(exports, "__esModule", {
+	  value: true
+	});
+
+	var BaseCursor = _interopRequire(__webpack_require__(35));
+
+	var calculatePadding = __webpack_require__(27).calculatePadding;
+
+	var Cursor = exports.Cursor = (function (_BaseCursor) {
+	  function Cursor() {
+	    _classCallCheck(this, Cursor);
+
+	    if (_BaseCursor != null) {
+	      _BaseCursor.apply(this, arguments);
+	    }
+	  }
+
+	  _inherits(Cursor, _BaseCursor);
+
+	  _createClass(Cursor, {
+	    writeBufferPadded: {
+	      value: function writeBufferPadded(buffer) {
+	        var padding = calculatePadding(buffer.length);
+	        var paddingBuffer = new Buffer(padding);
+	        paddingBuffer.fill(0);
+
+	        return this.copyFrom(new Cursor(buffer)).copyFrom(new Cursor(paddingBuffer));
+	      }
+	    }
+	  });
+
+	  return Cursor;
+	})(BaseCursor);
+	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(29).Buffer))
+
+/***/ },
+/* 31 */
+/***/ function(module, exports, __webpack_require__) {
+
+	module.exports = function(module) {
+		if(!module.webpackPolyfill) {
+			module.deprecate = function() {};
+			module.paths = [];
+			// module.parent = undefined by default
+			module.children = [];
+			module.webpackPolyfill = 1;
+		}
+		return module;
+	}
+
+
+/***/ },
+/* 32 */
+/***/ function(module, exports, __webpack_require__) {
+
+	/* WEBPACK VAR INJECTION */(function(global) {/**
+	 * Copyright (c) 2014, Facebook, Inc.
+	 * All rights reserved.
+	 *
+	 * This source code is licensed under the BSD-style license found in the
+	 * https://raw.github.com/facebook/regenerator/master/LICENSE file. An
+	 * additional grant of patent rights can be found in the PATENTS file in
+	 * the same directory.
+	 */
+
+	!(function(global) {
+	  "use strict";
+
+	  var hasOwn = Object.prototype.hasOwnProperty;
+	  var undefined; // More compressible than void 0.
+	  var iteratorSymbol =
+	    typeof Symbol === "function" && Symbol.iterator || "@@iterator";
+
+	  var inModule = typeof module === "object";
+	  var runtime = global.regeneratorRuntime;
+	  if (runtime) {
+	    if (inModule) {
+	      // If regeneratorRuntime is defined globally and we're in a module,
+	      // make the exports object identical to regeneratorRuntime.
+	      module.exports = runtime;
+	    }
+	    // Don't bother evaluating the rest of this file if the runtime was
+	    // already defined globally.
+	    return;
+	  }
+
+	  // Define the runtime globally (as expected by generated code) as either
+	  // module.exports (if we're in a module) or a new, empty object.
+	  runtime = global.regeneratorRuntime = inModule ? module.exports : {};
+
+	  function wrap(innerFn, outerFn, self, tryLocsList) {
+	    return new Generator(innerFn, outerFn, self || null, tryLocsList || []);
+	  }
+	  runtime.wrap = wrap;
+
+	  // Try/catch helper to minimize deoptimizations. Returns a completion
+	  // record like context.tryEntries[i].completion. This interface could
+	  // have been (and was previously) designed to take a closure to be
+	  // invoked without arguments, but in all the cases we care about we
+	  // already have an existing method we want to call, so there's no need
+	  // to create a new function object. We can even get away with assuming
+	  // the method takes exactly one argument, since that happens to be true
+	  // in every case, so we don't have to touch the arguments object. The
+	  // only additional allocation required is the completion record, which
+	  // has a stable shape and so hopefully should be cheap to allocate.
+	  function tryCatch(fn, obj, arg) {
+	    try {
+	      return { type: "normal", arg: fn.call(obj, arg) };
+	    } catch (err) {
+	      return { type: "throw", arg: err };
+	    }
+	  }
+
+	  var GenStateSuspendedStart = "suspendedStart";
+	  var GenStateSuspendedYield = "suspendedYield";
+	  var GenStateExecuting = "executing";
+	  var GenStateCompleted = "completed";
+
+	  // Returning this object from the innerFn has the same effect as
+	  // breaking out of the dispatch switch statement.
+	  var ContinueSentinel = {};
+
+	  // Dummy constructor functions that we use as the .constructor and
+	  // .constructor.prototype properties for functions that return Generator
+	  // objects. For full spec compliance, you may wish to configure your
+	  // minifier not to mangle the names of these two functions.
+	  function GeneratorFunction() {}
+	  function GeneratorFunctionPrototype() {}
+
+	  var Gp = GeneratorFunctionPrototype.prototype = Generator.prototype;
+	  GeneratorFunction.prototype = Gp.constructor = GeneratorFunctionPrototype;
+	  GeneratorFunctionPrototype.constructor = GeneratorFunction;
+	  GeneratorFunction.displayName = "GeneratorFunction";
+
+	  runtime.isGeneratorFunction = function(genFun) {
+	    var ctor = typeof genFun === "function" && genFun.constructor;
+	    return ctor
+	      ? ctor === GeneratorFunction ||
+	        // For the native GeneratorFunction constructor, the best we can
+	        // do is to check its .name property.
+	        (ctor.displayName || ctor.name) === "GeneratorFunction"
+	      : false;
+	  };
+
+	  runtime.mark = function(genFun) {
+	    genFun.__proto__ = GeneratorFunctionPrototype;
+	    genFun.prototype = Object.create(Gp);
+	    return genFun;
+	  };
+
+	  runtime.async = function(innerFn, outerFn, self, tryLocsList) {
+	    return new Promise(function(resolve, reject) {
+	      var generator = wrap(innerFn, outerFn, self, tryLocsList);
+	      var callNext = step.bind(generator.next);
+	      var callThrow = step.bind(generator["throw"]);
+
+	      function step(arg) {
+	        var record = tryCatch(this, null, arg);
+	        if (record.type === "throw") {
+	          reject(record.arg);
+	          return;
+	        }
+
+	        var info = record.arg;
+	        if (info.done) {
+	          resolve(info.value);
+	        } else {
+	          Promise.resolve(info.value).then(callNext, callThrow);
+	        }
+	      }
+
+	      callNext();
+	    });
+	  };
+
+	  function Generator(innerFn, outerFn, self, tryLocsList) {
+	    var generator = outerFn ? Object.create(outerFn.prototype) : this;
+	    var context = new Context(tryLocsList);
+	    var state = GenStateSuspendedStart;
+
+	    function invoke(method, arg) {
+	      if (state === GenStateExecuting) {
+	        throw new Error("Generator is already running");
+	      }
+
+	      if (state === GenStateCompleted) {
+	        // Be forgiving, per 25.3.3.3.3 of the spec:
+	        // https://people.mozilla.org/~jorendorff/es6-draft.html#sec-generatorresume
+	        return doneResult();
+	      }
+
+	      while (true) {
+	        var delegate = context.delegate;
+	        if (delegate) {
+	          var record = tryCatch(
+	            delegate.iterator[method],
+	            delegate.iterator,
+	            arg
+	          );
+
+	          if (record.type === "throw") {
+	            context.delegate = null;
+
+	            // Like returning generator.throw(uncaught), but without the
+	            // overhead of an extra function call.
+	            method = "throw";
+	            arg = record.arg;
+
+	            continue;
+	          }
+
+	          // Delegate generator ran and handled its own exceptions so
+	          // regardless of what the method was, we continue as if it is
+	          // "next" with an undefined arg.
+	          method = "next";
+	          arg = undefined;
+
+	          var info = record.arg;
+	          if (info.done) {
+	            context[delegate.resultName] = info.value;
+	            context.next = delegate.nextLoc;
+	          } else {
+	            state = GenStateSuspendedYield;
+	            return info;
+	          }
+
+	          context.delegate = null;
+	        }
+
+	        if (method === "next") {
+	          if (state === GenStateSuspendedStart &&
+	              typeof arg !== "undefined") {
+	            // https://people.mozilla.org/~jorendorff/es6-draft.html#sec-generatorresume
+	            throw new TypeError(
+	              "attempt to send " + JSON.stringify(arg) + " to newborn generator"
+	            );
+	          }
+
+	          if (state === GenStateSuspendedYield) {
+	            context.sent = arg;
+	          } else {
+	            delete context.sent;
+	          }
+
+	        } else if (method === "throw") {
+	          if (state === GenStateSuspendedStart) {
+	            state = GenStateCompleted;
+	            throw arg;
+	          }
+
+	          if (context.dispatchException(arg)) {
+	            // If the dispatched exception was caught by a catch block,
+	            // then let that catch block handle the exception normally.
+	            method = "next";
+	            arg = undefined;
+	          }
+
+	        } else if (method === "return") {
+	          context.abrupt("return", arg);
+	        }
+
+	        state = GenStateExecuting;
+
+	        var record = tryCatch(innerFn, self, context);
+	        if (record.type === "normal") {
+	          // If an exception is thrown from innerFn, we leave state ===
+	          // GenStateExecuting and loop back for another invocation.
+	          state = context.done
+	            ? GenStateCompleted
+	            : GenStateSuspendedYield;
+
+	          var info = {
+	            value: record.arg,
+	            done: context.done
+	          };
+
+	          if (record.arg === ContinueSentinel) {
+	            if (context.delegate && method === "next") {
+	              // Deliberately forget the last sent value so that we don't
+	              // accidentally pass it on to the delegate.
+	              arg = undefined;
+	            }
+	          } else {
+	            return info;
+	          }
+
+	        } else if (record.type === "throw") {
+	          state = GenStateCompleted;
+
+	          if (method === "next") {
+	            context.dispatchException(record.arg);
+	          } else {
+	            arg = record.arg;
+	          }
+	        }
+	      }
+	    }
+
+	    generator.next = invoke.bind(generator, "next");
+	    generator["throw"] = invoke.bind(generator, "throw");
+	    generator["return"] = invoke.bind(generator, "return");
+
+	    return generator;
+	  }
+
+	  Gp[iteratorSymbol] = function() {
+	    return this;
+	  };
+
+	  Gp.toString = function() {
+	    return "[object Generator]";
+	  };
+
+	  function pushTryEntry(locs) {
+	    var entry = { tryLoc: locs[0] };
+
+	    if (1 in locs) {
+	      entry.catchLoc = locs[1];
+	    }
+
+	    if (2 in locs) {
+	      entry.finallyLoc = locs[2];
+	      entry.afterLoc = locs[3];
+	    }
+
+	    this.tryEntries.push(entry);
+	  }
+
+	  function resetTryEntry(entry) {
+	    var record = entry.completion || {};
+	    record.type = "normal";
+	    delete record.arg;
+	    entry.completion = record;
+	  }
+
+	  function Context(tryLocsList) {
+	    // The root entry object (effectively a try statement without a catch
+	    // or a finally block) gives us a place to store values thrown from
+	    // locations where there is no enclosing try statement.
+	    this.tryEntries = [{ tryLoc: "root" }];
+	    tryLocsList.forEach(pushTryEntry, this);
+	    this.reset();
+	  }
+
+	  runtime.keys = function(object) {
+	    var keys = [];
+	    for (var key in object) {
+	      keys.push(key);
+	    }
+	    keys.reverse();
+
+	    // Rather than returning an object with a next method, we keep
+	    // things simple and return the next function itself.
+	    return function next() {
+	      while (keys.length) {
+	        var key = keys.pop();
+	        if (key in object) {
+	          next.value = key;
+	          next.done = false;
+	          return next;
+	        }
+	      }
+
+	      // To avoid creating an additional object, we just hang the .value
+	      // and .done properties off the next function object itself. This
+	      // also ensures that the minifier will not anonymize the function.
+	      next.done = true;
+	      return next;
+	    };
+	  };
+
+	  function values(iterable) {
+	    if (iterable) {
+	      var iteratorMethod = iterable[iteratorSymbol];
+	      if (iteratorMethod) {
+	        return iteratorMethod.call(iterable);
+	      }
+
+	      if (typeof iterable.next === "function") {
+	        return iterable;
+	      }
+
+	      if (!isNaN(iterable.length)) {
+	        var i = -1, next = function next() {
+	          while (++i < iterable.length) {
+	            if (hasOwn.call(iterable, i)) {
+	              next.value = iterable[i];
+	              next.done = false;
+	              return next;
+	            }
+	          }
+
+	          next.value = undefined;
+	          next.done = true;
+
+	          return next;
+	        };
+
+	        return next.next = next;
+	      }
+	    }
+
+	    // Return an iterator with no values.
+	    return { next: doneResult };
+	  }
+	  runtime.values = values;
+
+	  function doneResult() {
+	    return { value: undefined, done: true };
+	  }
+
+	  Context.prototype = {
+	    constructor: Context,
+
+	    reset: function() {
+	      this.prev = 0;
+	      this.next = 0;
+	      this.sent = undefined;
+	      this.done = false;
+	      this.delegate = null;
+
+	      this.tryEntries.forEach(resetTryEntry);
+
+	      // Pre-initialize at least 20 temporary variables to enable hidden
+	      // class optimizations for simple generators.
+	      for (var tempIndex = 0, tempName;
+	           hasOwn.call(this, tempName = "t" + tempIndex) || tempIndex < 20;
+	           ++tempIndex) {
+	        this[tempName] = null;
+	      }
+	    },
+
+	    stop: function() {
+	      this.done = true;
+
+	      var rootEntry = this.tryEntries[0];
+	      var rootRecord = rootEntry.completion;
+	      if (rootRecord.type === "throw") {
+	        throw rootRecord.arg;
+	      }
+
+	      return this.rval;
+	    },
+
+	    dispatchException: function(exception) {
+	      if (this.done) {
+	        throw exception;
+	      }
+
+	      var context = this;
+	      function handle(loc, caught) {
+	        record.type = "throw";
+	        record.arg = exception;
+	        context.next = loc;
+	        return !!caught;
+	      }
+
+	      for (var i = this.tryEntries.length - 1; i >= 0; --i) {
+	        var entry = this.tryEntries[i];
+	        var record = entry.completion;
+
+	        if (entry.tryLoc === "root") {
+	          // Exception thrown outside of any try block that could handle
+	          // it, so set the completion value of the entire function to
+	          // throw the exception.
+	          return handle("end");
+	        }
+
+	        if (entry.tryLoc <= this.prev) {
+	          var hasCatch = hasOwn.call(entry, "catchLoc");
+	          var hasFinally = hasOwn.call(entry, "finallyLoc");
+
+	          if (hasCatch && hasFinally) {
+	            if (this.prev < entry.catchLoc) {
+	              return handle(entry.catchLoc, true);
+	            } else if (this.prev < entry.finallyLoc) {
+	              return handle(entry.finallyLoc);
+	            }
+
+	          } else if (hasCatch) {
+	            if (this.prev < entry.catchLoc) {
+	              return handle(entry.catchLoc, true);
+	            }
+
+	          } else if (hasFinally) {
+	            if (this.prev < entry.finallyLoc) {
+	              return handle(entry.finallyLoc);
+	            }
+
+	          } else {
+	            throw new Error("try statement without catch or finally");
+	          }
+	        }
+	      }
+	    },
+
+	    abrupt: function(type, arg) {
+	      for (var i = this.tryEntries.length - 1; i >= 0; --i) {
+	        var entry = this.tryEntries[i];
+	        if (entry.tryLoc <= this.prev &&
+	            hasOwn.call(entry, "finallyLoc") &&
+	            this.prev < entry.finallyLoc) {
+	          var finallyEntry = entry;
+	          break;
+	        }
+	      }
+
+	      if (finallyEntry &&
+	          (type === "break" ||
+	           type === "continue") &&
+	          finallyEntry.tryLoc <= arg &&
+	          arg < finallyEntry.finallyLoc) {
+	        // Ignore the finally entry if control is not jumping to a
+	        // location outside the try/catch block.
+	        finallyEntry = null;
+	      }
+
+	      var record = finallyEntry ? finallyEntry.completion : {};
+	      record.type = type;
+	      record.arg = arg;
+
+	      if (finallyEntry) {
+	        this.next = finallyEntry.finallyLoc;
+	      } else {
+	        this.complete(record);
+	      }
+
+	      return ContinueSentinel;
+	    },
+
+	    complete: function(record, afterLoc) {
+	      if (record.type === "throw") {
+	        throw record.arg;
+	      }
+
+	      if (record.type === "break" ||
+	          record.type === "continue") {
+	        this.next = record.arg;
+	      } else if (record.type === "return") {
+	        this.rval = record.arg;
+	        this.next = "end";
+	      } else if (record.type === "normal" && afterLoc) {
+	        this.next = afterLoc;
+	      }
+
+	      return ContinueSentinel;
+	    },
+
+	    finish: function(finallyLoc) {
+	      for (var i = this.tryEntries.length - 1; i >= 0; --i) {
+	        var entry = this.tryEntries[i];
+	        if (entry.finallyLoc === finallyLoc) {
+	          return this.complete(entry.completion, entry.afterLoc);
+	        }
+	      }
+	    },
+
+	    "catch": function(tryLoc) {
+	      for (var i = this.tryEntries.length - 1; i >= 0; --i) {
+	        var entry = this.tryEntries[i];
+	        if (entry.tryLoc === tryLoc) {
+	          var record = entry.completion;
+	          if (record.type === "throw") {
+	            var thrown = record.arg;
+	            resetTryEntry(entry);
+	          }
+	          return thrown;
+	        }
+	      }
+
+	      // The context.catch method must only be called with a location
+	      // argument that corresponds to a known catch block.
+	      throw new Error("illegal catch attempt");
+	    },
+
+	    delegateYield: function(iterable, resultName, nextLoc) {
+	      this.delegate = {
+	        iterator: values(iterable),
+	        resultName: resultName,
+	        nextLoc: nextLoc
+	      };
+
+	      return ContinueSentinel;
+	    }
+	  };
+	})(
+	  // Among the various tricks for obtaining a reference to the global
+	  // object, this seems to be the most reliable technique that does not
+	  // use indirect eval (which violates Content Security Policy).
+	  typeof global === "object" ? global :
+	  typeof window === "object" ? window : this
+	);
+
+	/* WEBPACK VAR INJECTION */}.call(exports, (function() { return this; }())))
+
+/***/ },
+/* 33 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/**
@@ -17162,615 +18253,6 @@ var XDR =
 	}(typeof self != 'undefined' && self.Math === Math ? self : Function('return this')(), true);
 
 /***/ },
-/* 31 */
-/***/ function(module, exports, __webpack_require__) {
-
-	/* WEBPACK VAR INJECTION */(function(global) {/**
-	 * Copyright (c) 2014, Facebook, Inc.
-	 * All rights reserved.
-	 *
-	 * This source code is licensed under the BSD-style license found in the
-	 * https://raw.github.com/facebook/regenerator/master/LICENSE file. An
-	 * additional grant of patent rights can be found in the PATENTS file in
-	 * the same directory.
-	 */
-
-	!(function(global) {
-	  "use strict";
-
-	  var hasOwn = Object.prototype.hasOwnProperty;
-	  var undefined; // More compressible than void 0.
-	  var iteratorSymbol =
-	    typeof Symbol === "function" && Symbol.iterator || "@@iterator";
-
-	  var inModule = typeof module === "object";
-	  var runtime = global.regeneratorRuntime;
-	  if (runtime) {
-	    if (inModule) {
-	      // If regeneratorRuntime is defined globally and we're in a module,
-	      // make the exports object identical to regeneratorRuntime.
-	      module.exports = runtime;
-	    }
-	    // Don't bother evaluating the rest of this file if the runtime was
-	    // already defined globally.
-	    return;
-	  }
-
-	  // Define the runtime globally (as expected by generated code) as either
-	  // module.exports (if we're in a module) or a new, empty object.
-	  runtime = global.regeneratorRuntime = inModule ? module.exports : {};
-
-	  function wrap(innerFn, outerFn, self, tryLocsList) {
-	    return new Generator(innerFn, outerFn, self || null, tryLocsList || []);
-	  }
-	  runtime.wrap = wrap;
-
-	  // Try/catch helper to minimize deoptimizations. Returns a completion
-	  // record like context.tryEntries[i].completion. This interface could
-	  // have been (and was previously) designed to take a closure to be
-	  // invoked without arguments, but in all the cases we care about we
-	  // already have an existing method we want to call, so there's no need
-	  // to create a new function object. We can even get away with assuming
-	  // the method takes exactly one argument, since that happens to be true
-	  // in every case, so we don't have to touch the arguments object. The
-	  // only additional allocation required is the completion record, which
-	  // has a stable shape and so hopefully should be cheap to allocate.
-	  function tryCatch(fn, obj, arg) {
-	    try {
-	      return { type: "normal", arg: fn.call(obj, arg) };
-	    } catch (err) {
-	      return { type: "throw", arg: err };
-	    }
-	  }
-
-	  var GenStateSuspendedStart = "suspendedStart";
-	  var GenStateSuspendedYield = "suspendedYield";
-	  var GenStateExecuting = "executing";
-	  var GenStateCompleted = "completed";
-
-	  // Returning this object from the innerFn has the same effect as
-	  // breaking out of the dispatch switch statement.
-	  var ContinueSentinel = {};
-
-	  // Dummy constructor functions that we use as the .constructor and
-	  // .constructor.prototype properties for functions that return Generator
-	  // objects. For full spec compliance, you may wish to configure your
-	  // minifier not to mangle the names of these two functions.
-	  function GeneratorFunction() {}
-	  function GeneratorFunctionPrototype() {}
-
-	  var Gp = GeneratorFunctionPrototype.prototype = Generator.prototype;
-	  GeneratorFunction.prototype = Gp.constructor = GeneratorFunctionPrototype;
-	  GeneratorFunctionPrototype.constructor = GeneratorFunction;
-	  GeneratorFunction.displayName = "GeneratorFunction";
-
-	  runtime.isGeneratorFunction = function(genFun) {
-	    var ctor = typeof genFun === "function" && genFun.constructor;
-	    return ctor
-	      ? ctor === GeneratorFunction ||
-	        // For the native GeneratorFunction constructor, the best we can
-	        // do is to check its .name property.
-	        (ctor.displayName || ctor.name) === "GeneratorFunction"
-	      : false;
-	  };
-
-	  runtime.mark = function(genFun) {
-	    genFun.__proto__ = GeneratorFunctionPrototype;
-	    genFun.prototype = Object.create(Gp);
-	    return genFun;
-	  };
-
-	  runtime.async = function(innerFn, outerFn, self, tryLocsList) {
-	    return new Promise(function(resolve, reject) {
-	      var generator = wrap(innerFn, outerFn, self, tryLocsList);
-	      var callNext = step.bind(generator.next);
-	      var callThrow = step.bind(generator["throw"]);
-
-	      function step(arg) {
-	        var record = tryCatch(this, null, arg);
-	        if (record.type === "throw") {
-	          reject(record.arg);
-	          return;
-	        }
-
-	        var info = record.arg;
-	        if (info.done) {
-	          resolve(info.value);
-	        } else {
-	          Promise.resolve(info.value).then(callNext, callThrow);
-	        }
-	      }
-
-	      callNext();
-	    });
-	  };
-
-	  function Generator(innerFn, outerFn, self, tryLocsList) {
-	    var generator = outerFn ? Object.create(outerFn.prototype) : this;
-	    var context = new Context(tryLocsList);
-	    var state = GenStateSuspendedStart;
-
-	    function invoke(method, arg) {
-	      if (state === GenStateExecuting) {
-	        throw new Error("Generator is already running");
-	      }
-
-	      if (state === GenStateCompleted) {
-	        // Be forgiving, per 25.3.3.3.3 of the spec:
-	        // https://people.mozilla.org/~jorendorff/es6-draft.html#sec-generatorresume
-	        return doneResult();
-	      }
-
-	      while (true) {
-	        var delegate = context.delegate;
-	        if (delegate) {
-	          var record = tryCatch(
-	            delegate.iterator[method],
-	            delegate.iterator,
-	            arg
-	          );
-
-	          if (record.type === "throw") {
-	            context.delegate = null;
-
-	            // Like returning generator.throw(uncaught), but without the
-	            // overhead of an extra function call.
-	            method = "throw";
-	            arg = record.arg;
-
-	            continue;
-	          }
-
-	          // Delegate generator ran and handled its own exceptions so
-	          // regardless of what the method was, we continue as if it is
-	          // "next" with an undefined arg.
-	          method = "next";
-	          arg = undefined;
-
-	          var info = record.arg;
-	          if (info.done) {
-	            context[delegate.resultName] = info.value;
-	            context.next = delegate.nextLoc;
-	          } else {
-	            state = GenStateSuspendedYield;
-	            return info;
-	          }
-
-	          context.delegate = null;
-	        }
-
-	        if (method === "next") {
-	          if (state === GenStateSuspendedStart &&
-	              typeof arg !== "undefined") {
-	            // https://people.mozilla.org/~jorendorff/es6-draft.html#sec-generatorresume
-	            throw new TypeError(
-	              "attempt to send " + JSON.stringify(arg) + " to newborn generator"
-	            );
-	          }
-
-	          if (state === GenStateSuspendedYield) {
-	            context.sent = arg;
-	          } else {
-	            delete context.sent;
-	          }
-
-	        } else if (method === "throw") {
-	          if (state === GenStateSuspendedStart) {
-	            state = GenStateCompleted;
-	            throw arg;
-	          }
-
-	          if (context.dispatchException(arg)) {
-	            // If the dispatched exception was caught by a catch block,
-	            // then let that catch block handle the exception normally.
-	            method = "next";
-	            arg = undefined;
-	          }
-
-	        } else if (method === "return") {
-	          context.abrupt("return", arg);
-	        }
-
-	        state = GenStateExecuting;
-
-	        var record = tryCatch(innerFn, self, context);
-	        if (record.type === "normal") {
-	          // If an exception is thrown from innerFn, we leave state ===
-	          // GenStateExecuting and loop back for another invocation.
-	          state = context.done
-	            ? GenStateCompleted
-	            : GenStateSuspendedYield;
-
-	          var info = {
-	            value: record.arg,
-	            done: context.done
-	          };
-
-	          if (record.arg === ContinueSentinel) {
-	            if (context.delegate && method === "next") {
-	              // Deliberately forget the last sent value so that we don't
-	              // accidentally pass it on to the delegate.
-	              arg = undefined;
-	            }
-	          } else {
-	            return info;
-	          }
-
-	        } else if (record.type === "throw") {
-	          state = GenStateCompleted;
-
-	          if (method === "next") {
-	            context.dispatchException(record.arg);
-	          } else {
-	            arg = record.arg;
-	          }
-	        }
-	      }
-	    }
-
-	    generator.next = invoke.bind(generator, "next");
-	    generator["throw"] = invoke.bind(generator, "throw");
-	    generator["return"] = invoke.bind(generator, "return");
-
-	    return generator;
-	  }
-
-	  Gp[iteratorSymbol] = function() {
-	    return this;
-	  };
-
-	  Gp.toString = function() {
-	    return "[object Generator]";
-	  };
-
-	  function pushTryEntry(locs) {
-	    var entry = { tryLoc: locs[0] };
-
-	    if (1 in locs) {
-	      entry.catchLoc = locs[1];
-	    }
-
-	    if (2 in locs) {
-	      entry.finallyLoc = locs[2];
-	      entry.afterLoc = locs[3];
-	    }
-
-	    this.tryEntries.push(entry);
-	  }
-
-	  function resetTryEntry(entry) {
-	    var record = entry.completion || {};
-	    record.type = "normal";
-	    delete record.arg;
-	    entry.completion = record;
-	  }
-
-	  function Context(tryLocsList) {
-	    // The root entry object (effectively a try statement without a catch
-	    // or a finally block) gives us a place to store values thrown from
-	    // locations where there is no enclosing try statement.
-	    this.tryEntries = [{ tryLoc: "root" }];
-	    tryLocsList.forEach(pushTryEntry, this);
-	    this.reset();
-	  }
-
-	  runtime.keys = function(object) {
-	    var keys = [];
-	    for (var key in object) {
-	      keys.push(key);
-	    }
-	    keys.reverse();
-
-	    // Rather than returning an object with a next method, we keep
-	    // things simple and return the next function itself.
-	    return function next() {
-	      while (keys.length) {
-	        var key = keys.pop();
-	        if (key in object) {
-	          next.value = key;
-	          next.done = false;
-	          return next;
-	        }
-	      }
-
-	      // To avoid creating an additional object, we just hang the .value
-	      // and .done properties off the next function object itself. This
-	      // also ensures that the minifier will not anonymize the function.
-	      next.done = true;
-	      return next;
-	    };
-	  };
-
-	  function values(iterable) {
-	    if (iterable) {
-	      var iteratorMethod = iterable[iteratorSymbol];
-	      if (iteratorMethod) {
-	        return iteratorMethod.call(iterable);
-	      }
-
-	      if (typeof iterable.next === "function") {
-	        return iterable;
-	      }
-
-	      if (!isNaN(iterable.length)) {
-	        var i = -1, next = function next() {
-	          while (++i < iterable.length) {
-	            if (hasOwn.call(iterable, i)) {
-	              next.value = iterable[i];
-	              next.done = false;
-	              return next;
-	            }
-	          }
-
-	          next.value = undefined;
-	          next.done = true;
-
-	          return next;
-	        };
-
-	        return next.next = next;
-	      }
-	    }
-
-	    // Return an iterator with no values.
-	    return { next: doneResult };
-	  }
-	  runtime.values = values;
-
-	  function doneResult() {
-	    return { value: undefined, done: true };
-	  }
-
-	  Context.prototype = {
-	    constructor: Context,
-
-	    reset: function() {
-	      this.prev = 0;
-	      this.next = 0;
-	      this.sent = undefined;
-	      this.done = false;
-	      this.delegate = null;
-
-	      this.tryEntries.forEach(resetTryEntry);
-
-	      // Pre-initialize at least 20 temporary variables to enable hidden
-	      // class optimizations for simple generators.
-	      for (var tempIndex = 0, tempName;
-	           hasOwn.call(this, tempName = "t" + tempIndex) || tempIndex < 20;
-	           ++tempIndex) {
-	        this[tempName] = null;
-	      }
-	    },
-
-	    stop: function() {
-	      this.done = true;
-
-	      var rootEntry = this.tryEntries[0];
-	      var rootRecord = rootEntry.completion;
-	      if (rootRecord.type === "throw") {
-	        throw rootRecord.arg;
-	      }
-
-	      return this.rval;
-	    },
-
-	    dispatchException: function(exception) {
-	      if (this.done) {
-	        throw exception;
-	      }
-
-	      var context = this;
-	      function handle(loc, caught) {
-	        record.type = "throw";
-	        record.arg = exception;
-	        context.next = loc;
-	        return !!caught;
-	      }
-
-	      for (var i = this.tryEntries.length - 1; i >= 0; --i) {
-	        var entry = this.tryEntries[i];
-	        var record = entry.completion;
-
-	        if (entry.tryLoc === "root") {
-	          // Exception thrown outside of any try block that could handle
-	          // it, so set the completion value of the entire function to
-	          // throw the exception.
-	          return handle("end");
-	        }
-
-	        if (entry.tryLoc <= this.prev) {
-	          var hasCatch = hasOwn.call(entry, "catchLoc");
-	          var hasFinally = hasOwn.call(entry, "finallyLoc");
-
-	          if (hasCatch && hasFinally) {
-	            if (this.prev < entry.catchLoc) {
-	              return handle(entry.catchLoc, true);
-	            } else if (this.prev < entry.finallyLoc) {
-	              return handle(entry.finallyLoc);
-	            }
-
-	          } else if (hasCatch) {
-	            if (this.prev < entry.catchLoc) {
-	              return handle(entry.catchLoc, true);
-	            }
-
-	          } else if (hasFinally) {
-	            if (this.prev < entry.finallyLoc) {
-	              return handle(entry.finallyLoc);
-	            }
-
-	          } else {
-	            throw new Error("try statement without catch or finally");
-	          }
-	        }
-	      }
-	    },
-
-	    abrupt: function(type, arg) {
-	      for (var i = this.tryEntries.length - 1; i >= 0; --i) {
-	        var entry = this.tryEntries[i];
-	        if (entry.tryLoc <= this.prev &&
-	            hasOwn.call(entry, "finallyLoc") &&
-	            this.prev < entry.finallyLoc) {
-	          var finallyEntry = entry;
-	          break;
-	        }
-	      }
-
-	      if (finallyEntry &&
-	          (type === "break" ||
-	           type === "continue") &&
-	          finallyEntry.tryLoc <= arg &&
-	          arg < finallyEntry.finallyLoc) {
-	        // Ignore the finally entry if control is not jumping to a
-	        // location outside the try/catch block.
-	        finallyEntry = null;
-	      }
-
-	      var record = finallyEntry ? finallyEntry.completion : {};
-	      record.type = type;
-	      record.arg = arg;
-
-	      if (finallyEntry) {
-	        this.next = finallyEntry.finallyLoc;
-	      } else {
-	        this.complete(record);
-	      }
-
-	      return ContinueSentinel;
-	    },
-
-	    complete: function(record, afterLoc) {
-	      if (record.type === "throw") {
-	        throw record.arg;
-	      }
-
-	      if (record.type === "break" ||
-	          record.type === "continue") {
-	        this.next = record.arg;
-	      } else if (record.type === "return") {
-	        this.rval = record.arg;
-	        this.next = "end";
-	      } else if (record.type === "normal" && afterLoc) {
-	        this.next = afterLoc;
-	      }
-
-	      return ContinueSentinel;
-	    },
-
-	    finish: function(finallyLoc) {
-	      for (var i = this.tryEntries.length - 1; i >= 0; --i) {
-	        var entry = this.tryEntries[i];
-	        if (entry.finallyLoc === finallyLoc) {
-	          return this.complete(entry.completion, entry.afterLoc);
-	        }
-	      }
-	    },
-
-	    "catch": function(tryLoc) {
-	      for (var i = this.tryEntries.length - 1; i >= 0; --i) {
-	        var entry = this.tryEntries[i];
-	        if (entry.tryLoc === tryLoc) {
-	          var record = entry.completion;
-	          if (record.type === "throw") {
-	            var thrown = record.arg;
-	            resetTryEntry(entry);
-	          }
-	          return thrown;
-	        }
-	      }
-
-	      // The context.catch method must only be called with a location
-	      // argument that corresponds to a known catch block.
-	      throw new Error("illegal catch attempt");
-	    },
-
-	    delegateYield: function(iterable, resultName, nextLoc) {
-	      this.delegate = {
-	        iterator: values(iterable),
-	        resultName: resultName,
-	        nextLoc: nextLoc
-	      };
-
-	      return ContinueSentinel;
-	    }
-	  };
-	})(
-	  // Among the various tricks for obtaining a reference to the global
-	  // object, this seems to be the most reliable technique that does not
-	  // use indirect eval (which violates Content Security Policy).
-	  typeof global === "object" ? global :
-	  typeof window === "object" ? window : this
-	);
-
-	/* WEBPACK VAR INJECTION */}.call(exports, (function() { return this; }())))
-
-/***/ },
-/* 32 */
-/***/ function(module, exports, __webpack_require__) {
-
-	/* WEBPACK VAR INJECTION */(function(Buffer) {"use strict";
-
-	var _interopRequire = function (obj) { return obj && obj.__esModule ? obj["default"] : obj; };
-
-	var _createClass = (function () { function defineProperties(target, props) { for (var key in props) { var prop = props[key]; prop.configurable = true; if (prop.value) prop.writable = true; } Object.defineProperties(target, props); } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; })();
-
-	var _inherits = function (subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) subClass.__proto__ = superClass; };
-
-	var _classCallCheck = function (instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } };
-
-	Object.defineProperty(exports, "__esModule", {
-	  value: true
-	});
-
-	var BaseCursor = _interopRequire(__webpack_require__(37));
-
-	var calculatePadding = __webpack_require__(27).calculatePadding;
-
-	var Cursor = exports.Cursor = (function (_BaseCursor) {
-	  function Cursor() {
-	    _classCallCheck(this, Cursor);
-
-	    if (_BaseCursor != null) {
-	      _BaseCursor.apply(this, arguments);
-	    }
-	  }
-
-	  _inherits(Cursor, _BaseCursor);
-
-	  _createClass(Cursor, {
-	    writeBufferPadded: {
-	      value: function writeBufferPadded(buffer) {
-	        var padding = calculatePadding(buffer.length);
-	        var paddingBuffer = new Buffer(padding);
-	        paddingBuffer.fill(0);
-
-	        return this.copyFrom(new Cursor(buffer)).copyFrom(new Cursor(paddingBuffer));
-	      }
-	    }
-	  });
-
-	  return Cursor;
-	})(BaseCursor);
-	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(29).Buffer))
-
-/***/ },
-/* 33 */
-/***/ function(module, exports, __webpack_require__) {
-
-	module.exports = function(module) {
-		if(!module.webpackPolyfill) {
-			module.deprecate = function() {};
-			module.paths = [];
-			// module.parent = undefined by default
-			module.children = [];
-			module.webpackPolyfill = 1;
-		}
-		return module;
-	}
-
-
-/***/ },
 /* 34 */
 /***/ function(module, exports, __webpack_require__) {
 
@@ -18717,139 +19199,10 @@ var XDR =
 
 	})(this);
 
-	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(33)(module)))
+	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(31)(module)))
 
 /***/ },
 /* 35 */
-/***/ function(module, exports, __webpack_require__) {
-
-	exports.read = function(buffer, offset, isLE, mLen, nBytes) {
-	  var e, m,
-	      eLen = nBytes * 8 - mLen - 1,
-	      eMax = (1 << eLen) - 1,
-	      eBias = eMax >> 1,
-	      nBits = -7,
-	      i = isLE ? (nBytes - 1) : 0,
-	      d = isLE ? -1 : 1,
-	      s = buffer[offset + i];
-
-	  i += d;
-
-	  e = s & ((1 << (-nBits)) - 1);
-	  s >>= (-nBits);
-	  nBits += eLen;
-	  for (; nBits > 0; e = e * 256 + buffer[offset + i], i += d, nBits -= 8);
-
-	  m = e & ((1 << (-nBits)) - 1);
-	  e >>= (-nBits);
-	  nBits += mLen;
-	  for (; nBits > 0; m = m * 256 + buffer[offset + i], i += d, nBits -= 8);
-
-	  if (e === 0) {
-	    e = 1 - eBias;
-	  } else if (e === eMax) {
-	    return m ? NaN : ((s ? -1 : 1) * Infinity);
-	  } else {
-	    m = m + Math.pow(2, mLen);
-	    e = e - eBias;
-	  }
-	  return (s ? -1 : 1) * m * Math.pow(2, e - mLen);
-	};
-
-	exports.write = function(buffer, value, offset, isLE, mLen, nBytes) {
-	  var e, m, c,
-	      eLen = nBytes * 8 - mLen - 1,
-	      eMax = (1 << eLen) - 1,
-	      eBias = eMax >> 1,
-	      rt = (mLen === 23 ? Math.pow(2, -24) - Math.pow(2, -77) : 0),
-	      i = isLE ? 0 : (nBytes - 1),
-	      d = isLE ? 1 : -1,
-	      s = value < 0 || (value === 0 && 1 / value < 0) ? 1 : 0;
-
-	  value = Math.abs(value);
-
-	  if (isNaN(value) || value === Infinity) {
-	    m = isNaN(value) ? 1 : 0;
-	    e = eMax;
-	  } else {
-	    e = Math.floor(Math.log(value) / Math.LN2);
-	    if (value * (c = Math.pow(2, -e)) < 1) {
-	      e--;
-	      c *= 2;
-	    }
-	    if (e + eBias >= 1) {
-	      value += rt / c;
-	    } else {
-	      value += rt * Math.pow(2, 1 - eBias);
-	    }
-	    if (value * c >= 2) {
-	      e++;
-	      c /= 2;
-	    }
-
-	    if (e + eBias >= eMax) {
-	      m = 0;
-	      e = eMax;
-	    } else if (e + eBias >= 1) {
-	      m = (value * c - 1) * Math.pow(2, mLen);
-	      e = e + eBias;
-	    } else {
-	      m = value * Math.pow(2, eBias - 1) * Math.pow(2, mLen);
-	      e = 0;
-	    }
-	  }
-
-	  for (; mLen >= 8; buffer[offset + i] = m & 0xff, i += d, m /= 256, mLen -= 8);
-
-	  e = (e << mLen) | m;
-	  eLen += mLen;
-	  for (; eLen > 0; buffer[offset + i] = e & 0xff, i += d, e /= 256, eLen -= 8);
-
-	  buffer[offset + i - d] |= s * 128;
-	};
-
-
-/***/ },
-/* 36 */
-/***/ function(module, exports, __webpack_require__) {
-
-	
-	/**
-	 * isArray
-	 */
-
-	var isArray = Array.isArray;
-
-	/**
-	 * toString
-	 */
-
-	var str = Object.prototype.toString;
-
-	/**
-	 * Whether or not the given `val`
-	 * is an array.
-	 *
-	 * example:
-	 *
-	 *        isArray([]);
-	 *        // > true
-	 *        isArray(arguments);
-	 *        // > false
-	 *        isArray('');
-	 *        // > false
-	 *
-	 * @param {mixed} val
-	 * @return {bool}
-	 */
-
-	module.exports = isArray || function (val) {
-	  return !! val && '[object Array]' == str.call(val);
-	};
-
-
-/***/ },
-/* 37 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/* WEBPACK VAR INJECTION */(function(Buffer) {var Cursor = function(buffer)
@@ -19098,6 +19451,135 @@ var XDR =
 	module.exports = Cursor;
 
 	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(29).Buffer))
+
+/***/ },
+/* 36 */
+/***/ function(module, exports, __webpack_require__) {
+
+	exports.read = function (buffer, offset, isLE, mLen, nBytes) {
+	  var e, m,
+	      eLen = nBytes * 8 - mLen - 1,
+	      eMax = (1 << eLen) - 1,
+	      eBias = eMax >> 1,
+	      nBits = -7,
+	      i = isLE ? (nBytes - 1) : 0,
+	      d = isLE ? -1 : 1,
+	      s = buffer[offset + i]
+
+	  i += d
+
+	  e = s & ((1 << (-nBits)) - 1)
+	  s >>= (-nBits)
+	  nBits += eLen
+	  for (; nBits > 0; e = e * 256 + buffer[offset + i], i += d, nBits -= 8) {}
+
+	  m = e & ((1 << (-nBits)) - 1)
+	  e >>= (-nBits)
+	  nBits += mLen
+	  for (; nBits > 0; m = m * 256 + buffer[offset + i], i += d, nBits -= 8) {}
+
+	  if (e === 0) {
+	    e = 1 - eBias
+	  } else if (e === eMax) {
+	    return m ? NaN : ((s ? -1 : 1) * Infinity)
+	  } else {
+	    m = m + Math.pow(2, mLen)
+	    e = e - eBias
+	  }
+	  return (s ? -1 : 1) * m * Math.pow(2, e - mLen)
+	}
+
+	exports.write = function (buffer, value, offset, isLE, mLen, nBytes) {
+	  var e, m, c,
+	      eLen = nBytes * 8 - mLen - 1,
+	      eMax = (1 << eLen) - 1,
+	      eBias = eMax >> 1,
+	      rt = (mLen === 23 ? Math.pow(2, -24) - Math.pow(2, -77) : 0),
+	      i = isLE ? 0 : (nBytes - 1),
+	      d = isLE ? 1 : -1,
+	      s = value < 0 || (value === 0 && 1 / value < 0) ? 1 : 0
+
+	  value = Math.abs(value)
+
+	  if (isNaN(value) || value === Infinity) {
+	    m = isNaN(value) ? 1 : 0
+	    e = eMax
+	  } else {
+	    e = Math.floor(Math.log(value) / Math.LN2)
+	    if (value * (c = Math.pow(2, -e)) < 1) {
+	      e--
+	      c *= 2
+	    }
+	    if (e + eBias >= 1) {
+	      value += rt / c
+	    } else {
+	      value += rt * Math.pow(2, 1 - eBias)
+	    }
+	    if (value * c >= 2) {
+	      e++
+	      c /= 2
+	    }
+
+	    if (e + eBias >= eMax) {
+	      m = 0
+	      e = eMax
+	    } else if (e + eBias >= 1) {
+	      m = (value * c - 1) * Math.pow(2, mLen)
+	      e = e + eBias
+	    } else {
+	      m = value * Math.pow(2, eBias - 1) * Math.pow(2, mLen)
+	      e = 0
+	    }
+	  }
+
+	  for (; mLen >= 8; buffer[offset + i] = m & 0xff, i += d, m /= 256, mLen -= 8) {}
+
+	  e = (e << mLen) | m
+	  eLen += mLen
+	  for (; eLen > 0; buffer[offset + i] = e & 0xff, i += d, e /= 256, eLen -= 8) {}
+
+	  buffer[offset + i - d] |= s * 128
+	}
+
+
+/***/ },
+/* 37 */
+/***/ function(module, exports, __webpack_require__) {
+
+	
+	/**
+	 * isArray
+	 */
+
+	var isArray = Array.isArray;
+
+	/**
+	 * toString
+	 */
+
+	var str = Object.prototype.toString;
+
+	/**
+	 * Whether or not the given `val`
+	 * is an array.
+	 *
+	 * example:
+	 *
+	 *        isArray([]);
+	 *        // > true
+	 *        isArray(arguments);
+	 *        // > false
+	 *        isArray('');
+	 *        // > false
+	 *
+	 * @param {mixed} val
+	 * @return {bool}
+	 */
+
+	module.exports = isArray || function (val) {
+	  return !! val && '[object Array]' == str.call(val);
+	};
+
 
 /***/ },
 /* 38 */
