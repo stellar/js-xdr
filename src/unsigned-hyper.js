@@ -34,18 +34,18 @@ export class UnsignedHyper extends Long {
   }
 
   constructor(low, high) {
-    super(low, high, false);
+    super(low, high, true);
   }
 }
 
 includeIoMixin(UnsignedHyper);
 
 UnsignedHyper.MAX_VALUE = new UnsignedHyper(
-  Long.MAX_UNSIGNED_VALUE.low, 
+  Long.MAX_UNSIGNED_VALUE.low,
   Long.MAX_UNSIGNED_VALUE.high
 );
 
 UnsignedHyper.MIN_VALUE = new UnsignedHyper(
-  Long.MIN_VALUE.low, 
+  Long.MIN_VALUE.low,
   Long.MIN_VALUE.high
 );
