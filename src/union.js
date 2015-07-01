@@ -1,5 +1,6 @@
 import { each, isUndefined } from "lodash";
 import { Void } from "./void";
+import { Reference } from "./config";
 import includeIoMixin from './io-mixin';
 
 export class Union {
@@ -82,22 +83,43 @@ export class Union {
     return value instanceof this;
   }
 
-  static create(name, config) {
+  static create(context, name, config) {
     let ChildUnion = class extends Union {
       constructor(...args) {
         super(...args);
       }
     };
 
-    ChildUnion.unionName      = name;
-    ChildUnion._switchOn      = config.switchOn;
-    ChildUnion._switches      = new Map();
-    ChildUnion._arms          = config.arms;
-    
+    ChildUnion.unionName  = name;
+    context.results[name] = ChildUnion;
+
+    if (config.switchOn instanceof Reference) {
+      ChildUnion._switchOn = config.switchOn.resolve(context);
+    } else {
+      ChildUnion._switchOn = config.switchOn;
+    }
+
+    ChildUnion._switches = new Map();
+    ChildUnion._arms     = {};
+
+    each(config.arms, (value, name) => {
+      if (value instanceof Reference) {
+        value = value.resolve(context);
+      }
+
+      ChildUnion._arms[name] = value;
+    });
+
+    // resolve default arm
+    let defaultArm = config.defaultArm;
+    if (defaultArm instanceof Reference) {
+      defaultArm = defaultArm.resolve(context);
+    }
+
     each(ChildUnion._switchOn.values(), aSwitch => {
 
       // build the enum => arm map
-      let arm = config.switches[aSwitch.name] || config.defaultArm;
+      let arm = config.switches[aSwitch.name] || defaultArm;
       ChildUnion._switches.set(aSwitch, arm);
 
       // Add enum-based constrocutors

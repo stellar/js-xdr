@@ -1,5 +1,6 @@
 import { each, map, isUndefined } from "lodash";
 import { zipObject } from "lodash";
+import { Reference } from "./config";
 import includeIoMixin from './io-mixin';
 
 export class Struct {
@@ -33,7 +34,7 @@ export class Struct {
     return value instanceof this;
   }
 
-  static create(name, fields) {
+  static create(context, name, fields) {
     let ChildStruct = class extends Struct {
       constructor(...args) {
         super(...args);
@@ -41,15 +42,21 @@ export class Struct {
     };
 
     ChildStruct.structName = name;
-    
-    ChildStruct._fields = fields;
-    
-    each(fields, field => {
-      let [fieldName] = field;
 
+    context.results[name] = ChildStruct;
+
+    ChildStruct._fields = fields.map(([name, field]) => {
+      if (field instanceof Reference) {
+        field = field.resolve(context);
+      }
+
+      return [name, field];
+    });
+
+    each(ChildStruct._fields, field => {
+      let [fieldName] = field;
       ChildStruct.prototype[fieldName] = readOrWriteAttribute(fieldName);
     });
-    
 
     return ChildStruct;
   }

@@ -27,7 +27,7 @@ export class Enum {
         `XDR Write Error: Unknown ${value} is not a ${this.enumName}`
       );
     }
-    
+
     Int.write(value.value, io);
   }
 
@@ -46,14 +46,14 @@ export class Enum {
   static fromName(name) {
     let result = this._members[name];
 
-    if(!result) { 
-      throw new Error(`${name} is not a member of ${this.enumName}`); 
+    if(!result) {
+      throw new Error(`${name} is not a member of ${this.enumName}`);
     }
 
     return result;
   }
 
-  static create(name, members) {
+  static create(context, name, members) {
     let ChildEnum = class extends Enum {
       constructor(...args) {
         super(...args);
@@ -61,9 +61,11 @@ export class Enum {
     };
 
     ChildEnum.enumName = name;
+    context.results[name] = ChildEnum;
+
     ChildEnum._members = {};
     ChildEnum._byValue = new Map();
-    
+
     each(members, (value, key) => {
       let inst = new ChildEnum(key, value);
       ChildEnum._members[key] = inst;
