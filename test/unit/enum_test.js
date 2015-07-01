@@ -1,7 +1,10 @@
 import { Cursor } from "../../src/cursor";
 import { cursorToArray } from "../support/io-helpers";
 
-let Color = XDR.Enum.create('Color', {
+/* jshint -W030 */
+
+let emptyContext = {definitions:{}, results:{}};
+let Color = XDR.Enum.create(emptyContext, 'Color', {
   red:           0,
   green:         1,
   evenMoreGreen: 3,
@@ -21,7 +24,7 @@ describe('Enum.fromName', function() {
 });
 
 describe('Enum.read', function() {
-  
+
   it('decodes correctly', function() {
     expect(read([0x00,0x00,0x00,0x00])).to.eql(Color.red());
     expect(read([0x00,0x00,0x00,0x01])).to.eql(Color.green());
@@ -82,4 +85,3 @@ describe('Enum.isValid', function() {
     expect(Color.isValid(true)).to.be.false;
   });
 });
-

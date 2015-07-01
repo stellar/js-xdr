@@ -4,7 +4,7 @@ import {each, map, pick} from "lodash";
 import sequencify from "sequencify";
 
 
-// types is the root 
+// types is the root
 var types = {};
 
 
@@ -19,9 +19,9 @@ export function config(fn) {
 }
 
 
-class Reference {
+export class Reference {
   /* jshint unused: false */
-  resolve(definitions) {
+  resolve(context) {
     throw new Error("implement resolve in child class");
   }
 }
@@ -31,8 +31,9 @@ class SimpleReference extends Reference {
     this.name = name;
   }
 
-  resolve(definitions) {
-    return definitions[this.name];
+  resolve(context) {
+    let defn = context.definitions[this.name];
+    return defn.resolve(context);
   }
 }
 
@@ -44,8 +45,8 @@ class ArrayReference extends Reference {
     this.name           = childReference.name;
   }
 
-  resolve(definitions) {
-    let resolvedChild = this.childReference.resolve(definitions);
+  resolve(context) {
+    let resolvedChild = this.childReference.resolve(context);
     if (this.variable) {
       return new XDR.VarArray(resolvedChild, this.length);
     } else {
@@ -60,57 +61,29 @@ class OptionReference extends Reference {
     this.name           = childReference.name;
   }
 
-  resolve(definitions) {
-    let resolvedChild = this.childReference.resolve(definitions);
+  resolve(context) {
+    let resolvedChild = this.childReference.resolve(context);
     return new XDR.Option(resolvedChild);
   }
 }
 
 class Definition {
-  constructor(constructor, name, ...config) {
+  constructor(constructor, name, config) {
     this.constructor = constructor;
     this.name        = name;
     this.config      = config;
-    this.dep         = [];
-
-    // walk the defintion config for Reference objects, push their names onto
-    // this.deps so we can use sequencify to order our resolutions
-    this._walkConfig(this.config, value => {
-      if(value instanceof Reference) {
-        this.dep.push(value.name);
-      }
-    });
   }
 
-  create(deps) {
-    this._walkConfig(this.config, (value, key, parent) => {
-      if(!(value instanceof Reference)) { return; }
+  // resolve calls the constructor of this definition with the provided context
+  // and this definitions config values.  The definitions constructor should
+  // populate the final type on `context.results`, and may refer to other
+  // definitions through `context.definitions`
+  resolve(context) {
+    if (this.name in context.results) {
+      return context.results[this.name];
+    }
 
-      let dep = value.resolve(deps);
-
-      if(!dep) {
-        // throw if the reference couldn't be resolved
-        throw new Error(`XDR Error:${value.name} could not be resolved.`);
-      } else {
-        // overwrite the reference with the concrete value
-        parent[key] = dep;
-      }
-    });
-
-    // actually create the concrete definition
-    return this.constructor(this.name, ...this.config);
-  }
-
-  _walkConfig(current, fn) {
-
-    each(current, (value, key) => {
-      fn(value, key, current);
-
-      // recurse if the value is a nested object
-      if (isPlainObject(value) || isArray(value)) {
-        this._walkConfig(value, fn);
-      }
-    });
+    return this.constructor(context, this.name, this.config);
   }
 }
 
@@ -138,14 +111,24 @@ class TypeBuilder {
   typedef(name, config) {
     // let the reference resoltion system do it's thing
     // the "constructor" for a typedef just returns the resolved value
-    let createTypedef = (name, args) => args;
+    let createTypedef = (context, name, value) => {
+      if (value instanceof Reference) {
+        value = value.resolve(context);
+      }
+      context.results[name] = value;
+      return value;
+    };
 
     let result = new Definition(createTypedef, name, config);
     this.define(name, result);
   }
 
   const(name, config) {
-    let createConst = (name, args) => args;
+    let createConst = (context, name, value) => {
+      context.results[name] = value;
+      return value;
+    };
+
     let result = new Definition(createConst, name, config);
     this.define(name, result);
   }
@@ -164,27 +147,27 @@ class TypeBuilder {
   opaque(length) { return new XDR.Opaque(length); }
   varOpaque(length) { return new XDR.VarOpaque(length); }
 
-  array(childType, length) { 
+  array(childType, length) {
     if (childType instanceof Reference) {
       return new ArrayReference(childType, length);
     } else {
-      return new XDR.Array(childType, length); 
+      return new XDR.Array(childType, length);
     }
   }
 
-  varArray(childType, maxLength) { 
+  varArray(childType, maxLength) {
     if (childType instanceof Reference) {
       return new ArrayReference(childType, maxLength, true);
     } else {
-      return new XDR.VarArray(childType, maxLength); 
+      return new XDR.VarArray(childType, maxLength);
     }
   }
 
-  option(childType) { 
+  option(childType) {
     if (childType instanceof Reference) {
       return new OptionReference(childType);
     } else {
-      return new XDR.Option(childType); 
+      return new XDR.Option(childType);
     }
   }
 
@@ -202,20 +185,11 @@ class TypeBuilder {
   }
 
   resolve() {
-    let sequence = [];
-    sequencify(this._definitions, map(this._definitions, d => d.name), sequence);
-
-    each(sequence, name => {
-      let defn = this._definitions[name]; 
-      let deps = pick(this._destination, ...defn.dep);
-      let result = defn.create(deps);
-
-      //Ensure we aren't redefining a name
-      if(!isUndefined(this._destination[name])) {
-        throw new Error(`XDR Error:${name} is already defined`);
-      }
-      
-      this._destination[name] = result;
+    each(this._definitions, (defn, name) => {
+      defn.resolve({
+        definitions: this._definitions,
+        results:    this._destination
+      });
     });
   }
 }

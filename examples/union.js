@@ -1,11 +1,6 @@
 import * as XDR from "../src";
 
 let xdr = XDR.config(xdr => {
-  xdr.enum('ResultType', {
-    ok: 0,
-    error: 1,
-    nonsense: 2
-  });
 
   xdr.union('Result', {
     switchOn: xdr.lookup('ResultType'),
@@ -13,10 +8,16 @@ let xdr = XDR.config(xdr => {
       ok:     xdr.void(),
       error:   "message"
     },
-    defaultArm: xdr.void(),
+    // defaultArm: xdr.void(),
     arms: {
       message: xdr.string(100)
     }
+  });
+
+  xdr.enum('ResultType', {
+    ok: 0,
+    error: 1,
+    nonsense: 2
   });
 });
 
@@ -31,7 +32,7 @@ r.get("message"); // => "this is an error"
 r.set(xdr.ResultType.ok());
 r.get(); // => undefined
 
-r.set("nonsense");
+// r.set("nonsense");
 r.get(); // => undefined
 
 

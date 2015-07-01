@@ -12,7 +12,7 @@ let xdr = XDR.config(xdr => {
     ok: 0,
     error: 1
   });
-  
+
 });
 
 console.log(xdr);

@@ -1,13 +1,16 @@
 import { Cursor } from "../../src/cursor";
 import { cursorToArray } from "../support/io-helpers";
 
-let ResultType = XDR.Enum.create('ResultType', {
+/* jshint -W030 */
+
+let emptyContext = {definitions:{}, results:{}};
+let ResultType = XDR.Enum.create(emptyContext, 'ResultType', {
   ok:       0,
   error:    1,
   nonsense: 2
 });
 
-let Result = XDR.Union.create('Result', {
+let Result = XDR.Union.create(emptyContext, 'Result', {
   switchOn: ResultType,
   switches: {
     ok:      XDR.Void,
@@ -32,7 +35,7 @@ describe('Union.armForSwitch', function() {
 });
 
 describe('Union.read', function() {
-  
+
   it('decodes correctly', function() {
     let ok = read([0x00,0x00,0x00,0x00]);
 
