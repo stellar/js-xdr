@@ -1,14 +1,17 @@
 import { Cursor } from "../../src/cursor";
 import { cursorToArray } from "../support/io-helpers";
 
-let MyRange = XDR.Struct.create('MyRange', [
+/* jshint -W030 */
+
+let emptyContext = {definitions:{}, results:{}};
+let MyRange = XDR.Struct.create(emptyContext, 'MyRange', [
   ['begin', XDR.Int],
   ['end', XDR.Int],
   ['inclusive', XDR.Bool],
 ]);
 
 describe('Struct.read', function() {
-  
+
   it('decodes correctly', function() {
     let empty = read([
       0x00,0x00,0x00,0x00,
@@ -111,4 +114,3 @@ describe('Struct: attributes', function() {
     expect(subject.begin()).to.eql(10);
   });
 });
-
