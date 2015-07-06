@@ -4,10 +4,10 @@ let xdr = XDR.config(xdr => {
 
   xdr.union('Result', {
     switchOn: xdr.lookup('ResultType'),
-    switches: {
-      ok:     xdr.void(),
-      error:   "message"
-    },
+    switches: [
+      ["ok", xdr.void()],
+      ["error", "message"],
+    ],
     // defaultArm: xdr.void(),
     arms: {
       message: xdr.string(100)

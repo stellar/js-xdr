@@ -1,4 +1,4 @@
-import { each, isUndefined } from "lodash";
+import { each, isUndefined, isString } from "lodash";
 import { Void } from "./void";
 import { Reference } from "./config";
 import includeIoMixin from './io-mixin';
@@ -44,14 +44,13 @@ export class Union {
   }
 
   static armForSwitch(aSwitch) {
-
-    let arm = this._switches.get(aSwitch);
-
-    if (isUndefined(arm)) {
+    if (this._switches.has(aSwitch)) {
+      return this._switches.get(aSwitch);
+    } else if (this._defaultArm) {
+      return this._defaultArm;
+    } else {
       throw new Error(`Bad union switch: ${aSwitch}`);
     }
-
-    return arm;
   }
 
   static armTypeForArm(arm) {
@@ -116,22 +115,34 @@ export class Union {
       defaultArm = defaultArm.resolve(context);
     }
 
-    each(ChildUnion._switchOn.values(), aSwitch => {
+    ChildUnion._defaultArm = defaultArm;
 
-      // build the enum => arm map
-      let arm = config.switches[aSwitch.name] || defaultArm;
-      ChildUnion._switches.set(aSwitch, arm);
 
-      // Add enum-based constrocutors
-      ChildUnion[aSwitch.name] = function(value) {
-        return new ChildUnion(aSwitch, value);
-      };
+    each(config.switches, ([aSwitch, armName]) => {
+      if (isString(aSwitch)) {
+        aSwitch = ChildUnion._switchOn.fromName(aSwitch);
+      }
 
-      // Add enum-based "set" helpers
-      ChildUnion.prototype[aSwitch.name] = function(value) {
-        return this.set(aSwitch, value);
-      };
+      ChildUnion._switches.set(aSwitch, armName);
     });
+
+    // add enum-based helpers
+    // NOTE: we don't have good notation for "is a subclass of XDR.Enum",
+    //  and so we use the following check (does _switchOn have a `values`
+    //  attribute) to approximate the intent.
+    if (!isUndefined(ChildUnion._switchOn.values)) {
+      each(ChildUnion._switchOn.values(), aSwitch => {
+        // Add enum-based constrocutors
+        ChildUnion[aSwitch.name] = function(value) {
+          return new ChildUnion(aSwitch, value);
+        };
+
+        // Add enum-based "set" helpers
+        ChildUnion.prototype[aSwitch.name] = function(value) {
+          return this.set(aSwitch, value);
+        };
+      });
+    }
 
     // Add arm accessor helpers
     each(ChildUnion._arms, (type, name) => {

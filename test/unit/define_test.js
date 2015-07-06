@@ -32,10 +32,10 @@ describe('XDR.config', function() {
     XDR.config(xdr => {
       xdr.union('Result', {
         switchOn: xdr.lookup('ResultType'),
-        switches: {
-          ok:      XDR.Void,
-          error:   "message"
-        },
+        switches: [
+          ["ok", XDR.Void],
+          ["error",   "message"],
+        ],
         defaultArm: XDR.Void,
         arms: {
           message: new XDR.String(100)

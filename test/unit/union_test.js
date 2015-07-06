@@ -12,14 +12,21 @@ let ResultType = XDR.Enum.create(emptyContext, 'ResultType', {
 
 let Result = XDR.Union.create(emptyContext, 'Result', {
   switchOn: ResultType,
-  switches: {
-    ok:      XDR.Void,
-    error:   "code"
-  },
+  switches: [
+    ["ok", XDR.Void],
+    ["error",   "code"],
+  ],
   defaultArm: XDR.Void,
   arms: {
     code: XDR.Int
   }
+});
+
+let Ext = XDR.Union.create(emptyContext, 'Ext', {
+  switchOn: XDR.Int,
+  switches: [
+    [0, XDR.Void],
+  ]
 });
 
 
@@ -31,6 +38,10 @@ describe('Union.armForSwitch', function() {
 
   it('returns the default arm if no specific arm is defined', function() {
     expect(Result.armForSwitch(ResultType.nonsense())).to.eql(XDR.Void);
+  });
+
+  it('works for XDR.Int discrimnated unions', function() {
+    expect(Ext.armForSwitch(0)).to.eql(XDR.Void);
   });
 });
 
