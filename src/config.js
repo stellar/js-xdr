@@ -42,15 +42,24 @@ class ArrayReference extends Reference {
     this.childReference = childReference;
     this.length         = length;
     this.variable       = variable;
-    this.name           = childReference.name;
   }
 
   resolve(context) {
-    let resolvedChild = this.childReference.resolve(context);
+    let resolvedChild = this.childReference;
+    let length = this.length;
+
+    if (resolvedChild instanceof Reference) {
+      resolvedChild = resolvedChild.resolve(context);
+    }
+
+    if (length instanceof Reference) {
+      length = length.resolve(context);
+    }
+
     if (this.variable) {
-      return new XDR.VarArray(resolvedChild, this.length);
+      return new XDR.VarArray(resolvedChild, length);
     } else {
-      return new XDR.Array(resolvedChild, this.length);
+      return new XDR.Array(resolvedChild, length);
     }
   }
 }
@@ -62,8 +71,30 @@ class OptionReference extends Reference {
   }
 
   resolve(context) {
-    let resolvedChild = this.childReference.resolve(context);
+    let resolvedChild = this.childReference;
+
+    if (resolvedChild instanceof Reference) {
+      resolvedChild = resolvedChild.resolve(context);
+    }
+
     return new XDR.Option(resolvedChild);
+  }
+}
+
+class SizedReference extends Reference {
+  constructor(sizedType, length) {
+    this.sizedType = sizedType;
+    this.length    = length;
+  }
+
+  resolve(context) {
+    let length = this.length;
+
+    if (length instanceof Reference) {
+      length = length.resolve(context);
+    }
+
+    return new this.sizedType(length);
   }
 }
 
@@ -143,34 +174,21 @@ class TypeBuilder {
   double() { return XDR.Double; }
   quadruple() { return XDR.Quadruple; }
 
-  string(length) { return new XDR.String(length); }
-  opaque(length) { return new XDR.Opaque(length); }
-  varOpaque(length) { return new XDR.VarOpaque(length); }
+  string(length) { return new SizedReference(XDR.String, length); }
+  opaque(length) { return new SizedReference(XDR.Opaque, length); }
+  varOpaque(length) { return new SizedReference(XDR.VarOpaque, length); }
 
   array(childType, length) {
-    if (childType instanceof Reference) {
-      return new ArrayReference(childType, length);
-    } else {
-      return new XDR.Array(childType, length);
-    }
+    return new ArrayReference(childType, length);
   }
 
   varArray(childType, maxLength) {
-    if (childType instanceof Reference) {
-      return new ArrayReference(childType, maxLength, true);
-    } else {
-      return new XDR.VarArray(childType, maxLength);
-    }
+    return new ArrayReference(childType, maxLength, true);
   }
 
   option(childType) {
-    if (childType instanceof Reference) {
-      return new OptionReference(childType);
-    } else {
-      return new XDR.Option(childType);
-    }
+    return new OptionReference(childType);
   }
-
 
   define(name, definition) {
     if(isUndefined(this._destination[name])) {

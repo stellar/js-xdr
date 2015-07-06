@@ -8,7 +8,7 @@ describe('XDR.config', function() {
     let toDelete = keys(this.types);
     each(toDelete, k => delete this.types[k]);
   });
-  
+
   it('can define objects that have no dependency', function() {
     XDR.config(xdr => {
       xdr.enum('Color', {
@@ -110,7 +110,6 @@ describe('XDR.config', function() {
     expect(xdr.ArrayOfEmpty).to.be.instanceof(XDR.Array);
     expect(xdr.ArrayOfEmpty._childType).to.eql(xdr.MyStruct);
     expect(xdr.ArrayOfEmpty._length).to.eql(5);
-
   });
 
   it('can define vararrays', function() {
@@ -121,8 +120,6 @@ describe('XDR.config', function() {
     expect(xdr.ArrayOfInts).to.be.instanceof(XDR.VarArray);
     expect(xdr.ArrayOfInts._childType).to.eql(XDR.Int);
     expect(xdr.ArrayOfInts._maxLength).to.eql(3);
-
-
   });
 
   it('can define options', function() {
@@ -132,7 +129,33 @@ describe('XDR.config', function() {
 
     expect(xdr.OptionalInt).to.be.instanceof(XDR.Option);
     expect(xdr.OptionalInt._childType).to.eql(XDR.Int);
+  });
 
+  it('can use sizes defined as an xdr const', function() {
+    let xdr = XDR.config(xdr => {
+      xdr.const("SIZE", 5);
+      xdr.typedef("MyArray",      xdr.array(xdr.int(), xdr.lookup("SIZE")));
+      xdr.typedef("MyVarArray",   xdr.varArray(xdr.int(), xdr.lookup("SIZE")));
+      xdr.typedef("MyString",     xdr.string(xdr.lookup("SIZE")));
+      xdr.typedef("MyOpaque",     xdr.opaque(xdr.lookup("SIZE")));
+      xdr.typedef("MyVarOpaque",  xdr.varOpaque(xdr.lookup("SIZE")));
+    });
 
+    expect(xdr.MyArray).to.be.instanceof(XDR.Array);
+    expect(xdr.MyArray._childType).to.eql(XDR.Int);
+    expect(xdr.MyArray._length).to.eql(5);
+
+    expect(xdr.MyVarArray).to.be.instanceof(XDR.VarArray);
+    expect(xdr.MyVarArray._childType).to.eql(XDR.Int);
+    expect(xdr.MyVarArray._maxLength).to.eql(5);
+
+    expect(xdr.MyString).to.be.instanceof(XDR.String);
+    expect(xdr.MyString._maxLength).to.eql(5);
+
+    expect(xdr.MyOpaque).to.be.instanceof(XDR.Opaque);
+    expect(xdr.MyOpaque._length).to.eql(5);
+
+    expect(xdr.MyVarOpaque).to.be.instanceof(XDR.VarOpaque);
+    expect(xdr.MyVarOpaque._maxLength).to.eql(5);
   });
 });
