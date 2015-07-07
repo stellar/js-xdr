@@ -225,7 +225,6 @@ var XDR =
 	    this.childReference = childReference;
 	    this.length = length;
 	    this.variable = variable;
-	    this.name = childReference.name;
 	  }
 
 	  _inherits(ArrayReference, _Reference2);
@@ -233,11 +232,21 @@ var XDR =
 	  _createClass(ArrayReference, {
 	    resolve: {
 	      value: function resolve(context) {
-	        var resolvedChild = this.childReference.resolve(context);
+	        var resolvedChild = this.childReference;
+	        var length = this.length;
+
+	        if (resolvedChild instanceof Reference) {
+	          resolvedChild = resolvedChild.resolve(context);
+	        }
+
+	        if (length instanceof Reference) {
+	          length = length.resolve(context);
+	        }
+
 	        if (this.variable) {
-	          return new XDR.VarArray(resolvedChild, this.length);
+	          return new XDR.VarArray(resolvedChild, length);
 	        } else {
-	          return new XDR.Array(resolvedChild, this.length);
+	          return new XDR.Array(resolvedChild, length);
 	        }
 	      }
 	    }
@@ -259,13 +268,45 @@ var XDR =
 	  _createClass(OptionReference, {
 	    resolve: {
 	      value: function resolve(context) {
-	        var resolvedChild = this.childReference.resolve(context);
+	        var resolvedChild = this.childReference;
+
+	        if (resolvedChild instanceof Reference) {
+	          resolvedChild = resolvedChild.resolve(context);
+	        }
+
 	        return new XDR.Option(resolvedChild);
 	      }
 	    }
 	  });
 
 	  return OptionReference;
+	})(Reference);
+
+	var SizedReference = (function (_Reference4) {
+	  function SizedReference(sizedType, length) {
+	    _classCallCheck(this, SizedReference);
+
+	    this.sizedType = sizedType;
+	    this.length = length;
+	  }
+
+	  _inherits(SizedReference, _Reference4);
+
+	  _createClass(SizedReference, {
+	    resolve: {
+	      value: function resolve(context) {
+	        var length = this.length;
+
+	        if (length instanceof Reference) {
+	          length = length.resolve(context);
+	        }
+
+	        return new this.sizedType(length);
+	      }
+	    }
+	  });
+
+	  return SizedReference;
 	})(Reference);
 
 	var Definition = (function () {
@@ -399,44 +440,32 @@ var XDR =
 	    },
 	    string: {
 	      value: function string(length) {
-	        return new XDR.String(length);
+	        return new SizedReference(XDR.String, length);
 	      }
 	    },
 	    opaque: {
 	      value: function opaque(length) {
-	        return new XDR.Opaque(length);
+	        return new SizedReference(XDR.Opaque, length);
 	      }
 	    },
 	    varOpaque: {
 	      value: function varOpaque(length) {
-	        return new XDR.VarOpaque(length);
+	        return new SizedReference(XDR.VarOpaque, length);
 	      }
 	    },
 	    array: {
 	      value: function array(childType, length) {
-	        if (childType instanceof Reference) {
-	          return new ArrayReference(childType, length);
-	        } else {
-	          return new XDR.Array(childType, length);
-	        }
+	        return new ArrayReference(childType, length);
 	      }
 	    },
 	    varArray: {
 	      value: function varArray(childType, maxLength) {
-	        if (childType instanceof Reference) {
-	          return new ArrayReference(childType, maxLength, true);
-	        } else {
-	          return new XDR.VarArray(childType, maxLength);
-	        }
+	        return new ArrayReference(childType, maxLength, true);
 	      }
 	    },
 	    option: {
 	      value: function option(childType) {
-	        if (childType instanceof Reference) {
-	          return new OptionReference(childType);
-	        } else {
-	          return new XDR.Option(childType);
-	        }
+	        return new OptionReference(childType);
 	      }
 	    },
 	    define: {
@@ -1664,6 +1693,8 @@ var XDR =
 
 	var _interopRequire = function (obj) { return obj && obj.__esModule ? obj["default"] : obj; };
 
+	var _slicedToArray = function (arr, i) { if (Array.isArray(arr)) { return arr; } else if (Symbol.iterator in Object(arr)) { var _arr = []; for (var _iterator = arr[Symbol.iterator](), _step; !(_step = _iterator.next()).done;) { _arr.push(_step.value); if (i && _arr.length === i) break; } return _arr; } else { throw new TypeError("Invalid attempt to destructure non-iterable instance"); } };
+
 	var _get = function get(object, property, receiver) { var desc = Object.getOwnPropertyDescriptor(object, property); if (desc === undefined) { var parent = Object.getPrototypeOf(object); if (parent === null) { return undefined; } else { return get(parent, property, receiver); } } else if ("value" in desc && desc.writable) { return desc.value; } else { var getter = desc.get; if (getter === undefined) { return undefined; } return getter.call(receiver); } };
 
 	var _inherits = function (subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) subClass.__proto__ = superClass; };
@@ -1680,6 +1711,7 @@ var XDR =
 
 	var each = _lodash.each;
 	var isUndefined = _lodash.isUndefined;
+	var isString = _lodash.isString;
 
 	var Void = __webpack_require__(20).Void;
 
@@ -1740,14 +1772,13 @@ var XDR =
 	  }, {
 	    armForSwitch: {
 	      value: function armForSwitch(aSwitch) {
-
-	        var arm = this._switches.get(aSwitch);
-
-	        if (isUndefined(arm)) {
+	        if (this._switches.has(aSwitch)) {
+	          return this._switches.get(aSwitch);
+	        } else if (this._defaultArm) {
+	          return this._defaultArm;
+	        } else {
 	          throw new Error("Bad union switch: " + aSwitch);
 	        }
-
-	        return arm;
 	      }
 	    },
 	    armTypeForArm: {
@@ -1827,22 +1858,38 @@ var XDR =
 	          defaultArm = defaultArm.resolve(context);
 	        }
 
-	        each(ChildUnion._switchOn.values(), function (aSwitch) {
+	        ChildUnion._defaultArm = defaultArm;
 
-	          // build the enum => arm map
-	          var arm = config.switches[aSwitch.name] || defaultArm;
-	          ChildUnion._switches.set(aSwitch, arm);
+	        each(config.switches, function (_ref) {
+	          var _ref2 = _slicedToArray(_ref, 2);
 
-	          // Add enum-based constrocutors
-	          ChildUnion[aSwitch.name] = function (value) {
-	            return new ChildUnion(aSwitch, value);
-	          };
+	          var aSwitch = _ref2[0];
+	          var armName = _ref2[1];
 
-	          // Add enum-based "set" helpers
-	          ChildUnion.prototype[aSwitch.name] = function (value) {
-	            return this.set(aSwitch, value);
-	          };
+	          if (isString(aSwitch)) {
+	            aSwitch = ChildUnion._switchOn.fromName(aSwitch);
+	          }
+
+	          ChildUnion._switches.set(aSwitch, armName);
 	        });
+
+	        // add enum-based helpers
+	        // NOTE: we don't have good notation for "is a subclass of XDR.Enum",
+	        //  and so we use the following check (does _switchOn have a `values`
+	        //  attribute) to approximate the intent.
+	        if (!isUndefined(ChildUnion._switchOn.values)) {
+	          each(ChildUnion._switchOn.values(), function (aSwitch) {
+	            // Add enum-based constrocutors
+	            ChildUnion[aSwitch.name] = function (value) {
+	              return new ChildUnion(aSwitch, value);
+	            };
+
+	            // Add enum-based "set" helpers
+	            ChildUnion.prototype[aSwitch.name] = function (value) {
+	              return this.set(aSwitch, value);
+	            };
+	          });
+	        }
 
 	        // Add arm accessor helpers
 	        each(ChildUnion._arms, function (type, name) {
@@ -13849,7 +13896,7 @@ var XDR =
 	 * @license  MIT
 	 */
 
-	var base64 = __webpack_require__(38)
+	var base64 = __webpack_require__(39)
 	var ieee754 = __webpack_require__(35)
 	var isArray = __webpack_require__(36)
 
@@ -18708,7 +18755,7 @@ var XDR =
 
 	    /* CommonJS */ if ("function" === 'function' && typeof module === 'object' && module && typeof exports === 'object' && exports)
 	        module["exports"] = Long;
-	    /* AMD */ else if ("function" === 'function' && __webpack_require__(39)["amd"])
+	    /* AMD */ else if ("function" === 'function' && __webpack_require__(38)["amd"])
 	        !(__WEBPACK_AMD_DEFINE_RESULT__ = function() { return Long; }.call(exports, __webpack_require__, exports, module), __WEBPACK_AMD_DEFINE_RESULT__ !== undefined && (module.exports = __WEBPACK_AMD_DEFINE_RESULT__));
 	    /* Global */ else
 	        (global["dcodeIO"] = global["dcodeIO"] || {})["Long"] = Long;
@@ -19101,6 +19148,13 @@ var XDR =
 /* 38 */
 /***/ function(module, exports, __webpack_require__) {
 
+	module.exports = function() { throw new Error("define cannot be used indirect"); };
+
+
+/***/ },
+/* 39 */
+/***/ function(module, exports, __webpack_require__) {
+
 	var lookup = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/';
 
 	;(function (exports) {
@@ -19225,13 +19279,6 @@ var XDR =
 		exports.toByteArray = b64ToByteArray
 		exports.fromByteArray = uint8ToBase64
 	}(false ? (this.base64js = {}) : exports))
-
-
-/***/ },
-/* 39 */
-/***/ function(module, exports, __webpack_require__) {
-
-	module.exports = function() { throw new Error("define cannot be used indirect"); };
 
 
 /***/ },
