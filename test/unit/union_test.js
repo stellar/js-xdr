@@ -45,9 +45,31 @@ describe('Union.armForSwitch', function() {
   });
 });
 
-describe('new Union', function() {
+describe('Union: constructor', function() {
+
   it('works for XDR.Int discrimnated unions', function() {
     expect(() => new Ext(0)).to.not.throw();
+  });
+
+  it('works for Enum discrimnated unions', function() {
+    expect(() => new Result("ok")).to.not.throw();
+    expect(() => new Result(ResultType.ok())).to.not.throw();
+  });
+});
+
+describe('Union: set', function() {
+
+  it('works for XDR.Int discrimnated unions', function() {
+    let u = new Ext(0);
+    u.set(0);
+  });
+
+  it('works for Enum discrimnated unions', function() {
+    let u = Result.ok();
+
+    expect(() => u.set("ok")).to.not.throw();
+    expect(() => u.set("notok")).to.throw(/not a member/);
+    expect(() => u.set(ResultType.ok())).to.not.throw();
   });
 });
 
