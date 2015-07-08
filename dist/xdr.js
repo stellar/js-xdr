@@ -1729,7 +1729,7 @@ var XDR =
 	  _createClass(Union, {
 	    set: {
 	      value: function set(aSwitch, value) {
-	        if (typeof aSwtch === "string") {
+	        if (isString(aSwitch)) {
 	          aSwitch = this.constructor._switchOn.fromName(aSwitch);
 	        }
 
@@ -13897,8 +13897,8 @@ var XDR =
 	 */
 
 	var base64 = __webpack_require__(39)
-	var ieee754 = __webpack_require__(37)
-	var isArray = __webpack_require__(36)
+	var ieee754 = __webpack_require__(36)
+	var isArray = __webpack_require__(37)
 
 	exports.Buffer = Buffer
 	exports.SlowBuffer = SlowBuffer
@@ -19019,45 +19019,6 @@ var XDR =
 /* 36 */
 /***/ function(module, exports, __webpack_require__) {
 
-	
-	/**
-	 * isArray
-	 */
-
-	var isArray = Array.isArray;
-
-	/**
-	 * toString
-	 */
-
-	var str = Object.prototype.toString;
-
-	/**
-	 * Whether or not the given `val`
-	 * is an array.
-	 *
-	 * example:
-	 *
-	 *        isArray([]);
-	 *        // > true
-	 *        isArray(arguments);
-	 *        // > false
-	 *        isArray('');
-	 *        // > false
-	 *
-	 * @param {mixed} val
-	 * @return {bool}
-	 */
-
-	module.exports = isArray || function (val) {
-	  return !! val && '[object Array]' == str.call(val);
-	};
-
-
-/***/ },
-/* 37 */
-/***/ function(module, exports, __webpack_require__) {
-
 	exports.read = function(buffer, offset, isLE, mLen, nBytes) {
 	  var e, m,
 	      eLen = nBytes * 8 - mLen - 1,
@@ -19141,6 +19102,45 @@ var XDR =
 	  for (; eLen > 0; buffer[offset + i] = e & 0xff, i += d, e /= 256, eLen -= 8);
 
 	  buffer[offset + i - d] |= s * 128;
+	};
+
+
+/***/ },
+/* 37 */
+/***/ function(module, exports, __webpack_require__) {
+
+	
+	/**
+	 * isArray
+	 */
+
+	var isArray = Array.isArray;
+
+	/**
+	 * toString
+	 */
+
+	var str = Object.prototype.toString;
+
+	/**
+	 * Whether or not the given `val`
+	 * is an array.
+	 *
+	 * example:
+	 *
+	 *        isArray([]);
+	 *        // > true
+	 *        isArray(arguments);
+	 *        // > false
+	 *        isArray('');
+	 *        // > false
+	 *
+	 * @param {mixed} val
+	 * @return {bool}
+	 */
+
+	module.exports = isArray || function (val) {
+	  return !! val && '[object Array]' == str.call(val);
 	};
 
 
