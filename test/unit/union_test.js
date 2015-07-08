@@ -45,6 +45,12 @@ describe('Union.armForSwitch', function() {
   });
 });
 
+describe('new Union', function() {
+  it('works for XDR.Int discrimnated unions', function() {
+    expect(() => new Ext(0)).to.not.throw();
+  });
+});
+
 describe('Union.read', function() {
 
   it('decodes correctly', function() {

@@ -10,10 +10,10 @@ export class Union {
   }
 
   set(aSwitch, value) {
-    if (!(aSwitch instanceof this.constructor._switchOn)) {
+    if (typeof aSwtch === "string") {
       aSwitch = this.constructor._switchOn.fromName(aSwitch);
     }
-
+  
     this._switch  = aSwitch;
     this._arm     = this.constructor.armForSwitch(this._switch);
     this._armType = this.constructor.armTypeForArm(this._arm);
