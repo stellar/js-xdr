@@ -14,7 +14,16 @@ var staticMethods = {
     return cursor.slice(bytesWritten).buffer();
   },
 
-  fromXDR(buffer) {
+  fromXDR(input, format="raw") {
+    let buffer;
+    switch(format) {
+      case "raw":    buffer = input; break;
+      case "hex":    buffer = new Buffer(input, "hex"); break;
+      case "base64": buffer = new Buffer(input, "base64"); break;
+      default:
+        throw new Error(`Invalid format ${format}, must be "raw", "hex", "base64"`);
+    }
+
     let cursor = new Cursor(buffer);
     let result = this.read(cursor);
 
