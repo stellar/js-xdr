@@ -47,3 +47,17 @@ describe('UnsignedHyper.isValid', function() {
     expect(UnsignedHyper.isValid(true)).to.be.false;
   });
 });
+
+describe('UnsignedHyper.fromString', function() {
+  it("works for positive numbers", function() {
+    expect(UnsignedHyper.fromString('1059').toString()).to.eql("1059");
+  });
+
+  it("fails for negative numbers", function() {
+    expect(() => UnsignedHyper.fromString('-1059')).to.throw(/Invalid/);
+  })
+
+  it("fails when providing a string with a decimal place", function() {
+    expect(() => UnsignedHyper.fromString('105946095601.5')).to.throw(/Invalid/);
+  });
+})
