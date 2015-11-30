@@ -20,6 +20,11 @@ export class Hyper extends Long {
   }
 
   static fromString(string) {
+    if (!(/^-?\d+$/.test(string))) {
+      throw new Error(
+        `Invalid hyper string: ${string}`
+      );
+    }
     let result = super.fromString(string, false);
     return new this(result.low, result.high);
   }
