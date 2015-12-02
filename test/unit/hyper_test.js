@@ -51,4 +51,19 @@ describe('Hyper.isValid', function() {
     expect(Hyper.isValid(1)).to.be.false;
     expect(Hyper.isValid(true)).to.be.false;
   });
+
 });
+
+describe('Hyper.fromString', function() {
+  it("works for positive numbers", function() {
+    expect(Hyper.fromString('1059').toString()).to.eql("1059");
+  });
+
+  it("works for negative numbers", function() {
+    expect(Hyper.fromString('-1059').toString()).to.eql("-1059");
+  })
+
+  it("fails when providing a string with a decimal place", function() {
+    expect(() => Hyper.fromString('105946095601.5')).to.throw(/Invalid/);
+  });
+})

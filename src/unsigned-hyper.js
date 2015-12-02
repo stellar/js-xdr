@@ -20,6 +20,11 @@ export class UnsignedHyper extends Long {
   }
 
   static fromString(string) {
+    if (!(/^\d+$/.test(string))) {
+      throw new Error(
+        `Invalid hyper string: ${string}`
+      );
+    }
     let result = super.fromString(string, true);
     return new this(result.low, result.high);
   }
