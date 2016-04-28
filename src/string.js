@@ -21,7 +21,7 @@ export class String {
     let padding = calculatePadding(length);
     let result = io.slice(length);
     io.slice(padding); //consume padding
-    return result.buffer().toString('ascii');
+    return result.buffer().toString('utf8');
   }
 
   write(value, io) {
@@ -34,14 +34,18 @@ export class String {
     if(!isString(value)) {
       throw new Error(`XDR Write Error: ${value} is not a string,`);
     }
-    let buffer = new Buffer(value, 'ascii');
+    let buffer = new Buffer(value, 'utf8');
     
-    Int.write(value.length, io);
+    Int.write(buffer.length, io);
     io.writeBufferPadded(buffer);
   }
 
   isValid(value) {
-    return isString(value) && value.length <= this._maxLength;
+    if (!isString(value)) {
+      return false;
+    }
+    let buffer = new Buffer(value, 'utf8');
+    return buffer.length <= this._maxLength;
   }
 }
 
