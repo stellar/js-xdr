@@ -40,4 +40,5 @@ let output = r.toXDR();
 let parsed = xdr.Result.fromXDR(output);
 
 console.log(r);
+console.log(r.arm());
 console.log(parsed);
