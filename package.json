@@ -13,7 +13,7 @@
   },
   "keywords": [],
   "author": "Scott Fleckenstein <scott@stellar.org>",
-  "license": "Apache 2.0",
+  "license": "Apache-2.0",
   "bugs": {
     "url": "https://github.com/stellar/js-xdr/issues"
   },
