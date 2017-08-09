@@ -1,6 +1,6 @@
 import { Int } from "./int";
 import { UnsignedInt } from "./unsigned-int";
-import {calculatePadding} from "./util";
+import {calculatePadding, slicePadding} from "./util";
 import includeIoMixin from './io-mixin';
 
 export class VarOpaque {
@@ -19,7 +19,7 @@ export class VarOpaque {
     }
     let padding = calculatePadding(length);
     let result = io.slice(length);
-    io.slice(padding); //consume padding
+    slicePadding(io, padding);
     return result.buffer();
   }
 

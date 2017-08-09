@@ -2,3 +2,4 @@ node_modules/
 tmp/
 generated/
 .DS_Store
+.vscode

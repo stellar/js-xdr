@@ -1,6 +1,6 @@
 import { Int } from "./int";
 import { UnsignedInt } from "./unsigned-int";
-import {calculatePadding} from "./util";
+import {calculatePadding, slicePadding} from "./util";
 import {isString} from "lodash";
 import includeIoMixin from './io-mixin';
 
@@ -20,7 +20,7 @@ export class String {
     }
     let padding = calculatePadding(length);
     let result = io.slice(length);
-    io.slice(padding); //consume padding
+    slicePadding(io, padding);
     return result.buffer().toString('utf8');
   }
 

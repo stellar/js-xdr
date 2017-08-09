@@ -11,6 +11,10 @@ describe('Opaque#read', function() {
     expect(read([0,0,1,0])).to.eql(new Buffer([0,0,1]));
   });
 
+  it('throws a read error if the padding bytes are not zero', function() {    
+    expect(() => read([0,0,1,1])).to.throw(/read error/i);
+  });
+
   function read(bytes) {
     let io = new Cursor(bytes);
     return subject.read(io);

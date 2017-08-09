@@ -3,6 +3,11 @@
 All notable changes to this project will be documented in this
 file.  This project adheres to [Semantic Versioning](http://semver.org/).
 
+## [Unreleased](https://github.com/stellar/js-xdr/compare/v1.0.0...master)
+
+### Changed
+- bugfix: padding bytes are now ensured to be zero when reading
+
 ## [v1.0.0](https://github.com/stellar/js-xdr/compare/v0.0.12...v1.0.0)
 
 ### Changed
