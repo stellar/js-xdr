@@ -1,6 +1,7 @@
 language: node_js
 node_js:
-- '0.10'
+- 'node'
+- 'lts/*'
 script: gulp test
 before_install:
 - mkdir -p .npm

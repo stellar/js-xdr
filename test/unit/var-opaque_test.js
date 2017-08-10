@@ -17,6 +17,12 @@ describe('VarOpaque#read', function() {
     expect(() => read([0,0,0,3,0,0,0,0])).to.throw(/read error/i);
   });
 
+  it('throws a read error if the padding bytes are not zero', function() {    
+    expect(() => read([0x00,0x00,0x00,0x01,0x41,0x01,0x00,0x00])).to.throw(/read error/i);
+    expect(() => read([0x00,0x00,0x00,0x01,0x41,0x00,0x01,0x00])).to.throw(/read error/i);
+    expect(() => read([0x00,0x00,0x00,0x01,0x41,0x00,0x00,0x01])).to.throw(/read error/i);
+  });
+
   function read(bytes) {
     let io = new Cursor(bytes);
     return subject.read(io);

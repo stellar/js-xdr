@@ -1,5 +1,6 @@
-import {calculatePadding} from "./util";
+import {calculatePadding, slicePadding} from "./util";
 import includeIoMixin from './io-mixin';
+
 
 export class Opaque {
   constructor(length) {
@@ -9,7 +10,7 @@ export class Opaque {
 
   read(io) {
     let result = io.slice(this._length);
-    io.slice(this._padding); //consume padding
+    slicePadding(io, this._padding);
     return result.buffer();
   }
 
