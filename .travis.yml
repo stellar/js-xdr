@@ -1,7 +1,7 @@
 language: node_js
 node_js:
-- 'node'
-- 'lts/*'
+- node
+- lts/*
 script: gulp test
 before_install:
 - mkdir -p .npm
@@ -10,3 +10,14 @@ before_install:
 notifications:
   slack:
     secure: Bu3OZ0Cdy8eq0IMoLJmadDba8Yyb9ajobKocfp8V7/vfOjpIVXdFrGMqfckkZ22uiWxHCsYEX1ahQ77zTjbO3tNq1CTmSgEAWaqqMVz1iIVNhSoeHRfYDa9r1sKFpJv1KEz+j/8i2phcR5MDE6cGK+byJmjfjcnkP1XoNiupuck=
+before_deploy:
+  - gulp build
+deploy:
+  provider: npm
+  email: npm@stellar.org
+  api_key:
+    secure: Yb6nOoNeRCfNaah/R9fbT7n/6QTua5DWEDn0vMSEBWgmkviVsVyA2eTVs9895C9eFCRvdWBkQ92qE5ET5Lvp/KeYVuyxZIzpdWSqonSp74xrWm4W87F/4Lp+uDucfr+v9UfIl2uR9U9u90j+qiDfw8X5KNELiHrhY6xUCjoshsM=
+  on:
+    tags: true
+    repo: stellar/js-xdr
+    branch: master
