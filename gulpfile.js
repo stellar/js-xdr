@@ -39,9 +39,7 @@ gulp.task('hooks:precommit', ['build'], function() {
 
 gulp.task('build:node', ['lint:src'], function() {
     return gulp.src('src/**/*.js')
-        .pipe(plugins.babel({
-          optional: ["runtime"]
-        }))
+        .pipe(plugins.babel())
         .pipe(gulp.dest('lib'));
 });
 
