@@ -3,6 +3,11 @@
 All notable changes to this project will be documented in this
 file.  This project adheres to [Semantic Versioning](http://semver.org/).
 
+## [v1.0.2](https://github.com/stellar/js-xdr/compare/v1.0.1...v1.0.2)
+
+### Changed
+- bugfix: removed `runtime` flag from babel to make this package working in React/Webpack environments
+
 ## [v1.0.1](https://github.com/stellar/js-xdr/compare/v1.0.0...v1.0.1)
 
 ### Changed
