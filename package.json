@@ -5,7 +5,9 @@
   "main": "lib/index.js",
   "scripts": {
     "test": "gulp test",
-    "test-generate": "bundle exec xdrgen -o generated -n test -l javascript examples/test.x"
+    "test-generate": "bundle exec xdrgen -o generated -n test -l javascript examples/test.x",
+    "compile": "gulp build",
+    "prepublish": "npm run compile"
   },
   "repository": "https://github.com/stellar/js-xdr.git",
   "keywords": [],
