@@ -3,3 +3,4 @@ tmp/
 generated/
 .DS_Store
 .vscode
+yarn-error.log

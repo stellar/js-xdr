@@ -1,10 +1,13 @@
+import every from "lodash/every";
+import each from "lodash/each";
+import times from "lodash/times";
+import isArray from "lodash/isArray";
 import { Int } from "./int";
 import { UnsignedInt } from "./unsigned-int";
-import { all, each, times, isArray } from 'lodash';
-import includeIoMixin from './io-mixin';
+import includeIoMixin from "./io-mixin";
 
 export class VarArray {
-  constructor(childType, maxLength=UnsignedInt.MAX_VALUE) {
+  constructor(childType, maxLength = UnsignedInt.MAX_VALUE) {
     this._childType = childType;
     this._maxLength = maxLength;
   }
@@ -14,8 +17,8 @@ export class VarArray {
 
     if (length > this._maxLength) {
       throw new Error(
-        `XDR Read Error: Saw ${length} length VarArray,` + 
-        `max allowed is ${this._maxLength}`
+        `XDR Read Error: Saw ${length} length VarArray,` +
+          `max allowed is ${this._maxLength}`
       );
     }
 
@@ -23,15 +26,15 @@ export class VarArray {
   }
 
   write(value, io) {
-
-    if(!isArray(value)) {
+    if (!isArray(value)) {
       throw new Error(`XDR Write Error: value is not array`);
     }
 
-    if(value.length > this._maxLength) {
+    if (value.length > this._maxLength) {
       throw new Error(
-        `XDR Write Error: Got array of size ${value.length},` + 
-        `max allowed is ${this._maxLength}`);
+        `XDR Write Error: Got array of size ${value.length},` +
+          `max allowed is ${this._maxLength}`
+      );
     }
 
     Int.write(value.length, io);
@@ -39,10 +42,14 @@ export class VarArray {
   }
 
   isValid(value) {
-    if(!isArray(value)){ return false; }
-    if(value.length > this._maxLength){ return false; }
+    if (!isArray(value)) {
+      return false;
+    }
+    if (value.length > this._maxLength) {
+      return false;
+    }
 
-    return all(value, child => this._childType.isValid(child));
+    return every(value, child => this._childType.isValid(child));
   }
 }
 

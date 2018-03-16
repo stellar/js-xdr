@@ -3,6 +3,7 @@
 var gulp        = require('gulp');
 var plugins     = require('gulp-load-plugins')();
 var runSequence = require('run-sequence');
+var webpack     = require('webpack-stream');
 
 gulp.task('default', ['build']);
 
@@ -39,17 +40,28 @@ gulp.task('hooks:precommit', ['build'], function() {
 
 gulp.task('build:node', ['lint:src'], function() {
     return gulp.src('src/**/*.js')
-        .pipe(plugins.babel())
+        .pipe(plugins.babel({
+          presets: ['env'],
+          plugins: ["transform-runtime"]
+        }))
         .pipe(gulp.dest('lib'));
 });
 
 gulp.task('build:browser', ['lint:src'], function() {
   return gulp.src('src/browser.js')
-    .pipe(plugins.webpack({
+    .pipe(webpack({
       output: { library: 'XDR' },
       module: {
         loaders: [
-          { test: /\.js$/, exclude: /node_modules/, loader: 'babel-loader'}
+          {
+            test: /\.js$/,
+            exclude: /(node_modules|bower_components)/,
+            loader: 'babel-loader',
+            query: {
+              presets: ['env'],
+              plugins: ['transform-runtime'],
+            }
+          }
         ]
       }
     }))
