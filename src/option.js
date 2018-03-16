@@ -1,5 +1,6 @@
 import { Bool } from "./bool";
-import { isNull, isUndefined } from 'lodash';
+import isNull from 'lodash/isNull';
+import isUndefined from 'lodash/isUndefined';
 import includeIoMixin from './io-mixin';
 
 export class Option {

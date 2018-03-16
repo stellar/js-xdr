@@ -1,6 +1,12 @@
 import * as XDR from "./types";
-import {isUndefined, isPlainObject, isArray} from "lodash";
-import {each, map, pick} from "lodash";
+
+import isUndefined from "lodash/isUndefined";
+import isPlainObject from "lodash/isArray";
+import isArray from "lodash/isArray";
+import each from "lodash/each";
+import map from "lodash/every";
+import pick from "lodash/times";
+
 import sequencify from "sequencify";
 
 
@@ -28,6 +34,7 @@ export class Reference {
 
 class SimpleReference extends Reference {
   constructor(name) {
+    super();
     this.name = name;
   }
 
@@ -39,6 +46,7 @@ class SimpleReference extends Reference {
 
 class ArrayReference extends Reference {
   constructor(childReference, length, variable=false) {
+    super();
     this.childReference = childReference;
     this.length         = length;
     this.variable       = variable;
@@ -66,6 +74,7 @@ class ArrayReference extends Reference {
 
 class OptionReference extends Reference {
   constructor(childReference) {
+    super();
     this.childReference = childReference;
     this.name           = childReference.name;
   }
@@ -83,6 +92,7 @@ class OptionReference extends Reference {
 
 class SizedReference extends Reference {
   constructor(sizedType, length) {
+    super();
     this.sizedType = sizedType;
     this.length    = length;
   }

@@ -1,5 +1,8 @@
-import { all, each, times, isArray } from 'lodash';
-import includeIoMixin from './io-mixin';
+import every from "lodash/every";
+import each from "lodash/each";
+import times from "lodash/times";
+import isArray from "lodash/isArray";
+import includeIoMixin from "./io-mixin";
 
 export class Array {
   constructor(childType, length) {
@@ -12,15 +15,14 @@ export class Array {
   }
 
   write(value, io) {
-
-    if(!isArray(value)) {
+    if (!isArray(value)) {
       throw new Error(`XDR Write Error: value is not array`);
     }
 
-    if(value.length !== this._length) {
+    if (value.length !== this._length) {
       throw new Error(
-        `XDR Write Error: Got array of size ${value.length},` + 
-        `expected ${this._length}`
+        `XDR Write Error: Got array of size ${value.length},` +
+          `expected ${this._length}`
       );
     }
 
@@ -28,10 +30,14 @@ export class Array {
   }
 
   isValid(value) {
-    if(!isArray(value)){ return false; }
-    if(value.length !== this._length){ return false; }
+    if (!isArray(value)) {
+      return false;
+    }
+    if (value.length !== this._length) {
+      return false;
+    }
 
-    return all(value, child => this._childType.isValid(child));
+    return every(value, child => this._childType.isValid(child));
   }
 }
 

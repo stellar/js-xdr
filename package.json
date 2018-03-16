@@ -5,12 +5,11 @@
   "main": "lib/index.js",
   "scripts": {
     "test": "gulp test",
-    "test-generate": "bundle exec xdrgen -o generated -n test -l javascript examples/test.x"
+    "test-generate": "bundle exec xdrgen -o generated -n test -l javascript examples/test.x",
+    "compile": "gulp build",
+    "prepublish": "npm run compile"
   },
-  "repository": {
-    "type": "git",
-    "url": "https://github.com/stellar/js-xdr.git"
-  },
+  "repository": "https://github.com/stellar/js-xdr.git",
   "keywords": [],
   "author": "Scott Fleckenstein <scott@stellar.org>",
   "license": "Apache-2.0",
@@ -19,44 +18,57 @@
   },
   "homepage": "https://github.com/stellar/js-xdr",
   "devDependencies": {
-    "babel": "^4.7.16",
-    "babel-core": "^4.7.16",
-    "babel-loader": "^4.3.0",
-    "chai": "^2.2.0",
+    "babel-cli": "^6.26.0",
+    "babel-core": "^6.26.0",
+    "babel-loader": "7.1.1",
+    "babel-plugin-transform-runtime": "^6.23.0",
+    "babel-preset-env": "^1.6.1",
+    "babel-register": "^6.26.0",
+    "chai": "^4.1.2",
     "express": "^4.9.8",
     "ghooks": "^0.3.0",
     "gulp": "^3.8.11",
-    "gulp-babel": "^4.0.1",
+    "gulp-babel": "^6.0.0",
     "gulp-coveralls": "^0.1.3",
     "gulp-git": "~0.5.3",
     "gulp-jshint": "^1.10.0",
     "gulp-load-plugins": "^0.9.0",
-    "gulp-mocha": "^2.0.1",
+    "gulp-mocha": "^5.0.0",
     "gulp-plumber": "^1.0.0",
     "gulp-rename": "~1.2.0",
     "gulp-rimraf": "~0.1.0",
     "gulp-uglify": "~0.3.1",
-    "gulp-webpack": "^1.3.1",
     "istanbul": "~0.3.2",
     "jshint-stylish": "^1.0.1",
-    "karma": "^0.13.9",
-    "karma-chrome-launcher": "^0.1.7",
-    "karma-firefox-launcher": "^0.1.6",
+    "karma": "^2.0.0",
+    "karma-chrome-launcher": "^2.2.0",
+    "karma-firefox-launcher": "^1.1.0",
     "karma-mocha": "^0.1.10",
-    "karma-phantomjs-launcher": "^0.1.4",
-    "karma-sinon-chai": "^0.3.0",
-    "karma-webpack": "^1.7.0",
-    "mocha": "~1.17.1",
+    "karma-phantomjs-launcher": "^1.0.4",
+    "karma-sinon-chai": "^1.3.3",
+    "karma-webpack": "^2.0.13",
+    "mocha": "^4.1.0",
     "run-sequence": "^1.0.2",
-    "sinon": "^1.14.1",
-    "sinon-chai": "^2.7.0",
-    "webpack": "^1.12.0"
+    "sinon": "^4.4.6",
+    "sinon-chai": "^3.0.0",
+    "webpack": "3.11",
+    "webpack-bundle-analyzer": "^2.11.1",
+    "webpack-stream": "^4.0.2"
   },
   "dependencies": {
-    "babel-runtime": "^4.7.16",
+    "babel-polyfill": "^6.26.0",
+    "babel-runtime": "^6.26.0",
     "cursor": "^0.1.5",
-    "lodash": "^3.5.0",
+    "lodash": "^4.17.5",
     "long": "^2.2.3",
     "sequencify": "0.0.7"
+  },
+  "babel": {
+    "presets": [
+      "env"
+    ],
+    "plugins": [
+      "transform-runtime"
+    ]
   }
 }

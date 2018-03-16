@@ -1,4 +1,4 @@
-import {isNumber} from 'lodash';
+import isNumber from 'lodash/isNumber';
 import includeIoMixin from './io-mixin';
 
 export var Float = {
@@ -8,7 +8,7 @@ export var Float = {
   },
 
   write(value, io) {
-    if(!isNumber(value)){ 
+    if(!isNumber(value)){
       throw new Error("XDR Write Error: not a number");
     }
 

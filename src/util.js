@@ -1,4 +1,4 @@
-import { all } from 'lodash';
+import every from 'lodash/every';
 
 
 export function calculatePadding(length) {
@@ -11,7 +11,7 @@ export function calculatePadding(length) {
 }
 export function slicePadding(io, length) {
   let padding = io.slice(length);
-  let allZero = all(padding.buffer(), (byte) => {
+  let allZero = every(padding.buffer(), (byte) => {
     return byte === 0;
   });
 

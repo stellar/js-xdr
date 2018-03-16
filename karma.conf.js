@@ -1,9 +1,11 @@
+
 module.exports = function(config) {
   config.set({
     frameworks: ['mocha', 'sinon-chai'],
     browsers : ['PhantomJS', "Firefox"],
     browserNoActivityTimeout: 20000,
 
+    entry: ['babel-polyfill'],
     files: [
       'dist/xdr.js',
       'test/unit/**/*.js'
@@ -13,13 +15,7 @@ module.exports = function(config) {
       'test/unit/**/*.js': ['webpack']
     },
 
-    webpack: {
-      module: {
-        loaders: [
-          { test: /\.js$/, exclude: /node_modules/, loader: 'babel-loader'}
-        ]
-      }
-    },
+    webpack: require("./webpack.config")(),
 
     webpackMiddleware: {
       noInfo: true

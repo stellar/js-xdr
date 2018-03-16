@@ -1,5 +1,6 @@
 import * as XDR from "../../src";
-import { keys, each } from "lodash";
+import each  from "lodash/each";
+import keys from "lodash/keys";
 
 describe('XDR.config', function() {
 
@@ -23,8 +24,8 @@ describe('XDR.config', function() {
       });
     });
 
-    expect(this.types.Color).to.be.truthy;
-    expect(this.types.ResultType).to.be.truthy;
+    expect(this.types.Color).to.exist
+    expect(this.types.ResultType).to.exist
   });
 
 
@@ -48,8 +49,8 @@ describe('XDR.config', function() {
       });
     });
 
-    expect(this.types.Result).to.be.truthy;
-    expect(this.types.ResultType).to.be.truthy;
+    expect(this.types.Result).to.exist
+    expect(this.types.ResultType).to.exist
 
     let result = this.types.Result.ok();
     expect(result.switch()).to.eql(this.types.ResultType.ok());
@@ -69,7 +70,7 @@ describe('XDR.config', function() {
       ]);
     });
 
-    expect(this.types.Color).to.be.truthy;
+    expect(this.types.Color).to.exist
 
     let result = new this.types.Color({
       red: 0,
