@@ -81,9 +81,9 @@ gulp.task('test:node', function() {
 });
 
 gulp.task('test:browser', ["build:browser"], function (done) {
-  var karma = require('karma').server;
-
-  karma.start({ configFile: __dirname + '/karma.conf.js' }, done);
+  var karma = require('karma');
+  var server = new karma.Server({ configFile: __dirname + '/karma.conf.js' }, [done]);
+  server.start();
 });
 
 gulp.task('clean', function () {
