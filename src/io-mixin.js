@@ -1,8 +1,9 @@
 import { Cursor } from "./cursor";
-import { extend, isFunction } from "lodash";
+import isFunction from 'lodash/isFunction';
+import extend from 'lodash/extend';
 
 //TODO: build a system to grow a buffer as we write to it
-const BUFFER_SIZE = Math.pow(2,16); 
+const BUFFER_SIZE = Math.pow(2,16);
 
 var staticMethods = {
   toXDR(val) {
@@ -10,7 +11,7 @@ var staticMethods = {
     this.write(val, cursor);
     let bytesWritten = cursor.tell();
     cursor.rewind();
-    
+
     return cursor.slice(bytesWritten).buffer();
   },
 
@@ -28,7 +29,7 @@ var staticMethods = {
     let result = this.read(cursor);
 
     //TODO: error out if the entire buffer isn't consumed
-    
+
     return result;
   },
 };
@@ -40,7 +41,7 @@ var instanceMethods = {
       case "raw": return buffer;
       case "hex":    return buffer.toString('hex');
       case "base64": return buffer.toString('base64');
-      default: 
+      default:
       throw new Error(`Invalid format ${format}, must be "raw", "hex", "base64"`);
     }
   }

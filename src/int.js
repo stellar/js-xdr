@@ -1,4 +1,4 @@
-import {isNumber} from 'lodash';
+import isNumber from 'lodash/isNumber';
 import includeIoMixin from './io-mixin';
 
 export var Int = {
@@ -8,11 +8,11 @@ export var Int = {
   },
 
   write(value, io) {
-    if(!isNumber(value)){ 
+    if(!isNumber(value)){
       throw new Error("XDR Write Error: not a number");
     }
 
-    if(Math.floor(value) !== value){ 
+    if(Math.floor(value) !== value){
       throw new Error("XDR Write Error: not an integer");
     }
 
@@ -24,7 +24,7 @@ export var Int = {
     if (!isNumber(value)){ return false; }
     if (Math.floor(value) !== value ){ return false; }
 
-    return value >= Int.MIN_VALUE && value <= Int.MAX_VALUE; 
+    return value >= Int.MIN_VALUE && value <= Int.MAX_VALUE;
   },
 };
 

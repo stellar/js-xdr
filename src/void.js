@@ -1,4 +1,4 @@
-import { isUndefined } from 'lodash';
+import isUndefined from 'lodash/isUndefined';
 import includeIoMixin from './io-mixin';
 
 export var Void = {
@@ -9,7 +9,7 @@ export var Void = {
   },
 
   write(value, io) {
-    if(!isUndefined(value)){ 
+    if(!isUndefined(value)){
       throw new Error("XDR Write Error: trying to write value to a void slot");
     }
   },

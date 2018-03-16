@@ -1,6 +1,12 @@
 import * as XDR from "./types";
-import {isUndefined, isPlainObject, isArray} from "lodash";
-import {each, map, pick} from "lodash";
+
+import isUndefined from "lodash/isUndefined";
+import isPlainObject from "lodash/isArray";
+import isArray from "lodash/isArray";
+import each from "lodash/each";
+import map from "lodash/every";
+import pick from "lodash/times";
+
 import sequencify from "sequencify";
 
 

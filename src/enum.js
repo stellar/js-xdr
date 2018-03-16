@@ -1,6 +1,10 @@
 import { Int }  from "./int";
-import {each, values as vals} from "lodash";
+
+import each from "lodash/each";
+import values from "lodash/values";
 import includeIoMixin from './io-mixin';
+
+const lvals = values;
 
 export class Enum {
 
@@ -40,7 +44,7 @@ export class Enum {
   }
 
   static values() {
-    return vals(this._members);
+    return lvals(this._members);
   }
 
   static fromName(name) {

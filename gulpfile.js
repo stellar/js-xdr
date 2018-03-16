@@ -42,7 +42,7 @@ gulp.task('build:node', ['lint:src'], function() {
     return gulp.src('src/**/*.js')
         .pipe(plugins.babel({
           presets: ['env'],
-          plugins: ["transform-runtime"]
+          plugins: ["transform-runtime", { "polyfill": false }]
         }))
         .pipe(gulp.dest('lib'));
 });
@@ -59,7 +59,7 @@ gulp.task('build:browser', ['lint:src'], function() {
             loader: 'babel-loader',
             query: {
               presets: ['env'],
-              plugins: ['transform-runtime'],
+              plugins: ["transform-runtime", { "polyfill": false }],
             }
           }
         ]
@@ -73,12 +73,13 @@ gulp.task('build:browser', ['lint:src'], function() {
 });
 
 gulp.task('test:node', function() {
-  require("babel/register", {
-    ignore: /node_modules/
+  require("babel-register")({
+    presets: ['env'],
+    plugins: ["transform-runtime", { "polyfill": false }],
   });
   return gulp.src(["test/setup/node.js", "test/unit/**/*.js"])
     .pipe(plugins.mocha({
-      reporter: ['dot']
+      reporter: ['dot'],
     }));
 });
 

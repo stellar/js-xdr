@@ -1,4 +1,5 @@
-import {isNumber} from 'lodash';
+import isNumber from 'lodash/isNumber';
+
 import includeIoMixin from './io-mixin';
 
 export var UnsignedInt = {
@@ -8,15 +9,15 @@ export var UnsignedInt = {
   },
 
   write(value, io) {
-    if(!isNumber(value)){ 
+    if(!isNumber(value)){
       throw new Error("XDR Write Error: not a number");
     }
 
-    if(Math.floor(value) !== value){ 
+    if(Math.floor(value) !== value){
       throw new Error("XDR Write Error: not an integer");
     }
 
-    if(value < 0){ 
+    if(value < 0){
       throw new Error(`XDR Write Error: negative number ${value}`);
     }
 
@@ -27,7 +28,7 @@ export var UnsignedInt = {
     if (!isNumber(value)){ return false; }
     if (Math.floor(value) !== value ){ return false; }
 
-    return value >= UnsignedInt.MIN_VALUE && value <= UnsignedInt.MAX_VALUE; 
+    return value >= UnsignedInt.MIN_VALUE && value <= UnsignedInt.MAX_VALUE;
   },
 };
 
