@@ -4,6 +4,7 @@ module.exports = function(config) {
     browsers : ['PhantomJS', "Firefox"],
     browserNoActivityTimeout: 20000,
 
+    entry: ['babel-polyfill'],
     files: [
       'dist/xdr.js',
       'test/unit/**/*.js'
@@ -16,7 +17,15 @@ module.exports = function(config) {
     webpack: {
       module: {
         loaders: [
-          { test: /\.js$/, exclude: /node_modules/, loader: 'babel-loader'}
+          {
+            test: /\.js$/,
+            exclude: /(node_modules|bower_components)/,
+            loader: 'babel-loader',
+            query: {
+              presets: ['env'],
+              plugins: [["transform-runtime", { "polyfill": false }]],
+            }
+          }
         ]
       }
     },
