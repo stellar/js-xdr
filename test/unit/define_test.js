@@ -1,5 +1,6 @@
 import * as XDR from "../../src";
-import { keys, each } from "lodash";
+import each  from "lodash/each";
+import keys from "lodash/keys";
 
 describe('XDR.config', function() {
 

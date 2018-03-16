@@ -1,3 +1,4 @@
+
 module.exports = function(config) {
   config.set({
     frameworks: ['mocha', 'sinon-chai'],
@@ -14,21 +15,7 @@ module.exports = function(config) {
       'test/unit/**/*.js': ['webpack']
     },
 
-    webpack: {
-      module: {
-        loaders: [
-          {
-            test: /\.js$/,
-            exclude: /(node_modules|bower_components)/,
-            loader: 'babel-loader',
-            query: {
-              presets: ['env'],
-              plugins: [["transform-runtime", { "polyfill": false }]],
-            }
-          }
-        ]
-      }
-    },
+    webpack: require("./webpack.config")(),
 
     webpackMiddleware: {
       noInfo: true

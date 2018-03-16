@@ -6,3 +6,4 @@ generated/
 yarn-error.log
 lib/
 dist/
+report.html

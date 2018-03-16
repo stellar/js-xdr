@@ -1,9 +1,11 @@
 'use strict';
 
-var gulp        = require('gulp');
-var plugins     = require('gulp-load-plugins')();
-var runSequence = require('run-sequence');
-var webpack     = require('webpack-stream');
+var gulp          = require('gulp');
+var plugins       = require('gulp-load-plugins')();
+var runSequence   = require('run-sequence');
+var webpack       = require('webpack-stream');
+var webpackConfig = require('./webpack.config');
+var BundleAnalyzerPlugin = require('webpack-bundle-analyzer').BundleAnalyzerPlugin;
 
 gulp.task('default', ['build']);
 
@@ -38,6 +40,26 @@ gulp.task('hooks:precommit', ['build'], function() {
     .pipe(plugins.git.add());
 });
 
+gulp.task('analyze:node', [], function() {
+  var wconf = webpackConfig({
+    plugins: [new BundleAnalyzerPlugin({
+      analyzerMode: 'static',
+    })]
+  });
+
+  return gulp.src('src/index.js').pipe(webpack(wconf))
+});
+
+gulp.task('analyze:browser', ['lint:src'], function() {
+  var wconf = webpackConfig({
+    plugins: [new BundleAnalyzerPlugin({
+      analyzerMode: 'static',
+    })]
+  });
+
+  return gulp.src('src/browser.js').pipe(webpack(wconf))
+});
+
 gulp.task('build:node', ['lint:src'], function() {
     return gulp.src('src/**/*.js')
         .pipe(plugins.babel({
@@ -48,23 +70,10 @@ gulp.task('build:node', ['lint:src'], function() {
 });
 
 gulp.task('build:browser', ['lint:src'], function() {
+  var wconf = webpackConfig({output: { library: 'XDR' }});
+
   return gulp.src('src/browser.js')
-    .pipe(webpack({
-      output: { library: 'XDR' },
-      module: {
-        loaders: [
-          {
-            test: /\.js$/,
-            exclude: /(node_modules|bower_components)/,
-            loader: 'babel-loader',
-            query: {
-              presets: ['env'],
-              plugins: [["transform-runtime", { "polyfill": false }]],
-            }
-          }
-        ]
-      }
-    }))
+    .pipe(webpack(wconf))
     .pipe(plugins.rename('xdr.js'))
     .pipe(gulp.dest('dist'))
     .pipe(plugins.uglify())

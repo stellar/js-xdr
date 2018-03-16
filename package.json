@@ -52,6 +52,7 @@
     "sinon": "^4.4.6",
     "sinon-chai": "^3.0.0",
     "webpack": "3.11",
+    "webpack-bundle-analyzer": "^2.11.1",
     "webpack-stream": "^4.0.2"
   },
   "dependencies": {
