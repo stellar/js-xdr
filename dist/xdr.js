@@ -25255,7 +25255,7 @@ var XDR =
 	var each = _lodash.each;
 	var map = _lodash.map;
 	var isUndefined = _lodash.isUndefined;
-	var zipObject = _lodash.zipObject;
+	var fromPairs = _lodash.fromPairs;
 
 	var Reference = __webpack_require__(40).Reference;
 
@@ -25281,7 +25281,7 @@ var XDR =
 	          return [name, value];
 	        });
 
-	        return new this(zipObject(fields));
+	        return new this(fromPairs(fields));
 	      }
 	    },
 	    write: {
