@@ -1,4 +1,4 @@
-import { all, each, times, isArray } from 'lodash';
+import { every, each, times, isArray } from 'lodash';
 import includeIoMixin from './io-mixin';
 
 export class Array {
@@ -19,7 +19,7 @@ export class Array {
 
     if(value.length !== this._length) {
       throw new Error(
-        `XDR Write Error: Got array of size ${value.length},` + 
+        `XDR Write Error: Got array of size ${value.length},` +
         `expected ${this._length}`
       );
     }
@@ -31,7 +31,7 @@ export class Array {
     if(!isArray(value)){ return false; }
     if(value.length !== this._length){ return false; }
 
-    return all(value, child => this._childType.isValid(child));
+    return every(value, child => this._childType.isValid(child));
   }
 }
 

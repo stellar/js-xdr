@@ -1,6 +1,6 @@
 import { Int } from "./int";
 import { UnsignedInt } from "./unsigned-int";
-import { all, each, times, isArray } from 'lodash';
+import { every, each, times, isArray } from 'lodash';
 import includeIoMixin from './io-mixin';
 
 export class VarArray {
@@ -42,7 +42,7 @@ export class VarArray {
     if(!isArray(value)){ return false; }
     if(value.length > this._maxLength){ return false; }
 
-    return all(value, child => this._childType.isValid(child));
+    return every(value, child => this._childType.isValid(child));
   }
 }
 

@@ -1,5 +1,5 @@
 import { each, map, isUndefined } from "lodash";
-import { zipObject } from "lodash";
+import { fromPairs } from "lodash";
 import { Reference } from "./config";
 import includeIoMixin from './io-mixin';
 
@@ -16,7 +16,7 @@ export class Struct {
       return [name, value];
     });
 
-    return new this(zipObject(fields));
+    return new this(fromPairs(fields));
   }
 
   static write(value, io) {
