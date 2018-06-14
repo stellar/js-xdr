@@ -1,4 +1,4 @@
-import { isUndefined } from 'lodash';
+import isUndefined from 'lodash/isUndefined';
 import includeIoMixin from './io-mixin';
 
 export var Void = {

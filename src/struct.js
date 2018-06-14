@@ -1,5 +1,7 @@
-import { each, map, isUndefined } from "lodash";
-import { fromPairs } from "lodash";
+import each from "lodash/each";
+import map from "lodash/map";
+import isUndefined from "lodash/isUndefined";
+import fromPairs from "lodash/fromPairs";
 import { Reference } from "./config";
 import includeIoMixin from './io-mixin';
 
