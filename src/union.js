@@ -1,4 +1,6 @@
-import { each, isUndefined, isString } from "lodash";
+import each from "lodash/each";
+import isUndefined from "lodash/isUndefined";
+import isString from "lodash/isString";
 import { Void } from "./void";
 import { Reference } from "./config";
 import includeIoMixin from './io-mixin';

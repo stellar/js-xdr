@@ -1,5 +1,6 @@
 import { Cursor } from "./cursor";
-import { extend, isFunction } from "lodash";
+import extend from "lodash/extend";
+import isFunction from "lodash/isFunction";
 
 //TODO: build a system to grow a buffer as we write to it
 const BUFFER_SIZE = Math.pow(2,16); 

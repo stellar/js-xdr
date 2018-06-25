@@ -1,7 +1,7 @@
 import { Int } from "./int";
 import { UnsignedInt } from "./unsigned-int";
 import {calculatePadding, slicePadding} from "./util";
-import {isString} from "lodash";
+import isString from "lodash/isString";
 import includeIoMixin from './io-mixin';
 
 export class String {

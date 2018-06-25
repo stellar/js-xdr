@@ -1,6 +1,9 @@
 import { Int } from "./int";
 import { UnsignedInt } from "./unsigned-int";
-import { every, each, times, isArray } from 'lodash';
+import every from 'lodash/every';
+import each from 'lodash/each';
+import times from 'lodash/times';
+import isArray from 'lodash/isArray';
 import includeIoMixin from './io-mixin';
 
 export class VarArray {

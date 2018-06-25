@@ -1,5 +1,6 @@
 import { Int }  from "./int";
-import {each, values as vals} from "lodash";
+import each from "lodash/each";
+import vals from "lodash/values";
 import includeIoMixin from './io-mixin';
 
 export class Enum {
