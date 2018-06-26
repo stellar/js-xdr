@@ -7,8 +7,8 @@ let subject = new Opaque(3);
 describe('Opaque#read', function() {
 
   it('decodes correctly', function() {
-    expect(read([0,0,0,0])).to.eql(new Buffer([0,0,0]));
-    expect(read([0,0,1,0])).to.eql(new Buffer([0,0,1]));
+    expect(read([0,0,0,0])).to.eql(Buffer.from([0,0,0]));
+    expect(read([0,0,1,0])).to.eql(Buffer.from([0,0,1]));
   });
 
   it('throws a read error if the padding bytes are not zero', function() {    
@@ -24,8 +24,8 @@ describe('Opaque#read', function() {
 describe('Opaque#write', function() {
 
   it('encodes correctly', function() {
-    expect(write(new Buffer([0,0,0]))).to.eql([0,0,0,0]);
-    expect(write(new Buffer([0,0,1]))).to.eql([0,0,1,0]);
+    expect(write(Buffer.from([0,0,0]))).to.eql([0,0,0,0]);
+    expect(write(Buffer.from([0,0,1]))).to.eql([0,0,1,0]);
   });
 
   function write(value) {
@@ -37,12 +37,12 @@ describe('Opaque#write', function() {
 
 describe('Opaque#isValid', function() {
   it('returns true for buffers of the correct length', function() {
-    expect(subject.isValid(new Buffer(3))).to.be.true;
+    expect(subject.isValid(Buffer.alloc(3))).to.be.true;
   });
 
   it('returns false for buffers of the wrong size', function() {
-    expect(subject.isValid(new Buffer(2))).to.be.false;
-    expect(subject.isValid(new Buffer(4))).to.be.false;
+    expect(subject.isValid(Buffer.alloc(2))).to.be.false;
+    expect(subject.isValid(Buffer.alloc(4))).to.be.false;
   });
 
   it('returns false for non buffers', function() {

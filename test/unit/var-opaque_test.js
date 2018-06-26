@@ -7,10 +7,10 @@ let subject = new VarOpaque(2);
 describe('VarOpaque#read', function() {
 
   it('decodes correctly', function() {
-    expect(read([0,0,0,0])).to.eql(new Buffer([]));
-    expect(read([0,0,0,1,0,0,0,0])).to.eql(new Buffer([0]));
-    expect(read([0,0,0,1,1,0,0,0])).to.eql(new Buffer([1]));
-    expect(read([0,0,0,2,0,1,0,0])).to.eql(new Buffer([0,1]));
+    expect(read([0,0,0,0])).to.eql(Buffer.from([]));
+    expect(read([0,0,0,1,0,0,0,0])).to.eql(Buffer.from([0]));
+    expect(read([0,0,0,1,1,0,0,0])).to.eql(Buffer.from([1]));
+    expect(read([0,0,0,2,0,1,0,0])).to.eql(Buffer.from([0,1]));
   });
 
   it("throws a read error when the encoded length is greater than the allowed max", function() {
@@ -32,10 +32,10 @@ describe('VarOpaque#read', function() {
 describe('VarOpaque#write', function() {
 
   it('encodes correctly', function() {
-    expect(write(new Buffer([]))).to.eql([0,0,0,0]);
-    expect(write(new Buffer([0]))).to.eql([0,0,0,1,0,0,0,0]);
-    expect(write(new Buffer([1]))).to.eql([0,0,0,1,1,0,0,0]);
-    expect(write(new Buffer([0,1]))).to.eql([0,0,0,2,0,1,0,0]);
+    expect(write(Buffer.from([]))).to.eql([0,0,0,0]);
+    expect(write(Buffer.from([0]))).to.eql([0,0,0,1,0,0,0,0]);
+    expect(write(Buffer.from([1]))).to.eql([0,0,0,1,1,0,0,0]);
+    expect(write(Buffer.from([0,1]))).to.eql([0,0,0,2,0,1,0,0]);
   });
 
   function write(value) {
@@ -47,14 +47,14 @@ describe('VarOpaque#write', function() {
 
 describe('VarOpaque#isValid', function() {
   it('returns true for buffers of the correct length', function() {
-    expect(subject.isValid(new Buffer(0))).to.be.true;
-    expect(subject.isValid(new Buffer(1))).to.be.true;
-    expect(subject.isValid(new Buffer(2))).to.be.true;
+    expect(subject.isValid(Buffer.alloc(0))).to.be.true;
+    expect(subject.isValid(Buffer.alloc(1))).to.be.true;
+    expect(subject.isValid(Buffer.alloc(2))).to.be.true;
   });
 
   it('returns false for buffers of the wrong size', function() {
-    expect(subject.isValid(new Buffer(3))).to.be.false;
-    expect(subject.isValid(new Buffer(3000))).to.be.false;
+    expect(subject.isValid(Buffer.alloc(3))).to.be.false;
+    expect(subject.isValid(Buffer.alloc(3000))).to.be.false;
   });
 
   it('returns false for non buffers', function() {

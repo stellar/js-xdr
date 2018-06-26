@@ -1,6 +1,8 @@
 language: node_js
 node_js:
-- node
+- 6
+- 8
+- 10
 - lts/*
 script: gulp test
 before_install:

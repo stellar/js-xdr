@@ -5,8 +5,7 @@ export class Cursor extends BaseCursor {
 
   writeBufferPadded(buffer) {
     let padding = calculatePadding(buffer.length);
-    let paddingBuffer = new Buffer(padding);
-    paddingBuffer.fill(0);
+    let paddingBuffer = Buffer.alloc(padding);
     
     return this
       .copyFrom(new Cursor(buffer))

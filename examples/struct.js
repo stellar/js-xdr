@@ -15,13 +15,12 @@ let xdr = XDR.config(xdr => {
 });
 
 let sig = new xdr.Signature();
-sig.publicKey(new Buffer(32));
-sig.publicKey().fill(0x00);
-sig.data(new Buffer("00000000000000000000000000000000"));
+sig.publicKey(Buffer.alloc(32));
+sig.data(Buffer.from("00000000000000000000000000000000"));
 
 let env = new xdr.Envelope({
   signature: sig,
-  body: new Buffer("hello"),
+  body: Buffer.from("hello"),
   timestamp: Math.floor(new Date() / 1000)
 });
 
