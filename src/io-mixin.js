@@ -19,8 +19,8 @@ var staticMethods = {
     let buffer;
     switch(format) {
       case "raw":    buffer = input; break;
-      case "hex":    buffer = new Buffer(input, "hex"); break;
-      case "base64": buffer = new Buffer(input, "base64"); break;
+      case "hex":    buffer = Buffer.from(input, "hex"); break;
+      case "base64": buffer = Buffer.from(input, "base64"); break;
       default:
         throw new Error(`Invalid format ${format}, must be "raw", "hex", "base64"`);
     }

@@ -34,7 +34,7 @@ export class String {
     if(!isString(value)) {
       throw new Error(`XDR Write Error: ${value} is not a string,`);
     }
-    let buffer = new Buffer(value, 'utf8');
+    let buffer = Buffer.from(value, 'utf8');
     
     Int.write(buffer.length, io);
     io.writeBufferPadded(buffer);
@@ -44,7 +44,7 @@ export class String {
     if (!isString(value)) {
       return false;
     }
-    let buffer = new Buffer(value, 'utf8');
+    let buffer = Buffer.from(value, 'utf8');
     return buffer.length <= this._maxLength;
   }
 }

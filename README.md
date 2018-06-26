@@ -35,7 +35,7 @@ xdr.Bool.fromXDR([0,0,0,0]) // returns false
 xdr.Bool.fromXDR([0,0,0,1]) // returns true
 
 // the inverse of `fromXDR` is `toXDR`, which returns a Buffer
-xdr.Bool.toXDR(true) // returns new Buffer([0,0,0,1])
+xdr.Bool.toXDR(true) // returns Buffer.from([0,0,0,1])
 
 // XDR ints and unsigned ints can be safely represented as
 // a javascript number
