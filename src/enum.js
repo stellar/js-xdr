@@ -55,13 +55,13 @@ export class Enum {
   }
 
   static fromValue(value) {
-    let result = this._byValue.get(value)
+    let result = this._byValue.get(value);
 
     if(!result) {
       throw new Error(`${value} is not a value of any member of ${this.enumName}`);
     }
 
-    return result
+    return result;
   }
 
   static create(context, name, members) {
