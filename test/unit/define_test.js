@@ -27,6 +27,23 @@ describe('XDR.config', function() {
     expect(this.types.ResultType).to.be.truthy;
   });
 
+  it('can define objects with the same name from different contexts', function() {
+    XDR.config(xdr => {
+      xdr.enum('Color', {
+        red: 0,
+        green: 1,
+        blue: 2,
+      });
+    });
+
+    XDR.config(xdr => {
+      xdr.enum('Color', {
+        red: 0,
+        green: 1,
+        blue: 2,
+      });
+    });
+  });
 
   it('can define objects that have simple dependencies', function() {
     XDR.config(xdr => {
@@ -46,7 +63,7 @@ describe('XDR.config', function() {
         ok: 0,
         error: 1
       });
-    });
+    }, this.types);
 
     expect(this.types.Result).to.be.truthy;
     expect(this.types.ResultType).to.be.truthy;
@@ -67,7 +84,7 @@ describe('XDR.config', function() {
         ["green", xdr.int()],
         ["blue", xdr.int()],
       ]);
-    });
+    }, this.types);
 
     expect(this.types.Color).to.be.truthy;
 
