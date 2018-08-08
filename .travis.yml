@@ -18,7 +18,7 @@ deploy:
   provider: npm
   email: npm@stellar.org
   api_key:
-    secure: Yb6nOoNeRCfNaah/R9fbT7n/6QTua5DWEDn0vMSEBWgmkviVsVyA2eTVs9895C9eFCRvdWBkQ92qE5ET5Lvp/KeYVuyxZIzpdWSqonSp74xrWm4W87F/4Lp+uDucfr+v9UfIl2uR9U9u90j+qiDfw8X5KNELiHrhY6xUCjoshsM=
+    secure: Fiob77sZqBBASNHL+0+P83M+FIAjEhtWsXa2zF1rgGo6QKacgVLPq/9ue5b/eApJd07RdtQyxHC+f2DXuGqxgVvouylHGe+ozeNgW86vFQJQ3GT8PFUDNrMIIi+9W8Hl6B1p3nFWZVvnuvJU51VyT93MWJgypreSVFYSWpNsPmU=
   skip_cleanup: true
   on:
     tags: true
