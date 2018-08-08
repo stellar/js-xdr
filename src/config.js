@@ -6,12 +6,7 @@ import each from "lodash/each";
 import map from "lodash/map";
 import pick from "lodash/pick";
 
-
-// types is the root
-var types = {};
-
-
-export function config(fn) {
+export function config(fn, types = {}) {
   if (fn) {
     let builder = new TypeBuilder(types);
     fn(builder);
