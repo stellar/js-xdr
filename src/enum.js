@@ -54,6 +54,16 @@ export class Enum {
     return result;
   }
 
+  static fromValue(value) {
+    let result = this._byValue.get(value);
+
+    if(!result) {
+      throw new Error(`${value} is not a value of any member of ${this.enumName}`);
+    }
+
+    return result;
+  }
+
   static create(context, name, members) {
     let ChildEnum = class extends Enum {
       constructor(...args) {

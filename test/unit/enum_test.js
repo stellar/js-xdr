@@ -23,6 +23,18 @@ describe('Enum.fromName', function() {
 
 });
 
+describe('Enum.fromValue', function () {
+  it("returns the member with the provided value", function () {
+    expect(Color.fromValue(0)).to.eql(Color.red());
+    expect(Color.fromValue(1)).to.eql(Color.green());
+    expect(Color.fromValue(3)).to.eql(Color.evenMoreGreen());
+  });
+
+  it("throws an error if the value is not correct", function () {
+    expect(() => Color.fromValue(999)).to.throw(/not a value/i);
+  });
+});
+
 describe('Enum.read', function() {
 
   it('decodes correctly', function() {
