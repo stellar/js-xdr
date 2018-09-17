@@ -2,6 +2,7 @@ import { Int } from "./int";
 import { UnsignedInt } from "./unsigned-int";
 import {calculatePadding, slicePadding} from "./util";
 import isString from "lodash/isString";
+import isArray from "lodash/isArray";
 import includeIoMixin from './io-mixin';
 
 export class String {
@@ -21,7 +22,11 @@ export class String {
     let padding = calculatePadding(length);
     let result = io.slice(length);
     slicePadding(io, padding);
-    return result.buffer().toString('utf8');
+    return result.buffer();
+  }
+
+  readString(io) {
+    return this.read(io).toString('utf8');
   }
 
   write(value, io) {
@@ -31,20 +36,26 @@ export class String {
         `max allows is ${this._maxLength}`);
     }
 
-    if(!isString(value)) {
-      throw new Error(`XDR Write Error: ${value} is not a string,`);
+    let buffer;
+    if (isString(value)) {
+      buffer = Buffer.from(value, 'utf8');
+    } else {
+      buffer = Buffer.from(value);
     }
-    let buffer = Buffer.from(value, 'utf8');
     
     Int.write(buffer.length, io);
     io.writeBufferPadded(buffer);
   }
 
   isValid(value) {
-    if (!isString(value)) {
+    let buffer;
+    if (isString(value)) {
+      buffer = Buffer.from(value, 'utf8');
+    } else if (isArray(value) || Buffer.isBuffer(value)) {
+      buffer = Buffer.from(value);
+    } else {
       return false;
     }
-    let buffer = Buffer.from(value, 'utf8');
     return buffer.length <= this._maxLength;
   }
 }
