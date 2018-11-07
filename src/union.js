@@ -67,7 +67,12 @@ export class Union {
     let aSwitch = this._switchOn.read(io);
     let arm     = this.armForSwitch(aSwitch);
     let armType = this.armTypeForArm(arm);
-    let value   = armType.read(io);
+    let value;
+    if (!isUndefined(armType)) {
+      value = armType.read(io);
+    } else {
+      value = arm.read(io);
+    }
     return new this(aSwitch, value);
   }
 
