@@ -1,4 +1,4 @@
-import { Bool } from "./bool";
+import { Bool } from './bool';
 import isNull from 'lodash/isNull';
 import isUndefined from 'lodash/isUndefined';
 import includeIoMixin from './io-mixin';
@@ -9,7 +9,7 @@ export class Option {
   }
 
   read(io) {
-    if(Bool.read(io)) {
+    if (Bool.read(io)) {
       return this._childType.read(io);
     }
   }
@@ -19,14 +19,18 @@ export class Option {
 
     Bool.write(isPresent, io);
 
-    if(isPresent) {
+    if (isPresent) {
       this._childType.write(value, io);
     }
   }
 
   isValid(value) {
-    if(isNull(value)){ return true; }
-    if(isUndefined(value)){ return true; }
+    if (isNull(value)) {
+      return true;
+    }
+    if (isUndefined(value)) {
+      return true;
+    }
 
     return this._childType.isValid(value);
   }

@@ -1,18 +1,17 @@
-import each from "lodash/each";
-import map from "lodash/map";
-import isUndefined from "lodash/isUndefined";
-import fromPairs from "lodash/fromPairs";
-import { Reference } from "./config";
+import each from 'lodash/each';
+import map from 'lodash/map';
+import isUndefined from 'lodash/isUndefined';
+import fromPairs from 'lodash/fromPairs';
+import { Reference } from './config';
 import includeIoMixin from './io-mixin';
 
 export class Struct {
-
   constructor(attributes) {
     this._attributes = attributes || {};
   }
 
   static read(io) {
-    let fields = map(this._fields, field => {
+    let fields = map(this._fields, (field) => {
       let [name, type] = field;
       let value = type.read(io);
       return [name, value];
@@ -22,13 +21,13 @@ export class Struct {
   }
 
   static write(value, io) {
-    if(!(value instanceof this)) {
+    if (!(value instanceof this)) {
       throw new Error(`XDR Write Error: ${value} is not a ${this.structName}`);
     }
-    each(this._fields, field => {
+    each(this._fields, (field) => {
       let [name, type] = field;
       let attribute = value._attributes[name];
-      type.write(attribute,io);
+      type.write(attribute, io);
     });
   }
 
@@ -55,7 +54,7 @@ export class Struct {
       return [name, field];
     });
 
-    each(ChildStruct._fields, field => {
+    each(ChildStruct._fields, (field) => {
       let [fieldName] = field;
       ChildStruct.prototype[fieldName] = readOrWriteAttribute(fieldName);
     });
@@ -68,7 +67,7 @@ includeIoMixin(Struct);
 
 function readOrWriteAttribute(name) {
   return function(value) {
-    if(!isUndefined(value)) {
+    if (!isUndefined(value)) {
       this._attributes[name] = value;
     }
 

@@ -1,19 +1,18 @@
-import { Int }  from "./int";
-import each from "lodash/each";
-import vals from "lodash/values";
+import { Int } from './int';
+import each from 'lodash/each';
+import vals from 'lodash/values';
 import includeIoMixin from './io-mixin';
 
 export class Enum {
-
   constructor(name, value) {
-    this.name  = name;
+    this.name = name;
     this.value = value;
   }
 
   static read(io) {
     let intVal = Int.read(io);
 
-    if(!this._byValue.has(intVal)) {
+    if (!this._byValue.has(intVal)) {
       throw new Error(
         `XDR Read Error: Unknown ${this.enumName} member for value ${intVal}`
       );
@@ -23,7 +22,7 @@ export class Enum {
   }
 
   static write(value, io) {
-    if(!(value instanceof this)) {
+    if (!(value instanceof this)) {
       throw new Error(
         `XDR Write Error: Unknown ${value} is not a ${this.enumName}`
       );
@@ -47,7 +46,7 @@ export class Enum {
   static fromName(name) {
     let result = this._members[name];
 
-    if(!result) {
+    if (!result) {
       throw new Error(`${name} is not a member of ${this.enumName}`);
     }
 
@@ -57,8 +56,10 @@ export class Enum {
   static fromValue(value) {
     let result = this._byValue.get(value);
 
-    if(!result) {
-      throw new Error(`${value} is not a value of any member of ${this.enumName}`);
+    if (!result) {
+      throw new Error(
+        `${value} is not a value of any member of ${this.enumName}`
+      );
     }
 
     return result;

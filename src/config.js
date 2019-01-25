@@ -1,10 +1,10 @@
-import * as XDR from "./types";
-import isUndefined from "lodash/isUndefined";
-import isPlainObject from "lodash/isPlainObject";
-import isArray from "lodash/isArray";
-import each from "lodash/each";
-import map from "lodash/map";
-import pick from "lodash/pick";
+import * as XDR from './types';
+import isUndefined from 'lodash/isUndefined';
+import isPlainObject from 'lodash/isPlainObject';
+import isArray from 'lodash/isArray';
+import each from 'lodash/each';
+import map from 'lodash/map';
+import pick from 'lodash/pick';
 
 export function config(fn, types = {}) {
   if (fn) {
@@ -16,11 +16,10 @@ export function config(fn, types = {}) {
   return types;
 }
 
-
 export class Reference {
   /* jshint unused: false */
   resolve(context) {
-    throw new Error("implement resolve in child class");
+    throw new Error('implement resolve in child class');
   }
 }
 
@@ -36,10 +35,10 @@ class SimpleReference extends Reference {
 }
 
 class ArrayReference extends Reference {
-  constructor(childReference, length, variable=false) {
+  constructor(childReference, length, variable = false) {
     this.childReference = childReference;
-    this.length         = length;
-    this.variable       = variable;
+    this.length = length;
+    this.variable = variable;
   }
 
   resolve(context) {
@@ -65,7 +64,7 @@ class ArrayReference extends Reference {
 class OptionReference extends Reference {
   constructor(childReference) {
     this.childReference = childReference;
-    this.name           = childReference.name;
+    this.name = childReference.name;
   }
 
   resolve(context) {
@@ -82,7 +81,7 @@ class OptionReference extends Reference {
 class SizedReference extends Reference {
   constructor(sizedType, length) {
     this.sizedType = sizedType;
-    this.length    = length;
+    this.length = length;
   }
 
   resolve(context) {
@@ -99,8 +98,8 @@ class SizedReference extends Reference {
 class Definition {
   constructor(constructor, name, config) {
     this.constructor = constructor;
-    this.name        = name;
-    this.config      = config;
+    this.name = name;
+    this.config = config;
   }
 
   // resolve calls the constructor of this definition with the provided context
@@ -162,19 +161,43 @@ class TypeBuilder {
     this.define(name, result);
   }
 
-  void() { return XDR.Void; }
-  bool() { return XDR.Bool; }
-  int() { return XDR.Int; }
-  hyper() { return XDR.Hyper; }
-  uint() { return XDR.UnsignedInt; }
-  uhyper() { return XDR.UnsignedHyper; }
-  float() { return XDR.Float; }
-  double() { return XDR.Double; }
-  quadruple() { return XDR.Quadruple; }
+  void() {
+    return XDR.Void;
+  }
+  bool() {
+    return XDR.Bool;
+  }
+  int() {
+    return XDR.Int;
+  }
+  hyper() {
+    return XDR.Hyper;
+  }
+  uint() {
+    return XDR.UnsignedInt;
+  }
+  uhyper() {
+    return XDR.UnsignedHyper;
+  }
+  float() {
+    return XDR.Float;
+  }
+  double() {
+    return XDR.Double;
+  }
+  quadruple() {
+    return XDR.Quadruple;
+  }
 
-  string(length) { return new SizedReference(XDR.String, length); }
-  opaque(length) { return new SizedReference(XDR.Opaque, length); }
-  varOpaque(length) { return new SizedReference(XDR.VarOpaque, length); }
+  string(length) {
+    return new SizedReference(XDR.String, length);
+  }
+  opaque(length) {
+    return new SizedReference(XDR.Opaque, length);
+  }
+  varOpaque(length) {
+    return new SizedReference(XDR.VarOpaque, length);
+  }
 
   array(childType, length) {
     return new ArrayReference(childType, length);
@@ -189,7 +212,7 @@ class TypeBuilder {
   }
 
   define(name, definition) {
-    if(isUndefined(this._destination[name])) {
+    if (isUndefined(this._destination[name])) {
       this._definitions[name] = definition;
     } else {
       throw new Error(`XDR Error:${name} is already defined`);
@@ -204,7 +227,7 @@ class TypeBuilder {
     each(this._definitions, (defn, name) => {
       defn.resolve({
         definitions: this._definitions,
-        results:    this._destination
+        results: this._destination
       });
     });
   }

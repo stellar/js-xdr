@@ -1,12 +1,12 @@
-import { Int } from "./int";
-import { UnsignedInt } from "./unsigned-int";
-import {calculatePadding, slicePadding} from "./util";
-import isString from "lodash/isString";
-import isArray from "lodash/isArray";
+import { Int } from './int';
+import { UnsignedInt } from './unsigned-int';
+import { calculatePadding, slicePadding } from './util';
+import isString from 'lodash/isString';
+import isArray from 'lodash/isArray';
 import includeIoMixin from './io-mixin';
 
 export class String {
-  constructor(maxLength=UnsignedInt.MAX_VALUE) {
+  constructor(maxLength = UnsignedInt.MAX_VALUE) {
     this._maxLength = maxLength;
   }
 
@@ -15,8 +15,8 @@ export class String {
 
     if (length > this._maxLength) {
       throw new Error(
-        `XDR Read Error: Saw ${length} length String,` + 
-        `max allowed is ${this._maxLength}`
+        `XDR Read Error: Saw ${length} length String,` +
+          `max allowed is ${this._maxLength}`
       );
     }
     let padding = calculatePadding(length);
@@ -30,10 +30,11 @@ export class String {
   }
 
   write(value, io) {
-    if(value.length > this._maxLength) {
+    if (value.length > this._maxLength) {
       throw new Error(
-        `XDR Write Error: Got ${value.length} bytes,` + 
-        `max allows is ${this._maxLength}`);
+        `XDR Write Error: Got ${value.length} bytes,` +
+          `max allows is ${this._maxLength}`
+      );
     }
 
     let buffer;
@@ -42,7 +43,7 @@ export class String {
     } else {
       buffer = Buffer.from(value);
     }
-    
+
     Int.write(buffer.length, io);
     io.writeBufferPadded(buffer);
   }

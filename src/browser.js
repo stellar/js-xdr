@@ -1,3 +1,3 @@
-require("babel/polyfill");
+require('babel/polyfill');
 
-module.exports = require("./index");
+module.exports = require('./index');
