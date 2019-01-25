@@ -1,7 +1,7 @@
 import isNumber from 'lodash/isNumber';
 import includeIoMixin from './io-mixin';
 
-export var Int = {
+export const Int = {
   read(io) {
     return io.readInt32BE();
   },
@@ -30,7 +30,7 @@ export var Int = {
   }
 };
 
-Int.MAX_VALUE = Math.pow(2, 31) - 1;
-Int.MIN_VALUE = -Math.pow(2, 31);
+Int.MAX_VALUE = 2 ** 31 - 1;
+Int.MIN_VALUE = -(2 ** 31);
 
 includeIoMixin(Int);

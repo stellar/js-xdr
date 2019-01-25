@@ -9,7 +9,7 @@ export class VarOpaque {
   }
 
   read(io) {
-    let length = Int.read(io);
+    const length = Int.read(io);
 
     if (length > this._maxLength) {
       throw new Error(
@@ -17,8 +17,8 @@ export class VarOpaque {
           `max allowed is ${this._maxLength}`
       );
     }
-    let padding = calculatePadding(length);
-    let result = io.slice(length);
+    const padding = calculatePadding(length);
+    const result = io.slice(length);
     slicePadding(io, padding);
     return result.buffer();
   }

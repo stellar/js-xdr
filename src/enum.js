@@ -1,6 +1,6 @@
-import { Int } from './int';
 import each from 'lodash/each';
 import vals from 'lodash/values';
+import { Int } from './int';
 import includeIoMixin from './io-mixin';
 
 export class Enum {
@@ -10,7 +10,7 @@ export class Enum {
   }
 
   static read(io) {
-    let intVal = Int.read(io);
+    const intVal = Int.read(io);
 
     if (!this._byValue.has(intVal)) {
       throw new Error(
@@ -44,7 +44,7 @@ export class Enum {
   }
 
   static fromName(name) {
-    let result = this._members[name];
+    const result = this._members[name];
 
     if (!result) {
       throw new Error(`${name} is not a member of ${this.enumName}`);
@@ -54,7 +54,7 @@ export class Enum {
   }
 
   static fromValue(value) {
-    let result = this._byValue.get(value);
+    const result = this._byValue.get(value);
 
     if (!result) {
       throw new Error(
@@ -66,11 +66,7 @@ export class Enum {
   }
 
   static create(context, name, members) {
-    let ChildEnum = class extends Enum {
-      constructor(...args) {
-        super(...args);
-      }
-    };
+    const ChildEnum = class extends Enum {};
 
     ChildEnum.enumName = name;
     context.results[name] = ChildEnum;
@@ -79,12 +75,10 @@ export class Enum {
     ChildEnum._byValue = new Map();
 
     each(members, (value, key) => {
-      let inst = new ChildEnum(key, value);
+      const inst = new ChildEnum(key, value);
       ChildEnum._members[key] = inst;
       ChildEnum._byValue.set(value, inst);
-      ChildEnum[key] = function() {
-        return inst;
-      };
+      ChildEnum[key] = () => inst;
     });
 
     return ChildEnum;

@@ -1,10 +1,10 @@
-import { Int } from './int';
 import isBoolean from 'lodash/isBoolean';
+import { Int } from './int';
 import includeIoMixin from './io-mixin';
 
-export var Bool = {
+export const Bool = {
   read(io) {
-    let value = Int.read(io);
+    const value = Int.read(io);
 
     switch (value) {
       case 0:
@@ -19,7 +19,7 @@ export var Bool = {
   },
 
   write(value, io) {
-    let intVal = value ? 1 : 0;
+    const intVal = value ? 1 : 0;
     return Int.write(intVal, io);
   },
 

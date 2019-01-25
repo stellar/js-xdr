@@ -3,12 +3,14 @@ module.exports = {
     mocha: true
   },
   globals: {
-    StellarBase: true,
+    XDR: true,
     chai: true,
     sinon: true,
-    expect: true
+    expect: true,
+    stub: true,
+    spy: true
   },
   rules: {
-    "no-unused-vars": 0
+    'no-unused-vars': 0
   }
 };

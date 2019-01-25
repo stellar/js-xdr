@@ -1,14 +1,10 @@
-import * as XDR from './types';
 import isUndefined from 'lodash/isUndefined';
-import isPlainObject from 'lodash/isPlainObject';
-import isArray from 'lodash/isArray';
 import each from 'lodash/each';
-import map from 'lodash/map';
-import pick from 'lodash/pick';
+import * as XDR from './types';
 
 export function config(fn, types = {}) {
   if (fn) {
-    let builder = new TypeBuilder(types);
+    const builder = new TypeBuilder(types);
     fn(builder);
     builder.resolve();
   }
@@ -18,24 +14,26 @@ export function config(fn, types = {}) {
 
 export class Reference {
   /* jshint unused: false */
-  resolve(context) {
+  resolve() {
     throw new Error('implement resolve in child class');
   }
 }
 
 class SimpleReference extends Reference {
   constructor(name) {
+    super();
     this.name = name;
   }
 
   resolve(context) {
-    let defn = context.definitions[this.name];
+    const defn = context.definitions[this.name];
     return defn.resolve(context);
   }
 }
 
 class ArrayReference extends Reference {
   constructor(childReference, length, variable = false) {
+    super();
     this.childReference = childReference;
     this.length = length;
     this.variable = variable;
@@ -55,14 +53,14 @@ class ArrayReference extends Reference {
 
     if (this.variable) {
       return new XDR.VarArray(resolvedChild, length);
-    } else {
-      return new XDR.Array(resolvedChild, length);
     }
+    return new XDR.Array(resolvedChild, length);
   }
 }
 
 class OptionReference extends Reference {
   constructor(childReference) {
+    super();
     this.childReference = childReference;
     this.name = childReference.name;
   }
@@ -80,6 +78,7 @@ class OptionReference extends Reference {
 
 class SizedReference extends Reference {
   constructor(sizedType, length) {
+    super();
     this.sizedType = sizedType;
     this.length = length;
   }
@@ -96,10 +95,10 @@ class SizedReference extends Reference {
 }
 
 class Definition {
-  constructor(constructor, name, config) {
+  constructor(constructor, name, cfg) {
     this.constructor = constructor;
     this.name = name;
-    this.config = config;
+    this.config = cfg;
   }
 
   // resolve calls the constructor of this definition with the provided context
@@ -115,6 +114,21 @@ class Definition {
   }
 }
 
+// let the reference resoltion system do it's thing
+// the "constructor" for a typedef just returns the resolved value
+function createTypedef(context, typeName, value) {
+  if (value instanceof Reference) {
+    value = value.resolve(context);
+  }
+  context.results[typeName] = value;
+  return value;
+}
+
+function createConst(context, name, value) {
+  context.results[name] = value;
+  return value;
+}
+
 class TypeBuilder {
   constructor(destination) {
     this._destination = destination;
@@ -122,42 +136,27 @@ class TypeBuilder {
   }
 
   enum(name, members) {
-    let result = new Definition(XDR.Enum.create, name, members);
+    const result = new Definition(XDR.Enum.create, name, members);
     this.define(name, result);
   }
 
   struct(name, members) {
-    let result = new Definition(XDR.Struct.create, name, members);
+    const result = new Definition(XDR.Struct.create, name, members);
     this.define(name, result);
   }
 
-  union(name, config) {
-    let result = new Definition(XDR.Union.create, name, config);
+  union(name, cfg) {
+    const result = new Definition(XDR.Union.create, name, cfg);
     this.define(name, result);
   }
 
-  typedef(name, config) {
-    // let the reference resoltion system do it's thing
-    // the "constructor" for a typedef just returns the resolved value
-    let createTypedef = (context, name, value) => {
-      if (value instanceof Reference) {
-        value = value.resolve(context);
-      }
-      context.results[name] = value;
-      return value;
-    };
-
-    let result = new Definition(createTypedef, name, config);
+  typedef(name, cfg) {
+    const result = new Definition(createTypedef, name, cfg);
     this.define(name, result);
   }
 
-  const(name, config) {
-    let createConst = (context, name, value) => {
-      context.results[name] = value;
-      return value;
-    };
-
-    let result = new Definition(createConst, name, config);
+  const(name, cfg) {
+    const result = new Definition(createConst, name, cfg);
     this.define(name, result);
   }
 
@@ -224,7 +223,7 @@ class TypeBuilder {
   }
 
   resolve() {
-    each(this._definitions, (defn, name) => {
+    each(this._definitions, (defn) => {
       defn.resolve({
         definitions: this._definitions,
         results: this._destination

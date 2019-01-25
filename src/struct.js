@@ -11,9 +11,9 @@ export class Struct {
   }
 
   static read(io) {
-    let fields = map(this._fields, (field) => {
-      let [name, type] = field;
-      let value = type.read(io);
+    const fields = map(this._fields, (field) => {
+      const [name, type] = field;
+      const value = type.read(io);
       return [name, value];
     });
 
@@ -25,8 +25,8 @@ export class Struct {
       throw new Error(`XDR Write Error: ${value} is not a ${this.structName}`);
     }
     each(this._fields, (field) => {
-      let [name, type] = field;
-      let attribute = value._attributes[name];
+      const [name, type] = field;
+      const attribute = value._attributes[name];
       type.write(attribute, io);
     });
   }
@@ -36,26 +36,22 @@ export class Struct {
   }
 
   static create(context, name, fields) {
-    let ChildStruct = class extends Struct {
-      constructor(...args) {
-        super(...args);
-      }
-    };
+    const ChildStruct = class extends Struct {};
 
     ChildStruct.structName = name;
 
     context.results[name] = ChildStruct;
 
-    ChildStruct._fields = fields.map(([name, field]) => {
+    ChildStruct._fields = fields.map(([fieldName, field]) => {
       if (field instanceof Reference) {
         field = field.resolve(context);
       }
 
-      return [name, field];
+      return [fieldName, field];
     });
 
     each(ChildStruct._fields, (field) => {
-      let [fieldName] = field;
+      const [fieldName] = field;
       ChildStruct.prototype[fieldName] = readOrWriteAttribute(fieldName);
     });
 
@@ -66,7 +62,7 @@ export class Struct {
 includeIoMixin(Struct);
 
 function readOrWriteAttribute(name) {
-  return function(value) {
+  return (value) => {
     if (!isUndefined(value)) {
       this._attributes[name] = value;
     }

@@ -1,7 +1,7 @@
 import isNumber from 'lodash/isNumber';
 import includeIoMixin from './io-mixin';
 
-export var UnsignedInt = {
+export const UnsignedInt = {
   read(io) {
     return io.readUInt32BE();
   },
@@ -34,7 +34,7 @@ export var UnsignedInt = {
   }
 };
 
-UnsignedInt.MAX_VALUE = Math.pow(2, 32) - 1;
+UnsignedInt.MAX_VALUE = 2 ** 32 - 1;
 UnsignedInt.MIN_VALUE = 0;
 
 includeIoMixin(UnsignedInt);

@@ -1,15 +1,15 @@
-import { Cursor } from './cursor';
 import extend from 'lodash/extend';
 import isFunction from 'lodash/isFunction';
+import { Cursor } from './cursor';
 
-//TODO: build a system to grow a buffer as we write to it
-const BUFFER_SIZE = Math.pow(2, 16);
+// TODO: build a system to grow a buffer as we write to it
+const BUFFER_SIZE = 2 ** 16;
 
-var staticMethods = {
+const staticMethods = {
   toXDR(val) {
-    let cursor = new Cursor(BUFFER_SIZE);
+    const cursor = new Cursor(BUFFER_SIZE);
     this.write(val, cursor);
-    let bytesWritten = cursor.tell();
+    const bytesWritten = cursor.tell();
     cursor.rewind();
 
     return cursor.slice(bytesWritten).buffer();
@@ -33,18 +33,18 @@ var staticMethods = {
         );
     }
 
-    let cursor = new Cursor(buffer);
-    let result = this.read(cursor);
+    const cursor = new Cursor(buffer);
+    const result = this.read(cursor);
 
-    //TODO: error out if the entire buffer isn't consumed
+    // TODO: error out if the entire buffer isn't consumed
 
     return result;
   }
 };
 
-var instanceMethods = {
+const instanceMethods = {
   toXDR(format = 'raw') {
-    let buffer = this.constructor.toXDR(this);
+    const buffer = this.constructor.toXDR(this);
     switch (format) {
       case 'raw':
         return buffer;

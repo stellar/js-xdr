@@ -1,9 +1,9 @@
-import { Int } from './int';
-import { UnsignedInt } from './unsigned-int';
 import every from 'lodash/every';
 import each from 'lodash/each';
 import times from 'lodash/times';
 import isArray from 'lodash/isArray';
+import { UnsignedInt } from './unsigned-int';
+import { Int } from './int';
 import includeIoMixin from './io-mixin';
 
 export class VarArray {
@@ -13,7 +13,7 @@ export class VarArray {
   }
 
   read(io) {
-    let length = Int.read(io);
+    const length = Int.read(io);
 
     if (length > this._maxLength) {
       throw new Error(

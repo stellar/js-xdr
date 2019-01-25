@@ -1,17 +1,17 @@
 import includeIoMixin from './io-mixin';
 
-export var Quadruple = {
+export const Quadruple = {
   /* jshint unused: false */
 
-  read(io) {
+  read() {
     throw new Error('XDR Read Error: quadruple not supported');
   },
 
-  write(value, io) {
+  write() {
     throw new Error('XDR Write Error: quadruple not supported');
   },
 
-  isValid(value) {
+  isValid() {
     return false;
   }
 };

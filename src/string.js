@@ -1,8 +1,8 @@
+import isString from 'lodash/isString';
+import isArray from 'lodash/isArray';
 import { Int } from './int';
 import { UnsignedInt } from './unsigned-int';
 import { calculatePadding, slicePadding } from './util';
-import isString from 'lodash/isString';
-import isArray from 'lodash/isArray';
 import includeIoMixin from './io-mixin';
 
 export class String {
@@ -11,7 +11,7 @@ export class String {
   }
 
   read(io) {
-    let length = Int.read(io);
+    const length = Int.read(io);
 
     if (length > this._maxLength) {
       throw new Error(
@@ -19,8 +19,8 @@ export class String {
           `max allowed is ${this._maxLength}`
       );
     }
-    let padding = calculatePadding(length);
-    let result = io.slice(length);
+    const padding = calculatePadding(length);
+    const result = io.slice(length);
     slicePadding(io, padding);
     return result.buffer();
   }

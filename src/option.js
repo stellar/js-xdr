@@ -1,6 +1,6 @@
-import { Bool } from './bool';
 import isNull from 'lodash/isNull';
 import isUndefined from 'lodash/isUndefined';
+import { Bool } from './bool';
 import includeIoMixin from './io-mixin';
 
 export class Option {
@@ -12,10 +12,12 @@ export class Option {
     if (Bool.read(io)) {
       return this._childType.read(io);
     }
+
+    return null;
   }
 
   write(value, io) {
-    let isPresent = !(isNull(value) || isUndefined(value));
+    const isPresent = !(isNull(value) || isUndefined(value));
 
     Bool.write(isPresent, io);
 

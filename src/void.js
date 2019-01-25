@@ -1,14 +1,14 @@
 import isUndefined from 'lodash/isUndefined';
 import includeIoMixin from './io-mixin';
 
-export var Void = {
+export const Void = {
   /* jshint unused: false */
 
-  read(io) {
+  read() {
     return undefined;
   },
 
-  write(value, io) {
+  write(value) {
     if (!isUndefined(value)) {
       throw new Error('XDR Write Error: trying to write value to a void slot');
     }

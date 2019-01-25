@@ -8,7 +8,7 @@ export class Opaque {
   }
 
   read(io) {
-    let result = io.slice(this._length);
+    const result = io.slice(this._length);
     slicePadding(io, this._padding);
     return result.buffer();
   }

@@ -1,7 +1,7 @@
 import isNumber from 'lodash/isNumber';
 import includeIoMixin from './io-mixin';
 
-export var Double = {
+export const Double = {
   read(io) {
     return io.readDoubleBE();
   },
