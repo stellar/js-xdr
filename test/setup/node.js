@@ -1,4 +1,4 @@
-require('babel-register');
+require('babel-core/register');
 
 global['XDR'] = require('../../src/index');
 global.chai = require('chai');

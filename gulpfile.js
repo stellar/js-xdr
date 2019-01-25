@@ -40,16 +40,16 @@ gulp.task('hooks:precommit', ['build'], function() {
 
 gulp.task('build:node', ['lint:src'], function() {
   return gulp
-    .pipe(plumber())
     .src('src/**/*.js')
+    .pipe(plumber())
     .pipe(plugins.babel())
     .pipe(gulp.dest('lib'));
 });
 
 gulp.task('build:browser', ['lint:src'], function() {
   return gulp
-    .pipe(plumber())
     .src('src/browser.js')
+    .pipe(plumber())
     .pipe(
       plugins.webpack({
         output: { library: 'XDR' },

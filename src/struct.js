@@ -52,7 +52,7 @@ export class Struct {
 
     each(ChildStruct._fields, (field) => {
       const [fieldName] = field;
-      ChildStruct.prototype[fieldName] = readOrWriteAttribute(fieldName);
+      ChildStruct.prototype[fieldName] = getReadOrWriteAttribute(fieldName);
     });
 
     return ChildStruct;
@@ -61,8 +61,8 @@ export class Struct {
 
 includeIoMixin(Struct);
 
-function readOrWriteAttribute(name) {
-  return (value) => {
+function getReadOrWriteAttribute(name) {
+  return function readOrWriteAttribute(value) {
     if (!isUndefined(value)) {
       this._attributes[name] = value;
     }

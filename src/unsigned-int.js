@@ -34,7 +34,7 @@ export const UnsignedInt = {
   }
 };
 
-UnsignedInt.MAX_VALUE = 2 ** 32 - 1;
+UnsignedInt.MAX_VALUE = Math.pow(2, 32) - 1;
 UnsignedInt.MIN_VALUE = 0;
 
 includeIoMixin(UnsignedInt);

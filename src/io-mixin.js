@@ -3,7 +3,7 @@ import isFunction from 'lodash/isFunction';
 import { Cursor } from './cursor';
 
 // TODO: build a system to grow a buffer as we write to it
-const BUFFER_SIZE = 2 ** 16;
+const BUFFER_SIZE = Math.pow(2, 16);
 
 const staticMethods = {
   toXDR(val) {

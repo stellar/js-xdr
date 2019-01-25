@@ -13,7 +13,7 @@ export class Option {
       return this._childType.read(io);
     }
 
-    return null;
+    return undefined;
   }
 
   write(value, io) {
