@@ -1,3 +1,4 @@
+import Map from 'core-js/library/es6/map';
 import each from 'lodash/each';
 import isUndefined from 'lodash/isUndefined';
 import isString from 'lodash/isString';
