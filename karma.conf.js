@@ -1,7 +1,7 @@
 module.exports = function(config) {
   config.set({
     frameworks: ['mocha', 'sinon-chai'],
-    browsers: ['Firefox'],
+    browsers: ['PhantomJS', 'Firefox'],
     browserNoActivityTimeout: 20000,
 
     files: ['dist/xdr.js', 'test/unit/**/*.js'],
