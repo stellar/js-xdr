@@ -1,6 +1,6 @@
 import isUndefined from 'lodash/isUndefined';
 import each from 'lodash/each';
-import * as XDR from './types';
+import * as XDRTypes from './types';
 
 export function config(fn, types = {}) {
   if (fn) {
@@ -52,9 +52,9 @@ class ArrayReference extends Reference {
     }
 
     if (this.variable) {
-      return new XDR.VarArray(resolvedChild, length);
+      return new XDRTypes.VarArray(resolvedChild, length);
     }
-    return new XDR.Array(resolvedChild, length);
+    return new XDRTypes.Array(resolvedChild, length);
   }
 }
 
@@ -72,7 +72,7 @@ class OptionReference extends Reference {
       resolvedChild = resolvedChild.resolve(context);
     }
 
-    return new XDR.Option(resolvedChild);
+    return new XDRTypes.Option(resolvedChild);
   }
 }
 
@@ -136,17 +136,17 @@ class TypeBuilder {
   }
 
   enum(name, members) {
-    const result = new Definition(XDR.Enum.create, name, members);
+    const result = new Definition(XDRTypes.Enum.create, name, members);
     this.define(name, result);
   }
 
   struct(name, members) {
-    const result = new Definition(XDR.Struct.create, name, members);
+    const result = new Definition(XDRTypes.Struct.create, name, members);
     this.define(name, result);
   }
 
   union(name, cfg) {
-    const result = new Definition(XDR.Union.create, name, cfg);
+    const result = new Definition(XDRTypes.Union.create, name, cfg);
     this.define(name, result);
   }
 
@@ -161,41 +161,41 @@ class TypeBuilder {
   }
 
   void() {
-    return XDR.Void;
+    return XDRTypes.Void;
   }
   bool() {
-    return XDR.Bool;
+    return XDRTypes.Bool;
   }
   int() {
-    return XDR.Int;
+    return XDRTypes.Int;
   }
   hyper() {
-    return XDR.Hyper;
+    return XDRTypes.Hyper;
   }
   uint() {
-    return XDR.UnsignedInt;
+    return XDRTypes.UnsignedInt;
   }
   uhyper() {
-    return XDR.UnsignedHyper;
+    return XDRTypes.UnsignedHyper;
   }
   float() {
-    return XDR.Float;
+    return XDRTypes.Float;
   }
   double() {
-    return XDR.Double;
+    return XDRTypes.Double;
   }
   quadruple() {
-    return XDR.Quadruple;
+    return XDRTypes.Quadruple;
   }
 
   string(length) {
-    return new SizedReference(XDR.String, length);
+    return new SizedReference(XDRTypes.String, length);
   }
   opaque(length) {
-    return new SizedReference(XDR.Opaque, length);
+    return new SizedReference(XDRTypes.Opaque, length);
   }
   varOpaque(length) {
-    return new SizedReference(XDR.VarOpaque, length);
+    return new SizedReference(XDRTypes.VarOpaque, length);
   }
 
   array(childType, length) {
@@ -214,7 +214,7 @@ class TypeBuilder {
     if (isUndefined(this._destination[name])) {
       this._definitions[name] = definition;
     } else {
-      throw new Error(`XDR Error:${name} is already defined`);
+      throw new Error(`XDRTypes Error:${name} is already defined`);
     }
   }
 
