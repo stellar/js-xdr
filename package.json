@@ -8,7 +8,7 @@
     "test": "gulp test",
     "test-generate": "bundle exec xdrgen -o generated -n test -l javascript examples/test.x",
     "prettier-all": "prettier --write **/*.js",
-    "prepare": "npm run build"
+    "prepare": "echo 'lets build some fucked up shit' && npm run build"
   },
   "repository": {
     "type": "git",
