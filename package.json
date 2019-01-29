@@ -2,13 +2,12 @@
   "name": "js-xdr",
   "version": "1.0.5",
   "description": "Read/write XDR encoded data structures (RFC 4506)",
-  "main": "lib/index.js",
+  "main": "index.js",
   "scripts": {
     "build": "gulp build",
     "test": "gulp test",
     "test-generate": "bundle exec xdrgen -o generated -n test -l javascript examples/test.x",
-    "prettier-all": "prettier --write **/*.js",
-    "prepare": "echo 'lets build some fucked up shit' && npm run build"
+    "prettier-all": "prettier --write **/*.js"
   },
   "repository": {
     "type": "git",
