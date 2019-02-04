@@ -1,31 +1,50 @@
-import { Cursor } from "../../src/cursor";
-import { cursorToArray } from "../support/io-helpers";
+import { Cursor } from '../../src/cursor';
+import { cursorToArray } from '../support/io-helpers';
 
 /* jshint -W030 */
 
-let emptyContext = {definitions:{}, results:{}};
+let emptyContext = { definitions: {}, results: {} };
 let MyRange = XDR.Struct.create(emptyContext, 'MyRange', [
   ['begin', XDR.Int],
   ['end', XDR.Int],
-  ['inclusive', XDR.Bool],
+  ['inclusive', XDR.Bool]
 ]);
 
 describe('Struct.read', function() {
-
   it('decodes correctly', function() {
     let empty = read([
-      0x00,0x00,0x00,0x00,
-      0x00,0x00,0x00,0x00,
-      0x00,0x00,0x00,0x00]);
+      0x00,
+      0x00,
+      0x00,
+      0x00,
+      0x00,
+      0x00,
+      0x00,
+      0x00,
+      0x00,
+      0x00,
+      0x00,
+      0x00
+    ]);
     expect(empty).to.be.instanceof(MyRange);
     expect(empty.begin()).to.eql(0);
     expect(empty.end()).to.eql(0);
     expect(empty.inclusive()).to.eql(false);
 
     let filled = read([
-      0x00,0x00,0x00,0x05,
-      0x00,0x00,0x00,0xFF,
-      0x00,0x00,0x00,0x01]);
+      0x00,
+      0x00,
+      0x00,
+      0x05,
+      0x00,
+      0x00,
+      0x00,
+      0xff,
+      0x00,
+      0x00,
+      0x00,
+      0x01
+    ]);
     expect(filled).to.be.instanceof(MyRange);
     expect(filled.begin()).to.eql(5);
     expect(filled.end()).to.eql(255);
@@ -39,7 +58,6 @@ describe('Struct.read', function() {
 });
 
 describe('Struct.write', function() {
-
   it('encodes correctly', function() {
     let empty = new MyRange({
       begin: 0,
@@ -48,9 +66,18 @@ describe('Struct.write', function() {
     });
 
     expect(write(empty)).to.eql([
-      0x00,0x00,0x00,0x00,
-      0x00,0x00,0x00,0x00,
-      0x00,0x00,0x00,0x00
+      0x00,
+      0x00,
+      0x00,
+      0x00,
+      0x00,
+      0x00,
+      0x00,
+      0x00,
+      0x00,
+      0x00,
+      0x00,
+      0x00
     ]);
 
     let filled = new MyRange({
@@ -60,13 +87,22 @@ describe('Struct.write', function() {
     });
 
     expect(write(filled)).to.eql([
-      0x00,0x00,0x00,0x05,
-      0x00,0x00,0x00,0xFF,
-      0x00,0x00,0x00,0x01
+      0x00,
+      0x00,
+      0x00,
+      0x05,
+      0x00,
+      0x00,
+      0x00,
+      0xff,
+      0x00,
+      0x00,
+      0x00,
+      0x01
     ]);
   });
 
-  it("throws a write error if the value is not the correct type", function() {
+  it('throws a write error if the value is not the correct type', function() {
     expect(() => write(null)).to.throw(/write error/i);
     expect(() => write(undefined)).to.throw(/write error/i);
     expect(() => write([])).to.throw(/write error/i);
@@ -75,7 +111,7 @@ describe('Struct.write', function() {
     expect(() => write(true)).to.throw(/write error/i);
   });
 
-  it("throws a write error if the struct is not valid", function() {
+  it('throws a write error if the struct is not valid', function() {
     expect(() => write(new MyRange({}))).to.throw(/write error/i);
   });
 
@@ -87,7 +123,7 @@ describe('Struct.write', function() {
 });
 
 describe('Struct.isValid', function() {
-  it("returns true for instances of the struct", function() {
+  it('returns true for instances of the struct', function() {
     expect(MyRange.isValid(new MyRange({}))).to.be.true;
   });
 
@@ -101,15 +137,14 @@ describe('Struct.isValid', function() {
   });
 });
 
-
 describe('Struct: attributes', function() {
-  it("properly retrieves attributes", function() {
-    let subject = new MyRange({begin: 5, end: 255, inclusive: true });
+  it('properly retrieves attributes', function() {
+    let subject = new MyRange({ begin: 5, end: 255, inclusive: true });
     expect(subject.begin()).to.eql(5);
   });
 
-  it("properly sets attributes", function() {
-    let subject = new MyRange({begin: 5, end: 255, inclusive: true });
+  it('properly sets attributes', function() {
+    let subject = new MyRange({ begin: 5, end: 255, inclusive: true });
     expect(subject.begin(10)).to.eql(10);
     expect(subject.begin()).to.eql(10);
   });

@@ -1,26 +1,31 @@
 let VarOpaque = XDR.VarOpaque;
-import { Cursor } from "../../src/cursor";
-import { cursorToArray } from "../support/io-helpers";
+import { Cursor } from '../../src/cursor';
+import { cursorToArray } from '../support/io-helpers';
 
 let subject = new VarOpaque(2);
 
 describe('VarOpaque#read', function() {
-
   it('decodes correctly', function() {
-    expect(read([0,0,0,0])).to.eql(Buffer.from([]));
-    expect(read([0,0,0,1,0,0,0,0])).to.eql(Buffer.from([0]));
-    expect(read([0,0,0,1,1,0,0,0])).to.eql(Buffer.from([1]));
-    expect(read([0,0,0,2,0,1,0,0])).to.eql(Buffer.from([0,1]));
+    expect(read([0, 0, 0, 0])).to.eql(Buffer.from([]));
+    expect(read([0, 0, 0, 1, 0, 0, 0, 0])).to.eql(Buffer.from([0]));
+    expect(read([0, 0, 0, 1, 1, 0, 0, 0])).to.eql(Buffer.from([1]));
+    expect(read([0, 0, 0, 2, 0, 1, 0, 0])).to.eql(Buffer.from([0, 1]));
   });
 
-  it("throws a read error when the encoded length is greater than the allowed max", function() {
-    expect(() => read([0,0,0,3,0,0,0,0])).to.throw(/read error/i);
+  it('throws a read error when the encoded length is greater than the allowed max', function() {
+    expect(() => read([0, 0, 0, 3, 0, 0, 0, 0])).to.throw(/read error/i);
   });
 
-  it('throws a read error if the padding bytes are not zero', function() {    
-    expect(() => read([0x00,0x00,0x00,0x01,0x41,0x01,0x00,0x00])).to.throw(/read error/i);
-    expect(() => read([0x00,0x00,0x00,0x01,0x41,0x00,0x01,0x00])).to.throw(/read error/i);
-    expect(() => read([0x00,0x00,0x00,0x01,0x41,0x00,0x00,0x01])).to.throw(/read error/i);
+  it('throws a read error if the padding bytes are not zero', function() {
+    expect(() =>
+      read([0x00, 0x00, 0x00, 0x01, 0x41, 0x01, 0x00, 0x00])
+    ).to.throw(/read error/i);
+    expect(() =>
+      read([0x00, 0x00, 0x00, 0x01, 0x41, 0x00, 0x01, 0x00])
+    ).to.throw(/read error/i);
+    expect(() =>
+      read([0x00, 0x00, 0x00, 0x01, 0x41, 0x00, 0x00, 0x01])
+    ).to.throw(/read error/i);
   });
 
   function read(bytes) {
@@ -30,12 +35,11 @@ describe('VarOpaque#read', function() {
 });
 
 describe('VarOpaque#write', function() {
-
   it('encodes correctly', function() {
-    expect(write(Buffer.from([]))).to.eql([0,0,0,0]);
-    expect(write(Buffer.from([0]))).to.eql([0,0,0,1,0,0,0,0]);
-    expect(write(Buffer.from([1]))).to.eql([0,0,0,1,1,0,0,0]);
-    expect(write(Buffer.from([0,1]))).to.eql([0,0,0,2,0,1,0,0]);
+    expect(write(Buffer.from([]))).to.eql([0, 0, 0, 0]);
+    expect(write(Buffer.from([0]))).to.eql([0, 0, 0, 1, 0, 0, 0, 0]);
+    expect(write(Buffer.from([1]))).to.eql([0, 0, 0, 1, 1, 0, 0, 0]);
+    expect(write(Buffer.from([0, 1]))).to.eql([0, 0, 0, 2, 0, 1, 0, 0]);
   });
 
   function write(value) {
@@ -65,11 +69,10 @@ describe('VarOpaque#isValid', function() {
   });
 });
 
-describe("VarOpaque#constructor", function() {
+describe('VarOpaque#constructor', function() {
   let subject = new XDR.VarOpaque();
 
-  it("defaults to max length of a uint max value", function() {
-    expect(subject._maxLength).to.eql(Math.pow(2,32) - 1);
+  it('defaults to max length of a uint max value', function() {
+    expect(subject._maxLength).to.eql(Math.pow(2, 32) - 1);
   });
 });
-

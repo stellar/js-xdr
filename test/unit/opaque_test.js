@@ -1,18 +1,17 @@
 let Opaque = XDR.Opaque;
-import { Cursor } from "../../src/cursor";
-import { cursorToArray } from "../support/io-helpers";
+import { Cursor } from '../../src/cursor';
+import { cursorToArray } from '../support/io-helpers';
 
 let subject = new Opaque(3);
 
 describe('Opaque#read', function() {
-
   it('decodes correctly', function() {
-    expect(read([0,0,0,0])).to.eql(Buffer.from([0,0,0]));
-    expect(read([0,0,1,0])).to.eql(Buffer.from([0,0,1]));
+    expect(read([0, 0, 0, 0])).to.eql(Buffer.from([0, 0, 0]));
+    expect(read([0, 0, 1, 0])).to.eql(Buffer.from([0, 0, 1]));
   });
 
-  it('throws a read error if the padding bytes are not zero', function() {    
-    expect(() => read([0,0,1,1])).to.throw(/read error/i);
+  it('throws a read error if the padding bytes are not zero', function() {
+    expect(() => read([0, 0, 1, 1])).to.throw(/read error/i);
   });
 
   function read(bytes) {
@@ -22,10 +21,9 @@ describe('Opaque#read', function() {
 });
 
 describe('Opaque#write', function() {
-
   it('encodes correctly', function() {
-    expect(write(Buffer.from([0,0,0]))).to.eql([0,0,0,0]);
-    expect(write(Buffer.from([0,0,1]))).to.eql([0,0,1,0]);
+    expect(write(Buffer.from([0, 0, 0]))).to.eql([0, 0, 0, 0]);
+    expect(write(Buffer.from([0, 0, 1]))).to.eql([0, 0, 1, 0]);
   });
 
   function write(value) {
@@ -52,4 +50,3 @@ describe('Opaque#isValid', function() {
     expect(subject.isValid([0])).to.be.false;
   });
 });
-

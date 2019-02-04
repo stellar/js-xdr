@@ -1,14 +1,13 @@
-import { Cursor } from "../../src/cursor";
-import { cursorToArray } from "../support/io-helpers";
+import { Cursor } from '../../src/cursor';
+import { cursorToArray } from '../support/io-helpers';
 
 let subject = XDR.Void;
 
 describe('Void#read', function() {
-
   it('decodes correctly', function() {
-    expect(read([0x00,0x00,0x00,0x00])).to.be.undefined;
-    expect(read([0x00,0x00,0x00,0x01])).to.be.undefined;
-    expect(read([0x00,0x00,0x00,0x02])).to.be.undefined;
+    expect(read([0x00, 0x00, 0x00, 0x00])).to.be.undefined;
+    expect(read([0x00, 0x00, 0x00, 0x01])).to.be.undefined;
+    expect(read([0x00, 0x00, 0x00, 0x02])).to.be.undefined;
   });
 
   function read(bytes) {
@@ -18,7 +17,6 @@ describe('Void#read', function() {
 });
 
 describe('Void#write', function() {
-
   it('encodes correctly', function() {
     expect(write(undefined)).to.eql([]);
   });
@@ -39,9 +37,8 @@ describe('Void#isValid', function() {
     expect(subject.isValid(null)).to.be.false;
     expect(subject.isValid(false)).to.be.false;
     expect(subject.isValid(1)).to.be.false;
-    expect(subject.isValid("aaa")).to.be.false;
+    expect(subject.isValid('aaa')).to.be.false;
     expect(subject.isValid({})).to.be.false;
     expect(subject.isValid([undefined])).to.be.false;
   });
 });
-

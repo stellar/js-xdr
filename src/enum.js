@@ -1,19 +1,19 @@
-import { Int }  from "./int";
-import each from "lodash/each";
-import vals from "lodash/values";
+import Map from 'core-js/library/es6/map';
+import each from 'lodash/each';
+import vals from 'lodash/values';
+import { Int } from './int';
 import includeIoMixin from './io-mixin';
 
 export class Enum {
-
   constructor(name, value) {
-    this.name  = name;
+    this.name = name;
     this.value = value;
   }
 
   static read(io) {
-    let intVal = Int.read(io);
+    const intVal = Int.read(io);
 
-    if(!this._byValue.has(intVal)) {
+    if (!this._byValue.has(intVal)) {
       throw new Error(
         `XDR Read Error: Unknown ${this.enumName} member for value ${intVal}`
       );
@@ -23,7 +23,7 @@ export class Enum {
   }
 
   static write(value, io) {
-    if(!(value instanceof this)) {
+    if (!(value instanceof this)) {
       throw new Error(
         `XDR Write Error: Unknown ${value} is not a ${this.enumName}`
       );
@@ -45,9 +45,9 @@ export class Enum {
   }
 
   static fromName(name) {
-    let result = this._members[name];
+    const result = this._members[name];
 
-    if(!result) {
+    if (!result) {
       throw new Error(`${name} is not a member of ${this.enumName}`);
     }
 
@@ -55,21 +55,19 @@ export class Enum {
   }
 
   static fromValue(value) {
-    let result = this._byValue.get(value);
+    const result = this._byValue.get(value);
 
-    if(!result) {
-      throw new Error(`${value} is not a value of any member of ${this.enumName}`);
+    if (!result) {
+      throw new Error(
+        `${value} is not a value of any member of ${this.enumName}`
+      );
     }
 
     return result;
   }
 
   static create(context, name, members) {
-    let ChildEnum = class extends Enum {
-      constructor(...args) {
-        super(...args);
-      }
-    };
+    const ChildEnum = class extends Enum {};
 
     ChildEnum.enumName = name;
     context.results[name] = ChildEnum;
@@ -78,12 +76,10 @@ export class Enum {
     ChildEnum._byValue = new Map();
 
     each(members, (value, key) => {
-      let inst = new ChildEnum(key, value);
+      const inst = new ChildEnum(key, value);
       ChildEnum._members[key] = inst;
       ChildEnum._byValue.set(value, inst);
-      ChildEnum[key] = function() {
-        return inst;
-      };
+      ChildEnum[key] = () => inst;
     });
 
     return ChildEnum;

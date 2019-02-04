@@ -1,14 +1,14 @@
-import each from "lodash/each";
-import isUndefined from "lodash/isUndefined";
-import isString from "lodash/isString";
-import { Void } from "./void";
-import { Reference } from "./config";
+import Map from 'core-js/library/es6/map';
+import each from 'lodash/each';
+import isUndefined from 'lodash/isUndefined';
+import isString from 'lodash/isString';
+import { Void } from './void';
+import { Reference } from './config';
 import includeIoMixin from './io-mixin';
 
 export class Union {
-
-  constructor(aSwitch,value) {
-    this.set(aSwitch,value);
+  constructor(aSwitch, value) {
+    this.set(aSwitch, value);
   }
 
   set(aSwitch, value) {
@@ -16,13 +16,13 @@ export class Union {
       aSwitch = this.constructor._switchOn.fromName(aSwitch);
     }
 
-    this._switch  = aSwitch;
-    this._arm     = this.constructor.armForSwitch(this._switch);
+    this._switch = aSwitch;
+    this._arm = this.constructor.armForSwitch(this._switch);
     this._armType = this.constructor.armTypeForArm(this._arm);
-    this._value   = value;
+    this._value = value;
   }
 
-  get(armName=this._arm) {
+  get(armName = this._arm) {
     if (this._arm !== Void && this._arm !== armName) {
       throw new Error(`${armName} not set`);
     }
@@ -48,25 +48,24 @@ export class Union {
   static armForSwitch(aSwitch) {
     if (this._switches.has(aSwitch)) {
       return this._switches.get(aSwitch);
-    } else if (this._defaultArm) {
-      return this._defaultArm;
-    } else {
-      throw new Error(`Bad union switch: ${aSwitch}`);
     }
+    if (this._defaultArm) {
+      return this._defaultArm;
+    }
+    throw new Error(`Bad union switch: ${aSwitch}`);
   }
 
   static armTypeForArm(arm) {
     if (arm === Void) {
       return Void;
-    } else {
-      return this._arms[arm];
     }
+    return this._arms[arm];
   }
 
   static read(io) {
-    let aSwitch = this._switchOn.read(io);
-    let arm     = this.armForSwitch(aSwitch);
-    let armType = this.armTypeForArm(arm);
+    const aSwitch = this._switchOn.read(io);
+    const arm = this.armForSwitch(aSwitch);
+    const armType = this.armTypeForArm(arm);
     let value;
     if (!isUndefined(armType)) {
       value = armType.read(io);
@@ -77,7 +76,7 @@ export class Union {
   }
 
   static write(value, io) {
-    if(!(value instanceof this)) {
+    if (!(value instanceof this)) {
       throw new Error(`XDR Write Error: ${value} is not a ${this.unionName}`);
     }
 
@@ -90,13 +89,9 @@ export class Union {
   }
 
   static create(context, name, config) {
-    let ChildUnion = class extends Union {
-      constructor(...args) {
-        super(...args);
-      }
-    };
+    const ChildUnion = class extends Union {};
 
-    ChildUnion.unionName  = name;
+    ChildUnion.unionName = name;
     context.results[name] = ChildUnion;
 
     if (config.switchOn instanceof Reference) {
@@ -106,14 +101,14 @@ export class Union {
     }
 
     ChildUnion._switches = new Map();
-    ChildUnion._arms     = {};
+    ChildUnion._arms = {};
 
-    each(config.arms, (value, name) => {
+    each(config.arms, (value, armsName) => {
       if (value instanceof Reference) {
         value = value.resolve(context);
       }
 
-      ChildUnion._arms[name] = value;
+      ChildUnion._arms[armsName] = value;
     });
 
     // resolve default arm
@@ -123,7 +118,6 @@ export class Union {
     }
 
     ChildUnion._defaultArm = defaultArm;
-
 
     each(config.switches, ([aSwitch, armName]) => {
       if (isString(aSwitch)) {
@@ -138,25 +132,27 @@ export class Union {
     //  and so we use the following check (does _switchOn have a `values`
     //  attribute) to approximate the intent.
     if (!isUndefined(ChildUnion._switchOn.values)) {
-      each(ChildUnion._switchOn.values(), aSwitch => {
+      each(ChildUnion._switchOn.values(), (aSwitch) => {
         // Add enum-based constrocutors
-        ChildUnion[aSwitch.name] = function(value) {
-          return new ChildUnion(aSwitch, value);
-        };
+        ChildUnion[aSwitch.name] = (value) => new ChildUnion(aSwitch, value);
 
         // Add enum-based "set" helpers
-        ChildUnion.prototype[aSwitch.name] = function(value) {
+        // (note: normally I'd use an arrow function but the use of `this`
+        // here might rely on it NOT being an arrow function. so just keep it.)
+        ChildUnion.prototype[aSwitch.name] = function set(value) {
           return this.set(aSwitch, value);
         };
       });
     }
 
     // Add arm accessor helpers
-    each(ChildUnion._arms, (type, name) => {
-      if (type === Void) { return; }
+    each(ChildUnion._arms, (type, armsName) => {
+      if (type === Void) {
+        return;
+      }
 
-      ChildUnion.prototype[name] = function() {
-        return this.get(name);
+      ChildUnion.prototype[armsName] = function get() {
+        return this.get(armsName);
       };
     });
 

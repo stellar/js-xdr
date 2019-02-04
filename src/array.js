@@ -15,26 +15,29 @@ export class Array {
   }
 
   write(value, io) {
-
-    if(!isArray(value)) {
+    if (!isArray(value)) {
       throw new Error(`XDR Write Error: value is not array`);
     }
 
-    if(value.length !== this._length) {
+    if (value.length !== this._length) {
       throw new Error(
         `XDR Write Error: Got array of size ${value.length},` +
-        `expected ${this._length}`
+          `expected ${this._length}`
       );
     }
 
-    each(value, child => this._childType.write(child, io));
+    each(value, (child) => this._childType.write(child, io));
   }
 
   isValid(value) {
-    if(!isArray(value)){ return false; }
-    if(value.length !== this._length){ return false; }
+    if (!isArray(value)) {
+      return false;
+    }
+    if (value.length !== this._length) {
+      return false;
+    }
 
-    return every(value, child => this._childType.isValid(child));
+    return every(value, (child) => this._childType.isValid(child));
   }
 }
 

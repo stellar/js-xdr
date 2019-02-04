@@ -1,18 +1,16 @@
-import Long  from 'long';
+import Long from 'long';
 import includeIoMixin from './io-mixin';
 
 export class Hyper extends Long {
   static read(io) {
-    let high = io.readInt32BE();
-    let low  = io.readInt32BE();
+    const high = io.readInt32BE();
+    const low = io.readInt32BE();
     return this.fromBits(low, high);
   }
 
   static write(value, io) {
-    if(!(value instanceof this)) {
-      throw new Error(
-        `XDR Write Error: ${value} is not a Hyper`
-      );
+    if (!(value instanceof this)) {
+      throw new Error(`XDR Write Error: ${value} is not a Hyper`);
     }
 
     io.writeInt32BE(value.high);
@@ -20,17 +18,15 @@ export class Hyper extends Long {
   }
 
   static fromString(string) {
-    if (!(/^-?\d+$/.test(string))) {
-      throw new Error(
-        `Invalid hyper string: ${string}`
-      );
+    if (!/^-?\d+$/.test(string)) {
+      throw new Error(`Invalid hyper string: ${string}`);
     }
-    let result = super.fromString(string, false);
+    const result = super.fromString(string, false);
     return new this(result.low, result.high);
   }
 
   static fromBits(low, high) {
-    let result = super.fromBits(low, high, false);
+    const result = super.fromBits(low, high, false);
     return new this(result.low, result.high);
   }
 

@@ -1,14 +1,10 @@
-import * as XDR from "./types";
-import isUndefined from "lodash/isUndefined";
-import isPlainObject from "lodash/isPlainObject";
-import isArray from "lodash/isArray";
-import each from "lodash/each";
-import map from "lodash/map";
-import pick from "lodash/pick";
+import isUndefined from 'lodash/isUndefined';
+import each from 'lodash/each';
+import * as XDRTypes from './types';
 
 export function config(fn, types = {}) {
   if (fn) {
-    let builder = new TypeBuilder(types);
+    const builder = new TypeBuilder(types);
     fn(builder);
     builder.resolve();
   }
@@ -16,30 +12,31 @@ export function config(fn, types = {}) {
   return types;
 }
 
-
 export class Reference {
   /* jshint unused: false */
-  resolve(context) {
-    throw new Error("implement resolve in child class");
+  resolve() {
+    throw new Error('implement resolve in child class');
   }
 }
 
 class SimpleReference extends Reference {
   constructor(name) {
+    super();
     this.name = name;
   }
 
   resolve(context) {
-    let defn = context.definitions[this.name];
+    const defn = context.definitions[this.name];
     return defn.resolve(context);
   }
 }
 
 class ArrayReference extends Reference {
-  constructor(childReference, length, variable=false) {
+  constructor(childReference, length, variable = false) {
+    super();
     this.childReference = childReference;
-    this.length         = length;
-    this.variable       = variable;
+    this.length = length;
+    this.variable = variable;
   }
 
   resolve(context) {
@@ -55,17 +52,17 @@ class ArrayReference extends Reference {
     }
 
     if (this.variable) {
-      return new XDR.VarArray(resolvedChild, length);
-    } else {
-      return new XDR.Array(resolvedChild, length);
+      return new XDRTypes.VarArray(resolvedChild, length);
     }
+    return new XDRTypes.Array(resolvedChild, length);
   }
 }
 
 class OptionReference extends Reference {
   constructor(childReference) {
+    super();
     this.childReference = childReference;
-    this.name           = childReference.name;
+    this.name = childReference.name;
   }
 
   resolve(context) {
@@ -75,14 +72,15 @@ class OptionReference extends Reference {
       resolvedChild = resolvedChild.resolve(context);
     }
 
-    return new XDR.Option(resolvedChild);
+    return new XDRTypes.Option(resolvedChild);
   }
 }
 
 class SizedReference extends Reference {
   constructor(sizedType, length) {
+    super();
     this.sizedType = sizedType;
-    this.length    = length;
+    this.length = length;
   }
 
   resolve(context) {
@@ -97,10 +95,10 @@ class SizedReference extends Reference {
 }
 
 class Definition {
-  constructor(constructor, name, config) {
+  constructor(constructor, name, cfg) {
     this.constructor = constructor;
-    this.name        = name;
-    this.config      = config;
+    this.name = name;
+    this.config = cfg;
   }
 
   // resolve calls the constructor of this definition with the provided context
@@ -116,6 +114,21 @@ class Definition {
   }
 }
 
+// let the reference resoltion system do it's thing
+// the "constructor" for a typedef just returns the resolved value
+function createTypedef(context, typeName, value) {
+  if (value instanceof Reference) {
+    value = value.resolve(context);
+  }
+  context.results[typeName] = value;
+  return value;
+}
+
+function createConst(context, name, value) {
+  context.results[name] = value;
+  return value;
+}
+
 class TypeBuilder {
   constructor(destination) {
     this._destination = destination;
@@ -123,58 +136,67 @@ class TypeBuilder {
   }
 
   enum(name, members) {
-    let result = new Definition(XDR.Enum.create, name, members);
+    const result = new Definition(XDRTypes.Enum.create, name, members);
     this.define(name, result);
   }
 
   struct(name, members) {
-    let result = new Definition(XDR.Struct.create, name, members);
+    const result = new Definition(XDRTypes.Struct.create, name, members);
     this.define(name, result);
   }
 
-  union(name, config) {
-    let result = new Definition(XDR.Union.create, name, config);
+  union(name, cfg) {
+    const result = new Definition(XDRTypes.Union.create, name, cfg);
     this.define(name, result);
   }
 
-  typedef(name, config) {
-    // let the reference resoltion system do it's thing
-    // the "constructor" for a typedef just returns the resolved value
-    let createTypedef = (context, name, value) => {
-      if (value instanceof Reference) {
-        value = value.resolve(context);
-      }
-      context.results[name] = value;
-      return value;
-    };
-
-    let result = new Definition(createTypedef, name, config);
+  typedef(name, cfg) {
+    const result = new Definition(createTypedef, name, cfg);
     this.define(name, result);
   }
 
-  const(name, config) {
-    let createConst = (context, name, value) => {
-      context.results[name] = value;
-      return value;
-    };
-
-    let result = new Definition(createConst, name, config);
+  const(name, cfg) {
+    const result = new Definition(createConst, name, cfg);
     this.define(name, result);
   }
 
-  void() { return XDR.Void; }
-  bool() { return XDR.Bool; }
-  int() { return XDR.Int; }
-  hyper() { return XDR.Hyper; }
-  uint() { return XDR.UnsignedInt; }
-  uhyper() { return XDR.UnsignedHyper; }
-  float() { return XDR.Float; }
-  double() { return XDR.Double; }
-  quadruple() { return XDR.Quadruple; }
+  void() {
+    return XDRTypes.Void;
+  }
+  bool() {
+    return XDRTypes.Bool;
+  }
+  int() {
+    return XDRTypes.Int;
+  }
+  hyper() {
+    return XDRTypes.Hyper;
+  }
+  uint() {
+    return XDRTypes.UnsignedInt;
+  }
+  uhyper() {
+    return XDRTypes.UnsignedHyper;
+  }
+  float() {
+    return XDRTypes.Float;
+  }
+  double() {
+    return XDRTypes.Double;
+  }
+  quadruple() {
+    return XDRTypes.Quadruple;
+  }
 
-  string(length) { return new SizedReference(XDR.String, length); }
-  opaque(length) { return new SizedReference(XDR.Opaque, length); }
-  varOpaque(length) { return new SizedReference(XDR.VarOpaque, length); }
+  string(length) {
+    return new SizedReference(XDRTypes.String, length);
+  }
+  opaque(length) {
+    return new SizedReference(XDRTypes.Opaque, length);
+  }
+  varOpaque(length) {
+    return new SizedReference(XDRTypes.VarOpaque, length);
+  }
 
   array(childType, length) {
     return new ArrayReference(childType, length);
@@ -189,10 +211,10 @@ class TypeBuilder {
   }
 
   define(name, definition) {
-    if(isUndefined(this._destination[name])) {
+    if (isUndefined(this._destination[name])) {
       this._definitions[name] = definition;
     } else {
-      throw new Error(`XDR Error:${name} is already defined`);
+      throw new Error(`XDRTypes Error:${name} is already defined`);
     }
   }
 
@@ -201,10 +223,10 @@ class TypeBuilder {
   }
 
   resolve() {
-    each(this._definitions, (defn, name) => {
+    each(this._definitions, (defn) => {
       defn.resolve({
         definitions: this._definitions,
-        results:    this._destination
+        results: this._destination
       });
     });
   }

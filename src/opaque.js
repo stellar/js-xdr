@@ -1,6 +1,5 @@
-import {calculatePadding, slicePadding} from "./util";
+import { calculatePadding, slicePadding } from './util';
 import includeIoMixin from './io-mixin';
-
 
 export class Opaque {
   constructor(length) {
@@ -9,14 +8,16 @@ export class Opaque {
   }
 
   read(io) {
-    let result = io.slice(this._length);
+    const result = io.slice(this._length);
     slicePadding(io, this._padding);
     return result.buffer();
   }
 
   write(value, io) {
-    if(value.length !== this._length) {
-      throw new Error(`XDR Write Error: Got ${value.length} bytes, expected ${this._length}`);
+    if (value.length !== this._length) {
+      throw new Error(
+        `XDR Write Error: Got ${value.length} bytes, expected ${this._length}`
+      );
     }
 
     io.writeBufferPadded(value);

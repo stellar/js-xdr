@@ -1,13 +1,12 @@
-import { Cursor } from "../../src/cursor";
-import { cursorToArray } from "../support/io-helpers";
+import { Cursor } from '../../src/cursor';
+import { cursorToArray } from '../support/io-helpers';
 
 let subject = new XDR.Option(XDR.Int);
 
 describe('Option#read', function() {
-
   it('decodes correctly', function() {
-    expect(read([0x00,0x00,0x00,0x01,0x00,0x00,0x00,0x00])).to.eql(0);
-    expect(read([0x00,0x00,0x00,0x00])).to.be.undefined;
+    expect(read([0x00, 0x00, 0x00, 0x01, 0x00, 0x00, 0x00, 0x00])).to.eql(0);
+    expect(read([0x00, 0x00, 0x00, 0x00])).to.be.undefined;
   });
 
   function read(bytes) {
@@ -17,11 +16,10 @@ describe('Option#read', function() {
 });
 
 describe('Option#write', function() {
-
   it('encodes correctly', function() {
-    expect(write(3)).to.eql([0x00,0x00,0x00,0x01,0x00,0x00,0x00,0x03]);
-    expect(write(null)).to.eql([0x00,0x00,0x00,0x00]);
-    expect(write(undefined)).to.eql([0x00,0x00,0x00,0x00]);
+    expect(write(3)).to.eql([0x00, 0x00, 0x00, 0x01, 0x00, 0x00, 0x00, 0x03]);
+    expect(write(null)).to.eql([0x00, 0x00, 0x00, 0x00]);
+    expect(write(undefined)).to.eql([0x00, 0x00, 0x00, 0x00]);
   });
 
   function write(value) {
@@ -43,11 +41,9 @@ describe('Option#isValid', function() {
     expect(subject.isValid(undefined)).to.be.true;
   });
 
-
   it('returns false for values of the wrong type', function() {
     expect(subject.isValid(false)).to.be.false;
-    expect(subject.isValid("hello")).to.be.false;
+    expect(subject.isValid('hello')).to.be.false;
     expect(subject.isValid({})).to.be.false;
   });
 });
-
