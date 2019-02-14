@@ -2,12 +2,9 @@
 
 var gulp = require('gulp');
 var plugins = require('gulp-load-plugins')();
-var runSequence = require('run-sequence');
 var plumber = require('gulp-plumber');
 
-gulp.task('default', ['build']);
-
-gulp.task('lint:src', function() {
+gulp.task('lint:src', function lintSrc() {
   return gulp
     .src(['src/**/*.js'])
     .pipe(plumber())
@@ -17,7 +14,7 @@ gulp.task('lint:src', function() {
 });
 
 // Lint our test code
-gulp.task('lint:test', function() {
+gulp.task('lint:test', function lintTest() {
   return gulp
     .src(['test/unit/**/*.js'])
     .pipe(plumber())
@@ -26,46 +23,40 @@ gulp.task('lint:test', function() {
     .pipe(plugins.eslint.failAfterError());
 });
 
-gulp.task('build', function(done) {
-  runSequence('clean', 'build:node', 'build:browser', done);
-});
+gulp.task(
+  'build:node',
+  gulp.series('lint:src', function buildNode() {
+    return gulp
+      .src('src/**/*.js')
+      .pipe(plugins.babel())
+      .pipe(gulp.dest('lib'));
+  })
+);
 
-gulp.task('test', function(done) {
-  runSequence('clean', 'test:node', 'test:browser', done);
-});
+gulp.task(
+  'build:browser',
+  gulp.series('lint:src', function buildBrowser() {
+    return gulp
+      .src('src/browser.js')
+      .pipe(
+        plugins.webpack({
+          output: { library: 'XDR' },
+          module: {
+            loaders: [
+              { test: /\.js$/, exclude: /node_modules/, loader: 'babel-loader' }
+            ]
+          }
+        })
+      )
+      .pipe(plugins.rename('xdr.js'))
+      .pipe(gulp.dest('dist'))
+      .pipe(plugins.uglify())
+      .pipe(plugins.rename('xdr.min.js'))
+      .pipe(gulp.dest('dist'));
+  })
+);
 
-gulp.task('hooks:precommit', ['build'], function() {
-  return gulp.src(['dist/*', 'lib/*']).pipe(plugins.git.add());
-});
-
-gulp.task('build:node', ['lint:src'], function() {
-  return gulp
-    .src('src/**/*.js')
-    .pipe(plugins.babel())
-    .pipe(gulp.dest('lib'));
-});
-
-gulp.task('build:browser', ['lint:src'], function() {
-  return gulp
-    .src('src/browser.js')
-    .pipe(
-      plugins.webpack({
-        output: { library: 'XDR' },
-        module: {
-          loaders: [
-            { test: /\.js$/, exclude: /node_modules/, loader: 'babel-loader' }
-          ]
-        }
-      })
-    )
-    .pipe(plugins.rename('xdr.js'))
-    .pipe(gulp.dest('dist'))
-    .pipe(plugins.uglify())
-    .pipe(plugins.rename('xdr.min.js'))
-    .pipe(gulp.dest('dist'));
-});
-
-gulp.task('test:node', function() {
+gulp.task('test:node', function testNode() {
   return gulp.src(['test/setup/node.js', 'test/unit/**/*.js']).pipe(
     plugins.mocha({
       reporter: ['dot']
@@ -73,23 +64,59 @@ gulp.task('test:node', function() {
   );
 });
 
-gulp.task('test:browser', ['build:browser'], function(done) {
-  var karma = require('karma').server;
+gulp.task(
+  'test:browser',
+  gulp.series('build:browser', function testBrowser(done) {
+    const Server = require('karma').Server;
+    const server = new Server(
+      { configFile: __dirname + '/karma.conf.js' },
+      (exitCode) => {
+        if (exitCode !== 0) {
+          done(new Error(`Bad exit code ${exitCode}`));
+        } else {
+          done();
+        }
+      }
+    );
+    server.start();
+  })
+);
 
-  karma.start({ configFile: __dirname + '/karma.conf.js' }, done);
+gulp.task('clean', function clean() {
+  return gulp
+    .src('dist', { read: false, allowEmpty: true })
+    .pipe(plugins.rimraf());
 });
 
-gulp.task('clean', function() {
-  return gulp.src('dist', { read: false }).pipe(plugins.rimraf());
-});
+gulp.task(
+  'watch:lint',
+  gulp.series('lint:src', function watchLint() {
+    gulp.watch('src/**/*', ['lint:src']);
+  })
+);
 
-gulp.task('watch', ['build'], function() {
-  gulp.watch('lib/**/*', ['build']);
-});
-gulp.task('watch:lint', ['lint:src'], function() {
-  gulp.watch('src/**/*', ['lint:src']);
-});
-
-gulp.task('submit-coverage', function(cb) {
+gulp.task('submit-coverage', function submitCoverage(cb) {
   return gulp.src('./coverage/**/lcov.info').pipe(plugins.coveralls());
 });
+
+gulp.task('build', gulp.series('clean', 'build:node', 'build:browser'));
+
+gulp.task(
+  'watch',
+  gulp.series('build', function watch() {
+    gulp.watch('lib/**/*', ['build']);
+  })
+);
+
+gulp.task(
+  'hooks:precommit',
+  gulp.series('build', function hooksPrecommit() {
+    return gulp
+      .src(['dist/*', 'lib/*'], { allowEmpty: true })
+      .pipe(plugins.git.add());
+  })
+);
+
+gulp.task('test', gulp.series('clean', 'test:node', 'test:browser'));
+
+gulp.task('default', gulp.series('build'));
