@@ -67,14 +67,25 @@ gulp.task('test:node', function testNode() {
 gulp.task(
   'test:browser',
   gulp.series('build:browser', function testBrowser(done) {
-    var karma = require('karma').server;
-
-    karma.start({ configFile: __dirname + '/karma.conf.js' }, done);
+    const Server = require('karma').Server;
+    const server = new Server(
+      { configFile: __dirname + '/karma.conf.js' },
+      (exitCode) => {
+        if (exitCode !== 0) {
+          done(new Error(`Bad exit code ${exitCode}`));
+        } else {
+          done();
+        }
+      }
+    );
+    server.start();
   })
 );
 
 gulp.task('clean', function clean() {
-  return gulp.src('dist', { read: false }).pipe(plugins.rimraf());
+  return gulp
+    .src('dist', { read: false, allowEmpty: true })
+    .pipe(plugins.rimraf());
 });
 
 gulp.task(
@@ -100,7 +111,9 @@ gulp.task(
 gulp.task(
   'hooks:precommit',
   gulp.series('build', function hooksPrecommit() {
-    return gulp.src(['dist/*', 'lib/*']).pipe(plugins.git.add());
+    return gulp
+      .src(['dist/*', 'lib/*'], { allowEmpty: true })
+      .pipe(plugins.git.add());
   })
 );
 
