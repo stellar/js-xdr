@@ -3,7 +3,7 @@
 All notable changes to this project will be documented in this file. This
 project adheres to [Semantic Versioning](http://semver.org/).
 
-## In `master`
+## [v1.1.1](https://github.com/stellar/js-xdr/compare/v1.1.0...v1.1.1)
 
 - Updated some out-of-date dependencies
 
