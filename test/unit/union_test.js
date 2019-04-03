@@ -34,29 +34,29 @@ describe('Union.armForSwitch', function() {
     expect(Result.armForSwitch(ResultType.nonsense())).to.eql(XDR.Void);
   });
 
-  it('works for XDR.Int discrimnated unions', function() {
+  it('works for XDR.Int discriminated unions', function() {
     expect(Ext.armForSwitch(0)).to.eql(XDR.Void);
   });
 });
 
 describe('Union: constructor', function() {
-  it('works for XDR.Int discrimnated unions', function() {
+  it('works for XDR.Int discriminated unions', function() {
     expect(() => new Ext(0)).to.not.throw();
   });
 
-  it('works for Enum discrimnated unions', function() {
+  it('works for Enum discriminated unions', function() {
     expect(() => new Result('ok')).to.not.throw();
     expect(() => new Result(ResultType.ok())).to.not.throw();
   });
 });
 
 describe('Union: set', function() {
-  it('works for XDR.Int discrimnated unions', function() {
+  it('works for XDR.Int discriminated unions', function() {
     let u = new Ext(0);
     u.set(0);
   });
 
-  it('works for Enum discrimnated unions', function() {
+  it('works for Enum discriminated unions', function() {
     let u = Result.ok();
 
     expect(() => u.set('ok')).to.not.throw();
