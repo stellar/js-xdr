@@ -3,6 +3,11 @@
 All notable changes to this project will be documented in this file. This
 project adheres to [Semantic Versioning](http://semver.org/).
 
+## [v1.1.2](https://github.com/stellar/js-xdr/compare/v1.1.1...v1.1.2)
+
+- Travis: Deploy to NPM with an env variable instead of an encrypted key
+- Instruct Travis to cache node_modules
+
 ## [v1.1.1](https://github.com/stellar/js-xdr/compare/v1.1.0...v1.1.1)
 
 - Updated some out-of-date dependencies

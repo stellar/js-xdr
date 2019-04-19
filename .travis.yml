@@ -4,6 +4,9 @@ node_js:
   - 8
   - 10
   - lts/*
+cache: 
+  directories:
+    - node_modules
 script: gulp test
 before_install:
   - mkdir -p .npm
@@ -17,8 +20,7 @@ before_deploy:
 deploy:
   provider: npm
   email: npm@stellar.org
-  api_key:
-    secure: Fiob77sZqBBASNHL+0+P83M+FIAjEhtWsXa2zF1rgGo6QKacgVLPq/9ue5b/eApJd07RdtQyxHC+f2DXuGqxgVvouylHGe+ozeNgW86vFQJQ3GT8PFUDNrMIIi+9W8Hl6B1p3nFWZVvnuvJU51VyT93MWJgypreSVFYSWpNsPmU=
+  api_key: $NPM_TOKEN
   skip_cleanup: true
   on:
     tags: true
