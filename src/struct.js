@@ -2,7 +2,7 @@ import each from 'lodash/each';
 import map from 'lodash/map';
 import isUndefined from 'lodash/isUndefined';
 import fromPairs from 'lodash/fromPairs';
-import { Reference } from './config';
+import { Reference } from './reference';
 import includeIoMixin from './io-mixin';
 
 export class Struct {
