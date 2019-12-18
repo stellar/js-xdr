@@ -3,6 +3,8 @@ import each from 'lodash/each';
 import * as XDRTypes from './types';
 import { Reference } from './reference';
 
+export * from './reference';
+
 export function config(fn, types = {}) {
   if (fn) {
     const builder = new TypeBuilder(types);
