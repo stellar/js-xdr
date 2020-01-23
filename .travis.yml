@@ -1,17 +1,12 @@
 language: node_js
 node_js:
-  - 6.14.0
-  - 8
   - 10
-  - lts/*
-cache: 
+  - 11
+  - 12
+cache:
   directories:
     - node_modules
-script: gulp test
-before_install:
-  - mkdir -p .npm
-  - export DISPLAY=:99.0
-  - sh -e /etc/init.d/xvfb start
+script: yarn test
 notifications:
   slack:
     secure: Bu3OZ0Cdy8eq0IMoLJmadDba8Yyb9ajobKocfp8V7/vfOjpIVXdFrGMqfckkZ22uiWxHCsYEX1ahQ77zTjbO3tNq1CTmSgEAWaqqMVz1iIVNhSoeHRfYDa9r1sKFpJv1KEz+j/8i2phcR5MDE6cGK+byJmjfjcnkP1XoNiupuck=
