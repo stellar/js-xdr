@@ -3,6 +3,10 @@
 All notable changes to this project will be documented in this file. This
 project adheres to [Semantic Versioning](http://semver.org/).
 
+## [v1.1.3](https://github.com/stellar/js-xdr/compare/v1.1.2...v1.1.3)
+
+- Split out reference class to it's own file to avoid circular import  ([#39](https://github.com/stellar/js-xdr/pull/39)).
+
 ## [v1.1.2](https://github.com/stellar/js-xdr/compare/v1.1.1...v1.1.2)
 
 - Travis: Deploy to NPM with an env variable instead of an encrypted key
