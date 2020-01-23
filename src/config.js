@@ -1,6 +1,9 @@
 import isUndefined from 'lodash/isUndefined';
 import each from 'lodash/each';
 import * as XDRTypes from './types';
+import { Reference } from './reference';
+
+export * from './reference';
 
 export function config(fn, types = {}) {
   if (fn) {
@@ -10,13 +13,6 @@ export function config(fn, types = {}) {
   }
 
   return types;
-}
-
-export class Reference {
-  /* jshint unused: false */
-  resolve() {
-    throw new Error('implement resolve in child class');
-  }
 }
 
 class SimpleReference extends Reference {
