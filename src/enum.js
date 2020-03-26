@@ -1,4 +1,4 @@
-import Map from 'core-js/library/es6/map';
+import Map from 'core-js-pure/es/map';
 import each from 'lodash/each';
 import vals from 'lodash/values';
 import { Int } from './int';
