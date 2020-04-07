@@ -79,10 +79,8 @@
     "webpack": "^1.12.0"
   },
   "dependencies": {
-    "core-js": "^3.0.0",
     "cursor": "^0.1.5",
     "lodash": "^4.17.5",
-    "long": "^2.2.3",
-    "core-js-pure": "^3.6.4"
+    "long": "^2.2.3"
   }
 }
