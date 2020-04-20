@@ -4,6 +4,7 @@ var gulp = require('gulp');
 var plugins = require('gulp-load-plugins')();
 var plumber = require('gulp-plumber');
 var webpack = require('webpack-stream');
+var del = require('del');
 
 gulp.task('lint:src', function lintSrc() {
   return gulp
@@ -85,9 +86,7 @@ gulp.task(
 );
 
 gulp.task('clean', function clean() {
-  return gulp
-    .src('dist', { read: false, allowEmpty: true })
-    .pipe(plugins.rimraf());
+  return del(['dist/', 'lib/']);
 });
 
 gulp.task(
@@ -107,15 +106,6 @@ gulp.task(
   'watch',
   gulp.series('build', function watch() {
     gulp.watch('lib/**/*', ['build']);
-  })
-);
-
-gulp.task(
-  'hooks:precommit',
-  gulp.series('build', function hooksPrecommit() {
-    return gulp
-      .src(['dist/*', 'lib/*'], { allowEmpty: true })
-      .pipe(plugins.git.add());
   })
 );
 
