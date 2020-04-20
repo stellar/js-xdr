@@ -3,6 +3,7 @@
 var gulp = require('gulp');
 var plugins = require('gulp-load-plugins')();
 var plumber = require('gulp-plumber');
+var webpack = require('webpack-stream');
 
 gulp.task('lint:src', function lintSrc() {
   return gulp
@@ -39,10 +40,11 @@ gulp.task(
     return gulp
       .src('src/browser.js')
       .pipe(
-        plugins.webpack({
+        webpack({
           output: { library: 'XDR' },
+          mode: 'development',
           module: {
-            loaders: [
+            rules: [
               { test: /\.js$/, exclude: /node_modules/, loader: 'babel-loader' }
             ]
           }
