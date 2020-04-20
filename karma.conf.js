@@ -11,8 +11,9 @@ module.exports = function(config) {
     },
 
     webpack: {
+      mode: 'development',
       module: {
-        loaders: [
+        rules: [
           { test: /\.js$/, exclude: /node_modules/, loader: 'babel-loader' }
         ]
       }
