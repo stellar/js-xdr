@@ -39,6 +39,15 @@ const staticMethods = {
     // TODO: error out if the entire buffer isn't consumed
 
     return result;
+  },
+
+  validateXDR(input, format = 'raw') {
+    try {
+      this.fromXDR(input, format);
+      return true;
+    } catch (e) {
+      return false;
+    }
   }
 };
 
