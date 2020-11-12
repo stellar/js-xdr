@@ -137,6 +137,21 @@ describe('Struct.isValid', function() {
   });
 });
 
+describe('Struct.validateXDR', function() {
+  it('returns true for valid XDRs', function() {
+    let subject = new MyRange({ begin: 5, end: 255, inclusive: true });
+    expect(MyRange.validateXDR(subject.toXDR())).to.be.true;
+    expect(MyRange.validateXDR(subject.toXDR('hex'), 'hex')).to.be.true;
+    expect(MyRange.validateXDR(subject.toXDR('base64'), 'base64')).to.be.true;
+  });
+
+  it('returns false for invalid XDRs', function() {
+    expect(MyRange.validateXDR(Buffer.alloc(1))).to.be.false;
+    expect(MyRange.validateXDR('00', 'hex')).to.be.false;
+    expect(MyRange.validateXDR('AA==', 'base64')).to.be.false;
+  });
+});
+
 describe('Struct: attributes', function() {
   it('properly retrieves attributes', function() {
     let subject = new MyRange({ begin: 5, end: 255, inclusive: true });
