@@ -74,7 +74,6 @@
     "webpack-stream": "^5.2.1"
   },
   "dependencies": {
-    "cursor": "^0.1.5",
     "lodash": "^4.17.5",
     "long": "^2.2.3"
   }
