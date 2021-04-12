@@ -3,6 +3,10 @@
 All notable changes to this project will be documented in this file. This
 project adheres to [Semantic Versioning](http://semver.org/).
 
+## [v1.3.0](https://github.com/stellar/js-xdr/compare/v1.2.0...v1.3.0)
+
+- Inline and modernize the `cursor` dependency ([#](https://github.com/stellar/js-xdr/pull/63)).
+
 ## [v1.2.0](https://github.com/stellar/js-xdr/compare/v1.1.4...v1.2.0)
 
 - Add method `validateXDR(input, format = 'raw')` which validates if a given XDR is valid or  not. ([#56](https://github.com/stellar/js-xdr/pull/56)).
