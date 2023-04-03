@@ -1,2 +1,3 @@
 // eslint-disable-next-line prefer-import/prefer-import-over-require
-module.exports = require('./index');
+const exports = require('./index');
+module.exports = exports;

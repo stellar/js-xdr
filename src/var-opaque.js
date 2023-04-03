@@ -1,42 +1,39 @@
-import { Int } from './int';
 import { UnsignedInt } from './unsigned-int';
-import { calculatePadding, slicePadding } from './util';
-import includeIoMixin from './io-mixin';
+import { XdrCompositeType } from './xdr-type';
+import { XdrReaderError, XdrWriterError } from './errors';
 
-export class VarOpaque {
+export class VarOpaque extends XdrCompositeType {
   constructor(maxLength = UnsignedInt.MAX_VALUE) {
+    super();
     this._maxLength = maxLength;
   }
 
-  read(io) {
-    const length = Int.read(io);
-
-    if (length > this._maxLength) {
-      throw new Error(
-        `XDR Read Error: Saw ${length} length VarOpaque,` +
-          `max allowed is ${this._maxLength}`
-      );
-    }
-    const padding = calculatePadding(length);
-    const result = io.slice(length);
-    slicePadding(io, padding);
-    return result.buffer();
+  /**
+   * @inheritDoc
+   */
+  read(reader) {
+    const size = UnsignedInt.read(reader);
+    if (size > this._maxLength)
+      throw new XdrReaderError(`saw ${size} length VarOpaque, max allowed is ${this._maxLength}`);
+    return reader.read(size);
   }
 
-  write(value, io) {
-    if (value.length > this._maxLength) {
-      throw new Error(
-        `XDR Write Error: Got ${value.length} bytes,` +
-          `max allows is ${this._maxLength}`
-      );
-    }
-    Int.write(value.length, io);
-    io.writeBufferPadded(value);
+  /**
+   * @inheritDoc
+   */
+  write(value, writer) {
+    const {length} = value;
+    if (value.length > this._maxLength)
+      throw new XdrWriterError(`got ${value.length} bytes, max allowed is ${this._maxLength}`);
+    // write size info
+    UnsignedInt.write(length, writer);
+    writer.write(value, length);
   }
 
+  /**
+   * @inheritDoc
+   */
   isValid(value) {
     return Buffer.isBuffer(value) && value.length <= this._maxLength;
   }
 }
-
-includeIoMixin(VarOpaque.prototype);

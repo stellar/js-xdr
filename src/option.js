@@ -1,41 +1,43 @@
-import isNull from 'lodash/isNull';
-import isUndefined from 'lodash/isUndefined';
 import { Bool } from './bool';
-import includeIoMixin from './io-mixin';
+import { XdrPrimitiveType } from './xdr-type';
 
-export class Option {
+export class Option extends XdrPrimitiveType {
   constructor(childType) {
+    super();
     this._childType = childType;
   }
 
-  read(io) {
-    if (Bool.read(io)) {
-      return this._childType.read(io);
+  /**
+   * @inheritDoc
+   */
+  read(reader) {
+    if (Bool.read(reader)) {
+      return this._childType.read(reader);
     }
 
     return undefined;
   }
 
-  write(value, io) {
-    const isPresent = !(isNull(value) || isUndefined(value));
+  /**
+   * @inheritDoc
+   */
+  write(value, writer) {
+    const isPresent = value !== null && value !== undefined;
 
-    Bool.write(isPresent, io);
+    Bool.write(isPresent, writer);
 
     if (isPresent) {
-      this._childType.write(value, io);
+      this._childType.write(value, writer);
     }
   }
 
+  /**
+   * @inheritDoc
+   */
   isValid(value) {
-    if (isNull(value)) {
+    if (value === null || value === undefined) {
       return true;
     }
-    if (isUndefined(value)) {
-      return true;
-    }
-
     return this._childType.isValid(value);
   }
 }
-
-includeIoMixin(Option.prototype);

@@ -1,6 +1,6 @@
+import { XdrWriter } from '../../src/serialization/xdr-writer';
+import { XdrReader } from '../../src/serialization/xdr-reader';
 let Double = XDR.Double;
-import { Cursor } from '../../src/cursor';
-import { cursorToArray } from '../support/io-helpers';
 
 describe('Double.read', function() {
   it('decodes correctly', function() {
@@ -13,7 +13,7 @@ describe('Double.read', function() {
   });
 
   function read(bytes) {
-    let io = new Cursor(bytes);
+    let io = new XdrReader(bytes);
     return Double.read(io);
   }
 });
@@ -45,9 +45,9 @@ describe('Double.write', function() {
   });
 
   function write(value) {
-    let io = new Cursor(8);
+    let io = new XdrWriter(8);
     Double.write(value, io);
-    return cursorToArray(io);
+    return io.toArray();
   }
 });
 

@@ -1,22 +1,19 @@
-import isUndefined from 'lodash/isUndefined';
-import includeIoMixin from './io-mixin';
+import { XdrPrimitiveType } from './xdr-type';
+import { XdrWriterError } from './errors';
 
-export const Void = {
+export class Void extends XdrPrimitiveType {
   /* jshint unused: false */
 
-  read() {
+  static read() {
     return undefined;
-  },
-
-  write(value) {
-    if (!isUndefined(value)) {
-      throw new Error('XDR Write Error: trying to write value to a void slot');
-    }
-  },
-
-  isValid(value) {
-    return isUndefined(value);
   }
-};
 
-includeIoMixin(Void);
+  static write(value) {
+    if (value !== undefined)
+      throw new XdrWriterError('trying to write value to a void slot');
+  }
+
+  static isValid(value) {
+    return value === undefined;
+  }
+}

@@ -1,5 +1,5 @@
-import { Cursor } from '../../src/cursor';
-import { cursorToArray } from '../support/io-helpers';
+import { XdrReader } from '../../src/serialization/xdr-reader';
+import { XdrWriter } from '../../src/serialization/xdr-writer';
 
 let subject = new XDR.String(4);
 
@@ -54,12 +54,12 @@ describe('String#read', function() {
   });
 
   function read(bytes) {
-    let io = new Cursor(bytes);
+    let io = new XdrReader(bytes);
     return subject.read(io);
   }
 
   function readString(bytes) {
-    let io = new Cursor(bytes);
+    let io = new XdrReader(bytes);
     return subject.readString(io);
   }
 });
@@ -116,10 +116,14 @@ describe('String#write', function() {
     ]);
   });
 
+  it('checks actual utf-8 strings length on write', function() {
+    expect(() => write("€€€€")).to.throw(/max allowed/i);
+  })
+
   function write(value) {
-    let io = new Cursor(8);
+    let io = new XdrWriter(8);
     subject.write(value, io);
-    return cursorToArray(io);
+    return io.toArray();
   }
 });
 

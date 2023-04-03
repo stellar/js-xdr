@@ -1,6 +1,7 @@
-let VarOpaque = XDR.VarOpaque;
-import { Cursor } from '../../src/cursor';
-import { cursorToArray } from '../support/io-helpers';
+import { XdrReader } from '../../src/serialization/xdr-reader';
+import { XdrWriter } from '../../src/serialization/xdr-writer';
+
+const VarOpaque = XDR.VarOpaque;
 
 let subject = new VarOpaque(2);
 
@@ -29,7 +30,7 @@ describe('VarOpaque#read', function() {
   });
 
   function read(bytes) {
-    let io = new Cursor(bytes);
+    let io = new XdrReader(bytes);
     return subject.read(io);
   }
 });
@@ -43,9 +44,9 @@ describe('VarOpaque#write', function() {
   });
 
   function write(value) {
-    let io = new Cursor(8);
+    let io = new XdrWriter(8);
     subject.write(value, io);
-    return cursorToArray(io);
+    return io.toArray();
   }
 });
 

@@ -1,44 +1,53 @@
-import every from 'lodash/every';
-import each from 'lodash/each';
-import times from 'lodash/times';
-import isArray from 'lodash/isArray';
-import includeIoMixin from './io-mixin';
+import { XdrCompositeType } from './xdr-type';
+import { XdrWriterError } from './errors';
 
-export class Array {
+export class Array extends XdrCompositeType {
   constructor(childType, length) {
+    super();
     this._childType = childType;
     this._length = length;
   }
 
-  read(io) {
-    return times(this._length, () => this._childType.read(io));
+  /**
+   * @inheritDoc
+   */
+  read(reader) {
+    // allocate array of specified length
+    const result = new global.Array(this._length);
+    // read values
+    for (let i = 0; i < this._length; i++) {
+      result[i] = this._childType.read(reader);
+    }
+    return result;
   }
 
-  write(value, io) {
-    if (!isArray(value)) {
-      throw new Error(`XDR Write Error: value is not array`);
-    }
+  /**
+   * @inheritDoc
+   */
+  write(value, writer) {
+    if (!(value instanceof global.Array))
+      throw new XdrWriterError(`value is not array`);
 
-    if (value.length !== this._length) {
-      throw new Error(
-        `XDR Write Error: Got array of size ${value.length},` +
-          `expected ${this._length}`
-      );
-    }
+    if (value.length !== this._length)
+      throw new XdrWriterError(`got array of size ${value.length}, expected ${this._length}`);
 
-    each(value, (child) => this._childType.write(child, io));
+    for (const child of value) {
+      this._childType.write(child, writer);
+    }
   }
 
+  /**
+   * @inheritDoc
+   */
   isValid(value) {
-    if (!isArray(value)) {
-      return false;
-    }
-    if (value.length !== this._length) {
+    if (!(value instanceof global.Array) || value.length !== this._length) {
       return false;
     }
 
-    return every(value, (child) => this._childType.isValid(child));
+    for (const child of value) {
+      if (!this._childType.isValid(child))
+        return false;
+    }
+    return true;
   }
 }
-
-includeIoMixin(Array.prototype);

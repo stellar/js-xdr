@@ -1,10 +1,13 @@
-import isBoolean from 'lodash/isBoolean';
 import { Int } from './int';
-import includeIoMixin from './io-mixin';
+import { XdrPrimitiveType } from './xdr-type';
+import { XdrReaderError } from './errors';
 
-export const Bool = {
-  read(io) {
-    const value = Int.read(io);
+export class Bool extends XdrPrimitiveType {
+  /**
+   * @inheritDoc
+   */
+  static read(reader) {
+    const value = Int.read(reader);
 
     switch (value) {
       case 0:
@@ -12,20 +15,22 @@ export const Bool = {
       case 1:
         return true;
       default:
-        throw new Error(
-          `XDR Read Error: Got ${value} when trying to read a bool`
-        );
+        throw new XdrReaderError(`got ${value} when trying to read a bool`);
     }
-  },
-
-  write(value, io) {
-    const intVal = value ? 1 : 0;
-    return Int.write(intVal, io);
-  },
-
-  isValid(value) {
-    return isBoolean(value);
   }
-};
 
-includeIoMixin(Bool);
+  /**
+   * @inheritDoc
+   */
+  static write(value, writer) {
+    const intVal = value ? 1 : 0;
+    Int.write(intVal, writer);
+  }
+
+  /**
+   * @inheritDoc
+   */
+  static isValid(value) {
+    return typeof value === 'boolean';
+  }
+}

@@ -1,6 +1,6 @@
-let UnsignedHyper = XDR.UnsignedHyper;
-import { Cursor } from '../../src/cursor';
-import { cursorToArray } from '../support/io-helpers';
+import { XdrReader } from '../../src/serialization/xdr-reader';
+import { XdrWriter } from '../../src/serialization/xdr-writer';
+const UnsignedHyper = XDR.UnsignedHyper;
 
 describe('UnsignedHyper.read', function() {
   it('decodes correctly', function() {
@@ -16,7 +16,7 @@ describe('UnsignedHyper.read', function() {
   });
 
   function read(bytes) {
-    let io = new Cursor(bytes);
+    let io = new XdrReader(bytes);
     return UnsignedHyper.read(io);
   }
 });
@@ -56,9 +56,9 @@ describe('UnsignedHyper.write', function() {
   });
 
   function write(value) {
-    let io = new Cursor(8);
+    let io = new XdrWriter(8);
     UnsignedHyper.write(value, io);
-    return cursorToArray(io);
+    return io.toArray();
   }
 });
 

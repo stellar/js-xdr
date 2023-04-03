@@ -1,6 +1,6 @@
+import { XdrReader } from '../../src/serialization/xdr-reader';
+import { XdrWriter } from '../../src/serialization/xdr-writer';
 let Opaque = XDR.Opaque;
-import { Cursor } from '../../src/cursor';
-import { cursorToArray } from '../support/io-helpers';
 
 let subject = new Opaque(3);
 
@@ -15,7 +15,7 @@ describe('Opaque#read', function() {
   });
 
   function read(bytes) {
-    let io = new Cursor(bytes);
+    let io = new XdrReader(bytes);
     return subject.read(io);
   }
 });
@@ -27,9 +27,9 @@ describe('Opaque#write', function() {
   });
 
   function write(value) {
-    let io = new Cursor(8);
+    let io = new XdrWriter(8);
     subject.write(value, io);
-    return cursorToArray(io);
+    return io.toArray();
   }
 });
 

@@ -1,72 +1,76 @@
-import each from 'lodash/each';
-import map from 'lodash/map';
-import isUndefined from 'lodash/isUndefined';
-import fromPairs from 'lodash/fromPairs';
 import { Reference } from './reference';
-import includeIoMixin from './io-mixin';
+import { XdrPrimitiveType } from './xdr-type';
+import { XdrWriterError } from './errors';
 
-export class Struct {
+export class Struct extends XdrPrimitiveType {
   constructor(attributes) {
+    super();
     this._attributes = attributes || {};
   }
 
-  static read(io) {
-    const fields = map(this._fields, (field) => {
-      const [name, type] = field;
-      const value = type.read(io);
-      return [name, value];
-    });
-
-    return new this(fromPairs(fields));
-  }
-
-  static write(value, io) {
-    if (!(value instanceof this)) {
-      throw new Error(`XDR Write Error: ${value} is not a ${this.structName}`);
+  /**
+   * @inheritDoc
+   */
+  static read(reader) {
+    const attributes = {};
+    for (const [fieldName, type] of this._fields) {
+      attributes[fieldName] = type.read(reader);
     }
-    each(this._fields, (field) => {
-      const [name, type] = field;
-      const attribute = value._attributes[name];
-      type.write(attribute, io);
-    });
+    return new this(attributes);
   }
 
+  /**
+   * @inheritDoc
+   */
+  static write(value, writer) {
+    if (!(value instanceof this))
+      throw new XdrWriterError(`${value} is not a ${this.structName}`);
+
+    for (const [fieldName, type] of this._fields) {
+      const attribute = value._attributes[fieldName];
+      type.write(attribute, writer);
+    }
+  }
+
+  /**
+   * @inheritDoc
+   */
   static isValid(value) {
     return value instanceof this;
   }
 
   static create(context, name, fields) {
-    const ChildStruct = class extends Struct {};
+    const ChildStruct = class extends Struct {
+    };
 
     ChildStruct.structName = name;
 
     context.results[name] = ChildStruct;
 
-    ChildStruct._fields = fields.map(([fieldName, field]) => {
+    const mappedFields = new Array(fields.length);
+    for (let i = 0; i < fields.length; i++) {
+      const fieldDescriptor = fields[i];
+      const fieldName = fieldDescriptor[0];
+      let field = fieldDescriptor[1];
       if (field instanceof Reference) {
         field = field.resolve(context);
       }
+      mappedFields[i] = [fieldName, field];
+      // create accessors
+      ChildStruct.prototype[fieldName] = createAccessorMethod(fieldName);
+    }
 
-      return [fieldName, field];
-    });
-
-    each(ChildStruct._fields, (field) => {
-      const [fieldName] = field;
-      ChildStruct.prototype[fieldName] = getReadOrWriteAttribute(fieldName);
-    });
+    ChildStruct._fields = mappedFields;
 
     return ChildStruct;
   }
 }
 
-includeIoMixin(Struct);
-
-function getReadOrWriteAttribute(name) {
+function createAccessorMethod(name) {
   return function readOrWriteAttribute(value) {
-    if (!isUndefined(value)) {
+    if (value !== undefined) {
       this._attributes[name] = value;
     }
-
     return this._attributes[name];
   };
 }

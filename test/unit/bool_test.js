@@ -1,6 +1,6 @@
+import { XdrWriter } from '../../src/serialization/xdr-writer';
+import { XdrReader } from '../../src/serialization/xdr-reader';
 let Bool = XDR.Bool;
-import { Cursor } from '../../src/cursor';
-import { cursorToArray } from '../support/io-helpers';
 
 describe('Bool.read', function() {
   it('decodes correctly', function() {
@@ -12,7 +12,7 @@ describe('Bool.read', function() {
   });
 
   function read(bytes) {
-    let io = new Cursor(bytes);
+    let io = new XdrReader(bytes);
     return Bool.read(io);
   }
 });
@@ -24,9 +24,9 @@ describe('Bool.write', function() {
   });
 
   function write(value) {
-    let io = new Cursor(8);
+    let io = new XdrWriter(8);
     Bool.write(value, io);
-    return cursorToArray(io);
+    return io.toArray();
   }
 });
 

@@ -1,5 +1,5 @@
-import { Cursor } from '../../src/cursor';
-import { cursorToArray } from '../support/io-helpers';
+import { XdrReader } from '../../src/serialization/xdr-reader';
+import { XdrWriter } from '../../src/serialization/xdr-writer';
 
 /* jshint -W030 */
 
@@ -86,7 +86,7 @@ describe('Union.read', function() {
   });
 
   function read(bytes) {
-    let io = new Cursor(bytes);
+    let io = new XdrReader(bytes);
     return Result.read(io);
   }
 });
@@ -121,9 +121,9 @@ describe('Union.write', function() {
   });
 
   function write(value) {
-    let io = new Cursor(256);
+    let io = new XdrWriter(256);
     Result.write(value, io);
-    return cursorToArray(io);
+    return io.toArray();
   }
 });
 
