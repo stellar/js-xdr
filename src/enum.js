@@ -27,7 +27,6 @@ export class Enum extends XdrPrimitiveType {
     if (!(value instanceof this))
       throw new XdrWriterError(`unknown ${value} is not a ${this.enumName}`);
 
-
     Int.write(value.value, writer);
   }
 
