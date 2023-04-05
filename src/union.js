@@ -54,6 +54,13 @@ export class Union extends XdrCompositeType {
     throw new TypeError(`Bad union switch: ${aSwitch}`);
   }
 
+  static armTypeForArm(arm) {
+    if (arm === Void) {
+      return Void;
+    }
+    return this._arms[arm];
+  }
+
   /**
    * @inheritDoc
    */
