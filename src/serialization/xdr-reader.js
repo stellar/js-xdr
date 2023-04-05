@@ -68,6 +68,7 @@ export class XdrReader {
       for (let i = 0; i < padding; i++)
         if (this._buffer[this._index + i] !== 0) // all bytes in the padding should be zeros
           throw new XdrReaderError('invalid padding');
+      this._index += padding;
     }
     return from;
   }
@@ -86,7 +87,8 @@ export class XdrReader {
    * @return {Buffer} - Sliced portion of the underlying buffer
    */
   read(size) {
-    return this._buffer.subarray(this.advance(size), this._index);
+    const from = this.advance(size);
+    return this._buffer.subarray(from, from + size);
   }
 
   /**

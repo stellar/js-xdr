@@ -16,7 +16,9 @@ describe('Opaque#read', function() {
 
   function read(bytes) {
     let io = new XdrReader(bytes);
-    return subject.read(io);
+    const res = subject.read(io);
+    expect(io._index).to.eql(4, 'padding not processed by the reader');
+    return res
   }
 });
 
