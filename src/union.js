@@ -111,20 +111,6 @@ export class Union extends XdrCompositeType {
     ChildUnion._switches = new Map();
     ChildUnion._arms = {};
 
-    if (config.arms) {
-      for (const [armsName, value] of Object.entries(config.arms)) {
-        ChildUnion._arms[armsName] = (value instanceof Reference) ?
-          value.resolve(context) :
-          value;
-        // Add arm accessor helpers
-        if (value !== Void) {
-          ChildUnion.prototype[armsName] = function get() {
-            return this.get(armsName);
-          };
-        }
-      }
-    }
-
     // resolve default arm
     let defaultArm = config.defaultArm;
     if (defaultArm instanceof Reference) {
@@ -156,6 +142,20 @@ export class Union extends XdrCompositeType {
         ChildUnion.prototype[aSwitch.name] = function set(value) {
           return this.set(aSwitch, value);
         };
+      }
+    }
+
+    if (config.arms) {
+      for (const [armsName, value] of Object.entries(config.arms)) {
+        ChildUnion._arms[armsName] = (value instanceof Reference) ?
+          value.resolve(context) :
+          value;
+        // Add arm accessor helpers
+        if (value !== Void) {
+          ChildUnion.prototype[armsName] = function get() {
+            return this.get(armsName);
+          };
+        }
       }
     }
 
