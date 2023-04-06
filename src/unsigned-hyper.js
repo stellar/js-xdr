@@ -1,4 +1,4 @@
-import {XdrPrimitiveType} from './xdr-type';
+import { XdrPrimitiveType } from './xdr-type';
 import { XdrWriterError } from './errors';
 
 const MIN_VALUE = 0n;
@@ -32,6 +32,10 @@ export class UnsignedHyper extends XdrPrimitiveType {
 
   toString() {
     return this._value.toString();
+  }
+
+  toJSON() {
+    return {_value: this._value.toString()}
   }
 
   /**
