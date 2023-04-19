@@ -14,7 +14,7 @@
     "test": "yarn run test:node && yarn run test:browser",
     "test-generate": "bundle exec xdrgen -o generated -n test -l javascript examples/test.x",
     "fmt": "prettier --write '**/*.js'",
-    "clean": "rm -rf lib/ dist/ .nyc_output/"
+    "clean": "rm -rf lib/ dist/"
   },
   "repository": {
     "type": "git",
