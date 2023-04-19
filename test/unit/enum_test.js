@@ -1,5 +1,5 @@
-import { Cursor } from '../../src/cursor';
-import { cursorToArray } from '../support/io-helpers';
+import { XdrReader } from '../../src/serialization/xdr-reader';
+import { XdrWriter } from '../../src/serialization/xdr-writer';
 
 /* jshint -W030 */
 
@@ -48,7 +48,7 @@ describe('Enum.read', function() {
   });
 
   function read(bytes) {
-    let io = new Cursor(bytes);
+    let io = new XdrReader(bytes);
     return Color.read(io);
   }
 });
@@ -74,9 +74,9 @@ describe('Enum.write', function() {
   });
 
   function write(value) {
-    let io = new Cursor(8);
+    let io = new XdrWriter(8);
     Color.write(value, io);
-    return cursorToArray(io);
+    return io.toArray();
   }
 });
 

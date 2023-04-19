@@ -1,4 +1,4 @@
-import { Cursor } from '../../src/cursor';
+import { XdrReader } from '../../src/serialization/xdr-reader';
 
 /* jshint -W030 */
 
@@ -45,7 +45,7 @@ describe('StructUnion.read', function() {
   });
 
   function read(bytes) {
-    let io = new Cursor(bytes);
+    let io = new XdrReader(bytes);
     return StructUnion.read(io);
   }
 });

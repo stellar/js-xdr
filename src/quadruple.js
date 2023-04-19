@@ -1,19 +1,16 @@
-import includeIoMixin from './io-mixin';
+import { XdrPrimitiveType } from './xdr-type';
+import { XdrDefinitionError } from './errors';
 
-export const Quadruple = {
-  /* jshint unused: false */
+export class Quadruple extends XdrPrimitiveType {
+  static read() {
+    throw new XdrDefinitionError('quadruple not supported');
+  }
 
-  read() {
-    throw new Error('XDR Read Error: quadruple not supported');
-  },
+  static write() {
+    throw new XdrDefinitionError('quadruple not supported');
+  }
 
-  write() {
-    throw new Error('XDR Write Error: quadruple not supported');
-  },
-
-  isValid() {
+  static isValid() {
     return false;
   }
-};
-
-includeIoMixin(Quadruple);
+}

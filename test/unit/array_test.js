@@ -1,5 +1,5 @@
-import { Cursor } from '../../src/cursor';
-import { cursorToArray } from '../support/io-helpers';
+import { XdrReader } from '../../src/serialization/xdr-reader';
+import { XdrWriter } from '../../src/serialization/xdr-writer';
 
 let zero = new XDR.Array(XDR.Int, 0);
 let one = new XDR.Array(XDR.Int, 1);
@@ -21,13 +21,13 @@ describe('Array#read', function() {
     );
   });
 
-  it("throws RangeError when the byte stream isn't large enough", function() {
-    expect(() => read(many, [0x00, 0x00, 0x00, 0x00])).to.throw(RangeError);
+  it("throws XdrReaderError when the byte stream isn't large enough", function() {
+    expect(() => read(many, [0x00, 0x00, 0x00, 0x00])).to.throw(/read outside the boundary/i);
   });
 
   function read(arr, bytes) {
-    let io = new Cursor(bytes);
-    return arr.read(io);
+    let reader = new XdrReader(bytes);
+    return arr.read(reader);
   }
 });
 
@@ -72,9 +72,9 @@ describe('Array#write', function() {
   });
 
   function write(value) {
-    let io = new Cursor(8);
-    subject.write(value, io);
-    return cursorToArray(io);
+    let writer = new XdrWriter(8);
+    subject.write(value, writer);
+    return writer.toArray();
   }
 });
 

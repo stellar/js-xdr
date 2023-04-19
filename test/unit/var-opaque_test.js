@@ -1,6 +1,7 @@
-let VarOpaque = XDR.VarOpaque;
-import { Cursor } from '../../src/cursor';
-import { cursorToArray } from '../support/io-helpers';
+import { XdrReader } from '../../src/serialization/xdr-reader';
+import { XdrWriter } from '../../src/serialization/xdr-writer';
+
+const VarOpaque = XDR.VarOpaque;
 
 let subject = new VarOpaque(2);
 
@@ -29,8 +30,10 @@ describe('VarOpaque#read', function() {
   });
 
   function read(bytes) {
-    let io = new Cursor(bytes);
-    return subject.read(io);
+    let io = new XdrReader(bytes);
+    const res = subject.read(io);
+    expect(io._index).to.eql(!res.length ? 4 : 8, 'padding not processed by the reader');
+    return res
   }
 });
 
@@ -43,9 +46,9 @@ describe('VarOpaque#write', function() {
   });
 
   function write(value) {
-    let io = new Cursor(8);
+    let io = new XdrWriter(8);
     subject.write(value, io);
-    return cursorToArray(io);
+    return io.toArray();
   }
 });
 

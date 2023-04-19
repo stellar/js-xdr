@@ -1,7 +1,7 @@
-import { Cursor } from '../../src/cursor';
-import { cursorToArray } from '../support/io-helpers';
+import { XdrReader } from '../../src/serialization/xdr-reader';
+import { XdrWriter } from '../../src/serialization/xdr-writer';
 
-let subject = new XDR.VarArray(XDR.Int, 2);
+const subject = new XDR.VarArray(XDR.Int, 2);
 
 describe('VarArray#read', function() {
   it('decodes correctly', function() {
@@ -49,7 +49,7 @@ describe('VarArray#read', function() {
   });
 
   function read(bytes) {
-    let io = new Cursor(bytes);
+    let io = new XdrReader(bytes);
     return subject.read(io);
   }
 });
@@ -85,9 +85,9 @@ describe('VarArray#write', function() {
   });
 
   function write(value) {
-    let io = new Cursor(256);
+    let io = new XdrWriter(256);
     subject.write(value, io);
-    return cursorToArray(io);
+    return io.toArray();
   }
 });
 

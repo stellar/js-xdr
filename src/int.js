@@ -1,36 +1,41 @@
-import isNumber from 'lodash/isNumber';
-import includeIoMixin from './io-mixin';
+import { XdrPrimitiveType } from './xdr-type';
+import { XdrWriterError } from './errors';
 
-export const Int = {
-  read(io) {
-    return io.readInt32BE();
-  },
+const MAX_VALUE = 2147483647;
+const MIN_VALUE = -2147483648;
 
-  write(value, io) {
-    if (!isNumber(value)) {
-      throw new Error('XDR Write Error: not a number');
-    }
-
-    if (Math.floor(value) !== value) {
-      throw new Error('XDR Write Error: not an integer');
-    }
-
-    io.writeInt32BE(value);
-  },
-
-  isValid(value) {
-    if (!isNumber(value)) {
-      return false;
-    }
-    if (Math.floor(value) !== value) {
-      return false;
-    }
-
-    return value >= Int.MIN_VALUE && value <= Int.MAX_VALUE;
+export class Int extends XdrPrimitiveType {
+  /**
+   * @inheritDoc
+   */
+  static read(reader) {
+    return reader.readInt32BE();
   }
-};
 
-Int.MAX_VALUE = Math.pow(2, 31) - 1;
-Int.MIN_VALUE = -Math.pow(2, 31);
+  /**
+   * @inheritDoc
+   */
+  static write(value, writer) {
+    if (typeof value !== 'number')
+      throw new XdrWriterError('not a number');
 
-includeIoMixin(Int);
+    if ((value | 0) !== value)
+      throw new XdrWriterError('invalid i32 value');
+
+    writer.writeInt32BE(value);
+  }
+
+  /**
+   * @inheritDoc
+   */
+  static isValid(value) {
+    if (typeof value !== 'number' || (value | 0) !== value) {
+      return false;
+    }
+
+    return value >= MIN_VALUE && value <= MAX_VALUE;
+  }
+}
+
+Int.MAX_VALUE = MAX_VALUE;
+Int.MIN_VALUE = -MIN_VALUE;

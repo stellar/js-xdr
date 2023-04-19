@@ -1,19 +1,9 @@
-import isUndefined from 'lodash/isUndefined';
-import each from 'lodash/each';
+// eslint-disable-next-line max-classes-per-file
 import * as XDRTypes from './types';
 import { Reference } from './reference';
+import { XdrDefinitionError } from './errors';
 
 export * from './reference';
-
-export function config(fn, types = {}) {
-  if (fn) {
-    const builder = new TypeBuilder(types);
-    fn(builder);
-    builder.resolve();
-  }
-
-  return types;
-}
 
 class SimpleReference extends Reference {
   constructor(name) {
@@ -110,7 +100,7 @@ class Definition {
   }
 }
 
-// let the reference resoltion system do it's thing
+// let the reference resolution system do its thing
 // the "constructor" for a typedef just returns the resolved value
 function createTypedef(context, typeName, value) {
   if (value instanceof Reference) {
@@ -159,27 +149,35 @@ class TypeBuilder {
   void() {
     return XDRTypes.Void;
   }
+
   bool() {
     return XDRTypes.Bool;
   }
+
   int() {
     return XDRTypes.Int;
   }
+
   hyper() {
     return XDRTypes.Hyper;
   }
+
   uint() {
     return XDRTypes.UnsignedInt;
   }
+
   uhyper() {
     return XDRTypes.UnsignedHyper;
   }
+
   float() {
     return XDRTypes.Float;
   }
+
   double() {
     return XDRTypes.Double;
   }
+
   quadruple() {
     return XDRTypes.Quadruple;
   }
@@ -187,9 +185,11 @@ class TypeBuilder {
   string(length) {
     return new SizedReference(XDRTypes.String, length);
   }
+
   opaque(length) {
     return new SizedReference(XDRTypes.Opaque, length);
   }
+
   varOpaque(length) {
     return new SizedReference(XDRTypes.VarOpaque, length);
   }
@@ -207,10 +207,10 @@ class TypeBuilder {
   }
 
   define(name, definition) {
-    if (isUndefined(this._destination[name])) {
+    if (this._destination[name] === undefined) {
       this._definitions[name] = definition;
     } else {
-      throw new Error(`XDRTypes Error:${name} is already defined`);
+      throw new XdrDefinitionError(`${name} is already defined`);
     }
   }
 
@@ -219,11 +219,21 @@ class TypeBuilder {
   }
 
   resolve() {
-    each(this._definitions, (defn) => {
+    for (const defn of Object.values(this._definitions)) {
       defn.resolve({
         definitions: this._definitions,
         results: this._destination
       });
-    });
+    }
   }
+}
+
+export function config(fn, types = {}) {
+  if (fn) {
+    const builder = new TypeBuilder(types);
+    fn(builder);
+    builder.resolve();
+  }
+
+  return types;
 }

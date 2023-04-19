@@ -1,40 +1,38 @@
-import isNumber from 'lodash/isNumber';
-import includeIoMixin from './io-mixin';
+import { XdrPrimitiveType } from './xdr-type';
+import { XdrWriterError } from './errors';
 
-export const UnsignedInt = {
-  read(io) {
-    return io.readUInt32BE();
-  },
+const MAX_VALUE = 4294967295;
+const MIN_VALUE = 0;
 
-  write(value, io) {
-    if (!isNumber(value)) {
-      throw new Error('XDR Write Error: not a number');
-    }
-
-    if (Math.floor(value) !== value) {
-      throw new Error('XDR Write Error: not an integer');
-    }
-
-    if (value < 0) {
-      throw new Error(`XDR Write Error: negative number ${value}`);
-    }
-
-    io.writeUInt32BE(value);
-  },
-
-  isValid(value) {
-    if (!isNumber(value)) {
-      return false;
-    }
-    if (Math.floor(value) !== value) {
-      return false;
-    }
-
-    return value >= UnsignedInt.MIN_VALUE && value <= UnsignedInt.MAX_VALUE;
+export class UnsignedInt extends XdrPrimitiveType {
+  /**
+   * @inheritDoc
+   */
+  static read(reader) {
+    return reader.readUInt32BE();
   }
-};
 
-UnsignedInt.MAX_VALUE = Math.pow(2, 32) - 1;
-UnsignedInt.MIN_VALUE = 0;
+  /**
+   * @inheritDoc
+   */
+  static write(value, writer) {
+    if (typeof value !== 'number' || !(value >= MIN_VALUE && value <= MAX_VALUE) || value % 1 !== 0)
+      throw new XdrWriterError('invalid u32 value');
 
-includeIoMixin(UnsignedInt);
+    writer.writeUInt32BE(value);
+  }
+
+  /**
+   * @inheritDoc
+   */
+  static isValid(value) {
+    if (typeof value !== 'number' || value % 1 !== 0) {
+      return false;
+    }
+
+    return value >= MIN_VALUE && value <= MAX_VALUE;
+  }
+}
+
+UnsignedInt.MAX_VALUE = MAX_VALUE;
+UnsignedInt.MIN_VALUE = MIN_VALUE;

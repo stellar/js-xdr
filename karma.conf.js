@@ -1,7 +1,9 @@
-module.exports = function(config) {
+const webpack = require('webpack')
+
+module.exports = function (config) {
   config.set({
-    frameworks: ['mocha', 'sinon-chai'],
-    browsers: ['Firefox'],
+    frameworks: ['mocha', 'webpack', 'sinon-chai'],
+    browsers: ['FirefoxHeadless', 'ChromeHeadless'],
     browserNoActivityTimeout: 20000,
 
     files: ['dist/xdr.js', 'test/unit/**/*.js'],
@@ -14,9 +16,13 @@ module.exports = function(config) {
       mode: 'development',
       module: {
         rules: [
-          { test: /\.js$/, exclude: /node_modules/, loader: 'babel-loader' }
+          {test: /\.js$/, exclude: /node_modules/, loader: 'babel-loader'}
         ]
-      }
+      },
+      plugins: [
+        new webpack.ProvidePlugin({
+          Buffer: ['buffer', 'Buffer'],
+        })]
     },
 
     webpackMiddleware: {

@@ -1,31 +1,33 @@
-import { calculatePadding, slicePadding } from './util';
-import includeIoMixin from './io-mixin';
+import { XdrCompositeType } from './xdr-type';
+import { XdrWriterError } from './errors';
 
-export class Opaque {
+export class Opaque extends XdrCompositeType {
   constructor(length) {
+    super();
     this._length = length;
-    this._padding = calculatePadding(length);
   }
 
-  read(io) {
-    const result = io.slice(this._length);
-    slicePadding(io, this._padding);
-    return result.buffer();
+  /**
+   * @inheritDoc
+   */
+  read(reader) {
+    return reader.read(this._length);
   }
 
-  write(value, io) {
-    if (value.length !== this._length) {
-      throw new Error(
-        `XDR Write Error: Got ${value.length} bytes, expected ${this._length}`
-      );
-    }
-
-    io.writeBufferPadded(value);
+  /**
+   * @inheritDoc
+   */
+  write(value, writer) {
+    const {length} = value;
+    if (length !== this._length)
+      throw new XdrWriterError(`got ${value.length} bytes, expected ${this._length}`);
+    writer.write(value, length);
   }
 
+  /**
+   * @inheritDoc
+   */
   isValid(value) {
     return Buffer.isBuffer(value) && value.length === this._length;
   }
 }
-
-includeIoMixin(Opaque.prototype);

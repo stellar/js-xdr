@@ -1,14 +1,14 @@
 import * as XDR from '../../src';
-import { keys, each } from 'lodash';
 
-describe('XDR.config', function() {
-  beforeEach(function() {
+describe('XDR.config', function () {
+  beforeEach(function () {
     this.types = XDR.config(); // get the xdr object root
-    let toDelete = keys(this.types);
-    each(toDelete, (k) => delete this.types[k]);
+    for (const toDelete of Object.keys(this.types)) {
+      delete this.types[toDelete];
+    }
   });
 
-  it('can define objects that have no dependency', function() {
+  it('can define objects that have no dependency', function () {
     XDR.config((xdr) => {
       xdr.enum('Color', {
         red: 0,
@@ -20,13 +20,13 @@ describe('XDR.config', function() {
         ok: 0,
         error: 1
       });
-    });
+    }, this.types);
 
-    expect(this.types.Color).to.be.truthy;
-    expect(this.types.ResultType).to.be.truthy;
+    expect(this.types.Color).to.exist;
+    expect(this.types.ResultType).to.exist;
   });
 
-  it('can define objects with the same name from different contexts', function() {
+  it('can define objects with the same name from different contexts', function () {
     XDR.config((xdr) => {
       xdr.enum('Color', {
         red: 0,
@@ -44,7 +44,7 @@ describe('XDR.config', function() {
     });
   });
 
-  it('can define objects that have simple dependencies', function() {
+  it('can define objects that have simple dependencies', function () {
     XDR.config((xdr) => {
       xdr.union('Result', {
         switchOn: xdr.lookup('ResultType'),
@@ -61,8 +61,8 @@ describe('XDR.config', function() {
       });
     }, this.types);
 
-    expect(this.types.Result).to.be.truthy;
-    expect(this.types.ResultType).to.be.truthy;
+    expect(this.types.Result).to.exist;
+    expect(this.types.ResultType).to.exist;
 
     let result = this.types.Result.ok();
     expect(result.switch()).to.eql(this.types.ResultType.ok());
@@ -72,7 +72,7 @@ describe('XDR.config', function() {
     expect(result.message()).to.eql('It broke!');
   });
 
-  it('can define structs', function() {
+  it('can define structs', function () {
     XDR.config((xdr) => {
       xdr.struct('Color', [
         ['red', xdr.int()],
@@ -81,7 +81,7 @@ describe('XDR.config', function() {
       ]);
     }, this.types);
 
-    expect(this.types.Color).to.be.truthy;
+    expect(this.types.Color).to.exist;
 
     let result = new this.types.Color({
       red: 0,
@@ -93,21 +93,21 @@ describe('XDR.config', function() {
     expect(result.blue()).to.eql(2);
   });
 
-  it('can define typedefs', function() {
+  it('can define typedefs', function () {
     let xdr = XDR.config((xdr) => {
       xdr.typedef('Uint256', xdr.opaque(32));
     });
     expect(xdr.Uint256).to.be.instanceof(XDR.Opaque);
   });
 
-  it('can define consts', function() {
+  it('can define consts', function () {
     let xdr = XDR.config((xdr) => {
       xdr.typedef('MAX_SIZE', 300);
     });
     expect(xdr.MAX_SIZE).to.eql(300);
   });
 
-  it('can define arrays', function() {
+  it('can define arrays', function () {
     let xdr = XDR.config((xdr) => {
       xdr.typedef('ArrayOfInts', xdr.array(xdr.int(), 3));
       xdr.struct('MyStruct', [['red', xdr.int()]]);
@@ -123,7 +123,7 @@ describe('XDR.config', function() {
     expect(xdr.ArrayOfEmpty._length).to.eql(5);
   });
 
-  it('can define vararrays', function() {
+  it('can define vararrays', function () {
     let xdr = XDR.config((xdr) => {
       xdr.typedef('ArrayOfInts', xdr.varArray(xdr.int(), 3));
     });
@@ -133,7 +133,7 @@ describe('XDR.config', function() {
     expect(xdr.ArrayOfInts._maxLength).to.eql(3);
   });
 
-  it('can define options', function() {
+  it('can define options', function () {
     let xdr = XDR.config((xdr) => {
       xdr.typedef('OptionalInt', xdr.option(xdr.int()));
     });
@@ -142,7 +142,7 @@ describe('XDR.config', function() {
     expect(xdr.OptionalInt._childType).to.eql(XDR.Int);
   });
 
-  it('can use sizes defined as an xdr const', function() {
+  it('can use sizes defined as an xdr const', function () {
     let xdr = XDR.config((xdr) => {
       xdr.const('SIZE', 5);
       xdr.typedef('MyArray', xdr.array(xdr.int(), xdr.lookup('SIZE')));

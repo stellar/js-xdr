@@ -1,64 +1,53 @@
-import isString from 'lodash/isString';
-import isArray from 'lodash/isArray';
-import { Int } from './int';
 import { UnsignedInt } from './unsigned-int';
-import { calculatePadding, slicePadding } from './util';
-import includeIoMixin from './io-mixin';
+import { XdrCompositeType } from './xdr-type';
+import { XdrReaderError, XdrWriterError } from './errors';
 
-export class String {
+export class String extends XdrCompositeType {
   constructor(maxLength = UnsignedInt.MAX_VALUE) {
+    super();
     this._maxLength = maxLength;
   }
 
-  read(io) {
-    const length = Int.read(io);
+  /**
+   * @inheritDoc
+   */
+  read(reader) {
+    const size = UnsignedInt.read(reader);
+    if (size > this._maxLength)
+      throw new XdrReaderError(`saw ${size} length String, max allowed is ${this._maxLength}`);
 
-    if (length > this._maxLength) {
-      throw new Error(
-        `XDR Read Error: Saw ${length} length String,` +
-          `max allowed is ${this._maxLength}`
-      );
-    }
-    const padding = calculatePadding(length);
-    const result = io.slice(length);
-    slicePadding(io, padding);
-    return result.buffer();
+    return reader.read(size);
   }
 
-  readString(io) {
-    return this.read(io).toString('utf8');
+  readString(reader) {
+    return this.read(reader).toString('utf8');
   }
 
-  write(value, io) {
-    if (value.length > this._maxLength) {
-      throw new Error(
-        `XDR Write Error: Got ${value.length} bytes,` +
-          `max allows is ${this._maxLength}`
-      );
-    }
-
-    let buffer;
-    if (isString(value)) {
-      buffer = Buffer.from(value, 'utf8');
-    } else {
-      buffer = Buffer.from(value);
-    }
-
-    Int.write(buffer.length, io);
-    io.writeBufferPadded(buffer);
+  /**
+   * @inheritDoc
+   */
+  write(value, writer) {
+    // calculate string byte size before writing
+    const size = typeof value === 'string'?
+      Buffer.byteLength(value, 'utf8'):
+      value.length;
+    if (size > this._maxLength)
+      throw new XdrWriterError(`got ${value.length} bytes, max allowed is ${this._maxLength}`);
+    // write size info
+    UnsignedInt.write(size, writer);
+    writer.write(value, size);
   }
 
+  /**
+   * @inheritDoc
+   */
   isValid(value) {
-    let buffer;
-    if (isString(value)) {
-      buffer = Buffer.from(value, 'utf8');
-    } else if (isArray(value) || Buffer.isBuffer(value)) {
-      buffer = Buffer.from(value);
-    } else {
-      return false;
+    if (typeof value === 'string') {
+      return Buffer.byteLength(value, 'utf8') <= this._maxLength;
     }
-    return buffer.length <= this._maxLength;
+    if (value instanceof Array || Buffer.isBuffer(value)) {
+      return value.length <= this._maxLength;
+    }
+    return false;
   }
 }
-
-includeIoMixin(String.prototype);

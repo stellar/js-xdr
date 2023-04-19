@@ -1,22 +1,28 @@
-import isNumber from 'lodash/isNumber';
-import includeIoMixin from './io-mixin';
+import { XdrPrimitiveType } from './xdr-type';
+import { XdrWriterError } from './errors';
 
-export const Double = {
-  read(io) {
-    return io.readDoubleBE();
-  },
-
-  write(value, io) {
-    if (!isNumber(value)) {
-      throw new Error('XDR Write Error: not a number');
-    }
-
-    io.writeDoubleBE(value);
-  },
-
-  isValid(value) {
-    return isNumber(value);
+export class Double extends XdrPrimitiveType {
+  /**
+   * @inheritDoc
+   */
+  static read(reader) {
+    return reader.readDoubleBE();
   }
-};
 
-includeIoMixin(Double);
+  /**
+   * @inheritDoc
+   */
+  static write(value, writer) {
+    if (typeof value !== 'number')
+      throw new XdrWriterError('not a number');
+
+    writer.writeDoubleBE(value);
+  }
+
+  /**
+   * @inheritDoc
+   */
+  static isValid(value) {
+    return typeof value === 'number';
+  }
+}

@@ -1,5 +1,5 @@
-import { Cursor } from '../../src/cursor';
-import { cursorToArray } from '../support/io-helpers';
+import { XdrReader } from '../../src/serialization/xdr-reader';
+import { XdrWriter } from '../../src/serialization/xdr-writer';
 
 /* jshint -W030 */
 
@@ -52,7 +52,7 @@ describe('Struct.read', function() {
   });
 
   function read(bytes) {
-    let io = new Cursor(bytes);
+    let io = new XdrReader(bytes);
     return MyRange.read(io);
   }
 });
@@ -116,9 +116,9 @@ describe('Struct.write', function() {
   });
 
   function write(value) {
-    let io = new Cursor(256);
+    let io = new XdrWriter(256);
     MyRange.write(value, io);
-    return cursorToArray(io);
+    return io.toArray();
   }
 });
 
