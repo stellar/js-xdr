@@ -18,7 +18,7 @@ module.exports = function () {
       library: 'XDR',
         // type: browserBuild ? 'self' : 'umd'
       // },
-      globalObject: browserBuild ? 'self' : 'this'
+      // globalObject: browserBuild ? 'self' : 'this'
     },
     module: {
       rules: [
