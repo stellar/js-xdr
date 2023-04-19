@@ -13,14 +13,15 @@
     "test:browser": "yarn run build:browser && karma start",
     "test": "yarn run test:node && yarn run test:browser",
     "test-generate": "bundle exec xdrgen -o generated -n test -l javascript examples/test.x",
-    "prettier-all": "prettier --write **/*.js"
+    "fmt": "prettier --write '**/*.js'",
+    "clean": "rm -rf lib/ dist/ .nyc_output/"
   },
   "repository": {
     "type": "git",
     "url": "https://github.com/stellar/js-xdr.git"
   },
   "keywords": [],
-  "author": "Scott Fleckenstein <scott@stellar.org>",
+  "author": "Stellar Development Foundation <hello@stellar.org>",
   "license": "Apache-2.0",
   "bugs": {
     "url": "https://github.com/stellar/js-xdr/issues"
@@ -33,27 +34,27 @@
   },
   "lint-staged": {
     "**/*.{js,json}": [
-      "prettier --write",
+      "yarn fmt",
       "git add"
     ]
   },
   "mocha": {
-    "recursive": true,
     "require": [
       "@babel/register",
       "./test/setup.js"
     ],
+    "recursive": true,
     "ui": "bdd"
   },
   "devDependencies": {
-    "@babel/core": "^7.14.5",
-    "@babel/preset-env": "^7.14.5",
+    "@babel/core": "^7.21.4",
+    "@babel/eslint-parser": "^7.21.3",
+    "@babel/preset-env": "^7.21.4",
     "@babel/register": "^7.14.5",
-    "babel-eslint": "^10.1.0",
-    "babel-loader": "^8.2.2",
+    "babel-loader": "^9.1.2",
     "buffer": "^6.0.3",
     "chai": "^4.3.7",
-    "eslint": "^8.36.0",
+    "eslint": "^8.38.0",
     "eslint-config-airbnb-base": "^15.0.0",
     "eslint-config-prettier": "^8.8.0",
     "eslint-plugin-import": "^2.27.5",
@@ -61,20 +62,19 @@
     "eslint-plugin-prefer-import": "^0.0.1",
     "eslint-plugin-prettier": "^4.2.1",
     "husky": "^8.0.3",
-    "istanbul": "^0.4.5",
     "karma": "^6.4.1",
     "karma-chrome-launcher": "^3.1.1",
     "karma-firefox-launcher": "^2.1.2",
     "karma-mocha": "^2.0.1",
     "karma-sinon-chai": "^2.0.2",
     "karma-webpack": "^5.0.0",
-    "lint-staged": "13.2.0",
+    "lint-staged": "13.2.1",
     "mocha": "^10.2.0",
     "prettier": "^2.8.7",
-    "sinon": "^15.0.2",
+    "sinon": "^15.0.3",
     "sinon-chai": "^3.7.0",
     "terser-webpack-plugin": "^5.3.7",
-    "webpack": "^5.76.3",
+    "webpack": "^5.80.0",
     "webpack-cli": "^5.0.1"
   }
 }
