@@ -17,9 +17,10 @@ module.exports = function () {
       filename: '[name].js',
       library: {
         name: 'XDR',
-        type: 'umd'
+        // type: browserBuild ? 'self' : 'umd'
       },
-      globalObject: 'this'
+      mode: mode,
+      globalObject: browserBuild ? 'self' : 'this'
     },
     module: {
       rules: [
