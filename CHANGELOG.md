@@ -3,13 +3,10 @@
 All notable changes to this project will be documented in this file. This
 project adheres to [Semantic Versioning](http://semver.org/).
 
-## [v2.0.1](https://github.com/stellar/js-xdr/compare/v2.0.0...v2.0.1)
-
-- Upgrade dependencies to their latest versions.
 
 ## [v2.0.0](https://github.com/stellar/js-xdr/compare/v1.3.0...v2.0.0)
 
-- Refactor XDR serialization/deserialization logic.
+- Refactor XDR serialization/deserialization logic ([#91](https://github.com/stellar/js-xdr/pull/91)).
 - Replace `long` dependency with native `BigInt` arithmetics.
 - Replace `lodash` dependency with built-in Array and Object methods, iterators.
 - Add `buffer` dependency for WebPack browser polyfill.
@@ -18,7 +15,7 @@ project adheres to [Semantic Versioning](http://semver.org/).
 - Always check that the entire read buffer is consumed (#32 fixed).
 - Check actual byte size of the string on write (#33 fixed).
 - Fix babel-polyfill build warnings (#34 fixed).
-- Bump major version.
+- Upgrade dependencies to their latest versions ([#92](https://github.com/stellar/js-xdr/pull/92)).
 
 ## [v1.3.0](https://github.com/stellar/js-xdr/compare/v1.2.0...v1.3.0)
 
