@@ -15,10 +15,9 @@ module.exports = function () {
     output: {
       path: path.join(__dirname, browserBuild ? './dist' : './lib'),
       filename: '[name].js',
-      library: {
-        name: 'XDR',
+      library: 'XDR',
         // type: browserBuild ? 'self' : 'umd'
-      },
+      // },
       globalObject: browserBuild ? 'self' : 'this'
     },
     module: {
