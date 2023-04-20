@@ -5,6 +5,6 @@ module.exports = {
   extends: ['eslint:recommended', 'plugin:node/recommended'],
   rules: {
     'node/no-unpublished-require': 0,
-    'indent': ['warn', 2]
+    indent: ['warn', 2]
   }
 };

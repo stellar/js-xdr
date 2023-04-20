@@ -16,4 +16,4 @@ describe('Dynamic writer buffer resize', function () {
     // check final buffer size
     expect(io.toArray().length).to.eql(41788);
   });
-})
+});

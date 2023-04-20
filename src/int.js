@@ -16,11 +16,9 @@ export class Int extends XdrPrimitiveType {
    * @inheritDoc
    */
   static write(value, writer) {
-    if (typeof value !== 'number')
-      throw new XdrWriterError('not a number');
+    if (typeof value !== 'number') throw new XdrWriterError('not a number');
 
-    if ((value | 0) !== value)
-      throw new XdrWriterError('invalid i32 value');
+    if ((value | 0) !== value) throw new XdrWriterError('invalid i32 value');
 
     writer.writeInt32BE(value);
   }

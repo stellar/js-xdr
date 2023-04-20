@@ -19,7 +19,7 @@ export class Hyper extends XdrPrimitiveType {
   }
 
   get low() {
-    return Number(this._value & 0xFFFFFFFFn) << 0;
+    return Number(this._value & 0xffffffffn) << 0;
   }
 
   get high() {
@@ -35,7 +35,7 @@ export class Hyper extends XdrPrimitiveType {
   }
 
   toJSON() {
-    return {_value: this._value.toString()}
+    return { _value: this._value.toString() };
   }
 
   /**
