@@ -9,7 +9,7 @@ export class XdrReader {
    * @param {Buffer} source - Buffer containing serialized data
    */
   constructor(source) {
-    if (!(source instanceof Buffer)) {
+    if (!Buffer.isBuffer(source)) {
       if (source instanceof Array) {
         source = Buffer.from(source)
       } else {
