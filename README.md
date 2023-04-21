@@ -23,7 +23,7 @@ npm install --save js-xdr
 
 ## Usage
 
-You can find some [examples here.](examples)
+You can find some [examples here](examples/).
 
 First, let's import the library:
 
@@ -108,17 +108,18 @@ cd js-xdr
 npm install
 ```
 
-3. Install Node 6.14.0
+3. Install Node 14
 
-Because we support earlier versions of Node, please install and develop on Node
-6.14.0 so you don't get surprised when your code works locally but breaks in CI.
+Because we support the oldest maintenance version of Node, please install and
+develop on Node 14 so you don't get surprised when your code works locally but
+breaks in CI.
 
 Here's out to install `nvm` if you haven't: https://github.com/creationix/nvm
 
 ```shell
 nvm install
 
-# if you've never installed 6.14.0 before you'll want to re-install yarn
+# if you've never installed 14.x before you'll want to re-install yarn
 npm install -g yarn
 ```
 
@@ -130,14 +131,12 @@ https://github.com/wbyoung/avn
 
 4. Observe the project's code style
 
-While you're making changes, make sure to run the linter-watcher to catch any
-   linting errors (in addition to making sure your text editor supports ESLint)
+While you're making changes, make sure to run the linter periodically to catch any linting errors (in addition to making sure your text editor supports ESLint)
 
 ```shell
-node_modules/.bin/gulp watch
+yarn fmt
 ````
 
-If you're working on a file not in `src`, limit your code to Node 6.16 ES! See
-what's supported here: https://node.green/ (The reason is that our npm library
-must support earlier versions of Node, so the tests need to run on those
-versions.)
+If you're working on a file not in `src`, limit your code to Node 14! See what's
+supported here: https://node.green/ (The reason is that our npm library must
+support earlier versions of Node, so the tests need to run on those versions.)
