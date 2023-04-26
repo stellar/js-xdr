@@ -22,7 +22,7 @@ class XdrType {
    * Decode XDR-encoded value
    * @param {Buffer|String} input - XDR-encoded input data
    * @param {XdrEncodingFormat} [format] - Encoding format (one of "raw", "hex", "base64")
-   * @return {XdrType}
+   * @return {this}
    */
   fromXDR(input, format = 'raw') {
     if (!this.read)
@@ -51,7 +51,7 @@ class XdrType {
 
   /**
    * Encode value to XDR format
-   * @param {XdrPrimitiveType} value - Value to serialize
+   * @param {this} value - Value to serialize
    * @param {XdrEncodingFormat} [format] - Encoding format (one of "raw", "hex", "base64")
    * @return {Buffer}
    */
@@ -65,7 +65,7 @@ class XdrType {
    * Decode XDR-encoded value
    * @param {Buffer|String} input - XDR-encoded input data
    * @param {XdrEncodingFormat} [format] - Encoding format (one of "raw", "hex", "base64")
-   * @return {XdrType}
+   * @return {this}
    */
   static fromXDR(input, format = 'raw') {
     const reader = new XdrReader(decodeInput(input, format));
@@ -94,29 +94,29 @@ export class XdrPrimitiveType extends XdrType {
   /**
    * Read value from the XDR-serialized input
    * @param {XdrReader} reader - XdrReader instance
-   * @return {*}
+   * @return {this}
    * @abstract
    */
   // eslint-disable-next-line no-unused-vars
   static read(reader) {
-    throw new XdrNotImplementedDefinitionError()
+    throw new XdrNotImplementedDefinitionError();
   }
 
   /**
    * Write XDR value to the buffer
-   * @param {*} value - Value to write
+   * @param {this} value - Value to write
    * @param {XdrWriter} writer - XdrWriter instance
    * @return {void}
    * @abstract
    */
   // eslint-disable-next-line no-unused-vars
   static write(value, writer) {
-    throw new XdrNotImplementedDefinitionError()
+    throw new XdrNotImplementedDefinitionError();
   }
 
   /**
    * Check whether XDR primitive value is valid
-   * @param {XdrType} value - Value to check
+   * @param {this} value - Value to check
    * @return {Boolean}
    * @abstract
    */
@@ -131,7 +131,7 @@ export class XdrCompositeType extends XdrType {
 
   /**
    * Check whether XDR primitive value is valid
-   * @param {XdrType} value - Value to check
+   * @param {this} value - Value to check
    * @return {Boolean}
    * @abstract
    */
