@@ -10,7 +10,8 @@ module.exports = function () {
     mode,
     devtool: 'source-map',
     entry: {
-      'xdr': [path.join(__dirname, '/src/browser.js')]
+      'xdr': path.join(__dirname, '/src/browser.js'),
+      'xdr.min': path.join(__dirname, '/src/browser.js')
     },
     output: {
       path: path.join(__dirname, browserBuild ? './dist' : './lib'),
@@ -40,12 +41,19 @@ module.exports = function () {
     config.optimization = {
       minimize: true,
       minimizer: [new TerserPlugin({
-        parallel: true
+        include: /\.min\.js$/,
+        parallel: true,
+        terserOptions: {
+          format: {
+            ascii_only: true
+          }
+        }
       })]
     }
     config.plugins.push(new webpack.ProvidePlugin({
       Buffer: ['buffer', 'Buffer'],
     }))
+    config.target = "web";
   } else {
     config.target = 'node';
   }
