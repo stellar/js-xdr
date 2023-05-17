@@ -1,5 +1,5 @@
 module.exports = function (api) {
-  api.cache(true)
+  api.cache(true);
   return {
     comments: false,
     presets: [
@@ -7,15 +7,11 @@ module.exports = function (api) {
         '@babel/preset-env',
         {
           targets: {
-            'node': 14,
-            'browsers': [
-              '> 0.2%',
-              'not ie 11',
-              'not op_mini all'
-            ]
+            node: 14,
+            browsers: ['> 0.2%', 'not ie 11', 'not op_mini all']
           }
         }
       ]
     ]
-  }
-}
+  };
+};

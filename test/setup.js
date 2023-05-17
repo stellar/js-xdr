@@ -20,4 +20,4 @@ exports.mochaHooks = {
     delete global.spy;
     this.sandbox.restore();
   }
-}
+};

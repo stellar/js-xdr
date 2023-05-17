@@ -3,15 +3,13 @@ import { XdrWriter } from './serialization/xdr-writer';
 import { XdrNotImplementedDefinitionError } from './errors';
 
 class XdrType {
-
   /**
    * Encode value to XDR format
    * @param {XdrEncodingFormat} [format] - Encoding format (one of "raw", "hex", "base64")
    * @return {String|Buffer}
    */
   toXDR(format = 'raw') {
-    if (!this.write)
-      return this.constructor.toXDR(this, format);
+    if (!this.write) return this.constructor.toXDR(this, format);
 
     const writer = new XdrWriter();
     this.write(this, writer);
@@ -25,8 +23,7 @@ class XdrType {
    * @return {XdrType}
    */
   fromXDR(input, format = 'raw') {
-    if (!this.read)
-      return this.constructor.fromXDR(input, format);
+    if (!this.read) return this.constructor.fromXDR(input, format);
 
     const reader = new XdrReader(decodeInput(input, format));
     const result = this.read(reader);
@@ -99,7 +96,7 @@ export class XdrPrimitiveType extends XdrType {
    */
   // eslint-disable-next-line no-unused-vars
   static read(reader) {
-    throw new XdrNotImplementedDefinitionError()
+    throw new XdrNotImplementedDefinitionError();
   }
 
   /**
@@ -111,7 +108,7 @@ export class XdrPrimitiveType extends XdrType {
    */
   // eslint-disable-next-line no-unused-vars
   static write(value, writer) {
-    throw new XdrNotImplementedDefinitionError()
+    throw new XdrNotImplementedDefinitionError();
   }
 
   /**

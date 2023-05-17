@@ -14,7 +14,9 @@ export class VarOpaque extends XdrCompositeType {
   read(reader) {
     const size = UnsignedInt.read(reader);
     if (size > this._maxLength)
-      throw new XdrReaderError(`saw ${size} length VarOpaque, max allowed is ${this._maxLength}`);
+      throw new XdrReaderError(
+        `saw ${size} length VarOpaque, max allowed is ${this._maxLength}`
+      );
     return reader.read(size);
   }
 
@@ -22,9 +24,11 @@ export class VarOpaque extends XdrCompositeType {
    * @inheritDoc
    */
   write(value, writer) {
-    const {length} = value;
+    const { length } = value;
     if (value.length > this._maxLength)
-      throw new XdrWriterError(`got ${value.length} bytes, max allowed is ${this._maxLength}`);
+      throw new XdrWriterError(
+        `got ${value.length} bytes, max allowed is ${this._maxLength}`
+      );
     // write size info
     UnsignedInt.write(length, writer);
     writer.write(value, length);

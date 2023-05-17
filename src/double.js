@@ -13,8 +13,7 @@ export class Double extends XdrPrimitiveType {
    * @inheritDoc
    */
   static write(value, writer) {
-    if (typeof value !== 'number')
-      throw new XdrWriterError('not a number');
+    if (typeof value !== 'number') throw new XdrWriterError('not a number');
 
     writer.writeDoubleBE(value);
   }

@@ -2,7 +2,7 @@ import { XdrPrimitiveType } from './xdr-type';
 import { XdrWriterError } from './errors';
 
 const MIN_VALUE = 0n;
-const MAX_VALUE = 0xFFFFFFFFFFFFFFFFn;
+const MAX_VALUE = 0xffffffffffffffffn;
 
 export class UnsignedHyper extends XdrPrimitiveType {
   constructor(low, high) {
@@ -19,7 +19,7 @@ export class UnsignedHyper extends XdrPrimitiveType {
   }
 
   get low() {
-    return Number(this._value & 0xFFFFFFFFn) << 0;
+    return Number(this._value & 0xffffffffn) << 0;
   }
 
   get high() {
@@ -35,7 +35,7 @@ export class UnsignedHyper extends XdrPrimitiveType {
   }
 
   toJSON() {
-    return {_value: this._value.toString()}
+    return { _value: this._value.toString() };
   }
 
   /**

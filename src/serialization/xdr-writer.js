@@ -22,19 +22,19 @@ export class XdrWriter {
    * @private
    * @readonly
    */
-  _buffer
+  _buffer;
   /**
    * @type {Number}
    * @private
    * @readonly
    */
-  _length
+  _length;
   /**
    * @type {Number}
    * @private
    * @readonly
    */
-  _index = 0
+  _index = 0;
 
   /**
    * Advance writer position, write padding if needed, auto-resize the buffer
@@ -48,7 +48,7 @@ export class XdrWriter {
     this._index += size;
     // ensure sufficient buffer size
     if (this._length < this._index) {
-      this.resize(this._index)
+      this.resize(this._index);
     }
     return from;
   }
@@ -63,11 +63,11 @@ export class XdrWriter {
     // calculate new length, align new buffer length by chunk size
     const newLength = Math.ceil(minRequiredSize / BUFFER_CHUNK) * BUFFER_CHUNK;
     // create new buffer and copy previous data
-    const newBuffer = Buffer.allocUnsafe(newLength)
-    this._buffer.copy(newBuffer, 0, 0, this._length)
+    const newBuffer = Buffer.allocUnsafe(newLength);
+    this._buffer.copy(newBuffer, 0, 0, this._length);
     // update references
-    this._buffer = newBuffer
-    this._length = newLength
+    this._buffer = newBuffer;
+    this._length = newLength;
   }
 
   /**
@@ -76,7 +76,7 @@ export class XdrWriter {
    */
   finalize() {
     // clip underlying buffer to the actually written value
-    return this._buffer.subarray(0, this._index)
+    return this._buffer.subarray(0, this._index);
   }
 
   /**
@@ -84,7 +84,7 @@ export class XdrWriter {
    * @return {Number[]}
    */
   toArray() {
-    return [...this.finalize()]
+    return [...this.finalize()];
   }
 
   /**
@@ -153,7 +153,6 @@ export class XdrWriter {
   writeBigUInt64BE(value) {
     const offset = this.alloc(8);
     this._buffer.writeBigUInt64BE(value, offset);
-
   }
 
   /**
