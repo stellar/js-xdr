@@ -2,6 +2,10 @@ export * from './int';
 export * from './hyper';
 export * from './unsigned-int';
 export * from './unsigned-hyper';
+export * from './i128';
+export * from './u128';
+export * from './i256';
+export * from './u256';
 
 export * from './float';
 export * from './double';
