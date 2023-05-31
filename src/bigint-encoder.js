@@ -1,9 +1,12 @@
 /**
  * Encode BigInt value from arbitrary provided arguments
- * @param {Array<Number|BigInt|String>} parts - Slices to encode
+ *
+ * @param {Array<Number|BigInt|String>} parts - Slices to encode, where the
+ *    earlier elements represent higher bits in the final integer
  * @param {64|128|256} size - Number of bits in the target integer type
  * @param {Boolean} unsigned - Whether it's an unsigned integer
- * @return {BigInt}
+ *
+ * @returns {BigInt}
  */
 export function encodeBigIntFromBits(parts, size, unsigned) {
   let result = 0n;

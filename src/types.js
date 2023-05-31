@@ -2,6 +2,7 @@ export * from './int';
 export * from './hyper';
 export * from './unsigned-int';
 export * from './unsigned-hyper';
+export * from './large-int';
 
 export * from './float';
 export * from './double';

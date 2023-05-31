@@ -46,6 +46,10 @@ export class LargeInt extends XdrPrimitiveType {
     return {_value: this._value.toString()}
   }
 
+  toBigInt() {
+    return BigInt(this._value);
+  }
+
   /**
    * @inheritDoc
    */

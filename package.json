@@ -1,6 +1,6 @@
 {
   "name": "js-xdr",
-  "version": "2.0.0",
+  "version": "3.0.0",
   "description": "Read/write XDR encoded data structures (RFC 4506)",
   "main": "lib/xdr.js",
   "browser": "dist/xdr.js",
