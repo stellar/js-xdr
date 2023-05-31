@@ -3,7 +3,6 @@ import { XdrWriter } from './serialization/xdr-writer';
 import { XdrNotImplementedDefinitionError } from './errors';
 
 class XdrType {
-
   /**
    * Encode value to XDR format
    * @param {XdrEncodingFormat} [format] - Encoding format (one of "raw", "hex", "base64")

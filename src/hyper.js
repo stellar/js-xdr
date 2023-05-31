@@ -1,6 +1,9 @@
 import { LargeInt } from './large-int';
 
 export class Hyper extends LargeInt {
+  /**
+   * @param {Array<Number|BigInt|String>} parts - Slices to encode
+   */
   constructor(...args) {
     super(args);
   }

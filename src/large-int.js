@@ -3,6 +3,9 @@ import { calculateBigIntBoundaries, encodeBigIntFromBits, sliceBigInt } from './
 import { XdrNotImplementedDefinitionError, XdrWriterError } from './errors';
 
 export class LargeInt extends XdrPrimitiveType {
+  /**
+   * @param {Array<Number|BigInt|String>} parts - Slices to encode
+   */
   constructor(args) {
     super();
     this._value = encodeBigIntFromBits(args, this.size, this.unsigned);
