@@ -31,7 +31,9 @@ export function encodeBigIntFromBits(parts, size, unsigned) {
     // combine parts
     for (let i = 0; i < total; i++) {
       let part = BigInt.asUintN(sliceSize, BigInt(parts[i].valueOf()));
-      part <<= BigInt(i * sliceSize);
+      if (i > 0) { // shift if needed
+        part <<= BigInt(i * sliceSize);
+      }
       result |= part;
     }
     if (!unsigned) { // clamp value to the requested size
