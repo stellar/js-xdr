@@ -41,7 +41,7 @@ export function encodeBigIntFromBits(parts, size, unsigned) {
     throw new TypeError(`expected bigint-like values, got: ${parts} (${e})`);
   }
 
-  // encode in big-endian fashion, shifting each chunk by its size
+  // encode in big-endian fashion, shifting each slice by the slice size
   let result = parts.reduce(
     (sum, v, i) => sum | (v << BigInt(i * sliceSize)),
     0n
@@ -68,35 +68,47 @@ export function encodeBigIntFromBits(parts, size, unsigned) {
 }
 
 /**
- * @param {BigInt} value - Slices to encode
- * @param {64|128|256} size - Number of bits in the source integer type
- * @param {32|64|128} sliceSize - Number of parts
- * @return {BigInt[]}
+ * Transforms a single bigint value that's supposed to represent a `size`-bit
+ * integer into a list of `sliceSize`d chunks.
+ *
+ * @param {bigint} value - Single bigint value to decompose
+ * @param {64|128|256} iSize - Number of bits represented by `value`
+ * @param {32|64|128} sliceSize - Number of chunks to decompose into
+ * @return {bigint[]}
  */
-export function sliceBigInt(value, size, sliceSize) {
-  if (typeof value !== 'bigint')
+export function sliceBigInt(value, iSize, sliceSize) {
+  if (typeof value !== 'bigint') {
     throw new TypeError(`Expected bigint 'value', got ${typeof value}`);
+  }
 
-  const total = size / sliceSize;
-  if (total === 1) return [value];
+  const total = iSize / sliceSize;
+  if (total === 1) {
+    return [value];
+  }
 
   if (
     sliceSize < 32 ||
     sliceSize > 128 ||
     (total !== 2 && total !== 4 && total !== 8)
-  )
-    throw new TypeError('Invalid slice size');
+  ) {
+    throw new TypeError(
+      `invalid bigint (${value}) and slice size (${iSize} -> ${sliceSize}) combination`
+    );
+  }
 
   const shift = BigInt(sliceSize);
 
   // iterate shift and mask application
   const result = new Array(total);
   for (let i = 0; i < total; i++) {
-    if (i > 0) {
-      value >>= shift;
-    }
-    result[i] = BigInt.asIntN(sliceSize, value); // clamp value
+    // we force a signed interpretation to preserve sign in each slice value,
+    // but downstream can convert to unsigned if it's appropriate
+    result[i] = BigInt.asIntN(sliceSize, value); // clamps to size
+
+    // move on to the next chunk
+    value >>= shift;
   }
+
   return result;
 }
 
