@@ -1,51 +1,70 @@
 /**
- * Encode BigInt value from arbitrary provided arguments
+ * Encode a native `bigint` value from a list of arbitrary integer-like values.
  *
- * @param {Array<Number|BigInt|String>} parts - Slices to encode, where the
- *    earlier elements represent higher bits in the final integer
+ * @param {Array<number|bigint|string>} parts - Slices to encode in big-endian
+ *    format (i.e. earlier elements are higher bits)
  * @param {64|128|256} size - Number of bits in the target integer type
- * @param {Boolean} unsigned - Whether it's an unsigned integer
+ * @param {boolean} unsigned - Whether it's an unsigned integer
  *
- * @returns {BigInt}
+ * @returns {bigint}
  */
 export function encodeBigIntFromBits(parts, size, unsigned) {
-  let result = 0n;
-  // check arguments length
-  if (parts.length && parts[0] instanceof Array) {
+  if (!(parts instanceof Array)) {
+    // allow a single parameter instead of an array
+    parts = [parts];
+  } else if (parts.length && parts[0] instanceof Array) {
+    // unpack nested array param
     parts = parts[0];
   }
+
   const total = parts.length;
-  if (total === 1) {
-    try {
-      result = BigInt(parts[0]);
-      if (!unsigned) {
-        result = BigInt.asIntN(size, result);
-      }
-    } catch (e) {
-      throw new TypeError(`Invalid bigint value: ${parts[0]}`)
-    }
-  } else {
-    const sliceSize = size / total;
-    if (sliceSize !== 32 && sliceSize !== 64 && sliceSize !== 128)
-      throw new TypeError('Invalid number of arguments')
+  const sliceSize = size / total;
+  switch (sliceSize) {
+    case 32:
+    case 64:
+    case 128:
+    case 256:
+      break;
 
-      // combine parts
-    for (let i = 0; i < total; i++) {
-      let part = BigInt.asUintN(sliceSize, BigInt(parts[i].valueOf()));
-      result |= part << BigInt(i * sliceSize);
-    }
+    default:
+      throw new RangeError(
+        `expected slices to fit in 32/64/128/256 bits, got ${parts}`
+      );
+  }
 
-    // clamp value to the requested size
-    result = unsigned ? BigInt.asUintN(size, result) : BigInt.asIntN(size, result);
+  // normalize all inputs to bigint byte-chunks of the specified size
+  try {
+    parts = parts.map((p) =>
+      BigInt.asUintN(sliceSize, typeof p === 'bigint' ? p : BigInt(p.valueOf()))
+    );
+  } catch (e) {
+    throw new TypeError(`expected bigint-like values, got: ${parts} (${e})`);
+  }
+
+  // encode in big-endian fashion, shifting each chunk by its size
+  let result = parts.reduce(
+    (sum, v, i) => sum | (v << BigInt(i * sliceSize)),
+    0n
+  );
+
+  // interpret value as signed if necessary and clamp it
+  if (!unsigned) {
+    result = BigInt.asIntN(size, result);
   }
 
   // check boundaries
   const [min, max] = calculateBigIntBoundaries(size, unsigned);
-  if (result >= min && result <= max)
+  if (result >= min && result <= max) {
     return result;
+  }
 
   // failed to encode
-  throw new TypeError(`Invalid ${formatIntName(size, unsigned)} value(s): ${parts}`);
+  throw new TypeError(
+    `bigint values [${parts}] for ${formatIntName(
+      size,
+      unsigned
+    )} out of range [${min}, ${max}]: ${result}`
+  );
 }
 
 /**
@@ -59,10 +78,13 @@ export function sliceBigInt(value, size, sliceSize) {
     throw new TypeError(`Expected bigint 'value', got ${typeof value}`);
 
   const total = size / sliceSize;
-  if (total === 1)
-    return [value];
+  if (total === 1) return [value];
 
-  if (sliceSize < 32 || sliceSize > 128 || (total !== 2 && total !== 4 && total !== 8))
+  if (
+    sliceSize < 32 ||
+    sliceSize > 128 ||
+    (total !== 2 && total !== 4 && total !== 8)
+  )
     throw new TypeError('Invalid slice size');
 
   const shift = BigInt(sliceSize);
@@ -89,8 +111,10 @@ export function formatIntName(precision, unsigned) {
  * @return {BigInt[]}
  */
 export function calculateBigIntBoundaries(size, unsigned) {
-  if (unsigned)
+  if (unsigned) {
     return [0n, (1n << BigInt(size)) - 1n];
+  }
+
   const boundary = 1n << BigInt(size - 1);
   return [0n - boundary, boundary - 1n];
 }

@@ -86,12 +86,12 @@ describe('UnsignedHyper.fromString', function () {
   });
 
   it('fails for negative numbers', function () {
-    expect(() => UnsignedHyper.fromString('-1059')).to.throw(/Invalid/);
+    expect(() => UnsignedHyper.fromString('-1059')).to.throw(/range/);
   });
 
   it('fails when providing a string with a decimal place', function () {
     expect(() => UnsignedHyper.fromString('105946095601.5')).to.throw(
-      /Invalid/
+      /bigint/
     );
   });
 });

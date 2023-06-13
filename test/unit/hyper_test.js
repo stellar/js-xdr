@@ -116,6 +116,6 @@ describe('Hyper.fromString', function() {
   });
 
   it('fails when providing a string with a decimal place', function() {
-    expect(() => Hyper.fromString('105946095601.5')).to.throw(/Invalid/);
+    expect(() => Hyper.fromString('105946095601.5')).to.throw(/bigint/);
   });
 });

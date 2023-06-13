@@ -9,9 +9,9 @@ describe('encodeBigIntWithPrecision', function () {
       [['-15258'], 64, false, -15258n],
       [[-0x8000000000000000n], 64, false, -0x8000000000000000n],
       [[0x7FFFFFFFFFFFFFFFn], 64, false, 0x7FFFFFFFFFFFFFFFn],
-      [[1, -2147483648], 64, false, -0x7FFFFFFFFFFFFFFFn],
+      [[1, -0x80000000n], 64, false, -0x7FFFFFFFFFFFFFFFn],
       [[-1, -1], 64, false, -1n],
-      [[-2, 2147483647], 64, false, 9223372036854775806n],
+      [[-2, 0x7fffffffn], 64, false, 0X7FFFFFFFFFFFFFFEn],
       [[345, -345], 64, false, -0x158fffffea7n],
       // u64
       [[0], 64, true, 0n],
@@ -79,7 +79,7 @@ describe('encodeBigIntWithPrecision', function () {
     for (let [args, bits, unsigned, expected] of testCases) {
       try {
         const actual = encodeBigIntFromBits(args, bits, unsigned);
-        expect(actual).to.eq(expected, `Invalid ${formatIntName(bits, unsigned)} BigInt encoding result for [${args.join()}]`);
+        expect(actual).to.eq(expected, `bigint values for ${formatIntName(bits, unsigned)} out of range: [${args.join()}]`);
       } catch (e) {
         e.message = `Encoding [${args.join()}] => ${formatIntName(bits, unsigned)} BigInt failed with error: ${e.message}`;
         throw e;
