@@ -40,17 +40,14 @@ export function encodeBigIntFromBits(parts, size, unsigned) {
     throw new TypeError(`expected bigint-like values, got: ${parts} (${e})`);
   }
 
-  // check for sign mismatches then clamp to sized chunks
-  parts = parts.map(p => {
-    if (unsigned && p < 0n) {
-      throw new RangeError(`expected only positive values, got: ${parts}`)
-    }
-    return BigInt.asUintN(sliceSize, p)
-  });
+  // check for sign mismatches
+  if (unsigned && parts.length === 1 && parts[0] < 0n) {
+    throw new RangeError(`expected only a positive value, got: ${parts}`)
+  }
 
   // encode in big-endian fashion, shifting each slice by the slice size
   let result = parts.reduce(
-    (sum, v, i) => sum | (v << BigInt(i * sliceSize)),
+    (sum, v, i) => sum | (BigInt.asUintN(sliceSize, v) << BigInt(i * sliceSize)),
     0n
   );
 
