@@ -22,33 +22,30 @@ export function encodeBigIntFromBits(parts, size, unsigned) {
         result = BigInt.asIntN(size, result);
       }
     } catch (e) {
-      throw new TypeError(`Invalid integer value: ${parts[0]}`)
+      throw new TypeError(`Invalid bigint value: ${parts[0]}`)
     }
   } else {
     const sliceSize = size / total;
     if (sliceSize !== 32 && sliceSize !== 64 && sliceSize !== 128)
       throw new TypeError('Invalid number of arguments')
-    // combine parts
+
+      // combine parts
     for (let i = 0; i < total; i++) {
       let part = BigInt.asUintN(sliceSize, BigInt(parts[i].valueOf()));
-      if (i > 0) { // shift if needed
-        part <<= BigInt(i * sliceSize);
-      }
-      result |= part;
+      result |= part << BigInt(i * sliceSize);
     }
-    if (!unsigned) { // clamp value to the requested size
-      result = BigInt.asIntN(size, result);
-    }
+
+    // clamp value to the requested size
+    result = unsigned ? BigInt.asUintN(size, result) : BigInt.asIntN(size, result);
   }
-  // check type
-  if (typeof result === 'bigint') {
-    // check boundaries
-    const [min, max] = calculateBigIntBoundaries(size, unsigned);
-    if (result >= min && result <= max)
-      return result;
-  }
+
+  // check boundaries
+  const [min, max] = calculateBigIntBoundaries(size, unsigned);
+  if (result >= min && result <= max)
+    return result;
+
   // failed to encode
-  throw new TypeError(`Invalid ${formatIntName(size, unsigned)} value`);
+  throw new TypeError(`Invalid ${formatIntName(size, unsigned)} value(s): ${parts}`);
 }
 
 /**
@@ -59,22 +56,24 @@ export function encodeBigIntFromBits(parts, size, unsigned) {
  */
 export function sliceBigInt(value, size, sliceSize) {
   if (typeof value !== 'bigint')
-    throw new TypeError('Invalid BigInt value');
+    throw new TypeError(`Expected bigint 'value', got ${typeof value}`);
+
   const total = size / sliceSize;
   if (total === 1)
     return [value];
-  if (sliceSize < 32 || sliceSize > 128 || total !== 2 && total !== 4 && total !== 8)
+
+  if (sliceSize < 32 || sliceSize > 128 || (total !== 2 && total !== 4 && total !== 8))
     throw new TypeError('Invalid slice size');
-  // prepare shift and mask
+
   const shift = BigInt(sliceSize);
-  const mask = (1n << shift) - 1n;
+
   // iterate shift and mask application
   const result = new Array(total);
   for (let i = 0; i < total; i++) {
     if (i > 0) {
       value >>= shift;
     }
-    result[i] = BigInt.asIntN(sliceSize, value & mask); // clamp value
+    result[i] = BigInt.asIntN(sliceSize, value); // clamp value
   }
   return result;
 }
