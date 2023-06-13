@@ -32,14 +32,21 @@ export function encodeBigIntFromBits(parts, size, unsigned) {
       );
   }
 
-  // normalize all inputs to bigint byte-chunks of the specified size
+  // normalize all inputs to bigint
   try {
-    parts = parts.map((p) =>
-      BigInt.asUintN(sliceSize, typeof p === 'bigint' ? p : BigInt(p.valueOf()))
-    );
+    parts = parts.map((p) => typeof p === 'bigint' ? p : BigInt(p.valueOf()));
+
   } catch (e) {
     throw new TypeError(`expected bigint-like values, got: ${parts} (${e})`);
   }
+
+  // check for sign mismatches then clamp to sized chunks
+  parts = parts.map(p => {
+    if (unsigned && p < 0n) {
+      throw new RangeError(`expected only positive values, got: ${parts}`)
+    }
+    return BigInt.asUintN(sliceSize, p)
+  });
 
   // encode in big-endian fashion, shifting each slice by the slice size
   let result = parts.reduce(
