@@ -34,22 +34,27 @@ export function encodeBigIntFromBits(parts, size, unsigned) {
 
   // normalize all inputs to bigint
   try {
-    parts = parts.map((p) => typeof p === 'bigint' ? p : BigInt(p.valueOf()));
-
+    for (let i = 0; i < parts.length; i++) {
+      if (typeof parts[i] !== 'bigint') {
+        parts[i] = BigInt(parts[i].valueOf());
+      }
+    }
   } catch (e) {
     throw new TypeError(`expected bigint-like values, got: ${parts} (${e})`);
   }
 
-  // check for sign mismatches
+  // check for sign mismatches for single inputs (this is a special case to
+  // handle one parameter passed to e.g. UnsignedHyper et al.)
+  // see https://github.com/stellar/js-xdr/pull/100#discussion_r1228770845
   if (unsigned && parts.length === 1 && parts[0] < 0n) {
-    throw new RangeError(`expected only a positive value, got: ${parts}`)
+    throw new RangeError(`expected a positive value, got: ${parts}`);
   }
 
   // encode in big-endian fashion, shifting each slice by the slice size
-  let result = parts.reduce(
-    (sum, v, i) => sum | (BigInt.asUintN(sliceSize, v) << BigInt(i * sliceSize)),
-    0n
-  );
+  let result = BigInt.asUintN(sliceSize, parts[0]); // safe: len >= 1
+  for (let i = 1; i < parts.length; i++) {
+    result |= BigInt.asUintN(sliceSize, parts[i]) << BigInt(i * sliceSize);
+  }
 
   // interpret value as signed if necessary and clamp it
   if (!unsigned) {
