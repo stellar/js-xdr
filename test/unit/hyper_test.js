@@ -14,10 +14,10 @@ describe('Hyper.read', function() {
       Hyper.fromString('-1')
     );
     expect(read([0x7f, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff])).to.eql(
-      Hyper.MAX_VALUE
+      new Hyper(Hyper.MAX_VALUE)
     );
     expect(read([0x80, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00])).to.eql(
-      Hyper.MIN_VALUE
+      new Hyper(Hyper.MIN_VALUE)
     );
   });
 
@@ -116,6 +116,6 @@ describe('Hyper.fromString', function() {
   });
 
   it('fails when providing a string with a decimal place', function() {
-    expect(() => Hyper.fromString('105946095601.5')).to.throw(/Invalid/);
+    expect(() => Hyper.fromString('105946095601.5')).to.throw(/bigint/);
   });
 });

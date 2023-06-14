@@ -4,6 +4,12 @@ All notable changes to this project will be documented in this file. This
 project adheres to [Semantic Versioning](http://semver.org/).
 
 
+## Unreleased
+
+### Breaking Change
+- Add support for easily encoding integers larger than 32 bits ([#100](https://github.com/stellar/js-xdr/pull/100)).
+
+
 ## [v2.0.0](https://github.com/stellar/js-xdr/compare/v1.3.0...v2.0.0)
 
 - Refactor XDR serialization/deserialization logic ([#91](https://github.com/stellar/js-xdr/pull/91)).
