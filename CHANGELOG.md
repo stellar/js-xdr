@@ -10,11 +10,12 @@ project adheres to [Semantic Versioning](http://semver.org/).
 ## [v3.0.0](https://github.com/stellar/js-xdr/compare/v2.0.0...v3.0.0)
 
 ### Breaking Change
-- Add support for easily encoding integers larger than 32 bits ([#100](https://github.com/stellar/js-xdr/pull/100)). This (partially) breaks the API for creating `Hyper` and `UnsignedHyper` instances. Previously, you would pass `low` and `high` parts to represent the lower and upper 32 bits. Now, you can pass the entire 64-bit value directly as a `bigint` or `string` instance, e.g.:
+- Add support for easily encoding integers larger than 32 bits ([#100](https://github.com/stellar/js-xdr/pull/100)). This (partially) breaks the API for creating `Hyper` and `UnsignedHyper` instances. Previously, you would pass `low` and `high` parts to represent the lower and upper 32 bits. Now, you can pass the entire 64-bit value directly as a `bigint` or `string` instance, or as a list of "chunks" like before, e.g.:
 
 ```diff
 -new Hyper({ low: 1, high: 1 }); // representing (1 << 32) + 1 = 4294967297n
-+new Hyper(4294967297);
++new Hyper(4294967297n);
++new Hyper("4294967297");
 +new Hyper(1, 1);
 ```
 
