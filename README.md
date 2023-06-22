@@ -48,18 +48,16 @@ xdr.Int.fromXDR([0xff, 0xff, 0xff, 0xff]); // returns -1
 xdr.UnsignedInt.fromXDR([0xff, 0xff, 0xff, 0xff]); // returns 4294967295
 
 // XDR Hypers, however, cannot be safely represented in the 53-bits
-// of precision we get with javascript numbers, and so we have a custom class
-// for those numbers.  Hyper and UnsignedHyper both use
-//https://www.npmjs.com/package/long to represent the 64-bit numbers
-
+// of precision we get with a JavaScript `Number`, so we allow creation from big-endian arrays of numbers, strings, or bigints.
 var result = xdr.Hyper.fromXDR([0, 0, 0, 0, 0, 0, 0, 0]); // returns an instance of xdr.Hyper
+result = new xdr.Hyper(0); // equivalent
 
 // convert the hyper to a string
 result.toString(); // return '0'
 
 // math!
-var ten = result.add(10);
-var minusone = result.subtract(1);
+var ten = result.toBigInt() + 10;
+var minusone = result.toBigInt() - 1;
 
 // construct a number from a string
 var big = xdr.Hyper.fromString('1099511627776');
