@@ -10,8 +10,7 @@ module.exports = function () {
     mode,
     devtool: 'source-map',
     entry: {
-      xdr: [path.join(__dirname, '/src/browser.js')],
-      'xdr.min': [path.join(__dirname, '/src/browser.js')]
+      'xdr': [path.join(__dirname, '/src/browser.js')],
     },
     output: {
       path: path.join(__dirname, browserBuild ? './dist' : './lib'),
@@ -25,23 +24,10 @@ module.exports = function () {
     module: {
       rules: [
         {
-          test: /\.js$/,
+          test: /\.m?js$/,
           loader: 'babel-loader',
           exclude: /node_modules/
         }
-      ]
-    },
-    optimization: {
-      minimize: true,
-      minimizer: [
-        new TerserPlugin({
-          include: /\.min\.js$/,
-          terserOptions: {
-            format: {
-              ascii_only: true
-            }
-          }
-        })
       ]
     },
     plugins: [
@@ -55,7 +41,13 @@ module.exports = function () {
       minimize: true,
       minimizer: [
         new TerserPlugin({
-          parallel: true
+          include: /\.min\.js$/,
+          parallel: true,
+          terserOptions: {
+            format: {
+              ascii_only: true
+            }
+          }
         })
       ]
     };

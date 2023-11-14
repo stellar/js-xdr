@@ -5,16 +5,12 @@ const MAX_VALUE = 2147483647;
 const MIN_VALUE = -2147483648;
 
 export class Int extends XdrPrimitiveType {
-  /**
-   * @inheritDoc
-   */
+  /** @inheritDoc */
   static read(reader) {
     return reader.readInt32BE();
   }
 
-  /**
-   * @inheritDoc
-   */
+  /** @inheritDoc */
   static write(value, writer) {
     if (typeof value !== 'number')
       throw new XdrWriterError('not a number');
@@ -25,9 +21,7 @@ export class Int extends XdrPrimitiveType {
     writer.writeInt32BE(value);
   }
 
-  /**
-   * @inheritDoc
-   */
+  /** @inheritDoc */
   static isValid(value) {
     if (typeof value !== 'number' || (value | 0) !== value) {
       return false;

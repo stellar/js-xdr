@@ -1,10 +1,17 @@
 import { XdrPrimitiveType } from './xdr-type';
-import { calculateBigIntBoundaries, encodeBigIntFromBits, sliceBigInt } from './bigint-encoder';
+import {
+  calculateBigIntBoundaries,
+  encodeBigIntFromBits,
+  sliceBigInt
+} from './bigint-encoder';
 import { XdrNotImplementedDefinitionError, XdrWriterError } from './errors';
 
 export class LargeInt extends XdrPrimitiveType {
+  /** @type {JSBI.BigInt} */
+  _value;
+
   /**
-   * @param {Array<Number|BigInt|String>} parts - Slices to encode
+   * @param {Array<Number|BigInt|String|JSBI.BigInt>} parts   slices to encode
    */
   constructor(args) {
     super();
@@ -43,33 +50,36 @@ export class LargeInt extends XdrPrimitiveType {
   }
 
   toJSON() {
-    return {_value: this._value.toString()}
+    return { _value: this._value.toString() };
   }
 
   toBigInt() {
-    return BigInt(this._value);
+    return JSBI.BigInt(this._value);
   }
 
-  /**
-   * @inheritDoc
-   */
+  /** @inheritDoc */
   static read(reader) {
-    const {size} = this.prototype;
-    if (size === 64)
-      return new this(reader.readBigUInt64BE());
-    return new this(...Array.from({length: size / 64}, () => reader.readBigUInt64BE()).reverse());
+    const { size } = this.prototype;
+    if (size === 64) return new this(reader.readBigUInt64BE());
+    return new this(
+      ...Array.from({ length: size / 64 }, () =>
+        reader.readBigUInt64BE()
+      ).reverse()
+    );
   }
 
-  /**
-   * @inheritDoc
-   */
+  /** @inheritDoc */
   static write(value, writer) {
     if (value instanceof this) {
       value = value._value;
-    } else if (typeof value !== 'bigint' || value > this.MAX_VALUE || value < this.MIN_VALUE)
+    } else if (
+      !(value instanceof JSBI.BigInt) ||
+      value > this.MAX_VALUE ||
+      value < this.MIN_VALUE
+    )
       throw new XdrWriterError(`${value} is not a ${this.name}`);
 
-    const {unsigned, size} = this.prototype;
+    const { unsigned, size } = this.prototype;
     if (size === 64) {
       if (unsigned) {
         writer.writeBigUInt64BE(value);
@@ -91,7 +101,10 @@ export class LargeInt extends XdrPrimitiveType {
    * @inheritDoc
    */
   static isValid(value) {
-    return typeof value === 'bigint' || (value instanceof this);
+    return (
+      value instanceof JSBI.BigInt ||
+      value instanceof this
+    );
   }
 
   /**
@@ -103,16 +116,18 @@ export class LargeInt extends XdrPrimitiveType {
     return new this(string);
   }
 
-  static MAX_VALUE = 0n;
-
-  static MIN_VALUE = 0n;
+  static MAX_VALUE = JSBI.BigInt(0);
+  static MIN_VALUE = JSBI.BigInt(0);
 
   /**
    * @internal
    * @return {void}
    */
   static defineIntBoundaries() {
-    const [min, max] = calculateBigIntBoundaries(this.prototype.size, this.prototype.unsigned);
+    const [min, max] = calculateBigIntBoundaries(
+      this.prototype.size,
+      this.prototype.unsigned
+    );
     this.MIN_VALUE = min;
     this.MAX_VALUE = max;
   }
