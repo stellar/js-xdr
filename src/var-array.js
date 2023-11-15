@@ -15,7 +15,9 @@ export class VarArray extends XdrCompositeType {
   read(reader) {
     const length = UnsignedInt.read(reader);
     if (length > this._maxLength)
-      throw new XdrReaderError(`saw ${length} length VarArray, max allowed is ${this._maxLength}`);
+      throw new XdrReaderError(
+        `saw ${length} length VarArray, max allowed is ${this._maxLength}`
+      );
 
     const result = new Array(length);
     for (let i = 0; i < length; i++) {
@@ -32,7 +34,9 @@ export class VarArray extends XdrCompositeType {
       throw new XdrWriterError(`value is not array`);
 
     if (value.length > this._maxLength)
-      throw new XdrWriterError(`got array of size ${value.length}, max allowed is ${this._maxLength}`);
+      throw new XdrWriterError(
+        `got array of size ${value.length}, max allowed is ${this._maxLength}`
+      );
 
     UnsignedInt.write(value.length, writer);
     for (const child of value) {
@@ -48,8 +52,7 @@ export class VarArray extends XdrCompositeType {
       return false;
     }
     for (const child of value) {
-      if (!this._childType.isValid(child))
-        return false;
+      if (!this._childType.isValid(child)) return false;
     }
     return true;
   }

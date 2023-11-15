@@ -61,7 +61,10 @@ describe('String#read', function () {
   function readString(bytes) {
     const io = new XdrReader(bytes);
     const res = subject.readString(io);
-    expect(io._index).to.eql(!res ? 4 : 8, 'padding not processed by the reader');
+    expect(io._index).to.eql(
+      !res ? 4 : 8,
+      'padding not processed by the reader'
+    );
     return res;
   }
 });
@@ -70,57 +73,29 @@ describe('String#write', function () {
   it('encodes string correctly', function () {
     expect(write('')).to.eql([0x00, 0x00, 0x00, 0x00]);
     expect(write('三')).to.eql([
-      0x00,
-      0x00,
-      0x00,
-      0x03,
-      0xe4,
-      0xb8,
-      0x89,
-      0x00
+      0x00, 0x00, 0x00, 0x03, 0xe4, 0xb8, 0x89, 0x00
     ]);
     expect(write('A')).to.eql([0x00, 0x00, 0x00, 0x01, 0x41, 0x00, 0x00, 0x00]);
     expect(write('AA')).to.eql([
-      0x00,
-      0x00,
-      0x00,
-      0x02,
-      0x41,
-      0x41,
-      0x00,
-      0x00
+      0x00, 0x00, 0x00, 0x02, 0x41, 0x41, 0x00, 0x00
     ]);
   });
 
   it('encodes non-utf-8 correctly', function () {
     expect(write([0xd1])).to.eql([
-      0x00,
-      0x00,
-      0x00,
-      0x01,
-      0xd1,
-      0x00,
-      0x00,
-      0x00
+      0x00, 0x00, 0x00, 0x01, 0xd1, 0x00, 0x00, 0x00
     ]);
   });
 
   it('encodes non-utf-8 correctly (buffer)', function () {
     expect(write(Buffer.from([0xd1]))).to.eql([
-      0x00,
-      0x00,
-      0x00,
-      0x01,
-      0xd1,
-      0x00,
-      0x00,
-      0x00
+      0x00, 0x00, 0x00, 0x01, 0xd1, 0x00, 0x00, 0x00
     ]);
   });
 
   it('checks actual utf-8 strings length on write', function () {
-    expect(() => write("€€€€")).to.throw(/max allowed/i);
-  })
+    expect(() => write('€€€€')).to.throw(/max allowed/i);
+  });
 
   function write(value) {
     let io = new XdrWriter(8);

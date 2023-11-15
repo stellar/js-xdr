@@ -1,5 +1,9 @@
 import { XdrPrimitiveType } from './xdr-type';
-import { calculateBigIntBoundaries, encodeBigIntFromBits, sliceBigInt } from './bigint-encoder';
+import {
+  calculateBigIntBoundaries,
+  encodeBigIntFromBits,
+  sliceBigInt
+} from './bigint-encoder';
 import { XdrNotImplementedDefinitionError, XdrWriterError } from './errors';
 
 export class LargeInt extends XdrPrimitiveType {
@@ -43,7 +47,7 @@ export class LargeInt extends XdrPrimitiveType {
   }
 
   toJSON() {
-    return {_value: this._value.toString()}
+    return { _value: this._value.toString() };
   }
 
   toBigInt() {
@@ -54,10 +58,13 @@ export class LargeInt extends XdrPrimitiveType {
    * @inheritDoc
    */
   static read(reader) {
-    const {size} = this.prototype;
-    if (size === 64)
-      return new this(reader.readBigUInt64BE());
-    return new this(...Array.from({length: size / 64}, () => reader.readBigUInt64BE()).reverse());
+    const { size } = this.prototype;
+    if (size === 64) return new this(reader.readBigUInt64BE());
+    return new this(
+      ...Array.from({ length: size / 64 }, () =>
+        reader.readBigUInt64BE()
+      ).reverse()
+    );
   }
 
   /**
@@ -66,10 +73,14 @@ export class LargeInt extends XdrPrimitiveType {
   static write(value, writer) {
     if (value instanceof this) {
       value = value._value;
-    } else if (typeof value !== 'bigint' || value > this.MAX_VALUE || value < this.MIN_VALUE)
+    } else if (
+      typeof value !== 'bigint' ||
+      value > this.MAX_VALUE ||
+      value < this.MIN_VALUE
+    )
       throw new XdrWriterError(`${value} is not a ${this.name}`);
 
-    const {unsigned, size} = this.prototype;
+    const { unsigned, size } = this.prototype;
     if (size === 64) {
       if (unsigned) {
         writer.writeBigUInt64BE(value);
@@ -91,7 +102,7 @@ export class LargeInt extends XdrPrimitiveType {
    * @inheritDoc
    */
   static isValid(value) {
-    return typeof value === 'bigint' || (value instanceof this);
+    return typeof value === 'bigint' || value instanceof this;
   }
 
   /**
@@ -112,7 +123,10 @@ export class LargeInt extends XdrPrimitiveType {
    * @return {void}
    */
   static defineIntBoundaries() {
-    const [min, max] = calculateBigIntBoundaries(this.prototype.size, this.prototype.unsigned);
+    const [min, max] = calculateBigIntBoundaries(
+      this.prototype.size,
+      this.prototype.unsigned
+    );
     this.MIN_VALUE = min;
     this.MAX_VALUE = max;
   }

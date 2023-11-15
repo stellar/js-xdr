@@ -14,7 +14,9 @@ export class String extends XdrCompositeType {
   read(reader) {
     const size = UnsignedInt.read(reader);
     if (size > this._maxLength)
-      throw new XdrReaderError(`saw ${size} length String, max allowed is ${this._maxLength}`);
+      throw new XdrReaderError(
+        `saw ${size} length String, max allowed is ${this._maxLength}`
+      );
 
     return reader.read(size);
   }
@@ -28,11 +30,14 @@ export class String extends XdrCompositeType {
    */
   write(value, writer) {
     // calculate string byte size before writing
-    const size = typeof value === 'string'?
-      Buffer.byteLength(value, 'utf8'):
-      value.length;
+    const size =
+      typeof value === 'string'
+        ? Buffer.byteLength(value, 'utf8')
+        : value.length;
     if (size > this._maxLength)
-      throw new XdrWriterError(`got ${value.length} bytes, max allowed is ${this._maxLength}`);
+      throw new XdrWriterError(
+        `got ${value.length} bytes, max allowed is ${this._maxLength}`
+      );
     // write size info
     UnsignedInt.write(size, writer);
     writer.write(value, size);

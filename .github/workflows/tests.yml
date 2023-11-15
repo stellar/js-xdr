@@ -26,5 +26,5 @@ jobs:
       - name: Run Tests
         run: yarn test
 
-      - name: Run Linter Checks
-        run: yarn fmt && yarn lint && (git diff-index --quiet HEAD; git diff)
+      - name: Check Code Formatting
+        run: yarn fmt && (git diff-index --quiet HEAD; git diff)

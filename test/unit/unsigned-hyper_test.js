@@ -25,34 +25,13 @@ describe('UnsignedHyper.read', function () {
 describe('UnsignedHyper.write', function () {
   it('encodes correctly', function () {
     expect(write(UnsignedHyper.fromString('0'))).to.eql([
-      0x00,
-      0x00,
-      0x00,
-      0x00,
-      0x00,
-      0x00,
-      0x00,
-      0x00
+      0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00
     ]);
     expect(write(UnsignedHyper.fromString('1'))).to.eql([
-      0x00,
-      0x00,
-      0x00,
-      0x00,
-      0x00,
-      0x00,
-      0x00,
-      0x01
+      0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x01
     ]);
     expect(write(UnsignedHyper.MAX_VALUE)).to.eql([
-      0xff,
-      0xff,
-      0xff,
-      0xff,
-      0xff,
-      0xff,
-      0xff,
-      0xff
+      0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff
     ]);
   });
 
@@ -90,8 +69,6 @@ describe('UnsignedHyper.fromString', function () {
   });
 
   it('fails when providing a string with a decimal place', function () {
-    expect(() => UnsignedHyper.fromString('105946095601.5')).to.throw(
-      /bigint/
-    );
+    expect(() => UnsignedHyper.fromString('105946095601.5')).to.throw(/bigint/);
   });
 });

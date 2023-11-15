@@ -9,7 +9,7 @@ export class Hyper extends LargeInt {
   }
 
   get low() {
-    return Number(this._value & 0xFFFFFFFFn) << 0;
+    return Number(this._value & 0xffffffffn) << 0;
   }
 
   get high() {
