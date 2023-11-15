@@ -8,6 +8,7 @@ global.sinon = require('sinon');
 global.chai.use(require('sinon-chai'));
 
 global.expect = global.chai.expect;
+global.JSBI = require('jsbi');
 
 exports.mochaHooks = {
   beforeEach: function () {

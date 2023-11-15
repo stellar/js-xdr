@@ -1,3 +1,5 @@
+import JSBI from 'jsbi';
+
 import { XdrPrimitiveType } from './xdr-type';
 import {
   calculateBigIntBoundaries,
@@ -73,11 +75,12 @@ export class LargeInt extends XdrPrimitiveType {
     if (value instanceof this) {
       value = value._value;
     } else if (
-      !(value instanceof JSBI.BigInt) ||
+      !(value instanceof JSBI) ||
       value > this.MAX_VALUE ||
       value < this.MIN_VALUE
-    )
+    ) {
       throw new XdrWriterError(`${value} is not a ${this.name}`);
+    }
 
     const { unsigned, size } = this.prototype;
     if (size === 64) {
@@ -102,7 +105,7 @@ export class LargeInt extends XdrPrimitiveType {
    */
   static isValid(value) {
     return (
-      value instanceof JSBI.BigInt ||
+      value instanceof JSBI ||
       value instanceof this
     );
   }

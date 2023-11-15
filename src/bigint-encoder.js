@@ -145,7 +145,10 @@ export function calculateBigIntBoundaries(size, unsigned) {
   if (unsigned) {
     return [
       JSBI.BigInt(0),
-      JSBI.leftShift(JSBI.BigInt(1), JSBI.BigInt(size)).subtract(JSBI.BigInt(1))
+      JSBI.subtract(
+        JSBI.leftShift(JSBI.BigInt(1), JSBI.BigInt(size)),
+        JSBI.BigInt(1)
+      )
     ];
   }
 
