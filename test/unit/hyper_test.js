@@ -2,8 +2,8 @@ import { XdrWriter } from '../../src/serialization/xdr-writer';
 import { XdrReader } from '../../src/serialization/xdr-reader';
 let Hyper = XDR.Hyper;
 
-describe('Hyper.read', function() {
-  it('decodes correctly', function() {
+describe('Hyper.read', function () {
+  it('decodes correctly', function () {
     expect(read([0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00])).to.eql(
       Hyper.fromString('0')
     );
@@ -27,57 +27,22 @@ describe('Hyper.read', function() {
   }
 });
 
-describe('Hyper.write', function() {
-  it('encodes correctly', function() {
+describe('Hyper.write', function () {
+  it('encodes correctly', function () {
     expect(write(Hyper.fromString('0'))).to.eql([
-      0x00,
-      0x00,
-      0x00,
-      0x00,
-      0x00,
-      0x00,
-      0x00,
-      0x00
+      0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00
     ]);
     expect(write(Hyper.fromString('1'))).to.eql([
-      0x00,
-      0x00,
-      0x00,
-      0x00,
-      0x00,
-      0x00,
-      0x00,
-      0x01
+      0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x01
     ]);
     expect(write(Hyper.fromString('-1'))).to.eql([
-      0xff,
-      0xff,
-      0xff,
-      0xff,
-      0xff,
-      0xff,
-      0xff,
-      0xff
+      0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff
     ]);
     expect(write(Hyper.MAX_VALUE)).to.eql([
-      0x7f,
-      0xff,
-      0xff,
-      0xff,
-      0xff,
-      0xff,
-      0xff,
-      0xff
+      0x7f, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff
     ]);
     expect(write(Hyper.MIN_VALUE)).to.eql([
-      0x80,
-      0x00,
-      0x00,
-      0x00,
-      0x00,
-      0x00,
-      0x00,
-      0x00
+      0x80, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00
     ]);
   });
 
@@ -88,15 +53,15 @@ describe('Hyper.write', function() {
   }
 });
 
-describe('Hyper.isValid', function() {
-  it('returns true for Hyper instances', function() {
+describe('Hyper.isValid', function () {
+  it('returns true for Hyper instances', function () {
     expect(Hyper.isValid(Hyper.MIN_VALUE)).to.be.true;
     expect(Hyper.isValid(Hyper.MAX_VALUE)).to.be.true;
     expect(Hyper.isValid(Hyper.fromString('0'))).to.be.true;
     expect(Hyper.isValid(Hyper.fromString('-1'))).to.be.true;
   });
 
-  it('returns false for non Hypers', function() {
+  it('returns false for non Hypers', function () {
     expect(Hyper.isValid(null)).to.be.false;
     expect(Hyper.isValid(undefined)).to.be.false;
     expect(Hyper.isValid([])).to.be.false;
@@ -106,16 +71,16 @@ describe('Hyper.isValid', function() {
   });
 });
 
-describe('Hyper.fromString', function() {
-  it('works for positive numbers', function() {
+describe('Hyper.fromString', function () {
+  it('works for positive numbers', function () {
     expect(Hyper.fromString('1059').toString()).to.eql('1059');
   });
 
-  it('works for negative numbers', function() {
+  it('works for negative numbers', function () {
     expect(Hyper.fromString('-1059').toString()).to.eql('-1059');
   });
 
-  it('fails when providing a string with a decimal place', function() {
+  it('fails when providing a string with a decimal place', function () {
     expect(() => Hyper.fromString('105946095601.5')).to.throw(/bigint/);
   });
 });

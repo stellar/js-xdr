@@ -40,8 +40,7 @@ export class Struct extends XdrPrimitiveType {
   }
 
   static create(context, name, fields) {
-    const ChildStruct = class extends Struct {
-    };
+    const ChildStruct = class extends Struct {};
 
     ChildStruct.structName = name;
 

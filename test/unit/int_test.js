@@ -2,8 +2,8 @@ import { XdrWriter } from '../../src/serialization/xdr-writer';
 import { XdrReader } from '../../src/serialization/xdr-reader';
 let Int = XDR.Int;
 
-describe('Int.read', function() {
-  it('decodes correctly', function() {
+describe('Int.read', function () {
+  it('decodes correctly', function () {
     expect(read([0x00, 0x00, 0x00, 0x00])).to.eql(0);
     expect(read([0x00, 0x00, 0x00, 0x01])).to.eql(1);
     expect(read([0xff, 0xff, 0xff, 0xff])).to.eql(-1);
@@ -17,8 +17,8 @@ describe('Int.read', function() {
   }
 });
 
-describe('Int.write', function() {
-  it('encodes correctly', function() {
+describe('Int.write', function () {
+  it('encodes correctly', function () {
     expect(write(0)).to.eql([0x00, 0x00, 0x00, 0x00]);
     expect(write(1)).to.eql([0x00, 0x00, 0x00, 0x01]);
     expect(write(-1)).to.eql([0xff, 0xff, 0xff, 0xff]);
@@ -26,7 +26,7 @@ describe('Int.write', function() {
     expect(write(-Math.pow(2, 31))).to.eql([0x80, 0x00, 0x00, 0x00]);
   });
 
-  it('throws a write error if the value is not an integral number', function() {
+  it('throws a write error if the value is not an integral number', function () {
     expect(() => write(true)).to.throw(/write error/i);
     expect(() => write(undefined)).to.throw(/write error/i);
     expect(() => write([])).to.throw(/write error/i);
@@ -41,8 +41,8 @@ describe('Int.write', function() {
   }
 });
 
-describe('Int.isValid', function() {
-  it('returns true for number in a 32-bit range', function() {
+describe('Int.isValid', function () {
+  it('returns true for number in a 32-bit range', function () {
     expect(Int.isValid(0)).to.be.true;
     expect(Int.isValid(-1)).to.be.true;
     expect(Int.isValid(1.0)).to.be.true;
@@ -50,13 +50,13 @@ describe('Int.isValid', function() {
     expect(Int.isValid(-Math.pow(2, 31))).to.be.true;
   });
 
-  it('returns false for numbers outside a 32-bit range', function() {
+  it('returns false for numbers outside a 32-bit range', function () {
     expect(Int.isValid(Math.pow(2, 31))).to.be.false;
     expect(Int.isValid(-(Math.pow(2, 31) + 1))).to.be.false;
     expect(Int.isValid(1000000000000)).to.be.false;
   });
 
-  it('returns false for non numbers', function() {
+  it('returns false for non numbers', function () {
     expect(Int.isValid(true)).to.be.false;
     expect(Int.isValid(false)).to.be.false;
     expect(Int.isValid(null)).to.be.false;
@@ -69,7 +69,7 @@ describe('Int.isValid', function() {
     expect(Int.isValid(NaN)).to.be.false;
   });
 
-  it('returns false for non-integral values', function() {
+  it('returns false for non-integral values', function () {
     expect(Int.isValid(1.1)).to.be.false;
     expect(Int.isValid(0.1)).to.be.false;
     expect(Int.isValid(-0.1)).to.be.false;

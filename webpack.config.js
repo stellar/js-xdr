@@ -2,7 +2,7 @@ const path = require('path');
 const webpack = require('webpack');
 const TerserPlugin = require('terser-webpack-plugin');
 
-const browserBuild = !process.argv.includes('--mode=development')
+const browserBuild = !process.argv.includes('--mode=development');
 
 module.exports = function () {
   const mode = browserBuild ? 'production' : 'development';
@@ -10,7 +10,7 @@ module.exports = function () {
     mode,
     devtool: 'source-map',
     entry: {
-      'xdr': [path.join(__dirname, '/src/browser.js')]
+      xdr: [path.join(__dirname, '/src/browser.js')]
     },
     output: {
       path: path.join(__dirname, browserBuild ? './dist' : './lib'),
@@ -35,19 +35,23 @@ module.exports = function () {
         'process.env.NODE_ENV': JSON.stringify(mode)
       })
     ]
-  }
+  };
   if (browserBuild) {
     config.optimization = {
       minimize: true,
-      minimizer: [new TerserPlugin({
-        parallel: true
-      })]
-    }
-    config.plugins.push(new webpack.ProvidePlugin({
-      Buffer: ['buffer', 'Buffer'],
-    }))
+      minimizer: [
+        new TerserPlugin({
+          parallel: true
+        })
+      ]
+    };
+    config.plugins.push(
+      new webpack.ProvidePlugin({
+        Buffer: ['buffer', 'Buffer']
+      })
+    );
   } else {
     config.target = 'node';
   }
-  return config
-}
+  return config;
+};

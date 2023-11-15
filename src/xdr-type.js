@@ -9,8 +9,7 @@ class XdrType {
    * @return {String|Buffer}
    */
   toXDR(format = 'raw') {
-    if (!this.write)
-      return this.constructor.toXDR(this, format);
+    if (!this.write) return this.constructor.toXDR(this, format);
 
     const writer = new XdrWriter();
     this.write(this, writer);
@@ -24,8 +23,7 @@ class XdrType {
    * @return {this}
    */
   fromXDR(input, format = 'raw') {
-    if (!this.read)
-      return this.constructor.fromXDR(input, format);
+    if (!this.read) return this.constructor.fromXDR(input, format);
 
     const reader = new XdrReader(decodeInput(input, format));
     const result = this.read(reader);

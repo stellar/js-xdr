@@ -10,40 +10,40 @@ let Color = XDR.Enum.create(emptyContext, 'Color', {
   evenMoreGreen: 3
 });
 
-describe('Enum.fromName', function() {
-  it('returns the member with the provided name', function() {
+describe('Enum.fromName', function () {
+  it('returns the member with the provided name', function () {
     expect(Color.fromName('red')).to.eql(Color.red());
     expect(Color.fromName('green')).to.eql(Color.green());
     expect(Color.fromName('evenMoreGreen')).to.eql(Color.evenMoreGreen());
   });
 
-  it('throws an error if the name is not correct', function() {
+  it('throws an error if the name is not correct', function () {
     expect(() => Color.fromName('obviouslyNotAColor')).to.throw(
       /not a member/i
     );
   });
 });
 
-describe('Enum.fromValue', function() {
-  it('returns the member with the provided value', function() {
+describe('Enum.fromValue', function () {
+  it('returns the member with the provided value', function () {
     expect(Color.fromValue(0)).to.eql(Color.red());
     expect(Color.fromValue(1)).to.eql(Color.green());
     expect(Color.fromValue(3)).to.eql(Color.evenMoreGreen());
   });
 
-  it('throws an error if the value is not correct', function() {
+  it('throws an error if the value is not correct', function () {
     expect(() => Color.fromValue(999)).to.throw(/not a value/i);
   });
 });
 
-describe('Enum.read', function() {
-  it('decodes correctly', function() {
+describe('Enum.read', function () {
+  it('decodes correctly', function () {
     expect(read([0x00, 0x00, 0x00, 0x00])).to.eql(Color.red());
     expect(read([0x00, 0x00, 0x00, 0x01])).to.eql(Color.green());
     expect(read([0x00, 0x00, 0x00, 0x03])).to.eql(Color.evenMoreGreen());
   });
 
-  it("throws read error when encoded value isn't defined on the enum", function() {
+  it("throws read error when encoded value isn't defined on the enum", function () {
     expect(() => read([0x00, 0x00, 0x00, 0x02])).to.throw(/read error/i);
   });
 
@@ -53,8 +53,8 @@ describe('Enum.read', function() {
   }
 });
 
-describe('Enum.write', function() {
-  it('encodes correctly', function() {
+describe('Enum.write', function () {
+  it('encodes correctly', function () {
     expect(write(Color.red())).to.eql([0x00, 0x00, 0x00, 0x00]);
     expect(write(Color.green())).to.eql([0x00, 0x00, 0x00, 0x01]);
     expect(write(Color.evenMoreGreen())).to.eql([0x00, 0x00, 0x00, 0x03]);
@@ -64,7 +64,7 @@ describe('Enum.write', function() {
     expect(Color.evenMoreGreen().toXDR('hex')).to.eql('00000003');
   });
 
-  it('throws a write error if the value is not the correct type', function() {
+  it('throws a write error if the value is not the correct type', function () {
     expect(() => write(null)).to.throw(/write error/i);
     expect(() => write(undefined)).to.throw(/write error/i);
     expect(() => write([])).to.throw(/write error/i);
@@ -80,14 +80,14 @@ describe('Enum.write', function() {
   }
 });
 
-describe('Enum.isValid', function() {
-  it('returns true for members of the enum', function() {
+describe('Enum.isValid', function () {
+  it('returns true for members of the enum', function () {
     expect(Color.isValid(Color.red())).to.be.true;
     expect(Color.isValid(Color.green())).to.be.true;
     expect(Color.isValid(Color.evenMoreGreen())).to.be.true;
   });
 
-  it('returns false for arrays of the wrong size', function() {
+  it('returns false for arrays of the wrong size', function () {
     expect(Color.isValid(null)).to.be.false;
     expect(Color.isValid(undefined)).to.be.false;
     expect(Color.isValid([])).to.be.false;

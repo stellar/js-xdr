@@ -12,7 +12,10 @@ let ResultType = XDR.Enum.create(emptyContext, 'ResultType', {
 
 let Result = XDR.Union.create(emptyContext, 'Result', {
   switchOn: ResultType,
-  switches: [['ok', XDR.Void], ['error', 'code']],
+  switches: [
+    ['ok', XDR.Void],
+    ['error', 'code']
+  ],
   defaultArm: XDR.Void,
   arms: {
     code: XDR.Int
@@ -24,39 +27,39 @@ let Ext = XDR.Union.create(emptyContext, 'Ext', {
   switches: [[0, XDR.Void]]
 });
 
-describe('Union.armForSwitch', function() {
-  it('returns the defined arm for the provided switch', function() {
+describe('Union.armForSwitch', function () {
+  it('returns the defined arm for the provided switch', function () {
     expect(Result.armForSwitch(ResultType.ok())).to.eql(XDR.Void);
     expect(Result.armForSwitch(ResultType.error())).to.eql('code');
   });
 
-  it('returns the default arm if no specific arm is defined', function() {
+  it('returns the default arm if no specific arm is defined', function () {
     expect(Result.armForSwitch(ResultType.nonsense())).to.eql(XDR.Void);
   });
 
-  it('works for XDR.Int discriminated unions', function() {
+  it('works for XDR.Int discriminated unions', function () {
     expect(Ext.armForSwitch(0)).to.eql(XDR.Void);
   });
 });
 
-describe('Union: constructor', function() {
-  it('works for XDR.Int discriminated unions', function() {
+describe('Union: constructor', function () {
+  it('works for XDR.Int discriminated unions', function () {
     expect(() => new Ext(0)).to.not.throw();
   });
 
-  it('works for Enum discriminated unions', function() {
+  it('works for Enum discriminated unions', function () {
     expect(() => new Result('ok')).to.not.throw();
     expect(() => new Result(ResultType.ok())).to.not.throw();
   });
 });
 
-describe('Union: set', function() {
-  it('works for XDR.Int discriminated unions', function() {
+describe('Union: set', function () {
+  it('works for XDR.Int discriminated unions', function () {
     let u = new Ext(0);
     u.set(0);
   });
 
-  it('works for Enum discriminated unions', function() {
+  it('works for Enum discriminated unions', function () {
     let u = Result.ok();
 
     expect(() => u.set('ok')).to.not.throw();
@@ -65,8 +68,8 @@ describe('Union: set', function() {
   });
 });
 
-describe('Union.read', function() {
-  it('decodes correctly', function() {
+describe('Union.read', function () {
+  it('decodes correctly', function () {
     let ok = read([0x00, 0x00, 0x00, 0x00]);
 
     expect(ok).to.be.instanceof(Result);
@@ -91,8 +94,8 @@ describe('Union.read', function() {
   }
 });
 
-describe('Union.write', function() {
-  it('encodes correctly', function() {
+describe('Union.write', function () {
+  it('encodes correctly', function () {
     let ok = Result.ok();
 
     expect(write(ok)).to.eql([0x00, 0x00, 0x00, 0x00]);
@@ -100,18 +103,11 @@ describe('Union.write', function() {
     let error = Result.error(5);
 
     expect(write(error)).to.eql([
-      0x00,
-      0x00,
-      0x00,
-      0x01,
-      0x00,
-      0x00,
-      0x00,
-      0x05
+      0x00, 0x00, 0x00, 0x01, 0x00, 0x00, 0x00, 0x05
     ]);
   });
 
-  it('throws a write error if the value is not the correct type', function() {
+  it('throws a write error if the value is not the correct type', function () {
     expect(() => write(null)).to.throw(/write error/i);
     expect(() => write(undefined)).to.throw(/write error/i);
     expect(() => write([])).to.throw(/write error/i);
@@ -127,14 +123,14 @@ describe('Union.write', function() {
   }
 });
 
-describe('Union.isValid', function() {
-  it('returns true for instances of the union', function() {
+describe('Union.isValid', function () {
+  it('returns true for instances of the union', function () {
     expect(Result.isValid(Result.ok())).to.be.true;
     expect(Result.isValid(Result.error(1))).to.be.true;
     expect(Result.isValid(Result.nonsense())).to.be.true;
   });
 
-  it('returns false for anything else', function() {
+  it('returns false for anything else', function () {
     expect(Result.isValid(null)).to.be.false;
     expect(Result.isValid(undefined)).to.be.false;
     expect(Result.isValid([])).to.be.false;

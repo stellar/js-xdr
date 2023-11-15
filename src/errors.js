@@ -18,6 +18,8 @@ export class XdrDefinitionError extends TypeError {
 
 export class XdrNotImplementedDefinitionError extends XdrDefinitionError {
   constructor() {
-    super(`method not implemented, it should be overloaded in the descendant class.`);
+    super(
+      `method not implemented, it should be overloaded in the descendant class.`
+    );
   }
 }

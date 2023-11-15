@@ -1,4 +1,4 @@
-const webpack = require('webpack')
+const webpack = require('webpack');
 
 module.exports = function (config) {
   config.set({
@@ -16,13 +16,14 @@ module.exports = function (config) {
       mode: 'development',
       module: {
         rules: [
-          {test: /\.js$/, exclude: /node_modules/, loader: 'babel-loader'}
+          { test: /\.js$/, exclude: /node_modules/, loader: 'babel-loader' }
         ]
       },
       plugins: [
         new webpack.ProvidePlugin({
-          Buffer: ['buffer', 'Buffer'],
-        })]
+          Buffer: ['buffer', 'Buffer']
+        })
+      ]
     },
 
     webpackMiddleware: {

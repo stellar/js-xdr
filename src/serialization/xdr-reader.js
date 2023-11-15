@@ -11,7 +11,7 @@ export class XdrReader {
   constructor(source) {
     if (!Buffer.isBuffer(source)) {
       if (source instanceof Array) {
-        source = Buffer.from(source)
+        source = Buffer.from(source);
       } else {
         throw new XdrReaderError('source not specified');
       }
@@ -27,19 +27,19 @@ export class XdrReader {
    * @private
    * @readonly
    */
-  _buffer
+  _buffer;
   /**
    * @type {Number}
    * @private
    * @readonly
    */
-  _length
+  _length;
   /**
    * @type {Number}
    * @private
    * @readonly
    */
-  _index
+  _index;
 
   /**
    * Check if the reader reached the end of the input buffer
@@ -61,12 +61,15 @@ export class XdrReader {
     this._index += size;
     // check buffer boundaries
     if (this._length < this._index)
-      throw new XdrReaderError('attempt to read outside the boundary of the buffer');
+      throw new XdrReaderError(
+        'attempt to read outside the boundary of the buffer'
+      );
     // check that padding is correct for Opaque and String
     const padding = 4 - (size % 4 || 4);
     if (padding > 0) {
       for (let i = 0; i < padding; i++)
-        if (this._buffer[this._index + i] !== 0) // all bytes in the padding should be zeros
+        if (this._buffer[this._index + i] !== 0)
+          // all bytes in the padding should be zeros
           throw new XdrReaderError('invalid padding');
       this._index += padding;
     }
@@ -78,7 +81,7 @@ export class XdrReader {
    * @return {void}
    */
   rewind() {
-    this._index = 0
+    this._index = 0;
   }
 
   /**
@@ -146,6 +149,8 @@ export class XdrReader {
    */
   ensureInputConsumed() {
     if (this._index !== this._length)
-      throw new XdrReaderError(`invalid XDR contract typecast - source buffer not entirely consumed`);
+      throw new XdrReaderError(
+        `invalid XDR contract typecast - source buffer not entirely consumed`
+      );
   }
 }
