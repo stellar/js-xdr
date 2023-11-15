@@ -11,6 +11,7 @@ module.exports = function () {
     devtool: 'source-map',
     entry: {
       'xdr': [path.join(__dirname, '/src/browser.js')],
+      'xdr.min': [path.join(__dirname, '/src/browser.js')]
     },
     output: {
       path: path.join(__dirname, browserBuild ? './dist' : './lib'),
