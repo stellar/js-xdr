@@ -1625,6 +1625,11 @@ babel-plugin-polyfill-regenerator@^0.5.0:
   dependencies:
     "@babel/helper-define-polyfill-provider" "^0.4.0"
 
+babel-plugin-transform-jsbi-to-bigint@^1.4.0:
+  version "1.4.0"
+  resolved "https://registry.yarnpkg.com/babel-plugin-transform-jsbi-to-bigint/-/babel-plugin-transform-jsbi-to-bigint-1.4.0.tgz#04db5036c7821916c248b90ded792a1272bc9c8d"
+  integrity sha512-59f6ClwQBY/SKMVwKV/xoAqH/gnyZ6C5gSSPsEUCLPvvZULCDSE5Y3T62wjNTbpBcFzh0ReYz2mIe3u44mW9UQ==
+
 balanced-match@^1.0.0:
   version "1.0.2"
   resolved "https://registry.yarnpkg.com/balanced-match/-/balanced-match-1.0.2.tgz#e83e3a7e3f300b34cb9d87f615fa0cbf357690ee"
@@ -3101,6 +3106,11 @@ js-yaml@4.1.0, js-yaml@^4.1.0:
   integrity sha512-wpxZs9NoxZaJESJGIZTyDEaYpl0FKSA+FB9aJiyemKhMwkxQg63h4T1KJgUGHpTqPDNRcmmYLugrRjJlBtWvRA==
   dependencies:
     argparse "^2.0.1"
+
+jsbi@^4.3.0:
+  version "4.3.0"
+  resolved "https://registry.yarnpkg.com/jsbi/-/jsbi-4.3.0.tgz#b54ee074fb6fcbc00619559305c8f7e912b04741"
+  integrity sha512-SnZNcinB4RIcnEyZqFPdGPVgrg2AcnykiBy0sHVJQKHYeaLUvi3Exj+iaPpLnFVkDPZIV4U0yvgC9/R4uEAZ9g==
 
 jsesc@^2.5.1:
   version "2.5.2"

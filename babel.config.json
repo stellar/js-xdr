@@ -1,0 +1,15 @@
+{
+  "comments": false,
+  "presets": [
+      "@babel/preset-env"
+  ],
+  "targets": {
+    "node": 18,
+    "browsers": [
+        "> 2%",
+        "not ie 11",
+        "not op_mini all"
+    ]
+  },
+  "plugins": ["transform-jsbi-to-bigint"]
+}

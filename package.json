@@ -2,8 +2,8 @@
   "name": "js-xdr",
   "version": "3.0.0",
   "description": "Read/write XDR encoded data structures (RFC 4506)",
-  "main": "lib/xdr.js",
-  "browser": "dist/xdr.js",
+  "main": "lib/xdr.min.js",
+  "browser": "dist/xdr.min.js",
   "module": "src/index.js",
   "scripts": {
     "build": "yarn run build:browser && yarn run build:node",
@@ -53,6 +53,7 @@
     "@babel/preset-env": "^7.21.4",
     "@babel/register": "^7.14.5",
     "babel-loader": "^9.1.2",
+    "babel-plugin-transform-jsbi-to-bigint": "^1.4.0",
     "buffer": "^6.0.3",
     "chai": "^4.3.7",
     "eslint": "^8.43.0",
@@ -77,5 +78,8 @@
     "terser-webpack-plugin": "^5.3.7",
     "webpack": "^5.88.0",
     "webpack-cli": "^5.0.2"
+  },
+  "dependencies": {
+    "jsbi": "^4.3.0"
   }
 }

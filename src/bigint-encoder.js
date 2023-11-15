@@ -1,14 +1,17 @@
+import JSBI from 'jsbi';
+
 /**
  * Encode a native `bigint` value from a list of arbitrary integer-like values.
  *
- * @param {Array<number|bigint|string>} parts - Slices to encode in big-endian
- *    format (i.e. earlier elements are higher bits)
- * @param {64|128|256} size - Number of bits in the target integer type
- * @param {boolean} unsigned - Whether it's an unsigned integer
+ * @param {Array<number|bigint|string|JSBI.BigInt>} parts   slices to encode in
+ *    big-endian format (i.e. earlier elements are higher bits)
+ * @param {64|128|256} size   number of bits in the target integer type
+ * @param {boolean} unsigned  whether it's an unsigned integer
  *
- * @returns {bigint}
+ * @returns {JSBI.BigInt}
  */
 export function encodeBigIntFromBits(parts, size, unsigned) {
+  /** @type {Array<JSBI.BigInt>} */
   if (!(parts instanceof Array)) {
     // allow a single parameter instead of an array
     parts = [parts];
@@ -28,7 +31,7 @@ export function encodeBigIntFromBits(parts, size, unsigned) {
 
     default:
       throw new RangeError(
-        `expected slices to fit in 32/64/128/256 bits, got ${parts}`
+        `expected slices to fit in 32/64/128/256 bits, got ${sliceSize}: ${parts}`
       );
   }
 
@@ -36,7 +39,7 @@ export function encodeBigIntFromBits(parts, size, unsigned) {
   try {
     for (let i = 0; i < parts.length; i++) {
       if (typeof parts[i] !== 'bigint') {
-        parts[i] = BigInt(parts[i].valueOf());
+        parts[i] = JSBI.BigInt(parts[i].valueOf());
       }
     }
   } catch (e) {
@@ -46,19 +49,26 @@ export function encodeBigIntFromBits(parts, size, unsigned) {
   // check for sign mismatches for single inputs (this is a special case to
   // handle one parameter passed to e.g. UnsignedHyper et al.)
   // see https://github.com/stellar/js-xdr/pull/100#discussion_r1228770845
-  if (unsigned && parts.length === 1 && parts[0] < 0n) {
+  if (unsigned && parts.length === 1 && JSBI.LT(parts[0], JSBI.BigInt(0))) {
     throw new RangeError(`expected a positive value, got: ${parts}`);
   }
 
   // encode in big-endian fashion, shifting each slice by the slice size
-  let result = BigInt.asUintN(sliceSize, parts[0]); // safe: len >= 1
+  let result = JSBI.asUintN(sliceSize, parts[0]); // safe: len >= 1
   for (let i = 1; i < parts.length; i++) {
-    result |= BigInt.asUintN(sliceSize, parts[i]) << BigInt(i * sliceSize);
+    // result |= parts[i] << (i * sliceSize)
+    result = JSBI.bitwiseOr(
+      result,
+      JSBI.leftShift(
+        JSBI.asUintN(sliceSize, parts[i]),
+        JSBI.BigInt(i * sliceSize)
+      )
+    );
   }
 
   // interpret value as signed if necessary and clamp it
   if (!unsigned) {
-    result = BigInt.asIntN(size, result);
+    result = JSBI.asIntN(size, result);
   }
 
   // check boundaries
@@ -86,7 +96,7 @@ export function encodeBigIntFromBits(parts, size, unsigned) {
  * @return {bigint[]}
  */
 export function sliceBigInt(value, iSize, sliceSize) {
-  if (typeof value !== 'bigint') {
+  if (!(value instanceof JSBI)) {
     throw new TypeError(`Expected bigint 'value', got ${typeof value}`);
   }
 
@@ -105,17 +115,17 @@ export function sliceBigInt(value, iSize, sliceSize) {
     );
   }
 
-  const shift = BigInt(sliceSize);
+  const shift = JSBI.BigInt(sliceSize);
 
   // iterate shift and mask application
   const result = new Array(total);
   for (let i = 0; i < total; i++) {
     // we force a signed interpretation to preserve sign in each slice value,
     // but downstream can convert to unsigned if it's appropriate
-    result[i] = BigInt.asIntN(sliceSize, value); // clamps to size
+    result[i] = JSBI.asIntN(sliceSize, value); // clamps to size
 
     // move on to the next chunk
-    value >>= shift;
+    value = JSBI.signedRightShift(value, shift);
   }
 
   return result;
@@ -127,15 +137,24 @@ export function formatIntName(precision, unsigned) {
 
 /**
  * Get min|max boundaries for an integer with a specified bits size
- * @param {64|128|256} size - Number of bits in the source integer type
- * @param {Boolean} unsigned - Whether it's an unsigned integer
- * @return {BigInt[]}
+ * @param {64|128|256} size   number of bits in the source integer type
+ * @param {Boolean} unsigned  whether it's an unsigned integer
+ * @return {JSBI.BigInt[]}
  */
 export function calculateBigIntBoundaries(size, unsigned) {
   if (unsigned) {
-    return [0n, (1n << BigInt(size)) - 1n];
+    return [
+      JSBI.BigInt(0),
+      JSBI.subtract(
+        JSBI.leftShift(JSBI.BigInt(1), JSBI.BigInt(size)),
+        JSBI.BigInt(1)
+      )
+    ];
   }
 
-  const boundary = 1n << BigInt(size - 1);
-  return [0n - boundary, boundary - 1n];
+  const boundary = JSBI.leftShift(JSBI.BigInt(1), JSBI.BigInt(size - 1));
+  return [
+    JSBI.subtract(JSBI.BigInt(0), boundary),
+    JSBI.subtract(boundary, JSBI.BigInt(1))
+  ];
 }
