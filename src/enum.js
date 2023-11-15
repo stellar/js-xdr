@@ -16,7 +16,9 @@ export class Enum extends XdrPrimitiveType {
     const intVal = Int.read(reader);
     const res = this._byValue[intVal];
     if (res === undefined)
-      throw new XdrReaderError(`unknown ${this.enumName} member for value ${intVal}`);
+      throw new XdrReaderError(
+        `unknown ${this.enumName} member for value ${intVal}`
+      );
     return res;
   }
 
@@ -57,13 +59,14 @@ export class Enum extends XdrPrimitiveType {
   static fromValue(value) {
     const result = this._byValue[value];
     if (result === undefined)
-      throw new TypeError(`${value} is not a value of any member of ${this.enumName}`);
-     return result;
+      throw new TypeError(
+        `${value} is not a value of any member of ${this.enumName}`
+      );
+    return result;
   }
 
   static create(context, name, members) {
-    const ChildEnum = class extends Enum {
-    };
+    const ChildEnum = class extends Enum {};
 
     ChildEnum.enumName = name;
     context.results[name] = ChildEnum;

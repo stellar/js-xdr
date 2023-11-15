@@ -18,9 +18,11 @@ export class Opaque extends XdrCompositeType {
    * @inheritDoc
    */
   write(value, writer) {
-    const {length} = value;
+    const { length } = value;
     if (length !== this._length)
-      throw new XdrWriterError(`got ${value.length} bytes, expected ${this._length}`);
+      throw new XdrWriterError(
+        `got ${value.length} bytes, expected ${this._length}`
+      );
     writer.write(value, length);
   }
 

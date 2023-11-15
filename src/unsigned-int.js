@@ -16,7 +16,11 @@ export class UnsignedInt extends XdrPrimitiveType {
    * @inheritDoc
    */
   static write(value, writer) {
-    if (typeof value !== 'number' || !(value >= MIN_VALUE && value <= MAX_VALUE) || value % 1 !== 0)
+    if (
+      typeof value !== 'number' ||
+      !(value >= MIN_VALUE && value <= MAX_VALUE) ||
+      value % 1 !== 0
+    )
       throw new XdrWriterError('invalid u32 value');
 
     writer.writeUInt32BE(value);

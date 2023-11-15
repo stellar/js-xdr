@@ -29,7 +29,9 @@ export class Array extends XdrCompositeType {
       throw new XdrWriterError(`value is not array`);
 
     if (value.length !== this._length)
-      throw new XdrWriterError(`got array of size ${value.length}, expected ${this._length}`);
+      throw new XdrWriterError(
+        `got array of size ${value.length}, expected ${this._length}`
+      );
 
     for (const child of value) {
       this._childType.write(child, writer);
@@ -45,8 +47,7 @@ export class Array extends XdrCompositeType {
     }
 
     for (const child of value) {
-      if (!this._childType.isValid(child))
-        return false;
+      if (!this._childType.isValid(child)) return false;
     }
     return true;
   }
