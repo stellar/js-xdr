@@ -7,6 +7,14 @@ project adheres to [Semantic Versioning](http://semver.org/).
 ## Unreleased
 
 
+## [v3.0.1](https://github.com/stellar/js-xdr/compare/v3.0.0...v3.0.1)
+
+### Fixes
+- This package is now being published to `@stellar/js-xdr` on NPM.
+- The versions at `js-xdr` are now considered **deprecated** ([#111](https://github.com/stellar/js-xdr/pull/111)).
+- Misc. dependencies have been upgraded ([#104](https://github.com/stellar/js-xdr/pull/104), [#106](https://github.com/stellar/js-xdr/pull/106), [#107](https://github.com/stellar/js-xdr/pull/107), [#108](https://github.com/stellar/js-xdr/pull/108), [#105](https://github.com/stellar/js-xdr/pull/105)).
+
+
 ## [v3.0.0](https://github.com/stellar/js-xdr/compare/v2.0.0...v3.0.0)
 
 ### Breaking Change
