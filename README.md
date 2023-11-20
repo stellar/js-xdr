@@ -18,7 +18,7 @@ compound XDR types (enums, structs and unions)
 via npm:
 
 ```shell
-npm install --save js-xdr
+npm install --save @stellar/js-xdr
 ```
 
 ## Usage
@@ -28,7 +28,9 @@ You can find some [examples here](examples/).
 First, let's import the library:
 
 ```javascript
-var xdr = require('js-xdr');
+var xdr = require('@stellar/js-xdr');
+// or
+import xdr from '@stellar/js-xdr';
 ```
 
 Now, let's look at how to decode some primitive types:
@@ -78,13 +80,13 @@ There are a couple of caveats to be aware of with this library:
 
 ## Code generation
 
-js-xdr by itself does not have any ability to parse XDR IDL files and produce a
-parser for your custom data types. Instead, that is the responsibility of
-[xdrgen](http://github.com/stellar/xdrgen). xdrgen will take your .x files and
-produce a javascript file that target this library to allow for your own custom
-types.
+`js-xdr` by itself does not have any ability to parse XDR IDL files and produce
+a parser for your custom data types. Instead, that is the responsibility of
+[`xdrgen`](http://github.com/stellar/xdrgen). xdrgen will take your .x files
+and produce a javascript file that target this library to allow for your own
+custom types.
 
-See [js-stellar-base](http://github.com/stellar/js-stellar-base) for an example
+See [`stellar-base`](http://github.com/stellar/js-stellar-base) for an example
 (check out the src/generated directory)
 
 ## Contributing
@@ -103,7 +105,7 @@ git clone https://github.com/stellar/js-xdr.git
 
 ```shell
 cd js-xdr
-npm install
+npm i
 ```
 
 3. Install Node 14

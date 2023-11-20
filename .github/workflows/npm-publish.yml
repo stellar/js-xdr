@@ -23,15 +23,15 @@ jobs:
       - name: Build & Test
         run: yarn build && yarn test
 
-      - name: Publish npm package
-        run: yarn publish --access public
+      - name: Publish npm packages
+        run: |
+          yarn publish --access public
+          sed -i -e 's#"@stellar/js-xdr"#"js-xdr"#' package.json
+          yarn publish
         env:
           NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
 
       - name: Publish npm package under old scope
-        run: |
-          sed -i -e 's#"@stellar/js-xdr"#"js-xdr"#' package.json
-          yarn publish
-          npm deprecate js-xdr "⚠️ This package has moved to @stellar/js-xdr! 🚚"
+        run: npm deprecate@latest js-xdr "⚠️ This package has moved to @stellar/js-xdr! 🚚"
         env:
           NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
