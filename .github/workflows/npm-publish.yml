@@ -13,8 +13,7 @@ jobs:
       - name: Install Node
         uses: actions/setup-node@v3
         with:
-          node-version: '14.x'
-          registry-url: 'https://registry.npmjs.org'
+          node-version: 18
 
       - name: Install Dependencies
         run: yarn
@@ -24,5 +23,13 @@ jobs:
 
       - name: Publish npm package
         run: yarn publish
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
+
+      - name: Publish npm package under old scope
+        run: |
+          sed -i -e 's#"@stellar/js-xdr"#"js-xdr"#' package.json
+          yarn publish
+          npm deprecate js-xdr "⚠️ This package has moved to @stellar/js-xdr! 🚚"
         env:
           NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
