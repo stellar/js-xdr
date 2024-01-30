@@ -1,6 +1,6 @@
 {
   "name": "@stellar/js-xdr",
-  "version": "3.0.1",
+  "version": "3.1.0",
   "description": "Read/write XDR encoded data structures (RFC 4506)",
   "main": "lib/xdr.js",
   "browser": "dist/xdr.js",

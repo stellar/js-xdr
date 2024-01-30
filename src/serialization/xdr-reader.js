@@ -10,10 +10,14 @@ export class XdrReader {
    */
   constructor(source) {
     if (!Buffer.isBuffer(source)) {
-      if (source instanceof Array) {
+      if (
+        source instanceof Array ||
+        Array.isArray(source) ||
+        ArrayBuffer.isView(source)
+      ) {
         source = Buffer.from(source);
       } else {
-        throw new XdrReaderError('source not specified');
+        throw new XdrReaderError(`source invalid: ${source}`);
       }
     }
 
