@@ -9,10 +9,10 @@ project adheres to [Semantic Versioning](http://semver.org/).
 ## [v3.1.0](https://github.com/stellar/js-xdr/compare/v3.0.1...v3.1.0)
 
 ### Added
-* The raw, underlying `XdrReader` and `XdrWriter` types are now exposed by the library for reading without consuming the entire stream ([]()).
+* The raw, underlying `XdrReader` and `XdrWriter` types are now exposed by the library for reading without consuming the entire stream ([#116](https://github.com/stellar/js-xdr/pull/116)).
 
 ### Fixed
-* Added an additional type check for passing a bytearray-like object to `XdrReader`s ([]()).
+* Added additional type checks for passing a bytearray-like object to `XdrReader`s and improves the error with details ([#116](https://github.com/stellar/js-xdr/pull/116)).
 
 
 ## [v3.0.1](https://github.com/stellar/js-xdr/compare/v3.0.0...v3.0.1)
