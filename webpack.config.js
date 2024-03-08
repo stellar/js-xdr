@@ -47,7 +47,7 @@ module.exports = function () {
     };
     config.plugins.push(
       new webpack.ProvidePlugin({
-        Buffer: ['buffer', 'Buffer']
+        Buffer: [path.resolve(__dirname, 'buffer.js'), 'default']
       })
     );
   } else {
