@@ -1,3 +1,4 @@
+// See https://github.com/stellar/js-xdr/issues/117
 import { Buffer } from 'buffer';
 
 if (!(Buffer.alloc(1).subarray(0, 1) instanceof Buffer)) {
