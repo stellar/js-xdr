@@ -6,6 +6,13 @@ project adheres to [Semantic Versioning](http://semver.org/).
 
 ## Unreleased
 
+
+## [v3.1.1](https://github.com/stellar/js-xdr/compare/v3.1.0...v3.1.1)
+
+### Fixed
+* Add compatibility with pre-ES2016 environments (like some React Native JS compilers) by adding a custom `Buffer.subarray` polyfill ([#118](https://github.com/stellar/js-xdr/pull/118)).
+
+
 ## [v3.1.0](https://github.com/stellar/js-xdr/compare/v3.0.1...v3.1.0)
 
 ### Added
