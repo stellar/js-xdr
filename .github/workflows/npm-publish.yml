@@ -32,6 +32,9 @@ jobs:
           NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
 
       - name: Publish npm package under old scope
-        run: npm deprecate@latest js-xdr "⚠️ This package has moved to @stellar/js-xdr! 🚚"
+        run: |
+          V=$(cat package.json | jq '.version' | sed -e 's/\"//g')
+          echo "Deprecating js-xdr@$V"
+          npm deprecate js-xdr@"<= $V" "⚠️ This package has moved to @stellar/js-xdr! 🚚"
         env:
           NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
