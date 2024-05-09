@@ -44,13 +44,13 @@ module.exports = function () {
           parallel: true,
           terserOptions: {
             reserved: [
-              "XdrType",
-              "XdrCompositeType",
-              "Union",
-              "Array",
-              "Struct",
-            ],
-          },
+              'XdrType',
+              'XdrCompositeType',
+              'Union',
+              'Array',
+              'Struct'
+            ]
+          }
         })
       ]
     };
