@@ -191,26 +191,24 @@ export function isSerializableIsh(value, subtype) {
       if (instance.constructor.name === name) {
         return true;
       }
-    } while (instance = Object.getPrototypeOf(instance));
+    } while ((instance = Object.getPrototypeOf(instance)));
     return false;
-  }
+  };
 
   return (
-    (value !== undefined && value !== null) && // prereqs
-    (
-      value instanceof subtype || // quickest check
-      (
-        // Do an initial constructor check (anywhere is fine so that parent
-        // types of `subtype` work), then
-        hasConstructor(value, subtype) &&
+    value !== undefined &&
+    value !== null && // prereqs
+    (value instanceof subtype || // quickest check
+      // Do an initial constructor check (anywhere is fine so that parent
+      // types of `subtype` work), then
+      (hasConstructor(value, subtype) &&
         // ensure it has read/write methods, then
-        typeof value.read === 'function' && typeof value.write === 'function' &&
+        typeof value.read === 'function' &&
+        typeof value.write === 'function' &&
         // ensure XdrCompositeType is in the prototype chain (XdrCompositeType
         // reliably gives us XdrType unless you're intentionally being weird, so
         // we don't need to check for that).
-        hasConstructor(value, "XdrCompositeType")
-      )
-    )
+        hasConstructor(value, 'XdrCompositeType')))
   );
 }
 
