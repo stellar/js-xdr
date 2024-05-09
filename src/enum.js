@@ -1,5 +1,5 @@
 import { Int } from './int';
-import { XdrPrimitiveType } from './xdr-type';
+import { XdrPrimitiveType, isSerializableIsh } from './xdr-type';
 import { XdrReaderError, XdrWriterError } from './errors';
 
 export class Enum extends XdrPrimitiveType {
@@ -26,7 +26,7 @@ export class Enum extends XdrPrimitiveType {
    * @inheritDoc
    */
   static write(value, writer) {
-    if (!(value instanceof this))
+    if (!isSerializableIsh(value, Enum))
       throw new XdrWriterError(`unknown ${value} is not a ${this.enumName}`);
 
     Int.write(value.value, writer);

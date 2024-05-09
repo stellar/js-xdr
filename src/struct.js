@@ -1,5 +1,5 @@
 import { Reference } from './reference';
-import { XdrPrimitiveType } from './xdr-type';
+import { XdrPrimitiveType, isSerializableIsh } from './xdr-type';
 import { XdrWriterError } from './errors';
 
 export class Struct extends XdrPrimitiveType {
@@ -23,7 +23,7 @@ export class Struct extends XdrPrimitiveType {
    * @inheritDoc
    */
   static write(value, writer) {
-    if (!(value instanceof this))
+    if (!isSerializableIsh(value, Struct))
       throw new XdrWriterError(`${value} is not a ${this.structName}`);
 
     for (const [fieldName, type] of this._fields) {
