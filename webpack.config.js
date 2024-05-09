@@ -38,10 +38,19 @@ module.exports = function () {
   };
   if (browserBuild) {
     config.optimization = {
-      minimize: true,
+      minimize: false,
       minimizer: [
         new TerserPlugin({
-          parallel: true
+          parallel: true,
+          terserOptions: {
+            reserved: [
+              "XdrType",
+              "XdrCompositeType",
+              "Union",
+              "Array",
+              "Struct",
+            ],
+          },
         })
       ]
     };
