@@ -204,7 +204,7 @@ export function isSerializableIsh(value, subtype) {
         // types of `subtype` work), then
         hasConstructor(value, subtype) &&
         // ensure it has read/write methods, then
-        typeof value?.read === 'function' && typeof value?.write === 'function' &&
+        typeof value.read === 'function' && typeof value.write === 'function' &&
         // ensure XdrCompositeType is in the prototype chain (XdrCompositeType
         // reliably gives us XdrType unless you're intentionally being weird, so
         // we don't need to check for that).
