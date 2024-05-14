@@ -24,7 +24,9 @@ export class Struct extends XdrPrimitiveType {
    */
   static write(value, writer) {
     if (!isSerializableIsh(value, Struct)) {
-      `${value} is ${value?.constructor?.name}, not ${this.structName}: ${JSON.stringify(value)}`
+      `${value} is ${value?.constructor?.name}, not ${
+        this.structName
+      }: ${JSON.stringify(value)}`;
     }
 
     for (const [fieldName, type] of this._fields) {

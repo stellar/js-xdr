@@ -27,7 +27,9 @@ export class Enum extends XdrPrimitiveType {
    */
   static write(value, writer) {
     if (!isSerializableIsh(value, Enum)) {
-      `${value} is ${value?.constructor?.name}, not ${this.enumName}: ${JSON.stringify(value)}`
+      `${value} is ${value?.constructor?.name}, not ${
+        this.enumName
+      }: ${JSON.stringify(value)}`;
     }
 
     Int.write(value.value, writer);

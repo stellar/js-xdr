@@ -211,8 +211,7 @@ export function hasConstructor(instance, name) {
     }
   } while ((instance = Object.getPrototypeOf(instance)));
   return false;
-};
-
+}
 
 /**
  * @typedef {'raw'|'hex'|'base64'} XdrEncodingFormat
