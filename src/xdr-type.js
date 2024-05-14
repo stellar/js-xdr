@@ -186,15 +186,6 @@ function decodeInput(input, format) {
  * but fail `instanceof` checks due to cross-pollination.
  */
 export function isSerializableIsh(value, subtype) {
-  const hasConstructor = (instance, name) => {
-    do {
-      if (instance.constructor.name === name) {
-        return true;
-      }
-    } while ((instance = Object.getPrototypeOf(instance)));
-    return false;
-  };
-
   return (
     value !== undefined &&
     value !== null && // prereqs, otherwise `getPrototypeOf` pops
@@ -211,6 +202,17 @@ export function isSerializableIsh(value, subtype) {
         hasConstructor(value, 'XdrCompositeType')))
   );
 }
+
+/** Tries to find `name` in any of the constructors of `instance`. */
+export function hasConstructor(instance, name) {
+  do {
+    if (instance.constructor.name === name) {
+      return true;
+    }
+  } while ((instance = Object.getPrototypeOf(instance)));
+  return false;
+};
+
 
 /**
  * @typedef {'raw'|'hex'|'base64'} XdrEncodingFormat
