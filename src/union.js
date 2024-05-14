@@ -83,7 +83,7 @@ export class Union extends XdrCompositeType {
   static write(value, writer) {
     if (!isSerializableIsh(value, Union))
       throw new XdrWriterError(
-        `${value} is ${value?.constructor?.name}, not ${this.unionName}`
+        `${value} is ${value?.constructor?.name}, not ${this.unionName}: ${JSON.stringify(value)}`
       );
 
     this._switchOn.write(value.switch(), writer);

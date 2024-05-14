@@ -23,8 +23,9 @@ export class Struct extends XdrPrimitiveType {
    * @inheritDoc
    */
   static write(value, writer) {
-    if (!isSerializableIsh(value, Struct))
-      throw new XdrWriterError(`${value} is not a ${this.structName}`);
+    if (!isSerializableIsh(value, Struct)) {
+      `${value} is ${value?.constructor?.name}, not ${this.structName}: ${JSON.stringify(value)}`
+    }
 
     for (const [fieldName, type] of this._fields) {
       const attribute = value._attributes[fieldName];

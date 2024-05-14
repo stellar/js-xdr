@@ -26,8 +26,9 @@ export class Enum extends XdrPrimitiveType {
    * @inheritDoc
    */
   static write(value, writer) {
-    if (!isSerializableIsh(value, Enum))
-      throw new XdrWriterError(`unknown ${value} is not a ${this.enumName}`);
+    if (!isSerializableIsh(value, Enum)) {
+      `${value} is ${value?.constructor?.name}, not ${this.enumName}: ${JSON.stringify(value)}`
+    }
 
     Int.write(value.value, writer);
   }
