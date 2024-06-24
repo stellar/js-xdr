@@ -26,7 +26,7 @@ export class Enum extends XdrPrimitiveType {
    * @inheritDoc
    */
   static write(value, writer) {
-    if (!isValid(value)) {
+    if (!this.isValid(value)) {
       throw new XdrWriterError(
         `${value} is ${value?.constructor?.name}/${value?.enumName}, not ${
           this.enumName
