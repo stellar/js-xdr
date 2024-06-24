@@ -81,12 +81,13 @@ export class Union extends XdrCompositeType {
    * @inheritDoc
    */
   static write(value, writer) {
-    if (!isSerializableIsh(value, Union))
+    if (!this.isValid(value)) {
       throw new XdrWriterError(
-        `${value} is ${value?.constructor?.name}, not ${
-          this.unionName
-        }: ${JSON.stringify(value)}`
+        `${value} is ${value?.constructor?.name}/${
+          value?.constructor?.unionName
+        }, not ${this.unionName}: ${JSON.stringify(value)}`
       );
+    }
 
     this._switchOn.write(value.switch(), writer);
     value.armType().write(value.value(), writer);
@@ -96,7 +97,7 @@ export class Union extends XdrCompositeType {
    * @inheritDoc
    */
   static isValid(value) {
-    return value instanceof this;
+    return isSerializableIsh(value, this);
   }
 
   static create(context, name, config) {

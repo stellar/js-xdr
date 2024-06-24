@@ -208,9 +208,9 @@ export function hasConstructor(instance, name) {
   do {
     if (
       instance.constructor.name === name ||
-      instance.constructor.structName === name ||
-      instance.constructor.unionName === name ||
-      instance.constructor.enumName === name
+      (instance.structName && instance.structName === name.structName) ||
+      (instance.unionName && instance.unionName === name.unionName) ||
+      (instance.enumName && instance.enumName === name.enumName)
     ) {
       return true;
     }

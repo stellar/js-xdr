@@ -23,7 +23,7 @@ export class Struct extends XdrPrimitiveType {
    * @inheritDoc
    */
   static write(value, writer) {
-    if (!isSerializableIsh(value, Struct)) {
+    if (!this.isValid(value)) {
       throw new XdrWriterError(
         `${value} is ${value?.constructor?.name}, not ${
           this.structName
@@ -41,7 +41,7 @@ export class Struct extends XdrPrimitiveType {
    * @inheritDoc
    */
   static isValid(value) {
-    return value instanceof this;
+    return isSerializableIsh(value, this);
   }
 
   static create(context, name, fields) {

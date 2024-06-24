@@ -1,5 +1,6 @@
 import { XdrReader } from '../../src/serialization/xdr-reader';
 import { XdrWriter } from '../../src/serialization/xdr-writer';
+import { XdrCompositeType } from '../../src/xdr-type';
 
 /* jshint -W030 */
 
@@ -130,6 +131,25 @@ describe('Union.isValid', function () {
     expect(Result.isValid(Result.nonsense())).to.be.true;
   });
 
+  it('works for "union-like" objects', function () {
+    class FakeUnion extends XdrCompositeType {
+      write() {}
+      read() {}
+      unionName = 'Result';
+    }
+
+    let r = new FakeUnion();
+    expect(Result.isValid(r)).to.be.true;
+
+    r.unionName = 'NotResult';
+    expect(Result.isValid(r)).to.be.false;
+
+    // make sure you can't fool it
+    r.unionName = undefined;
+    r.structName = 'Result';
+    expect(Result.isValid(r)).to.be.false;
+  });
+
   it('returns false for anything else', function () {
     expect(Result.isValid(null)).to.be.false;
     expect(Result.isValid(undefined)).to.be.false;
@@ -137,5 +157,6 @@ describe('Union.isValid', function () {
     expect(Result.isValid({})).to.be.false;
     expect(Result.isValid(1)).to.be.false;
     expect(Result.isValid(true)).to.be.false;
+    expect(Result.isValid('ok')).to.be.false;
   });
 });

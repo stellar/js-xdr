@@ -26,7 +26,7 @@ export class Enum extends XdrPrimitiveType {
    * @inheritDoc
    */
   static write(value, writer) {
-    if (!isSerializableIsh(value, Enum)) {
+    if (!isValid(value)) {
       throw new XdrWriterError(
         `${value} is ${value?.constructor?.name}, not ${
           this.enumName
@@ -41,7 +41,7 @@ export class Enum extends XdrPrimitiveType {
    * @inheritDoc
    */
   static isValid(value) {
-    return value instanceof this;
+    return isSerializableIsh(value, this);
   }
 
   static members() {
