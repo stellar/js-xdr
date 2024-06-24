@@ -203,10 +203,15 @@ export function isSerializableIsh(value, subtype) {
   );
 }
 
-/** Tries to find `name` in any of the constructors of `instance`. */
+/** Tries to find `name` in any of the constructors or meta of `instance`. */
 export function hasConstructor(instance, name) {
   do {
-    if (instance.constructor.name === name) {
+    if (
+      instance.constructor.name === name ||
+      instance.constructor.structName === name ||
+      instance.constructor.unionName === name ||
+      instance.constructor.enumName === name
+    ) {
       return true;
     }
   } while ((instance = Object.getPrototypeOf(instance)));
