@@ -83,9 +83,9 @@ export class Union extends XdrCompositeType {
   static write(value, writer) {
     if (!this.isValid(value)) {
       throw new XdrWriterError(
-        `${value} is ${value?.constructor?.name}/${
-          value?.constructor?.unionName
-        }, not ${this.unionName}: ${JSON.stringify(value)}`
+        `${value} is ${value?.constructor?.name}/${value?.unionName}, not ${
+          this.unionName
+        }: ${JSON.stringify(value)}`
       );
     }
 

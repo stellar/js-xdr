@@ -28,7 +28,7 @@ export class Enum extends XdrPrimitiveType {
   static write(value, writer) {
     if (!isValid(value)) {
       throw new XdrWriterError(
-        `${value} is ${value?.constructor?.name}, not ${
+        `${value} is ${value?.constructor?.name}/${value?.enumName}, not ${
           this.enumName
         }: ${JSON.stringify(value)}`
       );

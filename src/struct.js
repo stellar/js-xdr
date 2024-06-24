@@ -25,7 +25,7 @@ export class Struct extends XdrPrimitiveType {
   static write(value, writer) {
     if (!this.isValid(value)) {
       throw new XdrWriterError(
-        `${value} is ${value?.constructor?.name}, not ${
+        `${value} is ${value?.constructor?.name}/${value?.structName}, not ${
           this.structName
         }: ${JSON.stringify(value)}`
       );
