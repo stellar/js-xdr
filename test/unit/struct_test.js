@@ -1,6 +1,6 @@
 import { XdrReader } from '../../src/serialization/xdr-reader';
 import { XdrWriter } from '../../src/serialization/xdr-writer';
-import { XdrCompositeType } from '../../src/xdr-type';
+import { Struct } from '../../src/struct';
 
 /* jshint -W030 */
 
@@ -85,7 +85,7 @@ describe('Struct.isValid', function () {
   });
 
   it('works for "struct-like" objects', function () {
-    class FakeStruct extends XdrCompositeType {
+    class FakeStruct extends Struct {
       write() {}
       read() {}
     }

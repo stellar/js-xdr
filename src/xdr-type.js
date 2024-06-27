@@ -203,15 +203,16 @@ export function isSerializableIsh(value, subtype) {
   );
 }
 
-/** Tries to find `name` in any of the constructors or meta of `instance`. */
-export function hasConstructor(instance, name) {
+/** Tries to find `subtype` in any of the constructors or meta of `instance`. */
+export function hasConstructor(instance, subtype) {
   do {
     const ctor = instance.constructor;
+
     if (
-      ctor.name === name ||
-      (ctor.structName && ctor.structName === name.structName) ||
-      (ctor.unionName && ctor.unionName === name.unionName) ||
-      (ctor.enumName && ctor.enumName === name.enumName)
+      ctor.name === subtype ||
+      (ctor.structName && ctor.structName === subtype.structName) ||
+      (ctor.unionName && ctor.unionName === subtype.unionName) ||
+      (ctor.enumName && ctor.enumName === subtype.enumName)
     ) {
       return true;
     }
