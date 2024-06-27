@@ -1,5 +1,6 @@
 import { XdrReader } from '../../src/serialization/xdr-reader';
 import { XdrWriter } from '../../src/serialization/xdr-writer';
+import { Struct } from '../../src/struct';
 
 /* jshint -W030 */
 
@@ -81,6 +82,18 @@ describe('Struct.write', function () {
 describe('Struct.isValid', function () {
   it('returns true for instances of the struct', function () {
     expect(MyRange.isValid(new MyRange({}))).to.be.true;
+  });
+
+  it('works for "struct-like" objects', function () {
+    class FakeStruct extends Struct {}
+
+    FakeStruct.structName = 'MyRange';
+    let r = new FakeStruct();
+    expect(MyRange.isValid(r)).to.be.true;
+
+    FakeStruct.structName = 'NotMyRange';
+    r = new FakeStruct();
+    expect(MyRange.isValid(r)).to.be.false;
   });
 
   it('returns false for anything else', function () {
