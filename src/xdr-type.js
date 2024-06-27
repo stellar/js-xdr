@@ -176,9 +176,9 @@ function decodeInput(input, format) {
  * "Duck typing" means if the parameter _looks like_ and _acts like_ a duck
  * (i.e. the type we're checking), it will be treated as that type.
  *
- * In this case, the "type" we're looking for is "like XdrCompositeType",
- * meaning serialization, but also conditioned on a particular subclass of
- * "XdrCompositionType" (e.g. {@link Union} which extends XdrCompositeType ->
+ * In this case, the "type" we're looking for is "like XdrType" but also "like
+ * XdrCompositeType|XdrPrimitiveType" (i.e. serializable), but also conditioned
+ * on a particular subclass of "XdrType" (e.g. {@link Union} which extends
  * XdrType).
  *
  * This makes the package resilient to downstream systems that may be combining
