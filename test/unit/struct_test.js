@@ -90,11 +90,12 @@ describe('Struct.isValid', function () {
       read() {}
     }
 
+    FakeStruct.structName = 'MyRange';
     let r = new FakeStruct();
-    r.structName = 'MyRange';
     expect(MyRange.isValid(r)).to.be.true;
 
-    r.structName = 'NotMyRange';
+    FakeStruct.structName = 'NotMyRange';
+    r = new FakeStruct();
     expect(MyRange.isValid(r)).to.be.false;
   });
 

@@ -135,18 +135,20 @@ describe('Union.isValid', function () {
     class FakeUnion extends XdrCompositeType {
       write() {}
       read() {}
-      unionName = 'Result';
     }
 
+    FakeUnion.unionName = 'Result';
     let r = new FakeUnion();
     expect(Result.isValid(r)).to.be.true;
 
-    r.unionName = 'NotResult';
+    FakeUnion.unionName = 'NotResult';
+    r = new FakeUnion();
     expect(Result.isValid(r)).to.be.false;
 
     // make sure you can't fool it
-    r.unionName = undefined;
-    r.structName = 'Result';
+    FakeUnion.unionName = undefined;
+    FakeUnion.structName = 'Result';
+    r = new FakeUnion();
     expect(Result.isValid(r)).to.be.false;
   });
 

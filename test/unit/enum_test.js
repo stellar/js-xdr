@@ -92,18 +92,20 @@ describe('Enum.isValid', function () {
     class FakeEnum extends XdrCompositeType {
       write() {}
       read() {}
-      enumName = 'Color';
     }
+    FakeEnum.enumName = 'Color';
 
     let r = new FakeEnum();
     expect(Color.isValid(r)).to.be.true;
 
-    r.enumName = 'NotColor';
+    FakeEnum.enumName = 'NotColor';
+    r = new FakeEnum();
     expect(Color.isValid(r)).to.be.false;
 
     // make sure you can't fool it
-    r.enumName = undefined;
-    r.unionName = 'Color';
+    FakeEnum.enumName = undefined;
+    FakeEnum.unionName = 'Color';
+    r = new FakeEnum();
     expect(Color.isValid(r)).to.be.false;
   });
 

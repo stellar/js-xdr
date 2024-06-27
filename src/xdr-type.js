@@ -206,11 +206,12 @@ export function isSerializableIsh(value, subtype) {
 /** Tries to find `name` in any of the constructors or meta of `instance`. */
 export function hasConstructor(instance, name) {
   do {
+    const ctor = instance.constructor;
     if (
-      instance.constructor.name === name ||
-      (instance.structName && instance.structName === name.structName) ||
-      (instance.unionName && instance.unionName === name.unionName) ||
-      (instance.enumName && instance.enumName === name.enumName)
+      ctor.name === name ||
+      (ctor.structName && ctor.structName === name.structName) ||
+      (ctor.unionName && ctor.unionName === name.unionName) ||
+      (ctor.enumName && ctor.enumName === name.enumName)
     ) {
       return true;
     }
