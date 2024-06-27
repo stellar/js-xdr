@@ -208,6 +208,11 @@ export function hasConstructor(instance, subtype) {
   do {
     const ctor = instance.constructor;
 
+    console.log(ctor.name, subtype);
+    console.log(ctor.structName, subtype.structName);
+    // console.log(ctor.unionName, subtype.unionName);
+    // console.log(ctor.enumName, subtype.enumName);
+
     if (
       ctor.name === subtype ||
       (ctor.structName && ctor.structName === subtype.structName) ||
