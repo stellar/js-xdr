@@ -1,6 +1,6 @@
 import { XdrReader } from '../../src/serialization/xdr-reader';
 import { XdrWriter } from '../../src/serialization/xdr-writer';
-import { XdrCompositeType } from '../../src/xdr-type';
+import { XdrPrimitiveType } from '../../src/xdr-type';
 
 /* jshint -W030 */
 
@@ -132,10 +132,7 @@ describe('Union.isValid', function () {
   });
 
   it('works for "union-like" objects', function () {
-    class FakeUnion extends XdrCompositeType {
-      write() {}
-      read() {}
-    }
+    class FakeUnion extends XdrPrimitiveType {};
 
     FakeUnion.unionName = 'Result';
     let r = new FakeUnion();

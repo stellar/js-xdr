@@ -1,8 +1,8 @@
 import { Reference } from './reference';
-import { XdrCompositeType, isSerializableIsh } from './xdr-type';
+import { XdrPrimitiveType, isSerializableIsh } from './xdr-type';
 import { XdrWriterError } from './errors';
 
-export class Struct extends XdrCompositeType {
+export class Struct extends XdrPrimitiveType {
   constructor(attributes) {
     super();
     this._attributes = attributes || {};

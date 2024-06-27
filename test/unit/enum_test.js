@@ -1,6 +1,6 @@
 import { XdrReader } from '../../src/serialization/xdr-reader';
 import { XdrWriter } from '../../src/serialization/xdr-writer';
-import { XdrCompositeType } from '../../src/xdr-type';
+import { Enum } from '../../src/enum';
 
 /* jshint -W030 */
 
@@ -89,10 +89,7 @@ describe('Enum.isValid', function () {
   });
 
   it('works for "enum-like" objects', function () {
-    class FakeEnum extends XdrCompositeType {
-      write() {}
-      read() {}
-    }
+    class FakeEnum extends Enum {}
     FakeEnum.enumName = 'Color';
 
     let r = new FakeEnum();

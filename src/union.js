@@ -1,9 +1,9 @@
 import { Void } from './void';
 import { Reference } from './reference';
-import { XdrCompositeType, isSerializableIsh } from './xdr-type';
+import { XdrPrimitiveType, isSerializableIsh } from './xdr-type';
 import { XdrWriterError } from './errors';
 
-export class Union extends XdrCompositeType {
+export class Union extends XdrPrimitiveType {
   constructor(aSwitch, value) {
     super();
     this.set(aSwitch, value);

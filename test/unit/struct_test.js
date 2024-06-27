@@ -85,10 +85,7 @@ describe('Struct.isValid', function () {
   });
 
   it('works for "struct-like" objects', function () {
-    class FakeStruct extends Struct {
-      write() {}
-      read() {}
-    }
+    class FakeStruct extends Struct {}
 
     FakeStruct.structName = 'MyRange';
     let r = new FakeStruct();

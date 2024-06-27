@@ -1,8 +1,8 @@
 import { Int } from './int';
-import { XdrCompositeType, isSerializableIsh } from './xdr-type';
+import { XdrPrimitiveType, isSerializableIsh } from './xdr-type';
 import { XdrReaderError, XdrWriterError } from './errors';
 
-export class Enum extends XdrCompositeType {
+export class Enum extends XdrPrimitiveType {
   constructor(name, value) {
     super();
     this.name = name;
