@@ -132,7 +132,7 @@ describe('Union.isValid', function () {
   });
 
   it('works for "union-like" objects', function () {
-    class FakeUnion extends XdrPrimitiveType {};
+    class FakeUnion extends XdrPrimitiveType {}
 
     FakeUnion.unionName = 'Result';
     let r = new FakeUnion();

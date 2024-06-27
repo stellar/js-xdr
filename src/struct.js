@@ -25,7 +25,7 @@ export class Struct extends XdrCompositeType {
   static write(value, writer) {
     if (!this.isValid(value)) {
       throw new XdrWriterError(
-        `${value} is struct ${value?.constructor?.structName}, not ${
+        `${value} has struct name ${value?.constructor?.structName}, not ${
           this.structName
         }: ${JSON.stringify(value)}`
       );
