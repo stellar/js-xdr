@@ -97,7 +97,8 @@ export class Union extends XdrCompositeType {
    * @inheritDoc
    */
   static isValid(value) {
-    return isSerializableIsh(value, this);
+    return value?.constructor?.unionName === this.unionName ||
+      isSerializableIsh(value, this);
   }
 
   static create(context, name, config) {

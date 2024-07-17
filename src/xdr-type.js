@@ -205,12 +205,7 @@ export function isSerializableIsh(value, subtype) {
 export function hasConstructor(instance, subtype) {
   do {
     const ctor = instance.constructor;
-    if (
-      ctor.name === subtype ||
-      (ctor.structName && ctor.structName === subtype.structName) ||
-      (ctor.unionName && ctor.unionName === subtype.unionName) ||
-      (ctor.enumName && ctor.enumName === subtype.enumName)
-    ) {
+    if (ctor.name === subtype) {
       return true;
     }
   } while ((instance = Object.getPrototypeOf(instance)));
