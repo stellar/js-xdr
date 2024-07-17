@@ -41,8 +41,10 @@ export class Enum extends XdrPrimitiveType {
    * @inheritDoc
    */
   static isValid(value) {
-    return value?.constructor?.enumName === this.enumName ||
-      isSerializableIsh(value, this);
+    return (
+      value?.constructor?.enumName === this.enumName ||
+      isSerializableIsh(value, this)
+    );
   }
 
   static members() {

@@ -41,8 +41,10 @@ export class Struct extends XdrCompositeType {
    * @inheritDoc
    */
   static isValid(value) {
-    return value?.constructor?.structName === this.structName ||
-      isSerializableIsh(value, this);
+    return (
+      value?.constructor?.structName === this.structName ||
+      isSerializableIsh(value, this)
+    );
   }
 
   static create(context, name, fields) {
