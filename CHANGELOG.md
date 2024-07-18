@@ -3,8 +3,10 @@
 All notable changes to this project will be documented in this file. This
 project adheres to [Semantic Versioning](http://semver.org/).
 
-
 ## Unreleased
+
+
+## [v3.1.2](https://github.com/stellar/js-xdr/compare/v3.1.1...v3.1.2)
 
 ### Fixed
 * Increase robustness of compatibility across multiple `js-xdr` instances in an environment ([#122](https://github.com/stellar/js-xdr/pull/122)).
