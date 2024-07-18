@@ -25,7 +25,7 @@ export class Array extends XdrCompositeType {
    * @inheritDoc
    */
   write(value, writer) {
-    if (!(value instanceof global.Array))
+    if (!global.Array.isArray(value))
       throw new XdrWriterError(`value is not array`);
 
     if (value.length !== this._length)

@@ -1,8 +1,8 @@
 import { Reference } from './reference';
-import { XdrPrimitiveType } from './xdr-type';
+import { XdrCompositeType, isSerializableIsh } from './xdr-type';
 import { XdrWriterError } from './errors';
 
-export class Struct extends XdrPrimitiveType {
+export class Struct extends XdrCompositeType {
   constructor(attributes) {
     super();
     this._attributes = attributes || {};
@@ -23,8 +23,13 @@ export class Struct extends XdrPrimitiveType {
    * @inheritDoc
    */
   static write(value, writer) {
-    if (!(value instanceof this))
-      throw new XdrWriterError(`${value} is not a ${this.structName}`);
+    if (!this.isValid(value)) {
+      throw new XdrWriterError(
+        `${value} has struct name ${value?.constructor?.structName}, not ${
+          this.structName
+        }: ${JSON.stringify(value)}`
+      );
+    }
 
     for (const [fieldName, type] of this._fields) {
       const attribute = value._attributes[fieldName];
@@ -36,7 +41,10 @@ export class Struct extends XdrPrimitiveType {
    * @inheritDoc
    */
   static isValid(value) {
-    return value instanceof this;
+    return (
+      value?.constructor?.structName === this.structName ||
+      isSerializableIsh(value, this)
+    );
   }
 
   static create(context, name, fields) {
