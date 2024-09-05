@@ -1,5 +1,6 @@
 import { XdrReader } from '../../src/serialization/xdr-reader';
 import { XdrWriter } from '../../src/serialization/xdr-writer';
+import { Enum } from '../../src/enum';
 
 /* jshint -W030 */
 
@@ -85,6 +86,24 @@ describe('Enum.isValid', function () {
     expect(Color.isValid(Color.red())).to.be.true;
     expect(Color.isValid(Color.green())).to.be.true;
     expect(Color.isValid(Color.evenMoreGreen())).to.be.true;
+  });
+
+  it('works for "enum-like" objects', function () {
+    class FakeEnum extends Enum {}
+    FakeEnum.enumName = 'Color';
+
+    let r = new FakeEnum();
+    expect(Color.isValid(r)).to.be.true;
+
+    FakeEnum.enumName = 'NotColor';
+    r = new FakeEnum();
+    expect(Color.isValid(r)).to.be.false;
+
+    // make sure you can't fool it
+    FakeEnum.enumName = undefined;
+    FakeEnum.unionName = 'Color';
+    r = new FakeEnum();
+    expect(Color.isValid(r)).to.be.false;
   });
 
   it('returns false for arrays of the wrong size', function () {

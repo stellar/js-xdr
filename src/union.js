@@ -1,6 +1,6 @@
 import { Void } from './void';
 import { Reference } from './reference';
-import { XdrCompositeType } from './xdr-type';
+import { XdrCompositeType, isSerializableIsh } from './xdr-type';
 import { XdrWriterError } from './errors';
 
 export class Union extends XdrCompositeType {
@@ -81,8 +81,13 @@ export class Union extends XdrCompositeType {
    * @inheritDoc
    */
   static write(value, writer) {
-    if (!(value instanceof this))
-      throw new XdrWriterError(`${value} is not a ${this.unionName}`);
+    if (!this.isValid(value)) {
+      throw new XdrWriterError(
+        `${value} has union name ${value?.unionName}, not ${
+          this.unionName
+        }: ${JSON.stringify(value)}`
+      );
+    }
 
     this._switchOn.write(value.switch(), writer);
     value.armType().write(value.value(), writer);
@@ -92,7 +97,10 @@ export class Union extends XdrCompositeType {
    * @inheritDoc
    */
   static isValid(value) {
-    return value instanceof this;
+    return (
+      value?.constructor?.unionName === this.unionName ||
+      isSerializableIsh(value, this)
+    );
   }
 
   static create(context, name, config) {

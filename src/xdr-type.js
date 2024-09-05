@@ -171,5 +171,47 @@ function decodeInput(input, format) {
 }
 
 /**
+ * Provides a "duck typed" version of the native `instanceof` for read/write.
+ *
+ * "Duck typing" means if the parameter _looks like_ and _acts like_ a duck
+ * (i.e. the type we're checking), it will be treated as that type.
+ *
+ * In this case, the "type" we're looking for is "like XdrType" but also "like
+ * XdrCompositeType|XdrPrimitiveType" (i.e. serializable), but also conditioned
+ * on a particular subclass of "XdrType" (e.g. {@link Union} which extends
+ * XdrType).
+ *
+ * This makes the package resilient to downstream systems that may be combining
+ * many versions of a package across its stack that are technically compatible
+ * but fail `instanceof` checks due to cross-pollination.
+ */
+export function isSerializableIsh(value, subtype) {
+  return (
+    value !== undefined &&
+    value !== null && // prereqs, otherwise `getPrototypeOf` pops
+    (value instanceof subtype || // quickest check
+      // Do an initial constructor check (anywhere is fine so that children of
+      // `subtype` still work), then
+      (hasConstructor(value, subtype) &&
+        // ensure it has read/write methods, then
+        typeof value.constructor.read === 'function' &&
+        typeof value.constructor.write === 'function' &&
+        // ensure XdrType is in the prototype chain
+        hasConstructor(value, 'XdrType')))
+  );
+}
+
+/** Tries to find `subtype` in any of the constructors or meta of `instance`. */
+export function hasConstructor(instance, subtype) {
+  do {
+    const ctor = instance.constructor;
+    if (ctor.name === subtype) {
+      return true;
+    }
+  } while ((instance = Object.getPrototypeOf(instance)));
+  return false;
+}
+
+/**
  * @typedef {'raw'|'hex'|'base64'} XdrEncodingFormat
  */
