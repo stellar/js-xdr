@@ -13,10 +13,6 @@ updates:
         update-types:
         - "patch"
         - "minor"
-      npm-major:
-        applies-to: version-updates
-        update-types:
-        - "major"
   - package-ecosystem: "bundler"
     directory: "/"
     schedule:
@@ -30,10 +26,6 @@ updates:
         update-types:
         - "patch"
         - "minor"
-      bundler-major:
-        applies-to: version-updates
-        update-types:
-        - "major"
   - package-ecosystem: "github-actions"
     directory: "/"
     schedule:
