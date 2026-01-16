@@ -3,6 +3,10 @@ on:
   release:
     types: [published]
 
+permissions:
+  id-token: write  # Required for OIDC
+  contents: read
+
 jobs:
   build:
     runs-on: ubuntu-latest
@@ -25,16 +29,12 @@ jobs:
 
       - name: Publish npm packages
         run: |
-          yarn publish --access public
+          yarn publish --access public --provenance
           sed -i -e 's#"@stellar/js-xdr"#"js-xdr"#' package.json
-          yarn publish
-        env:
-          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
+          yarn publish --provenance
 
       - name: Publish npm package under old scope
         run: |
           V=$(cat package.json | jq '.version' | sed -e 's/\"//g')
           echo "Deprecating js-xdr@$V"
           npm deprecate js-xdr@"<= $V" "⚠️ This package has moved to @stellar/js-xdr! 🚚"
-        env:
-          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
