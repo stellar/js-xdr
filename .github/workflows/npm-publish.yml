@@ -6,6 +6,9 @@ on:
 jobs:
   build:
     runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      id-token: write  # Required for OIDC provenance
     steps:
       - name: Checkout
         uses: actions/checkout@v3
@@ -17,21 +20,26 @@ jobs:
           registry-url: 'https://registry.npmjs.org'
           always-auth: true
 
+      - name: Install pnpm
+        uses: pnpm/action-setup@v4
+        with:
+          version: 9
+
       - name: Install Dependencies
-        run: yarn
+        run: pnpm install
 
       - name: Build & Test
-        run: yarn build && yarn test
+        run: pnpm build && pnpm test
 
       - name: Publish npm packages
         run: |
-          yarn publish --access public
+          pnpm publish --access public --no-git-checks --provenance
           sed -i -e 's#"@stellar/js-xdr"#"js-xdr"#' package.json
-          yarn publish
+          pnpm publish --no-git-checks --provenance
         env:
           NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
 
-      - name: Publish npm package under old scope
+      - name: Deprecate old unscoped package
         run: |
           V=$(cat package.json | jq '.version' | sed -e 's/\"//g')
           echo "Deprecating js-xdr@$V"
