@@ -96,7 +96,7 @@ Please [see CONTRIBUTING.md for details](CONTRIBUTING.md).
 ## Development Setup
 
 **Requirements:**
-- Node.js ≥ 18.12
+- Node.js ≥ 20.0.0
 - pnpm ≥ 9.0
 - Git
 
@@ -129,5 +129,5 @@ Please [see CONTRIBUTING.md for details](CONTRIBUTING.md).
 - Pre-commit hooks will automatically format staged files
 - Use `nvm` to manage Node versions: https://github.com/creationix/nvm
 
-**Note:** While the built library supports multiple Node versions, development requires Node.js ≥ 18.12 and pnpm ≥ 9.0.
+**Note:** While the built library supports multiple Node versions, development requires Node.js ≥ 20.0.0 and pnpm ≥ 9.0.
 
