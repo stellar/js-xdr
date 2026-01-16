@@ -31,18 +31,7 @@ jobs:
       - name: Build & Test
         run: pnpm build && pnpm test
 
-      - name: Publish npm packages
-        run: |
-          pnpm publish --access public --no-git-checks --provenance
-          sed -i -e 's#"@stellar/js-xdr"#"js-xdr"#' package.json
-          pnpm publish --no-git-checks --provenance
-        env:
-          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
-
-      - name: Deprecate old unscoped package
-        run: |
-          V=$(cat package.json | jq '.version' | sed -e 's/\"//g')
-          echo "Deprecating js-xdr@$V"
-          npm deprecate js-xdr@"<= $V" "⚠️ This package has moved to @stellar/js-xdr! 🚚"
+      - name: Publish to npm
+        run: pnpm publish --access public --provenance
         env:
           NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
