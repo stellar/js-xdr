@@ -2,19 +2,23 @@
   "name": "@stellar/js-xdr",
   "version": "3.1.2",
   "description": "Read/write XDR encoded data structures (RFC 4506)",
+  "engines": {
+    "node": ">=20.0.0",
+    "pnpm": ">=9.0.0"
+  },
   "main": "lib/xdr.js",
   "browser": "dist/xdr.js",
   "module": "src/index.js",
   "scripts": {
-    "build": "yarn run build:browser && yarn run build:node",
+    "build": "pnpm run build:browser && pnpm run build:node",
     "build:browser": "webpack --mode=production --config ./webpack.config.js",
     "build:node": "webpack --mode=development --config ./webpack.config.js",
-    "test:node": "yarn run build:node && mocha",
-    "test:browser": "yarn run build:browser && karma start",
-    "test": "yarn run test:node && yarn run test:browser",
+    "test:node": "pnpm run build:node && mocha",
+    "test:browser": "pnpm run build:browser && karma start",
+    "test": "pnpm run test:node && pnpm run test:browser",
     "test-generate": "bundle exec xdrgen -o generated -n test -l javascript examples/test.x",
     "fmt": "prettier --write '**/*.js'",
-    "prepare": "yarn build",
+    "prepare": "pnpm build",
     "clean": "rm -rf lib/ dist/"
   },
   "repository": {
@@ -28,15 +32,9 @@
     "url": "https://github.com/stellar/js-xdr/issues"
   },
   "homepage": "https://github.com/stellar/js-xdr",
-  "husky": {
-    "hooks": {
-      "pre-commit": "lint-staged"
-    }
-  },
   "lint-staged": {
     "**/*.{js,json}": [
-      "yarn fmt",
-      "git add"
+      "pnpm fmt"
     ]
   },
   "mocha": {

@@ -93,48 +93,41 @@ See [`stellar-base`](http://github.com/stellar/js-stellar-base) for an example
 
 Please [see CONTRIBUTING.md for details](CONTRIBUTING.md).
 
-### To develop and test js-xdr itself
+## Development Setup
 
-1. Clone the repo
+**Requirements:**
+- Node.js ≥ 20.0.0
+- pnpm ≥ 9.0
+- Git
 
-```shell
-git clone https://github.com/stellar/js-xdr.git
-```
+**Setup Steps:**
 
-2. Install dependencies inside js-xdr folder
+1. Clone the repository
+   ```shell
+   git clone https://github.com/stellar/js-xdr.git
+   cd js-xdr
+   ```
 
-```shell
-cd js-xdr
-npm i
-```
+2. Install pnpm (if not already installed)
+   ```shell
+   npm install -g pnpm
+   ```
 
-3. Install Node 14
+3. Install dependencies
+   ```shell
+   pnpm install
+   ```
 
-Because we support the oldest maintenance version of Node, please install and
-develop on Node 14 so you don't get surprised when your code works locally but
-breaks in CI.
+4. Run tests
+   ```shell
+   pnpm test
+   ```
 
-Here's out to install `nvm` if you haven't: https://github.com/creationix/nvm
+**Development Tips:**
 
-```shell
-nvm install
+- Run `pnpm fmt` to format code with Prettier
+- Pre-commit hooks will automatically format staged files
+- Use `nvm` to manage Node versions: https://github.com/creationix/nvm
 
-# if you've never installed 14.x before you'll want to re-install yarn
-npm install -g yarn
-```
+**Note:** While the built library supports multiple Node versions, development requires Node.js ≥ 20.0.0 and pnpm ≥ 9.0.
 
-If you work on several projects that use different Node versions, you might it
-helpful to install this automatic version manager:
-https://github.com/wbyoung/avn
-
-4. Observe the project's code style
-
-While you're making changes, make sure to run the linter periodically to catch any linting errors (in addition to making sure your text editor supports ESLint)
-
-```shell
-yarn fmt
-````
-
-If you're working on a file not in `src`, limit your code to Node 14! See what's
-supported here: https://node.green/ (The reason is that our npm library must
-support earlier versions of Node, so the tests need to run on those versions.)

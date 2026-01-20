@@ -6,6 +6,14 @@ module.exports = function (config) {
     browsers: ['FirefoxHeadless', 'ChromeHeadless'],
     browserNoActivityTimeout: 20000,
 
+    plugins: [
+      'karma-mocha',
+      'karma-webpack',
+      'karma-sinon-chai',
+      'karma-chrome-launcher',
+      'karma-firefox-launcher'
+    ],
+
     files: ['dist/xdr.js', 'test/unit/**/*.js'],
 
     preprocessors: {
