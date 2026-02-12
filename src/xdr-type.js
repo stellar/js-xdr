@@ -154,6 +154,7 @@ export class NestedXdrType extends XdrCompositeType {
    * @param {number} remainingDepth - Remaining recursion budget
    * @returns {void}
    * @throws {XdrReaderError} If remaining depth budget is exhausted
+   * @throws {TypeError} If remainingDepth is not a finite number
    * @protected
    */
   static checkDepth(remainingDepth) {
