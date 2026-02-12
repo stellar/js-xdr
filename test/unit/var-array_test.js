@@ -26,6 +26,28 @@ describe('VarArray#read', function () {
     expect(() => read([0x00, 0x00, 0x00, 0x03])).to.throw(/read error/i);
   });
 
+  it('fast-fails when declared length cannot fit remaining bytes for fixed-size child', function () {
+    let calls = 0;
+    class FixedSizeChild {
+      static read() {
+        calls += 1;
+        return 0;
+      }
+
+      static write() {}
+
+      static isValid() {
+        return true;
+      }
+    }
+
+    const arr = new XDR.VarArray(FixedSizeChild, 10);
+    const io = new XdrReader([0x00, 0x00, 0x00, 0x02]);
+
+    expect(() => arr.read(io)).to.throw(/insufficient bytes/i);
+    expect(calls).to.eql(0);
+  });
+
   function read(bytes) {
     let io = new XdrReader(bytes);
     return subject.read(io);

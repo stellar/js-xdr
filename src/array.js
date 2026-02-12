@@ -1,5 +1,5 @@
 import { XdrCompositeType } from './xdr-type';
-import { XdrWriterError } from './errors';
+import { XdrReaderError, XdrWriterError } from './errors';
 
 export class Array extends XdrCompositeType {
   constructor(childType, length) {
@@ -12,6 +12,12 @@ export class Array extends XdrCompositeType {
    * @inheritDoc
    */
   read(reader) {
+    if (this._length > reader.remainingBytes()) {
+      throw new XdrReaderError(
+        `insufficient bytes to decode Array of length ${this._length}`
+      );
+    }
+
     // allocate array of specified length
     const result = new global.Array(this._length);
     // read values

@@ -23,8 +23,30 @@ describe('Array#read', function () {
 
   it("throws XdrReaderError when the byte stream isn't large enough", function () {
     expect(() => read(many, [0x00, 0x00, 0x00, 0x00])).to.throw(
-      /read outside the boundary/i
+      /(read outside the boundary|insufficient bytes)/i
     );
+  });
+
+  it('fast-fails before decoding child elements when remaining bytes are insufficient', function () {
+    let calls = 0;
+    class FixedSizeChild {
+      static read() {
+        calls += 1;
+        return 0;
+      }
+
+      static write() {}
+
+      static isValid() {
+        return true;
+      }
+    }
+
+    const fixed = new XDR.Array(FixedSizeChild, 2);
+    const reader = new XdrReader([0x00, 0x00, 0x00, 0x01]);
+
+    expect(() => fixed.read(reader)).to.throw(/insufficient bytes/i);
+    expect(calls).to.eql(0);
   });
 
   function read(arr, bytes) {

@@ -19,6 +19,12 @@ export class VarArray extends XdrCompositeType {
         `saw ${length} length VarArray, max allowed is ${this._maxLength}`
       );
 
+    if (length > reader.remainingBytes()) {
+      throw new XdrReaderError(
+        `insufficient bytes to decode VarArray of length ${length}`
+      );
+    }
+
     const result = new Array(length);
     for (let i = 0; i < length; i++) {
       result[i] = this._childType.read(reader);

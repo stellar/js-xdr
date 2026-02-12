@@ -89,6 +89,14 @@ export class XdrReader {
   }
 
   /**
+   * Remaining unread bytes in the source buffer
+   * @return {Number}
+   */
+  remainingBytes() {
+    return this._length - this._index;
+  }
+
+  /**
    * Read byte array from the buffer
    * @param {Number} size - Bytes to read
    * @return {Buffer} - Sliced portion of the underlying buffer
