@@ -1,9 +1,9 @@
-import { XdrCompositeType } from './xdr-type';
+import { NestedXdrType } from './xdr-type';
 import { XdrWriterError } from './errors';
 
-export class Array extends XdrCompositeType {
-  constructor(childType, length) {
-    super();
+export class Array extends NestedXdrType {
+  constructor(childType, length, maxDepth = NestedXdrType.DEFAULT_MAX_DEPTH) {
+    super(maxDepth);
     this._childType = childType;
     this._length = length;
   }
@@ -11,12 +11,13 @@ export class Array extends XdrCompositeType {
   /**
    * @inheritDoc
    */
-  read(reader) {
+  read(reader, remainingDepth = this._maxDepth) {
+    NestedXdrType.checkDepth(remainingDepth);
     // allocate array of specified length
     const result = new global.Array(this._length);
     // read values
     for (let i = 0; i < this._length; i++) {
-      result[i] = this._childType.read(reader);
+      result[i] = this._childType.read(reader, remainingDepth - 1);
     }
     return result;
   }

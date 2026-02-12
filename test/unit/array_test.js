@@ -33,6 +33,47 @@ describe('Array#read', function () {
   }
 });
 
+describe('Array#read maxDepth', function () {
+  it('throws when depth exceeds maxDepth', function () {
+    const arrayType = new XDR.Array(XDR.Int, 2, 2);
+    const bytes = [0x00, 0x00, 0x00, 0x05, 0x00, 0x00, 0x00, 0x0a];
+    const reader = new XdrReader(bytes);
+
+    expect(() => arrayType.read(reader, -1)).to.throw(
+      /exceeded max decoding depth.*/i
+    );
+  });
+
+  it('succeeds when depth is within maxDepth', function () {
+    const arrayType = new XDR.Array(XDR.Int, 2, 5);
+    const bytes = [0x00, 0x00, 0x00, 0x05, 0x00, 0x00, 0x00, 0x0a];
+    const reader = new XdrReader(bytes);
+
+    const result = arrayType.read(reader, 4);
+    expect(result).to.eql([5, 10]);
+  });
+
+  it('uses default maxDepth of 200', function () {
+    const arrayType = new XDR.Array(XDR.Int, 2);
+    const bytes = [0x00, 0x00, 0x00, 0x05, 0x00, 0x00, 0x00, 0x0a];
+    const reader = new XdrReader(bytes);
+
+    expect(() => arrayType.read(reader, -1)).to.throw(
+      /exceeded max decoding depth.*/i
+    );
+  });
+
+  it('uses the root maxDepth for nested arrays', function () {
+    const innerArray = new XDR.Array(XDR.Int, 1, 2);
+    const outerArray = new XDR.Array(innerArray, 1, 5);
+    const bytes = [0x00, 0x00, 0x00, 0x2a];
+    const reader = new XdrReader(bytes);
+
+    const result = outerArray.read(reader, 2);
+    expect(result).to.eql([[42]]);
+  });
+});
+
 describe('Array#write', function () {
   let subject = many;
 

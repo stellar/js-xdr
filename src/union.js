@@ -1,11 +1,12 @@
 import { Void } from './void';
 import { Reference } from './reference';
-import { XdrCompositeType, isSerializableIsh } from './xdr-type';
+import { NestedXdrType, isSerializableIsh } from './xdr-type';
 import { XdrWriterError } from './errors';
 
-export class Union extends XdrCompositeType {
-  constructor(aSwitch, value) {
-    super();
+export class Union extends NestedXdrType {
+  constructor(aSwitch, value, maxDepth) {
+    const resolvedMaxDepth = maxDepth ?? new.target?._maxDepth;
+    super(resolvedMaxDepth);
     this.set(aSwitch, value);
   }
 
@@ -64,17 +65,18 @@ export class Union extends XdrCompositeType {
   /**
    * @inheritDoc
    */
-  static read(reader) {
-    const aSwitch = this._switchOn.read(reader);
+  static read(reader, remainingDepth = this._maxDepth) {
+    NestedXdrType.checkDepth(remainingDepth);
+    const aSwitch = this._switchOn.read(reader, remainingDepth - 1);
     const arm = this.armForSwitch(aSwitch);
     const armType = arm === Void ? Void : this._arms[arm];
     let value;
     if (armType !== undefined) {
-      value = armType.read(reader);
+      value = armType.read(reader, remainingDepth - 1);
     } else {
-      value = arm.read(reader);
+      value = arm.read(reader, remainingDepth - 1);
     }
-    return new this(aSwitch, value);
+    return new this(aSwitch, value, this._maxDepth);
   }
 
   /**
@@ -103,10 +105,16 @@ export class Union extends XdrCompositeType {
     );
   }
 
-  static create(context, name, config) {
+  static create(
+    context,
+    name,
+    config,
+    maxDepth = NestedXdrType.DEFAULT_MAX_DEPTH
+  ) {
     const ChildUnion = class extends Union {};
 
     ChildUnion.unionName = name;
+    ChildUnion._maxDepth = maxDepth;
     context.results[name] = ChildUnion;
 
     if (config.switchOn instanceof Reference) {

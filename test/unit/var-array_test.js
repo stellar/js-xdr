@@ -32,6 +32,96 @@ describe('VarArray#read', function () {
   }
 });
 
+describe('VarArray#read maxDepth', function () {
+  it('throws when depth exceeds maxDepth', function () {
+    const varArrayType = new XDR.VarArray(XDR.Int, 10, 2);
+    const bytes = [0x00, 0x00, 0x00, 0x01, 0x00, 0x00, 0x00, 0x05];
+    const reader = new XdrReader(bytes);
+
+    expect(() => varArrayType.read(reader, -1)).to.throw(
+      /exceeded max decoding depth.*/i
+    );
+  });
+
+  it('succeeds when depth is within maxDepth', function () {
+    const varArrayType = new XDR.VarArray(XDR.Int, 10, 5);
+    const bytes = [
+      0x00, 0x00, 0x00, 0x02, 0x00, 0x00, 0x00, 0x05, 0x00, 0x00, 0x00, 0x0a
+    ];
+    const reader = new XdrReader(bytes);
+
+    const result = varArrayType.read(reader, 4);
+    expect(result).to.eql([5, 10]);
+  });
+
+  it('uses default maxDepth of 200', function () {
+    const varArrayType = new XDR.VarArray(XDR.Int, 10);
+    const bytes = [0x00, 0x00, 0x00, 0x01, 0x00, 0x00, 0x00, 0x05];
+    const reader = new XdrReader(bytes);
+
+    expect(() => varArrayType.read(reader, -1)).to.throw(
+      /exceeded max decoding depth.*/i
+    );
+  });
+
+  it('uses the root maxDepth for child types', function () {
+    const innerArray = new XDR.VarArray(XDR.Int, 10, 2);
+    const outerArray = new XDR.VarArray(innerArray, 10, 5);
+    const bytes = [
+      0x00, 0x00, 0x00, 0x01, 0x00, 0x00, 0x00, 0x01, 0x00, 0x00, 0x00, 0x01
+    ];
+    const reader = new XdrReader(bytes);
+
+    const result = outerArray.read(reader, 2);
+    expect(result).to.eql([[1]]);
+  });
+
+  it('VarArray containing Strings respects depth', function () {
+    const stringType = new XDR.String(100);
+    const arrayOfStrings = new XDR.VarArray(stringType, 10, 3);
+
+    const bytes = [
+      0x00, 0x00, 0x00, 0x01, 0x00, 0x00, 0x00, 0x01, 0x41, 0x00, 0x00, 0x00
+    ];
+    const reader = new XdrReader(bytes);
+
+    const result = arrayOfStrings.read(reader, 2);
+    expect(result.length).to.eql(1);
+    expect(result[0].toString('utf8')).to.eql('A');
+  });
+
+  it('deeply nested VarArrays read at appropriate depth', function () {
+    const level3 = new XDR.VarArray(XDR.Int, 10, 4);
+    const level2 = new XDR.VarArray(level3, 10, 4);
+    const level1 = new XDR.VarArray(level2, 10, 4);
+
+    const bytes = [
+      0x00, 0x00, 0x00, 0x01, 0x00, 0x00, 0x00, 0x01, 0x00, 0x00, 0x00, 0x01,
+      0x00, 0x00, 0x00, 0x01
+    ];
+    const reader = new XdrReader(bytes);
+
+    const result = level1.read(reader, 2);
+    expect(result).to.eql([[[1]]]);
+  });
+
+  it('deeply nested VarArrays throw when depth exceeds limit', function () {
+    const level3 = new XDR.VarArray(XDR.Int, 10, 2);
+    const level2 = new XDR.VarArray(level3, 10, 2);
+    const level1 = new XDR.VarArray(level2, 10, 2);
+
+    const bytes = [
+      0x00, 0x00, 0x00, 0x01, 0x00, 0x00, 0x00, 0x01, 0x00, 0x00, 0x00, 0x01,
+      0x00, 0x00, 0x00, 0x01
+    ];
+    const reader = new XdrReader(bytes);
+
+    expect(() => level1.read(reader, 1)).to.throw(
+      /exceeded max decoding depth.*/i
+    );
+  });
+});
+
 describe('VarArray#write', function () {
   it('encodes correctly', function () {
     expect(write([])).to.eql([0x00, 0x00, 0x00, 0x00]);
