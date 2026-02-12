@@ -84,7 +84,7 @@ describe('Struct.read maxDepth', function () {
     );
   });
 
-  it('uses maxDepth of provided by create', function () {
+  it('uses maxDepth provided by create', function () {
     const MyStruct = XDR.Struct.create(
       context,
       'DepthStruct3',
