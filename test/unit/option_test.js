@@ -49,6 +49,7 @@ describe('Option#read maxDepth', function () {
     const bytes = [0x00, 0x00, 0x00, 0x01, 0x00, 0x00, 0x00, 0x05];
     const reader = new XdrReader(bytes);
 
+    expect(optionType._maxDepth).to.equal(200);
     expect(() => optionType.read(reader, -1)).to.throw(
       /exceeded max decoding depth.*/i
     );

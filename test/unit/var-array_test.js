@@ -59,6 +59,7 @@ describe('VarArray#read maxDepth', function () {
     const bytes = [0x00, 0x00, 0x00, 0x01, 0x00, 0x00, 0x00, 0x05];
     const reader = new XdrReader(bytes);
 
+    expect(varArrayType._maxDepth).to.equal(200);
     expect(() => varArrayType.read(reader, -1)).to.throw(
       /exceeded max decoding depth.*/i
     );
