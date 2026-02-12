@@ -6,6 +6,28 @@ let one = new XDR.Array(XDR.Int, 1);
 let many = new XDR.Array(XDR.Int, 2);
 
 describe('Array#read', function () {
+  function createFixedSizeChild() {
+    let calls = 0;
+
+    return {
+      FixedSizeChild: class FixedSizeChild {
+        static read(io) {
+          calls += 1;
+          return io.readInt32BE();
+        }
+
+        static write() {}
+
+        static isValid() {
+          return true;
+        }
+      },
+      getCalls() {
+        return calls;
+      }
+    };
+  }
+
   it('decodes correctly', function () {
     expect(read(zero, [])).to.eql([]);
     expect(read(zero, [0x00, 0x00, 0x00, 0x00])).to.eql([]);
@@ -28,24 +50,45 @@ describe('Array#read', function () {
   });
 
   it('fast-fails before decoding child elements when remaining bytes are insufficient', function () {
-    let calls = 0;
-    class FixedSizeChild {
-      static read() {
-        calls += 1;
-        return 0;
-      }
-
-      static write() {}
-
-      static isValid() {
-        return true;
-      }
-    }
+    const { FixedSizeChild, getCalls } = createFixedSizeChild();
 
     const fixed = new XDR.Array(FixedSizeChild, 5);
     const reader = new XdrReader([0x00, 0x00, 0x00, 0x01]);
     expect(() => fixed.read(reader)).to.throw(/insufficient bytes/i);
-    expect(calls).to.eql(0);
+    expect(getCalls()).to.eql(0);
+  });
+
+  it('decodes on exact-fit byte length and reads each child exactly once', function () {
+    const { FixedSizeChild, getCalls } = createFixedSizeChild();
+
+    const fixed = new XDR.Array(FixedSizeChild, 2);
+    const reader = new XdrReader([
+      0x00, 0x00, 0x00, 0x01, 0x00, 0x00, 0x00, 0x02
+    ]);
+
+    expect(fixed.read(reader)).to.eql([1, 2]);
+    expect(getCalls()).to.eql(2);
+  });
+
+  it('zero-length array does not decode child elements', function () {
+    const { FixedSizeChild, getCalls } = createFixedSizeChild();
+
+    const fixed = new XDR.Array(FixedSizeChild, 0);
+    const reader = new XdrReader([0x01, 0x02, 0x03, 0x04]);
+
+    expect(fixed.read(reader)).to.eql([]);
+    expect(getCalls()).to.eql(0);
+  });
+
+  it('keeps reader position unchanged on Array fast-fail', function () {
+    const { FixedSizeChild } = createFixedSizeChild();
+
+    const fixed = new XDR.Array(FixedSizeChild, 3);
+    const reader = new XdrReader([0x00, 0x00]);
+    const before = reader.remainingBytes();
+
+    expect(() => fixed.read(reader)).to.throw(/insufficient bytes/i);
+    expect(reader.remainingBytes()).to.eql(before);
   });
 
   function read(arr, bytes) {
