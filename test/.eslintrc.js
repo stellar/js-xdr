@@ -1,7 +1,9 @@
 module.exports = {
   env: {
-    mocha: true
+    mocha: true,
+    es2022: true
   },
+  parserOptions: { ecmaVersion: 2022, sourceType: 'module' },
   globals: {
     XDR: true,
     chai: true,
@@ -11,6 +13,7 @@ module.exports = {
     spy: true
   },
   rules: {
-    'no-unused-vars': 0
+    'no-unused-vars': 0,
+    'node/no-unsupported-features/es-syntax': 0
   }
 };
