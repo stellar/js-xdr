@@ -42,9 +42,8 @@ describe('Array#read', function () {
       }
     }
 
-    const fixed = new XDR.Array(FixedSizeChild, 2);
+    const fixed = new XDR.Array(FixedSizeChild, 5);
     const reader = new XdrReader([0x00, 0x00, 0x00, 0x01]);
-
     expect(() => fixed.read(reader)).to.throw(/insufficient bytes/i);
     expect(calls).to.eql(0);
   });
