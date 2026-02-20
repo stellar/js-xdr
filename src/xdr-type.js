@@ -1,6 +1,7 @@
+/* eslint-disable max-classes-per-file */
 import { XdrReader } from './serialization/xdr-reader';
 import { XdrWriter } from './serialization/xdr-writer';
-import { XdrNotImplementedDefinitionError } from './errors';
+import { XdrNotImplementedDefinitionError, XdrReaderError } from './errors';
 
 class XdrType {
   /**
@@ -138,6 +139,40 @@ export class XdrCompositeType extends XdrType {
   }
 }
 
+export class NestedXdrType extends XdrCompositeType {
+  /**
+   * @constructor
+   * @param {number} maxDepth - Maximum allowed depth for nested structures (e.g. arrays of arrays), to prevent DoS via excessively deep nesting
+   */
+  constructor(maxDepth) {
+    super();
+    this._maxDepth = maxDepth ?? NestedXdrType.DEFAULT_MAX_DEPTH;
+  }
+
+  /**
+   * Check remaining depth budget and throw if exceeded
+   * @param {number} remainingDepth - Remaining recursion budget
+   * @returns {void}
+   * @throws {XdrReaderError} If remaining depth budget is exhausted
+   * @throws {TypeError} If remainingDepth is not a finite number
+   * @protected
+   */
+  static checkDepth(remainingDepth) {
+    if (remainingDepth === undefined) return;
+    if (!Number.isFinite(remainingDepth)) {
+      throw new TypeError(
+        `remainingDepth (current remaining decoding depth budget) must be a finite number, got ${typeof remainingDepth}: ${remainingDepth}`
+      );
+    }
+    if (remainingDepth < 0) {
+      throw new XdrReaderError('exceeded max decoding depth');
+    }
+  }
+}
+
+NestedXdrType.DEFAULT_MAX_DEPTH = 200;
+NestedXdrType._maxDepth = NestedXdrType.DEFAULT_MAX_DEPTH;
+
 class InvalidXdrEncodingFormatError extends TypeError {
   constructor(format) {
     super(`Invalid format ${format}, must be one of "raw", "hex", "base64"`);
@@ -208,6 +243,7 @@ export function hasConstructor(instance, subtype) {
     if (ctor.name === subtype) {
       return true;
     }
+    // eslint-disable-next-line no-cond-assign
   } while ((instance = Object.getPrototypeOf(instance)));
   return false;
 }

@@ -15,6 +15,59 @@ describe('Option#read', function () {
   }
 });
 
+describe('Option#read maxDepth', function () {
+  it('throws when depth exceeds maxDepth', function () {
+    const optionType = new XDR.Option(XDR.Int, 2);
+    const bytes = [0x00, 0x00, 0x00, 0x01, 0x00, 0x00, 0x00, 0x05];
+    const reader = new XdrReader(bytes);
+
+    expect(() => optionType.read(reader, -1)).to.throw(
+      /exceeded max decoding depth.*/i
+    );
+  });
+
+  it('succeeds when depth is within maxDepth', function () {
+    const optionType = new XDR.Option(XDR.Int, 5);
+    const bytes = [0x00, 0x00, 0x00, 0x01, 0x00, 0x00, 0x00, 0x05];
+    const reader = new XdrReader(bytes);
+
+    const result = optionType.read(reader, 4);
+    expect(result).to.eql(5);
+  });
+
+  it('succeeds for None value within maxDepth', function () {
+    const optionType = new XDR.Option(XDR.Int, 5);
+    const bytes = [0x00, 0x00, 0x00, 0x00];
+    const reader = new XdrReader(bytes);
+
+    const result = optionType.read(reader, 4);
+    expect(result).to.be.undefined;
+  });
+
+  it('uses default maxDepth of 200', function () {
+    const optionType = new XDR.Option(XDR.Int);
+    const bytes = [0x00, 0x00, 0x00, 0x01, 0x00, 0x00, 0x00, 0x05];
+    const reader = new XdrReader(bytes);
+
+    expect(optionType._maxDepth).to.equal(200);
+    expect(() => optionType.read(reader, -1)).to.throw(
+      /exceeded max decoding depth.*/i
+    );
+  });
+
+  it('uses option maxDepth for child types', function () {
+    const innerArray = new XDR.VarArray(XDR.Int, 10, 2);
+    const optionType = new XDR.Option(innerArray, 5);
+    const bytes = [
+      0x00, 0x00, 0x00, 0x01, 0x00, 0x00, 0x00, 0x01, 0x00, 0x00, 0x00, 0x2a
+    ];
+    const reader = new XdrReader(bytes);
+
+    const result = optionType.read(reader, 2);
+    expect(result).to.eql([42]);
+  });
+});
+
 describe('Option#write', function () {
   it('encodes correctly', function () {
     expect(write(3)).to.eql([0x00, 0x00, 0x00, 0x01, 0x00, 0x00, 0x00, 0x03]);

@@ -44,6 +44,10 @@ describe('Union.armForSwitch', function () {
 });
 
 describe('Union: constructor', function () {
+  beforeEach(function () {
+    Result._maxDepth = 200;
+  });
+
   it('works for XDR.Int discriminated unions', function () {
     expect(() => new Ext(0)).to.not.throw();
   });
@@ -51,6 +55,34 @@ describe('Union: constructor', function () {
   it('works for Enum discriminated unions', function () {
     expect(() => new Result('ok')).to.not.throw();
     expect(() => new Result(ResultType.ok())).to.not.throw();
+  });
+
+  it('inherits maxDepth from the union class when omitted', function () {
+    let context = { definitions: {}, results: {} };
+    let Kind = XDR.Enum.create(context, 'CtorDepthKind', {
+      ok: 0,
+      error: 1
+    });
+    let DepthUnion = XDR.Union.create(
+      context,
+      'CtorDepthUnion',
+      {
+        switchOn: Kind,
+        switches: [
+          ['ok', XDR.Void],
+          ['error', 'code']
+        ],
+        arms: {
+          code: XDR.Int
+        }
+      },
+      7
+    );
+
+    expect(DepthUnion.ok()._maxDepth).to.eql(7);
+
+    DepthUnion._maxDepth = 3;
+    expect(DepthUnion.ok()._maxDepth).to.eql(3);
   });
 });
 
@@ -93,6 +125,147 @@ describe('Union.read', function () {
     let io = new XdrReader(bytes);
     return Result.read(io);
   }
+});
+
+describe('Union.read maxDepth', function () {
+  beforeEach(function () {
+    Result._maxDepth = 200;
+  });
+
+  it('throws when depth exceeds maxDepth', function () {
+    Result._maxDepth = 2;
+
+    const bytes = [0x00, 0x00, 0x00, 0x00];
+    const reader = new XdrReader(bytes);
+
+    expect(() => Result.read(reader, -1)).to.throw(
+      /exceeded max decoding depth.*/i
+    );
+  });
+
+  it('succeeds when depth is within maxDepth', function () {
+    Result._maxDepth = 5;
+
+    const bytes = [0x00, 0x00, 0x00, 0x01, 0x00, 0x00, 0x00, 0x05];
+    const reader = new XdrReader(bytes);
+
+    const result = Result.read(reader, 4);
+    expect(result.switch()).to.eql(ResultType.error());
+    expect(result.code()).to.eql(5);
+  });
+
+  it('uses default maxDepth of 200 from create', function () {
+    const context = { definitions: {}, results: {} };
+    const Kind = XDR.Enum.create(context, 'Kind', { ok: 0, error: 1 });
+    const DepthUnion = XDR.Union.create(context, 'DepthUnion', {
+      switchOn: Kind,
+      switches: [
+        ['ok', XDR.Void],
+        ['error', 'code']
+      ],
+      arms: {
+        code: XDR.Int
+      }
+    });
+
+    expect(DepthUnion._maxDepth).to.eql(200);
+
+    const bytes = [0x00, 0x00, 0x00, 0x00];
+    const reader = new XdrReader(bytes);
+
+    expect(() => DepthUnion.read(reader, -1)).to.throw(
+      /exceeded max decoding depth.*/i
+    );
+  });
+
+  it('uses maxDepth from create', function () {
+    const context = { definitions: {}, results: {} };
+    const Kind = XDR.Enum.create(context, 'Kind', { ok: 0, error: 1 });
+    const DepthUnion = XDR.Union.create(
+      context,
+      'DepthUnion',
+      {
+        switchOn: Kind,
+        switches: [
+          ['ok', XDR.Void],
+          ['error', 'code']
+        ],
+        arms: {
+          code: XDR.Int
+        }
+      },
+      300
+    );
+
+    expect(DepthUnion._maxDepth).to.eql(300);
+
+    const bytes = [0x00, 0x00, 0x00, 0x00];
+    const reader = new XdrReader(bytes);
+
+    expect(() => DepthUnion.read(reader, -1)).to.throw(
+      /exceeded max decoding depth.*/i
+    );
+  });
+});
+
+describe('Union.read nested maxDepth', function () {
+  let context;
+  let ResultTypeDepth;
+
+  beforeEach(function () {
+    context = { definitions: {}, results: {} };
+    ResultTypeDepth = XDR.Enum.create(context, 'ResultTypeDepth', {
+      ok: 0,
+      data: 1
+    });
+  });
+
+  it('propagates depth to arm types', function () {
+    const dataArray = new XDR.VarArray(XDR.Int, 10, 3);
+    const DepthUnion = XDR.Union.create(context, 'NestedUnion', {
+      switchOn: ResultTypeDepth,
+      switches: [
+        ['ok', XDR.Void],
+        ['data', 'values']
+      ],
+      arms: {
+        values: dataArray
+      }
+    });
+    DepthUnion._maxDepth = 5;
+
+    const bytes = [
+      0x00, 0x00, 0x00, 0x01, 0x00, 0x00, 0x00, 0x01, 0x00, 0x00, 0x00, 0x2a
+    ];
+    const reader = new XdrReader(bytes);
+
+    const result = DepthUnion.read(reader, 1);
+    expect(result.switch()).to.eql(ResultTypeDepth.data());
+    expect(result.values()).to.eql([42]);
+  });
+
+  it('uses union maxDepth for arm type decoding', function () {
+    const dataArray = new XDR.VarArray(XDR.Int, 10, 1);
+    const DepthUnion = XDR.Union.create(context, 'NestedUnion2', {
+      switchOn: ResultTypeDepth,
+      switches: [
+        ['ok', XDR.Void],
+        ['data', 'values']
+      ],
+      arms: {
+        values: dataArray
+      }
+    });
+    DepthUnion._maxDepth = 5;
+
+    const bytes = [
+      0x00, 0x00, 0x00, 0x01, 0x00, 0x00, 0x00, 0x01, 0x00, 0x00, 0x00, 0x2a
+    ];
+    const reader = new XdrReader(bytes);
+
+    const result = DepthUnion.read(reader, 1);
+    expect(result.values()).to.eql([42]);
+  });
 });
 
 describe('Union.write', function () {

@@ -1,18 +1,19 @@
 import { Bool } from './bool';
-import { XdrPrimitiveType } from './xdr-type';
+import { NestedXdrType } from './xdr-type';
 
-export class Option extends XdrPrimitiveType {
-  constructor(childType) {
-    super();
+export class Option extends NestedXdrType {
+  constructor(childType, maxDepth = NestedXdrType.DEFAULT_MAX_DEPTH) {
+    super(maxDepth);
     this._childType = childType;
   }
 
   /**
    * @inheritDoc
    */
-  read(reader) {
+  read(reader, remainingDepth = this._maxDepth) {
+    NestedXdrType.checkDepth(remainingDepth);
     if (Bool.read(reader)) {
-      return this._childType.read(reader);
+      return this._childType.read(reader, remainingDepth - 1);
     }
 
     return undefined;

@@ -36,6 +36,106 @@ describe('Struct.read', function () {
   }
 });
 
+describe('Struct.read maxDepth', function () {
+  let context;
+
+  beforeEach(function () {
+    context = { definitions: {}, results: {} };
+  });
+
+  it('throws when depth exceeds maxDepth', function () {
+    const MyStruct = XDR.Struct.create(context, 'DepthStruct', [
+      ['value', XDR.Int]
+    ]);
+    MyStruct._maxDepth = 2;
+
+    const bytes = [0x00, 0x00, 0x00, 0x05];
+    const reader = new XdrReader(bytes);
+
+    expect(() => MyStruct.read(reader, -1)).to.throw(
+      /exceeded max decoding depth.*/i
+    );
+  });
+
+  it('succeeds when depth is within maxDepth', function () {
+    const MyStruct = XDR.Struct.create(context, 'DepthStruct2', [
+      ['value', XDR.Int]
+    ]);
+    MyStruct._maxDepth = 5;
+
+    const bytes = [0x00, 0x00, 0x00, 0x05];
+    const reader = new XdrReader(bytes);
+
+    const result = MyStruct.read(reader, 4);
+    expect(result.value()).to.eql(5);
+  });
+
+  it('uses default maxDepth of 200 from create', function () {
+    const MyStruct = XDR.Struct.create(context, 'DepthStruct3', [
+      ['value', XDR.Int]
+    ]);
+    expect(MyStruct._maxDepth).to.eql(200);
+
+    const bytes = [0x00, 0x00, 0x00, 0x05];
+    const reader = new XdrReader(bytes);
+
+    expect(() => MyStruct.read(reader, -1)).to.throw(
+      /exceeded max decoding depth.*/i
+    );
+  });
+
+  it('uses maxDepth provided by create', function () {
+    const MyStruct = XDR.Struct.create(
+      context,
+      'DepthStruct3',
+      [['value', XDR.Int]],
+      300
+    );
+    expect(MyStruct._maxDepth).to.eql(300);
+    const bytes = [0x00, 0x00, 0x00, 0x05];
+    const reader = new XdrReader(bytes);
+
+    expect(() => MyStruct.read(reader, -1)).to.throw(
+      /exceeded max decoding depth.*/i
+    );
+  });
+
+  it('propagates depth to child fields', function () {
+    const stringArray = new XDR.VarArray(new XDR.String(100), 10, 3);
+    const MyStruct = XDR.Struct.create(context, 'NestedStruct', [
+      ['names', stringArray]
+    ]);
+
+    const bytes = [
+      0x00, 0x00, 0x00, 0x01, 0x00, 0x00, 0x00, 0x02, 0x48, 0x69, 0x00, 0x00
+    ];
+    const reader = new XdrReader(bytes);
+
+    const result = MyStruct.read(reader, 1);
+    expect(result.names().length).to.eql(1);
+    expect(result.names()[0].toString('utf8')).to.eql('Hi');
+  });
+
+  it('uses struct maxDepth for nested field decoding', function () {
+    const innerArray = new XDR.VarArray(XDR.Int, 10, 1);
+    const outerArray = new XDR.VarArray(innerArray, 10, 5);
+    const MyStruct = XDR.Struct.create(
+      context,
+      'NestedDepthStruct',
+      [['values', outerArray]],
+      5
+    );
+
+    const bytes = [
+      0x00, 0x00, 0x00, 0x01, 0x00, 0x00, 0x00, 0x01, 0x00, 0x00, 0x00, 0x2a
+    ];
+    const reader = new XdrReader(bytes);
+
+    const result = MyStruct.read(reader, 2);
+    expect(result.values()).to.eql([[42]]);
+  });
+});
+
 describe('Struct.write', function () {
   it('encodes correctly', function () {
     let empty = new MyRange({
@@ -131,5 +231,22 @@ describe('Struct: attributes', function () {
     let subject = new MyRange({ begin: 5, end: 255, inclusive: true });
     expect(subject.begin(10)).to.eql(10);
     expect(subject.begin()).to.eql(10);
+  });
+});
+
+describe('Struct: constructor maxDepth', function () {
+  it('inherits maxDepth from the struct class when omitted', function () {
+    let context = { definitions: {}, results: {} };
+    let DepthStruct = XDR.Struct.create(
+      context,
+      'CtorDepthStruct',
+      [['value', XDR.Int]],
+      9
+    );
+
+    expect(new DepthStruct({ value: 1 })._maxDepth).to.eql(9);
+
+    DepthStruct._maxDepth = 4;
+    expect(new DepthStruct({ value: 2 })._maxDepth).to.eql(4);
   });
 });

@@ -1,22 +1,25 @@
 import { Reference } from './reference';
-import { XdrCompositeType, isSerializableIsh } from './xdr-type';
+import { NestedXdrType, isSerializableIsh } from './xdr-type';
 import { XdrWriterError } from './errors';
 
-export class Struct extends XdrCompositeType {
-  constructor(attributes) {
-    super();
+export class Struct extends NestedXdrType {
+  constructor(attributes, maxDepth) {
+    const resolvedMaxDepth = maxDepth ?? new.target?._maxDepth;
+    super(resolvedMaxDepth);
     this._attributes = attributes || {};
   }
 
   /**
    * @inheritDoc
    */
-  static read(reader) {
+  static read(reader, remainingDepth = this._maxDepth) {
+    NestedXdrType.checkDepth(remainingDepth);
+
     const attributes = {};
     for (const [fieldName, type] of this._fields) {
-      attributes[fieldName] = type.read(reader);
+      attributes[fieldName] = type.read(reader, remainingDepth - 1);
     }
-    return new this(attributes);
+    return new this(attributes, this._maxDepth);
   }
 
   /**
@@ -47,11 +50,16 @@ export class Struct extends XdrCompositeType {
     );
   }
 
-  static create(context, name, fields) {
+  static create(
+    context,
+    name,
+    fields,
+    maxDepth = NestedXdrType.DEFAULT_MAX_DEPTH
+  ) {
     const ChildStruct = class extends Struct {};
 
     ChildStruct.structName = name;
-
+    ChildStruct._maxDepth = maxDepth;
     context.results[name] = ChildStruct;
 
     const mappedFields = new Array(fields.length);
