@@ -11,6 +11,8 @@ project adheres to [Semantic Versioning](http://semver.org/).
 ### Fixed
 * Removed [the custom `Buffer.subarray` polyfill](https://github.com/stellar/js-xdr/pull/118) introduced in v3.1.1 to address the issue of it not being usable in the React Native Hermes engine. We recommend using [`@exodus/patch-broken-hermes-typed-arrays`](https://github.com/ExodusMovement/patch-broken-hermes-typed-arrays) as an alternative. If needed, please review and consider manually adding it to your project ([#128](https://github.com/stellar/js-xdr/pull/128)).
 
+* Decoding Array and VarArray now fast fails when the array length exceeds remaining bytes to decode ([#132](https://github.com/stellar/js-xdr/pull/132))
+
 ## [v3.1.2](https://github.com/stellar/js-xdr/compare/v3.1.1...v3.1.2)
 
 ### Fixed
