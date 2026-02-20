@@ -1,5 +1,5 @@
 import { NestedXdrType } from './xdr-type';
-import { XdrWriterError } from './errors';
+import { XdrWriterError, XdrReaderError } from './errors';
 
 export class Array extends NestedXdrType {
   constructor(childType, length, maxDepth = NestedXdrType.DEFAULT_MAX_DEPTH) {
@@ -11,7 +11,7 @@ export class Array extends NestedXdrType {
   /**
    * @inheritDoc
    */
-  read(reader) {
+  read(reader, remainingDepth = this._maxDepth) {
     if (this._length > reader.remainingBytes()) {
       throw new XdrReaderError(
         `insufficient bytes to decode Array of length ${this._length}`
