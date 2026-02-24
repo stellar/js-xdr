@@ -53,8 +53,11 @@ describe('VarArray#read', function () {
 
     const arr = new XDR.VarArray(FixedSizeChild, 10);
     const io = new XdrReader([0x00, 0x00, 0x00, 0x02]);
+    const remainingAfterLengthPrefix = io.remainingBytes() - 4;
 
-    expect(() => arr.read(io)).to.throw(/insufficient bytes/i);
+    expect(() => arr.read(io)).to.throw(
+      new RegExp(`exceeds remaining ${remainingAfterLengthPrefix} bytes`, 'i')
+    );
     expect(getCalls()).to.eql(0);
   });
 
@@ -86,8 +89,11 @@ describe('VarArray#read', function () {
     const arr = new XDR.VarArray(FixedSizeChild, 10);
     const io = new XdrReader([0x00, 0x00, 0x00, 0x02]);
     const before = io.remainingBytes();
+    const remainingAfterLengthPrefix = io.remainingBytes() - 4;
 
-    expect(() => arr.read(io)).to.throw(/insufficient bytes/i);
+    expect(() => arr.read(io)).to.throw(
+      new RegExp(`exceeds remaining ${remainingAfterLengthPrefix} bytes`, 'i')
+    );
     expect(before - io.remainingBytes()).to.eql(4);
   });
 

@@ -54,7 +54,9 @@ describe('Array#read', function () {
 
     const fixed = new XDR.Array(FixedSizeChild, 5);
     const reader = new XdrReader([0x00, 0x00, 0x00, 0x01]);
-    expect(() => fixed.read(reader)).to.throw(/insufficient bytes/i);
+    expect(() => fixed.read(reader)).to.throw(
+      new RegExp(`exceeds remaining ${reader.remainingBytes()} bytes`, 'i')
+    );
     expect(getCalls()).to.eql(0);
   });
 
@@ -87,7 +89,9 @@ describe('Array#read', function () {
     const reader = new XdrReader([0x00, 0x00]);
     const before = reader.remainingBytes();
 
-    expect(() => fixed.read(reader)).to.throw(/insufficient bytes/i);
+    expect(() => fixed.read(reader)).to.throw(
+      new RegExp(`exceeds remaining ${reader.remainingBytes()} bytes`, 'i')
+    );
     expect(reader.remainingBytes()).to.eql(before);
   });
 
