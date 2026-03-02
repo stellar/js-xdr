@@ -22,11 +22,10 @@ export class Array extends NestedXdrType {
       );
     }
     NestedXdrType.checkDepth(remainingDepth);
-    // allocate array of specified length
-    const result = new global.Array(this._length);
+    const result = [];
     // read values
     for (let i = 0; i < this._length; i++) {
-      result[i] = this._childType.read(reader, remainingDepth - 1);
+      result.push(this._childType.read(reader, remainingDepth - 1));
     }
     return result;
   }

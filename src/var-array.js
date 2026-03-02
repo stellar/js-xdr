@@ -32,9 +32,9 @@ export class VarArray extends NestedXdrType {
       );
     }
 
-    const result = new Array(length);
+    const result = [];
     for (let i = 0; i < length; i++) {
-      result[i] = this._childType.read(reader, remainingDepth - 1);
+      result.push(this._childType.read(reader, remainingDepth - 1));
     }
     return result;
   }
