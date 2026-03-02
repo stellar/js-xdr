@@ -58,13 +58,21 @@ export class LargeInt extends XdrPrimitiveType {
    * @inheritDoc
    */
   static read(reader) {
-    const { size } = this.prototype;
-    if (size === 64) return new this(reader.readBigUInt64BE());
-    return new this(
-      ...Array.from({ length: size / 64 }, () =>
-        reader.readBigUInt64BE()
-      ).reverse()
-    );
+    const { size, unsigned } = this.prototype;
+    if (size === 64) {
+      return new this(
+        unsigned ? reader.readBigUInt64BE() : reader.readBigInt64BE()
+      );
+    }
+    // assemble bigint directly from big-endian 64-bit chunks
+    let value = 0n;
+    for (let i = size / 64 - 1; i >= 0; i--) {
+      value |= reader.readBigUInt64BE() << BigInt(i * 64);
+    }
+    if (!unsigned) {
+      value = BigInt.asIntN(size, value);
+    }
+    return new this(value);
   }
 
   /**
@@ -88,12 +96,12 @@ export class LargeInt extends XdrPrimitiveType {
         writer.writeBigInt64BE(value);
       }
     } else {
-      for (const part of sliceBigInt(value, size, 64).reverse()) {
-        if (unsigned) {
-          writer.writeBigUInt64BE(part);
-        } else {
-          writer.writeBigInt64BE(part);
-        }
+      // extract 64-bit chunks directly from bigint, big-endian order
+      const uvalue = unsigned ? value : BigInt.asUintN(size, value);
+      for (let i = size / 64 - 1; i >= 0; i--) {
+        writer.writeBigUInt64BE(
+          (uvalue >> BigInt(i * 64)) & 0xffffffffffffffffn
+        );
       }
     }
   }
@@ -102,7 +110,11 @@ export class LargeInt extends XdrPrimitiveType {
    * @inheritDoc
    */
   static isValid(value) {
-    return typeof value === 'bigint' || value instanceof this;
+    if (value instanceof this) return true;
+    if (typeof value === 'bigint') {
+      return value >= this.MIN_VALUE && value <= this.MAX_VALUE;
+    }
+    return false;
   }
 
   /**
