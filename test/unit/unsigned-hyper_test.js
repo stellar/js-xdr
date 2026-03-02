@@ -72,3 +72,28 @@ describe('UnsignedHyper.fromString', function () {
     expect(() => UnsignedHyper.fromString('105946095601.5')).to.throw(/bigint/);
   });
 });
+
+describe('UnsignedHyper overflow', function () {
+  it('throws when constructing with a value exceeding u64 max', function () {
+    const tooBig = 2n ** 64n; // one above MAX_VALUE
+    expect(() => new UnsignedHyper(tooBig)).to.throw(
+      /out of range|does not fit/i
+    );
+  });
+
+  it('throws for a 300-bit bigint', function () {
+    const huge = 2n ** 300n;
+    expect(() => new UnsignedHyper(huge)).to.throw(
+      /out of range|does not fit/i
+    );
+  });
+
+  it('throws for negative values', function () {
+    expect(() => new UnsignedHyper(-1n)).to.throw(/positive/);
+  });
+
+  it('accepts exact boundary values without throwing', function () {
+    expect(() => new UnsignedHyper(UnsignedHyper.MAX_VALUE)).to.not.throw();
+    expect(() => new UnsignedHyper(UnsignedHyper.MIN_VALUE)).to.not.throw();
+  });
+});

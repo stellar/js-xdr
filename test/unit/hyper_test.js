@@ -84,3 +84,25 @@ describe('Hyper.fromString', function () {
     expect(() => Hyper.fromString('105946095601.5')).to.throw(/bigint/);
   });
 });
+
+describe('Hyper overflow/underflow', function () {
+  it('throws when constructing with a value exceeding i64 max', function () {
+    const tooBig = 2n ** 63n; // one above MAX_VALUE
+    expect(() => new Hyper(tooBig)).to.throw(/out of range|does not fit/i);
+  });
+
+  it('throws when constructing with a value below i64 min', function () {
+    const tooSmall = -(2n ** 63n) - 1n; // one below MIN_VALUE
+    expect(() => new Hyper(tooSmall)).to.throw(/out of range|does not fit/i);
+  });
+
+  it('throws for a 300-bit bigint', function () {
+    const huge = 2n ** 300n;
+    expect(() => new Hyper(huge)).to.throw(/out of range|does not fit/i);
+  });
+
+  it('accepts exact boundary values without throwing', function () {
+    expect(() => new Hyper(Hyper.MAX_VALUE)).to.not.throw();
+    expect(() => new Hyper(Hyper.MIN_VALUE)).to.not.throw();
+  });
+});
