@@ -13,6 +13,11 @@ project adheres to [Semantic Versioning](http://semver.org/).
 
 * Decoding Array and VarArray now fast fails when the array length exceeds remaining bytes to decode ([#132](https://github.com/stellar/js-xdr/pull/132))
 
+* Fixed silent truncation of bigint values exceeding the range of sized integers (`Hyper`, `UnsignedHyper`, and other `LargeInt` subtypes). Construction, encoding, and multi-part assembly now throw on overflow/underflow instead of silently clamping. `isValid` also validates value range. `sliceBigInt` now returns unsigned slice values for consistency ([#133](https://github.com/stellar/js-xdr/pull/133)).
+
+
+
+
 ## [v3.1.2](https://github.com/stellar/js-xdr/compare/v3.1.1...v3.1.2)
 
 ### Fixed
