@@ -118,11 +118,15 @@ export function sliceBigInt(value, iSize, sliceSize) {
   }
 
   const shift = BigInt(sliceSize);
-  const mask = (1n << shift) - 1n;
 
+  // iterate shift and mask application
   const result = new Array(total);
   for (let i = 0; i < total; i++) {
-    result[i] = value & mask;
+    // we force a signed interpretation to preserve sign in each slice value,
+    // but downstream can convert to unsigned if it's appropriate
+    result[i] = BigInt.asIntN(sliceSize, value); // clamps to size
+
+    // move on to the next chunk
     value >>= shift;
   }
 

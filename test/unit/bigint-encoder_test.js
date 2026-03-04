@@ -335,8 +335,8 @@ describe('sliceBigInt', function () {
     const testCases = [
       [0n, 64, 64, [0n]],
       [0n, 256, 256, [0n]],
-      [-1n, 64, 32, [0xffffffffn, 0xffffffffn]],
-      [0xfffffffffffffffen, 64, 32, [0xfffffffen, 0xffffffffn]],
+      [-1n, 64, 32, [-1n, -1n]],
+      [0xfffffffffffffffen, 64, 32, [-2n, -1n]],
       [
         0x7fffffffffffffff5cffffffffffffffn,
         128,
@@ -347,13 +347,13 @@ describe('sliceBigInt', function () {
         0x80000000ffffffff0000000100000001n,
         128,
         32,
-        [1n, 1n, 0xffffffffn, 0x80000000n]
+        [1n, 1n, -1n, -0x80000000n]
       ],
       [
         -0x158fffffffffffffea6fffffffffffffea6fffffffffffffea7n,
         256,
         64,
-        [0x159n, 0x159n, 0x159n, 0xfffffffffffffea7n]
+        [345n, 345n, 345n, -345n]
       ],
       [
         0x0000000800000007000000060000000500000004000000030000000200000001n,
@@ -365,13 +365,13 @@ describe('sliceBigInt', function () {
         -0x7fffffff8fffffff9fffffffafffffffbfffffffcfffffffdffffffffn,
         256,
         32,
-        [1n, 2n, 3n, 4n, 5n, 6n, 7n, 0xfffffff8n]
+        [1n, 2n, 3n, 4n, 5n, 6n, 7n, -8n]
       ],
       [
         -0x7fffffff800000005fffffffa00000003fffffffc00000001ffffffffn,
         256,
         32,
-        [1n, 0xfffffffen, 3n, 0xfffffffcn, 5n, 0xfffffffan, 7n, 0xfffffff8n]
+        [1n, -2n, 3n, -4n, 5n, -6n, 7n, -8n]
       ]
     ];
     for (let [value, size, sliceSize, expected] of testCases) {
