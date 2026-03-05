@@ -98,7 +98,7 @@ export class LargeInt extends XdrPrimitiveType {
       const uvalue = unsigned ? value : BigInt.asUintN(size, value);
       for (let i = size / 64 - 1; i >= 0; i--) {
         writer.writeBigUInt64BE(
-          (uvalue >> BigInt(i * 64)) & 0xffffffffffffffffn
+          (uvalue >> BigInt(i * 64)) & 0xffffffffffffffffn // 2^64-1
         );
       }
     }
