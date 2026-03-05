@@ -51,7 +51,7 @@ export function encodeBigIntFromBits(parts, size, unsigned) {
     }
     const [min, max] = calculateBigIntBoundaries(size, unsigned);
     if (value < min || value > max) {
-      throw new TypeError(
+      throw new RangeError(
         `bigint value ${value} for ${formatIntName(
           size,
           unsigned
@@ -80,7 +80,7 @@ export function encodeBigIntFromBits(parts, size, unsigned) {
   }
 
   // failed to encode
-  throw new TypeError(
+  throw new RangeError(
     `bigint values [${parts}] for ${formatIntName(
       size,
       unsigned
