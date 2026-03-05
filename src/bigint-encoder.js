@@ -95,7 +95,7 @@ export function encodeBigIntFromBits(parts, size, unsigned) {
  * @param {bigint} value - Single bigint value to decompose
  * @param {64|128|256} iSize - Number of bits represented by `value`
  * @param {32|64|128} sliceSize - Number of chunks to decompose into
- * @return {bigint[]}
+ * @return {bigint[]} List of signed bigint chunks in big-endian order (i.e. earlier elements are higher bits)
  */
 export function sliceBigInt(value, iSize, sliceSize) {
   if (typeof value !== 'bigint') {

@@ -93,6 +93,8 @@ export class LargeInt extends XdrPrimitiveType {
       }
     } else {
       // extract 64-bit chunks directly from bigint, big-endian order
+      // This does not use sliceBigint since it returns slices as signed values,
+      // which is not what we want for encoding
       const uvalue = unsigned ? value : BigInt.asUintN(size, value);
       for (let i = size / 64 - 1; i >= 0; i--) {
         writer.writeBigUInt64BE(
