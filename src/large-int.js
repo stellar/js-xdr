@@ -64,15 +64,11 @@ export class LargeInt extends XdrPrimitiveType {
         unsigned ? reader.readBigUInt64BE() : reader.readBigInt64BE()
       );
     }
-    // assemble bigint directly from big-endian 64-bit chunks
-    let value = 0n;
-    for (let i = size / 64 - 1; i >= 0; i--) {
-      value |= reader.readBigUInt64BE() << BigInt(i * 64);
-    }
-    if (!unsigned) {
-      value = BigInt.asIntN(size, value);
-    }
-    return new this(value);
+    return new this(
+      ...Array.from({ length: size / 64 }, () =>
+        reader.readBigUInt64BE()
+      ).reverse()
+    );
   }
 
   /**
