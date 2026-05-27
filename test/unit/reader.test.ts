@@ -87,4 +87,11 @@ describe('Reader', () => {
     );
     expect(nested.decode(wire, { maxDepth: 2 })).toBe(5);
   });
+
+  it('validateXdr honors the maxDepth option', () => {
+    const nested = option(option(int32()));
+    const wire = bytes([0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0, 5]);
+    expect(nested.validateXdr(wire, { maxDepth: 1 })).toBe(false);
+    expect(nested.validateXdr(wire, { maxDepth: 2 })).toBe(true);
+  });
 });

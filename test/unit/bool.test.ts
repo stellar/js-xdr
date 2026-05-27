@@ -46,4 +46,20 @@ describe('bool', () => {
       expect(schema.validate(undefined)).toBe(false);
     });
   });
+
+  describe('validateXdr', () => {
+    it('accepts valid encoded XDR bytes', () => {
+      expect(schema.validateXdr(bytes([0, 0, 0, 0]))).toBe(true);
+      expect(schema.validateXdr(bytes([0, 0, 0, 1]))).toBe(true);
+    });
+
+    it('rejects invalid encoded XDR bytes', () => {
+      expect(schema.validateXdr(bytes([0, 0, 0, 2]))).toBe(false);
+      expect(schema.validateXdr(bytes([0, 0]))).toBe(false);
+    });
+
+    it('rejects encoded XDR bytes with trailing data', () => {
+      expect(schema.validateXdr(bytes([0, 0, 0, 1, 0]))).toBe(false);
+    });
+  });
 });

@@ -12,6 +12,7 @@ export interface XdrType<T> {
   readonly kind: string;
   encode(value: T): Uint8Array;
   decode(input: Uint8Array, options?: DecodeOptions): T;
+  validateXdr(input: Uint8Array, options?: DecodeOptions): boolean;
   validate(value: unknown): value is T;
   _read(reader: Reader, path: string): T;
   _write(value: T, writer: Writer, path: string): void;
@@ -38,6 +39,15 @@ export abstract class BaseType<T> implements XdrType<T> {
     const value = this._read(reader, this.name ?? this.kind);
     reader.done(this.name ?? this.kind);
     return value;
+  }
+
+  validateXdr(input: Uint8Array, options?: DecodeOptions): boolean {
+    try {
+      this.decode(input, options);
+      return true;
+    } catch {
+      return false;
+    }
   }
 
   validate(value: unknown): value is T {
