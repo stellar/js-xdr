@@ -37,6 +37,20 @@ describe('Writer', () => {
     expect(toArray(writer.toUint8Array())).toEqual([1, 2, 3, 4]);
   });
 
+  it('writes byte chunks larger than the initial buffer', () => {
+    const writer = new Writer();
+    const payload = new Uint8Array(200000);
+    payload[0] = 1;
+    payload[payload.length - 1] = 255;
+
+    writer.writeBytes(payload);
+
+    const output = writer.toUint8Array();
+    expect(output).toHaveLength(payload.length);
+    expect(output[0]).toBe(1);
+    expect(output[output.length - 1]).toBe(255);
+  });
+
   it('pads to the next 4-byte boundary based on length', () => {
     const cases: Array<[number, number[]]> = [
       [0, []],

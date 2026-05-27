@@ -1,15 +1,23 @@
 import { paddingLength, viewFor } from './helpers.js';
 
+const INITIAL_BUFFER_SIZE = 8192;
+
 export class Writer {
-  readonly #chunks: number[] = [];
+  #buffer = new Uint8Array(INITIAL_BUFFER_SIZE);
+  #offset = 0;
 
   writeBytes(bytes: Uint8Array): void {
-    this.#chunks.push(...bytes);
+    this.#ensureCapacity(bytes.length);
+    this.#buffer.set(bytes, this.#offset);
+    this.#offset += bytes.length;
   }
 
   writePadding(length: number): void {
-    for (let i = 0; i < paddingLength(length); i += 1) {
-      this.#chunks.push(0);
+    const padding = paddingLength(length);
+    if (padding > 0) {
+      this.#ensureCapacity(padding);
+      this.#buffer.fill(0, this.#offset, this.#offset + padding);
+      this.#offset += padding;
     }
   }
 
@@ -50,6 +58,22 @@ export class Writer {
   }
 
   toUint8Array(): Uint8Array {
-    return Uint8Array.from(this.#chunks);
+    return this.#buffer.slice(0, this.#offset);
+  }
+
+  #ensureCapacity(additionalBytes: number): void {
+    const requiredLength = this.#offset + additionalBytes;
+    if (requiredLength <= this.#buffer.length) {
+      return;
+    }
+
+    let nextLength = this.#buffer.length;
+    while (nextLength < requiredLength) {
+      nextLength *= 2;
+    }
+
+    const nextBuffer = new Uint8Array(nextLength);
+    nextBuffer.set(this.#buffer);
+    this.#buffer = nextBuffer;
   }
 }
