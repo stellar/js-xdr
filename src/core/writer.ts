@@ -2,6 +2,14 @@ import { paddingLength, viewFor } from './helpers.js';
 
 const INITIAL_BUFFER_SIZE = 8192;
 
+/**
+ * Low-level writer for raw XDR bytes.
+ *
+ * `Writer` appends big-endian primitive values to a growable byte buffer and
+ * can add the zero padding required by XDR's 4-byte alignment rules. Schema
+ * authors use it from `_write`; application code usually calls
+ * `schema.encode(value)`.
+ */
 export class Writer {
   #buffer = new Uint8Array(INITIAL_BUFFER_SIZE);
   #offset = 0;

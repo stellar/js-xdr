@@ -23,6 +23,12 @@ const RESERVED_ENUM_MEMBER_NAMES = new Set([
   '_write'
 ]);
 
+/**
+ * Reads and writes XDR enum values.
+ *
+ * Runtime values are numeric discriminants; member names are metadata exposed
+ * on the public enum schema.
+ */
 export class EnumType<Values extends Record<string, number>> extends BaseType<
   EnumMember<Values>
 > {
@@ -61,6 +67,21 @@ export class EnumType<Values extends Record<string, number>> extends BaseType<
   }
 }
 
+/**
+ * Creates a schema for an XDR enum.
+ *
+ * Values are the numeric wire discriminants. The returned schema also exposes
+ * each member name as a numeric property, so callers can use named constants
+ * while storing numbers in encoded data. Duplicate wire values and member names
+ * that collide with schema properties are rejected.
+ *
+ * @example
+ * ```ts
+ * const Color = enumType('Color', { red: 0, green: 1, blue: 2 });
+ * Color.encode(Color.green);
+ * Color.decode(bytes); // 1
+ * ```
+ */
 export function enumType<
   Name extends string,
   Values extends Record<string, number>

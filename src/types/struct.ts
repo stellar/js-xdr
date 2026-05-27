@@ -4,6 +4,11 @@ import type { Writer } from '../core/writer.js';
 import { BaseType, type Infer, type XdrType } from '../core/xdr-type.js';
 import { isPlainObject } from '../core/helpers.js';
 
+/**
+ * Reads and writes XDR structs.
+ *
+ * Runtime values are plain objects; there are no generated accessor classes.
+ */
 class StructType<
   Shape extends Record<string, XdrType<unknown>>
 > extends BaseType<{
@@ -53,6 +58,24 @@ class StructType<
   }
 }
 
+/**
+ * Creates a schema for an XDR struct.
+ *
+ * Values are plain JavaScript objects whose properties match the `fields`
+ * object. Fields are encoded in the insertion order of `fields`, so declare
+ * them in wire order. Encoding rejects missing fields and non-object values.
+ *
+ * @example
+ * ```ts
+ * const Color = struct('Color', {
+ *   red: uint32(),
+ *   green: uint32(),
+ *   blue: uint32(),
+ * });
+ *
+ * Color.encode({ red: 1, green: 2, blue: 3 });
+ * ```
+ */
 export function struct<
   Name extends string,
   Shape extends Record<string, XdrType<unknown>>

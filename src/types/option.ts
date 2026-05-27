@@ -3,6 +3,9 @@ import type { Writer } from '../core/writer.js';
 import { BaseType, type Infer, type XdrType } from '../core/xdr-type.js';
 import { BOOL_TYPE } from './bool.js';
 
+/**
+ * Reads and writes XDR optional values.
+ */
 class OptionType<T> extends BaseType<T | null> {
   readonly kind = 'option';
   readonly element: XdrType<T>;
@@ -30,6 +33,13 @@ class OptionType<T> extends BaseType<T | null> {
   }
 }
 
+/**
+ * Creates a schema for an XDR optional value.
+ *
+ * Values are represented as either the element value or `null`. The wire format
+ * writes a boolean presence flag first; when the flag is `true`, the element
+ * value follows.
+ */
 export function option<T extends XdrType<unknown>>(
   element: T
 ): XdrType<Infer<T> | null> {

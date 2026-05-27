@@ -3,6 +3,9 @@ import type { Writer } from '../core/writer.js';
 import { BaseType, type XdrType } from '../core/xdr-type.js';
 import { assertBigIntRange } from '../core/helpers.js';
 
+/**
+ * Reads and writes unsigned 64-bit XDR integers.
+ */
 class UHyperType extends BaseType<bigint> {
   readonly kind = 'uint64';
 
@@ -16,6 +19,13 @@ class UHyperType extends BaseType<bigint> {
   }
 }
 
+/**
+ * Creates a schema for an unsigned 64-bit XDR integer.
+ *
+ * Values are native `bigint`s in the inclusive range
+ * `0n..(2n ** 64n - 1n)`. Encoding rejects numbers, strings, and out-of-range
+ * bigint values.
+ */
 export function uint64(): XdrType<bigint> {
   return new UHyperType();
 }

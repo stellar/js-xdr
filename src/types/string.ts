@@ -5,14 +5,9 @@ import { BaseType, type XdrType } from '../core/xdr-type.js';
 import { assertLength } from '../core/helpers.js';
 
 /**
- * XDR `string<N>` — length-prefixed bytes, 4-byte padded.
+ * Reads and writes XDR `string<N>` values as bytes.
  *
- * Schema primitive: reads/writes raw `Uint8Array`. Charset handling is a
- * higher-layer concern (see e.g. `values/xdr-string.ts` for a wrapper that
- * exposes ergonomic string semantics on top of these bytes). Keeping this
- * layer charset-free means the `types/` schema primitives have no dependency
- * on the consumer-facing `values/` classes — the runtime can be lifted out
- * of this repo into a standalone XDR library without modification.
+ * Charset handling is deliberately outside this schema layer.
  */
 class StringType extends BaseType<Uint8Array> {
   readonly kind = 'string';
@@ -49,6 +44,20 @@ class StringType extends BaseType<Uint8Array> {
   }
 }
 
+/**
+ * Creates a schema for an XDR string.
+ *
+ * Values are raw bytes in a `Uint8Array`, not JavaScript strings. The wire
+ * format is a uint32 byte length, the bytes, then zero padding to a 4-byte
+ * boundary. Convert text at the boundary with `TextEncoder` and `TextDecoder`.
+ *
+ * @example
+ * ```ts
+ * const Name = string(64);
+ * const encoded = Name.encode(new TextEncoder().encode('hello'));
+ * const value = new TextDecoder().decode(Name.decode(encoded));
+ * ```
+ */
 function string_(maxLength: number): XdrType<Uint8Array> {
   return new StringType(maxLength);
 }

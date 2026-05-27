@@ -5,6 +5,9 @@ import { BaseType, type Infer, type XdrType } from '../core/xdr-type.js';
 import { assertArray, assertLength } from '../core/helpers.js';
 import { readArray, writeArray } from './array.js';
 
+/**
+ * Reads and writes XDR arrays with a fixed element count.
+ */
 class FixedArrayType<T> extends BaseType<T[]> {
   readonly kind = 'fixedArray';
   readonly element: XdrType<T>;
@@ -37,6 +40,13 @@ class FixedArrayType<T> extends BaseType<T[]> {
   }
 }
 
+/**
+ * Creates a schema for an XDR fixed-length array.
+ *
+ * Values are JavaScript arrays whose length must exactly equal `length`. The
+ * wire format contains only the element bytes; unlike `array`, no count is
+ * encoded.
+ */
 export function fixedArray<T extends XdrType<unknown>>(
   element: T,
   length: number

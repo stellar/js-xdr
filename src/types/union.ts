@@ -4,13 +4,30 @@ import type { Writer } from '../core/writer.js';
 import { BaseType, type Infer, type XdrType } from '../core/xdr-type.js';
 import { isPlainObject } from '../core/helpers.js';
 
+/**
+ * Named payload field for a non-void union arm.
+ *
+ * If a union case uses `field('code', int32())`, values for that case carry the
+ * payload as `{ type: discriminant, code: number }`.
+ */
 export type Field<Name extends string, T extends XdrType<unknown>> = {
   readonly kind: 'field';
   readonly name: Name;
   readonly schema: T;
 };
 type VoidArm = XdrType<void>;
+
+/**
+ * Payload schema for a union arm.
+ *
+ * Use `void()` for arms with no payload, or `field(name, schema)` for arms that
+ * carry one named payload value.
+ */
 export type UnionArm = VoidArm | Field<string, XdrType<unknown>>;
+
+/**
+ * Mapping between one discriminator value and the arm selected by that value.
+ */
 export type UnionCase<Name extends string, Disc, Arm extends UnionArm> = {
   readonly name: Name;
   readonly discriminant: Disc;
@@ -40,6 +57,12 @@ type UnionValue<
 
 const DEFAULT_CASE_NAME = 'default';
 
+/**
+ * Reads and writes XDR unions.
+ *
+ * Runtime values are plain tagged objects. There are no generated static arm
+ * constructors or accessor methods.
+ */
 class UnionType<
   Switch extends XdrType<string | number | boolean>,
   Cases extends readonly UnionCase<string, Infer<Switch>, UnionArm>[],
@@ -148,6 +171,12 @@ class UnionType<
   }
 }
 
+/**
+ * Creates a named payload field for a non-void union arm.
+ *
+ * The field name becomes the payload property on the JavaScript value for that
+ * arm. It must not match the union's discriminator property.
+ */
 export function field<Name extends string, T extends XdrType<unknown>>(
   name: Name,
   schema: T
@@ -155,6 +184,12 @@ export function field<Name extends string, T extends XdrType<unknown>>(
   return { kind: 'field', name, schema };
 }
 
+/**
+ * Creates one discriminator-to-arm mapping for a union schema.
+ *
+ * The discriminator must be a value accepted by the `switchOn` schema. For enum
+ * switches, pass the enum member value such as `ResultType.ok`.
+ */
 function case_<
   Name extends string,
   Disc extends string | number | boolean,
@@ -165,6 +200,29 @@ function case_<
 
 export { case_ as case };
 
+/**
+ * Creates a schema for an XDR union.
+ *
+ * Values are plain tagged objects. The discriminator is stored under `type` by
+ * default, or under `switchKey` when provided. Void arms contain only the
+ * discriminator. Non-void arms also contain the payload property declared with
+ * `field`.
+ *
+ * @example
+ * ```ts
+ * const ResultType = enumType('ResultType', { ok: 0, error: 1 });
+ * const Result = union('Result', {
+ *   switchOn: ResultType,
+ *   cases: [
+ *     case('ok', ResultType.ok, void()),
+ *     case('error', ResultType.error, field('code', int32())),
+ *   ],
+ * });
+ *
+ * Result.encode({ type: ResultType.error, code: 7 });
+ * Result.decode(bytes); // { type: 1, code: 7 }
+ * ```
+ */
 export function union<
   Name extends string,
   Switch extends XdrType<string | number | boolean>,

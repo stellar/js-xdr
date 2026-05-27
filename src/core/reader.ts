@@ -3,6 +3,13 @@ import { paddingLength, viewFor } from './helpers.js';
 
 export const DEFAULT_MAX_DEPTH = 200;
 
+/**
+ * Low-level reader for raw XDR bytes.
+ *
+ * `Reader` advances through one byte sequence, reads big-endian primitive
+ * values, verifies zero padding, and tracks nested schema depth. Schema authors
+ * use it from `_read`; application code usually calls `schema.decode(bytes)`.
+ */
 export class Reader {
   #offset = 0;
   #depth = 0;

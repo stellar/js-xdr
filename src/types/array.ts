@@ -4,6 +4,9 @@ import type { Writer } from '../core/writer.js';
 import { BaseType, type Infer, type XdrType } from '../core/xdr-type.js';
 import { assertArray, assertLength } from '../core/helpers.js';
 
+/**
+ * Reads and writes an XDR variable-length array body.
+ */
 class ArrayType<T> extends BaseType<T[]> {
   readonly kind = 'array';
   readonly element: XdrType<T>;
@@ -43,6 +46,16 @@ class ArrayType<T> extends BaseType<T[]> {
   }
 }
 
+/**
+ * Creates a schema for an XDR variable-length array.
+ *
+ * Values are JavaScript arrays. On the wire, the array is encoded as a uint32
+ * element count followed by each element. Encoding and decoding reject lengths
+ * greater than `maxLength`.
+ *
+ * Use `fixedArray` for XDR arrays with a compile-time length and no length
+ * prefix.
+ */
 export function array<T extends XdrType<unknown>>(
   element: T,
   maxLength: number
@@ -50,6 +63,12 @@ export function array<T extends XdrType<unknown>>(
   return new ArrayType(element, maxLength) as XdrType<Infer<T>[]>;
 }
 
+/**
+ * Reads `length` array elements without reading a length prefix.
+ *
+ * This is a schema-composition helper used by `array` and `fixedArray`;
+ * application code should normally use `schema.decode(bytes)`.
+ */
 export function readArray<T>(
   reader: Reader,
   length: number,
@@ -63,6 +82,12 @@ export function readArray<T>(
   return values;
 }
 
+/**
+ * Writes array elements without writing a length prefix.
+ *
+ * This is a schema-composition helper used by `array` and `fixedArray`;
+ * application code should normally use `schema.encode(value)`.
+ */
 export function writeArray<T>(
   values: T[],
   writer: Writer,

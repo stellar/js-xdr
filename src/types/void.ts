@@ -2,6 +2,9 @@ import { XdrError } from '../core/error.js';
 import type { Writer } from '../core/writer.js';
 import { BaseType, type XdrType } from '../core/xdr-type.js';
 
+/**
+ * Reads and writes the XDR void type.
+ */
 class VoidType extends BaseType<void> {
   readonly kind = 'void';
 
@@ -16,6 +19,12 @@ class VoidType extends BaseType<void> {
   }
 }
 
+/**
+ * Creates a schema for the XDR void type.
+ *
+ * The only valid JavaScript value is `undefined`, and the wire representation
+ * is zero bytes. This is most often used for void union arms.
+ */
 function void_(): XdrType<void> {
   return new VoidType();
 }

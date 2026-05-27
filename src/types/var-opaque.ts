@@ -4,6 +4,9 @@ import type { Writer } from '../core/writer.js';
 import { BaseType, type XdrType } from '../core/xdr-type.js';
 import { assertLength, assertUint8Array } from '../core/helpers.js';
 
+/**
+ * Reads and writes variable-length XDR opaque byte sequences.
+ */
 class VarOpaqueType extends BaseType<Uint8Array> {
   readonly kind = 'varOpaque';
 
@@ -37,6 +40,12 @@ class VarOpaqueType extends BaseType<Uint8Array> {
   }
 }
 
+/**
+ * Creates a schema for an XDR variable-length opaque byte sequence.
+ *
+ * Values are `Uint8Array`s with length at most `maxLength`. The wire format is
+ * a uint32 byte length, the raw bytes, then zero padding to a 4-byte boundary.
+ */
 export function varOpaque(
   maxLength: number,
   name?: string
