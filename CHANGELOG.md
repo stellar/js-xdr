@@ -5,6 +5,29 @@ project adheres to [Semantic Versioning](http://semver.org/).
 
 ## Unreleased
 
+A complete rewrite of the library. The runtime `xdr.config(...)` schema-definition DSL has been replaced with a set of statically-typed, explicitly-declared schema builders, and the entire source has been migrated from JavaScript to TypeScript. See [MIGRATION.md](./MIGRATION.md) for a step-by-step upgrade guide.
+
+### Breaking Change
+* **Removed the dynamic `config` / `TypeBuilder` DSL.** Schemas are no longer built at runtime by resolving a graph of `Reference`s inside `xdr.config(...)`. Instead, you compose schemas directly from exported builder functions: `array`, `bool`, `double`, `enumType`, `fixedArray`, `float`, `int32`, `int64`, `lazy`, `opaque`, `option`, `string`, `struct`, `uint32`, `uint64`, `union`, `varOpaque`, and `void`. Forward/recursive references that the old DSL resolved automatically are now expressed explicitly with `lazy(() => schema)`.
+* **Renamed the encode/decode API.** `toXDR()` / `fromXDR()` → `encode()` / `decode()`. The `format` argument (`'raw' | 'hex' | 'base64'`) has been dropped — `encode` always returns a `Uint8Array` and `decode` always takes one. Callers that relied on hex/base64 strings or `Buffer` output must convert at the boundary.
+* **Updated validation APIs.** `validateXDR(input, format)` is now `validateXdr(bytes, options)` and accepts raw `Uint8Array` bytes only; callers that used hex/base64 validation must convert at the boundary first. The new `validate(value)` method checks whether a JavaScript value can be encoded by the schema.
+* **`encode()` returns `Uint8Array` instead of `Buffer`.**
+* **Renamed the low-level streaming types.** `XdrReader` → `Reader` and `XdrWriter` → `Writer`.
+* **Consolidated the error types.** `XdrReaderError`, `XdrWriterError`, `XdrDefinitionError`, and `XdrNotImplementedDefinitionError` are replaced by a single `XdrError`.
+* **Renamed/reshaped the numeric types.** `Int`/`UnsignedInt` → `int32`/`uint32` (return JS `number`); `Hyper`/`UnsignedHyper`/`LargeInt` → `int64`/`uint64` (return `bigint`, with range-checked encoding). The `Quadruple` type has been removed (it was already unsupported and threw on use).
+* **New package layout.** `main`/`module`/`browser` fields are replaced by an `exports` map exposing dual ESM (`dist/js-xdr.mjs`) and CommonJS (`dist/js-xdr.cjs`) builds plus generated type declarations (`dist/js-xdr.d.ts`). Output is now `dist/` only (the `lib/` build is gone), the package is marked `sideEffects: false`, and Node `>=20` is required.
+
+### Added
+* **First-class TypeScript types.** Schemas carry full type information; `Infer<typeof schema>` yields the encoded/decoded value type, and `struct`/`union`/`enumType` produce strongly-typed object, tagged-union, and named-member types.
+* **`lazy(() => schema)`** builder for defining recursive and forward-referencing schemas.
+* **`BaseType` / `XdrType<T>`** are exported as the base class and interface for all schemas, along with a `DecodeOptions` `{ maxDepth }` option preserved from the prior recursion-depth guard.
+* **`enumType` reserved-name and duplicate-value validation** — throws if a member name collides with a schema property (`name`, `kind`, `encode`, …) or if two members share a wire value.
+
+### Changed
+* **Build chain modernized:** Webpack + Babel → Rollup + esbuild; output is a clean dual ESM/CJS bundle with `.d.ts` emission via `rollup-plugin-dts`.
+* **Test framework replaced:** Mocha + Karma + Sinon + Chai → Vitest; the full unit suite was rewritten in TypeScript (`*.test.ts`).
+* **Linting modernized:** ESLint 8 (airbnb-base config) → ESLint 9 flat config (`eslint.config.mjs`) with `typescript-eslint`; added `pnpm lint` and `pnpm typecheck` scripts.
+
 ## [v4.0.0](https://github.com/stellar/js-xdr/compare/v3.1.2...v4.0.0)
 
 ### Breaking Change

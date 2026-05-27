@@ -23,60 +23,43 @@ npm install --save @stellar/js-xdr
 
 ## Usage
 
-You can find some [examples here](examples/).
+> **Upgrading from v4?** The schema-definition API changed completely in v5.
+> See the [migration guide](MIGRATION.md).
 
-First, let's import the library:
-
-```javascript
-var xdr = require('@stellar/js-xdr');
-// or
-import xdr from '@stellar/js-xdr';
-```
-
-Now, let's look at how to decode some primitive types:
+Schemas are built by composing the exported builder functions. Each builder
+returns a schema with `encode(value)` → `Uint8Array` and `decode(bytes)` → value:
 
 ```javascript
+import { bool, int32, uint32, int64 } from '@stellar/js-xdr';
+
 // booleans
-xdr.Bool.fromXDR([0, 0, 0, 0]); // returns false
-xdr.Bool.fromXDR([0, 0, 0, 1]); // returns true
+bool().decode(Uint8Array.from([0, 0, 0, 0])); // returns false
+bool().decode(Uint8Array.from([0, 0, 0, 1])); // returns true
 
-// the inverse of `fromXDR` is `toXDR`, which returns a Buffer
-xdr.Bool.toXDR(true); // returns Buffer.from([0,0,0,1])
+// the inverse of `decode` is `encode`, which returns a Uint8Array
+bool().encode(true); // returns Uint8Array.from([0, 0, 0, 1])
 
-// XDR ints and unsigned ints can be safely represented as
-// a javascript number
+// XDR ints and unsigned ints are represented as a JavaScript number
+int32().decode(Uint8Array.from([0xff, 0xff, 0xff, 0xff])); // returns -1
+uint32().decode(Uint8Array.from([0xff, 0xff, 0xff, 0xff])); // returns 4294967295
 
-xdr.Int.fromXDR([0xff, 0xff, 0xff, 0xff]); // returns -1
-xdr.UnsignedInt.fromXDR([0xff, 0xff, 0xff, 0xff]); // returns 4294967295
-
-// XDR Hypers, however, cannot be safely represented in the 53-bits
-// of precision we get with a JavaScript `Number`, so we allow creation from big-endian arrays of numbers, strings, or bigints.
-var result = xdr.Hyper.fromXDR([0, 0, 0, 0, 0, 0, 0, 0]); // returns an instance of xdr.Hyper
-result = new xdr.Hyper(0); // equivalent
-
-// convert the hyper to a string
-result.toString(); // return '0'
-
-// math!
-var ten = result.toBigInt() + 10;
-var minusone = result.toBigInt() - 1;
-
-// construct a number from a string
-var big = xdr.Hyper.fromString('1099511627776');
-
-// encode the hyper back into xdr
-big.toXDR(); // <Buffer 00 00 01 00 00 00 00 00>
+// XDR hypers cannot be safely represented in a JavaScript `Number`, so
+// `int64`/`uint64` use native `bigint` values
+int64().encode(1099511627776n); // Uint8Array(8) [0, 0, 1, 0, 0, 0, 0, 0]
+int64().decode(Uint8Array.from([0, 0, 1, 0, 0, 0, 0, 0])); // returns 1099511627776n
 ```
+
+Compound types (`struct`, `union`, `enumType`, `array`, …) are composed the same
+way — see the [migration guide](MIGRATION.md) and [examples](examples/) for the
+full set of builders.
 
 ## Caveats
 
 There are a couple of caveats to be aware of with this library:
 
-1.  We do not support quadruple precision floating point values. Attempting to
-    read or write these values will throw errors.
+1.  Quadruple precision floating point values are not supported.
 2.  NaN is not handled perfectly for floats and doubles. There are several forms
-    of NaN as defined by IEEE754 and the browser polyfill for node's Buffer
-    class seems to handle them poorly.
+    of NaN as defined by IEEE754, and they are not all round-tripped faithfully.
 
 ## Code generation
 
