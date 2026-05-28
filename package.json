@@ -3,7 +3,7 @@
   "version": "4.0.0",
   "description": "Read/write XDR encoded data structures (RFC 4506)",
   "engines": {
-    "node": ">=20.0.0",
+    "node": ">=22.0.0",
     "pnpm": ">=9.0.0"
   },
   "main": "./dist/js-xdr.cjs",
@@ -59,7 +59,7 @@
   },
   "devDependencies": {
     "@eslint/js": "^9.39.4",
-    "@types/node": "^20.12.0",
+    "@types/node": "^22.0.0",
     "esbuild": "^0.27.1",
     "eslint": "^9.39.4",
     "eslint-config-prettier": "^9.1.2",
