@@ -1,4 +1,4 @@
-import { opaque, struct, uint32, varOpaque } from '../dist/js-xdr.mjs';
+import { opaque, struct, uint32, varOpaque } from '../src/index.js';
 
 const Signature = struct('Signature', {
   publicKey: opaque(32),

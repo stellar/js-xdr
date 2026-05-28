@@ -1,6 +1,10 @@
-import { int32, lazy, option, struct } from '../dist/js-xdr.mjs';
+import { int32, lazy, option, struct, XdrType } from '../src/index.js';
 
-const IntList = struct('IntList', {
+type IntListWire = {
+  value: number;
+  rest: IntListWire | null;
+};
+const IntList: XdrType<IntListWire> = struct('IntList', {
   value: int32(),
   rest: option(lazy(() => IntList))
 });

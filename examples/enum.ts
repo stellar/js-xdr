@@ -1,4 +1,4 @@
-import { enumType } from '../dist/js-xdr.mjs';
+import { enumType } from '../src/index.js';
 
 const Color = enumType('Color', {
   red: 0,

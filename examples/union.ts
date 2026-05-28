@@ -6,7 +6,7 @@ import {
   string,
   union,
   void as xdrVoid
-} from '../dist/js-xdr.mjs';
+} from '../src/index.js';
 
 const ResultType = enumType('ResultType', {
   ok: 0,
@@ -32,6 +32,7 @@ const errorBytes = Result.encode(errorResult);
 const parsedError = Result.decode(errorBytes);
 
 console.log(parsedError);
+// @ts-expect-error TypeScript doesn't know about the discriminated union here, so `message` is still a `Uint8Array`.
 console.log(new TextDecoder().decode(parsedError.message));
 
 const okResult = { type: ResultType.ok };
