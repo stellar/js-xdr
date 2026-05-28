@@ -6,11 +6,17 @@ import { BaseType, type XdrType } from '../core/xdr-type.js';
 export type EnumMember<Values extends Record<string, number>> =
   Values[keyof Values];
 
+export type EnumName<Values extends Record<string, number>> = Extract<
+  keyof Values,
+  string
+>;
+
 export type EnumSchema<
   Name extends string,
   Values extends Record<string, number>
 > = XdrType<EnumMember<Values>> & {
   readonly name: Name;
+  readonly nameByValue: ReadonlyMap<number, EnumName<Values>>;
 } & Values;
 
 const RESERVED_ENUM_MEMBER_NAMES = new Set([
@@ -20,7 +26,8 @@ const RESERVED_ENUM_MEMBER_NAMES = new Set([
   'decode',
   'validate',
   '_read',
-  '_write'
+  '_write',
+  'nameByValue'
 ]);
 
 /**
@@ -35,18 +42,18 @@ export class EnumType<Values extends Record<string, number>> extends BaseType<
   readonly kind = 'enum';
   // Maps wire value → declared member name. Public so the generic toJson
   // walker can render numeric enums as their string names.
-  readonly nameByValue: ReadonlyMap<number, string>;
+  readonly nameByValue: ReadonlyMap<number, EnumName<Values>>;
   readonly #valuesSet = new Set<number>();
 
   constructor(name: string, values: Values) {
     super(name);
-    const nameByValue = new Map<number, string>();
+    const nameByValue = new Map<number, EnumName<Values>>();
     for (const [memberName, memberValue] of Object.entries(values)) {
       if (this.#valuesSet.has(memberValue)) {
         throw new XdrError(`${name}: duplicate enum value ${memberValue}`);
       }
       this.#valuesSet.add(memberValue);
-      nameByValue.set(memberValue, memberName);
+      nameByValue.set(memberValue, memberName as EnumName<Values>);
     }
     this.nameByValue = nameByValue;
   }
