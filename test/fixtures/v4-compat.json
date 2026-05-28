@@ -1,0 +1,56 @@
+{
+  "generatedBy": {
+    "package": "@stellar/js-xdr",
+    "alias": "js-xdr-v4",
+    "version": "4.0.0",
+    "script": "test/fixtures/generate-v4-compat.cjs"
+  },
+  "cases": {
+    "compatRecord": {
+      "schema": "CompatRecord",
+      "hex": "fffffffffffffffffffffee08e04fb350000011f71fb04cb000000013fc00000c0020000000000000000000268690000010203000000000404050607000000010000000200000003000000020000000400000005000000010000000900000002",
+      "value": {
+        "i": -1,
+        "u": 4294967295,
+        "h": "-1234567890123",
+        "uh": "1234567890123",
+        "ok": true,
+        "f": 1.5,
+        "d": -2.25,
+        "name": "6869",
+        "fixed": "010203",
+        "varBytes": "04050607",
+        "fixedInts": [1, 2, 3],
+        "varInts": [4, 5],
+        "maybe": 9,
+        "color": 2
+      }
+    },
+    "resultOk": {
+      "schema": "Result",
+      "hex": "00000000",
+      "value": {
+        "type": 0
+      }
+    },
+    "resultError": {
+      "schema": "Result",
+      "hex": "00000001000000107468697320697320616e206572726f72",
+      "value": {
+        "type": 1,
+        "message": "7468697320697320616e206572726f72"
+      }
+    },
+    "linkedList": {
+      "schema": "IntList",
+      "hex": "00000003000000010000000100000000",
+      "value": {
+        "value": 3,
+        "rest": {
+          "value": 1,
+          "rest": null
+        }
+      }
+    }
+  }
+}

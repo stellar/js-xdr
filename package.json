@@ -33,6 +33,7 @@
     "lint": "eslint .",
     "typecheck": "tsc --noEmit",
     "test-generate": "bundle exec xdrgen -o generated -n test -l javascript examples/test.x",
+    "fixtures:generate-v4": "node test/fixtures/generate-v4-compat.cjs",
     "fmt": "prettier --write '**/*.{js,ts,json}'",
     "prepare": "husky",
     "clean": "rm -rf dist"
@@ -64,6 +65,7 @@
     "eslint": "^9.39.4",
     "eslint-config-prettier": "^9.1.2",
     "husky": "^9.1.7",
+    "js-xdr-v4": "npm:@stellar/js-xdr@4.0.0",
     "lint-staged": "13.2.2",
     "prettier": "^2.8.7",
     "rollup": "^4.53.3",
