@@ -3,7 +3,7 @@
 All notable changes to this project will be documented in this file. This
 project adheres to [Semantic Versioning](http://semver.org/).
 
-## Unreleased
+## [v5.0.0-rc.1](https://github.com/stellar/js-xdr/compare/v4.0.0...v5.0.0)
 
 A complete rewrite of the library. The runtime `xdr.config(...)` schema-definition DSL has been replaced with a set of statically-typed, explicitly-declared schema builders, and the entire source has been migrated from JavaScript to TypeScript. See [MIGRATION.md](./MIGRATION.md) for a step-by-step upgrade guide.
 
@@ -15,7 +15,7 @@ A complete rewrite of the library. The runtime `xdr.config(...)` schema-definiti
 * **Renamed the low-level streaming types.** `XdrReader` → `Reader` and `XdrWriter` → `Writer`.
 * **Consolidated the error types.** `XdrReaderError`, `XdrWriterError`, `XdrDefinitionError`, and `XdrNotImplementedDefinitionError` are replaced by a single `XdrError`.
 * **Renamed/reshaped the numeric types.** `Int`/`UnsignedInt` → `int32`/`uint32` (return JS `number`); `Hyper`/`UnsignedHyper`/`LargeInt` → `int64`/`uint64` (return `bigint`, with range-checked encoding). The `Quadruple` type has been removed (it was already unsupported and threw on use).
-* **New package layout.** `main`/`module`/`browser` fields are replaced by an `exports` map exposing dual ESM (`dist/js-xdr.mjs`) and CommonJS (`dist/js-xdr.cjs`) builds plus generated type declarations (`dist/js-xdr.d.ts`). Output is now `dist/` only (the `lib/` build is gone), the package is marked `sideEffects: false`, and Node `>=20` is required.
+* **New package layout.** `main`/`module`/`browser` fields are replaced by an `exports` map exposing dual ESM (`dist/js-xdr.mjs`) and CommonJS (`dist/js-xdr.cjs`) builds plus generated type declarations (`dist/js-xdr.d.ts`). Output is now `dist/` only (the `lib/` build is gone), the package is marked `sideEffects: false`, and Node `>=22` is required.
 
 ### Added
 * **First-class TypeScript types.** Schemas carry full type information; `Infer<typeof schema>` yields the encoded/decoded value type, and `struct`/`union`/`enumType` produce strongly-typed object, tagged-union, and named-member types.
