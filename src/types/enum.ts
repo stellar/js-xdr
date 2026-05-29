@@ -1,4 +1,5 @@
 import { XdrError } from '../core/error.js';
+import { assertIntRange } from '../core/helpers.js';
 import type { Reader } from '../core/reader.js';
 import type { Writer } from '../core/writer.js';
 import { BaseType, type XdrType } from '../core/xdr-type.js';
@@ -49,6 +50,12 @@ export class EnumType<Values extends Record<string, number>> extends BaseType<
     super(name);
     const nameByValue = new Map<number, EnumName<Values>>();
     for (const [memberName, memberValue] of Object.entries(values)) {
+      assertIntRange(
+        memberValue,
+        -2147483648,
+        2147483647,
+        `${name}.${memberName}`
+      );
       if (this.#valuesSet.has(memberValue)) {
         throw new XdrError(`${name}: duplicate enum value ${memberValue}`);
       }

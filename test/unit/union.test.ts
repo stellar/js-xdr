@@ -37,6 +37,17 @@ describe('union', () => {
     it('throws when the value has no discriminator key', () => {
       expect(() => encodeInvalid(Asset, {})).toThrow(/expected union object/i);
     });
+
+    it('rejects class instances rather than treating them as plain objects', () => {
+      // Carries the discriminator key, so it is only rejected by the
+      // plain-object check itself (not the missing-key fallback).
+      class FakeAsset {
+        type = 0;
+      }
+      expect(() => encodeInvalid(Asset, new FakeAsset())).toThrow(
+        /expected union object/i
+      );
+    });
   });
 
   describe('decode', () => {

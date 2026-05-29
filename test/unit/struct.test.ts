@@ -33,6 +33,29 @@ describe('struct', () => {
       expect(() => encodeInvalid(Range, [])).toThrow(/expected plain object/i);
     });
 
+    it('rejects class instances rather than treating them as plain objects', () => {
+      expect(() => encodeInvalid(Range, new Date())).toThrow(
+        /expected plain object/i
+      );
+      expect(() => encodeInvalid(Range, new Map())).toThrow(
+        /expected plain object/i
+      );
+      expect(() => encodeInvalid(Range, new Uint8Array(4))).toThrow(
+        /expected plain object/i
+      );
+    });
+
+    it('accepts objects with a null prototype', () => {
+      const value = Object.assign(Object.create(null), {
+        begin: 1,
+        end: 2,
+        inclusive: true
+      });
+      expect(toArray(Range.encode(value))).toEqual([
+        0, 0, 0, 1, 0, 0, 0, 2, 0, 0, 0, 1
+      ]);
+    });
+
     it('propagates field validation errors', () => {
       expect(() =>
         Range.encode({ begin: 2147483648, end: 0, inclusive: false })

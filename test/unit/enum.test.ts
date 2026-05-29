@@ -54,5 +54,21 @@ describe('enum', () => {
       expect(() => enumType('Bad', { name: 0 })).toThrow(/reserved/i);
       expect(() => enumType('Bad', { decode: 1 })).toThrow(/reserved/i);
     });
+
+    it('rejects member values outside the int32 range', () => {
+      // 4294967295 would silently encode as -1 via DataView.setInt32.
+      expect(() => enumType('TooBig', { a: 4294967295 })).toThrow(/range/i);
+      expect(() => enumType('TooSmall', { a: -2147483649 })).toThrow(/range/i);
+    });
+
+    it('rejects non-integer member values', () => {
+      expect(() => enumType('Frac', { a: 1.5 })).toThrow(/integer/i);
+    });
+
+    it('accepts the int32 boundary values', () => {
+      expect(() =>
+        enumType('Bounds', { lo: -2147483648, hi: 2147483647 })
+      ).not.toThrow();
+    });
   });
 });
