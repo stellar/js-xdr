@@ -70,6 +70,42 @@ const IntList: XdrType<IntListValue> = struct('IntList', {
   rest: option(lazy(() => IntList))
 }) as XdrType<IntListValue>;
 
+// A deeply nested composite: Scene -> Layer -> [Shape (union)] -> Polygon ->
+// [Point]. Several layers of nested structs, unions, arrays, and options.
+const Point = struct('Point', {
+  x: int32(),
+  y: int32()
+});
+
+const Polygon = struct('Polygon', {
+  vertices: array(Point, 8),
+  closed: bool()
+});
+
+const ShapeKind = enumType('ShapeKind', {
+  dot: 0,
+  poly: 1
+});
+
+const Shape = union('Shape', {
+  switchOn: ShapeKind,
+  cases: [
+    xdrCase('dot', ShapeKind.dot, field('center', Point)),
+    xdrCase('poly', ShapeKind.poly, field('polygon', Polygon))
+  ]
+});
+
+const Layer = struct('Layer', {
+  label: string(8),
+  shapes: array(Shape, 4)
+});
+
+const Scene = struct('Scene', {
+  name: string(16),
+  root: Layer,
+  fallback: option(Shape)
+});
+
 function fromHex(hex: string): Uint8Array {
   return Uint8Array.from(Buffer.from(hex, 'hex'));
 }
@@ -94,6 +130,20 @@ function normalizeCompatRecord(value: ReturnType<typeof CompatRecord.decode>) {
     varInts: value.varInts,
     maybe: value.maybe,
     color: value.color
+  };
+}
+
+// Renders the byte-valued (string) fields nested in a decoded Scene as hex so
+// it can be compared against the JSON fixture; numeric/struct/union fields pass
+// through unchanged.
+function normalizeScene(value: ReturnType<typeof Scene.decode>) {
+  return {
+    name: toHex(value.name),
+    root: {
+      label: toHex(value.root.label),
+      shapes: value.root.shapes
+    },
+    fallback: value.fallback
   };
 }
 
@@ -152,5 +202,15 @@ describe('v4 wire compatibility fixtures', () => {
 
     expect(decoded).toEqual(testCase.value);
     expect(toHex(IntList.encode(decoded))).toBe(testCase.hex);
+  });
+
+  it('decodes and re-encodes a v4 deeply nested struct/union/array composite', () => {
+    const testCase = fixture.cases.scene;
+    const bytes = fromHex(testCase.hex);
+
+    const decoded = Scene.decode(bytes);
+
+    expect(normalizeScene(decoded)).toEqual(testCase.value);
+    expect(toHex(Scene.encode(decoded))).toBe(testCase.hex);
   });
 });

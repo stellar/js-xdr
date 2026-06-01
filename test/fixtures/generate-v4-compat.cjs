@@ -50,6 +50,47 @@ const types = XDR.config((xdr) => {
     ['value', xdr.int()],
     ['rest', xdr.option(xdr.lookup('IntList'))]
   ]);
+
+  // A deeply nested composite: Scene -> Layer -> [Shape (union)] -> Polygon
+  // -> [Point]. Exercises wire compatibility for several layers of nested
+  // structs, unions, arrays, and options.
+  xdr.struct('Point', [
+    ['x', xdr.int()],
+    ['y', xdr.int()]
+  ]);
+
+  xdr.struct('Polygon', [
+    ['vertices', xdr.varArray(xdr.lookup('Point'), 8)],
+    ['closed', xdr.bool()]
+  ]);
+
+  xdr.enum('ShapeKind', {
+    dot: 0,
+    poly: 1
+  });
+
+  xdr.union('Shape', {
+    switchOn: xdr.lookup('ShapeKind'),
+    switches: [
+      ['dot', 'center'],
+      ['poly', 'polygon']
+    ],
+    arms: {
+      center: xdr.lookup('Point'),
+      polygon: xdr.lookup('Polygon')
+    }
+  });
+
+  xdr.struct('Layer', [
+    ['label', xdr.string(8)],
+    ['shapes', xdr.varArray(xdr.lookup('Shape'), 4)]
+  ]);
+
+  xdr.struct('Scene', [
+    ['name', xdr.string(16)],
+    ['root', xdr.lookup('Layer')],
+    ['fallback', xdr.option(xdr.lookup('Shape'))]
+  ]);
 });
 
 function toHex(value) {
@@ -78,6 +119,26 @@ const resultError = types.Result.error('this is an error');
 
 const listTail = new types.IntList({ value: 1, rest: null });
 const linkedList = new types.IntList({ value: 3, rest: listTail });
+
+const scene = new types.Scene({
+  name: 'demo',
+  root: new types.Layer({
+    label: 'base',
+    shapes: [
+      types.Shape.dot(new types.Point({ x: 1, y: 2 })),
+      types.Shape.poly(
+        new types.Polygon({
+          vertices: [
+            new types.Point({ x: 3, y: 4 }),
+            new types.Point({ x: 5, y: 6 })
+          ],
+          closed: true
+        })
+      )
+    ]
+  }),
+  fallback: types.Shape.dot(new types.Point({ x: 7, y: 8 }))
+});
 
 const fixture = {
   generatedBy: {
@@ -129,6 +190,30 @@ const fixture = {
           value: 1,
           rest: null
         }
+      }
+    },
+    scene: {
+      schema: 'Scene',
+      hex: toHex(scene.toXDR()),
+      value: {
+        name: toHex(Buffer.from('demo')),
+        root: {
+          label: toHex(Buffer.from('base')),
+          shapes: [
+            { type: 0, center: { x: 1, y: 2 } },
+            {
+              type: 1,
+              polygon: {
+                vertices: [
+                  { x: 3, y: 4 },
+                  { x: 5, y: 6 }
+                ],
+                closed: true
+              }
+            }
+          ]
+        },
+        fallback: { type: 0, center: { x: 7, y: 8 } }
       }
     }
   }
