@@ -37,7 +37,7 @@ Two things changed at the conceptual level; everything else follows from them:
 | --- | --- |
 | `main: lib/xdr.js`, `browser: dist/xdr.js`, `module: src/index.js` | `exports` map with ESM (`dist/js-xdr.mjs`) + CJS (`dist/js-xdr.cjs`) + types (`dist/js-xdr.d.ts`) |
 | `Buffer` in, `Buffer` out | `Uint8Array` in, `Uint8Array` out |
-| Node `>=20` | Node `>=20` (unchanged) |
+| Node `>=20` | Node `>=22` |
 
 `encode()` returns a `Uint8Array`. If you need a `Buffer`, hex, or base64,
 convert at the boundary. The old `format` argument is gone.
@@ -346,9 +346,23 @@ If you used the raw streaming primitives, update the names and output method:
 | `writer.writeBigUInt64BE(value)` | `writer.writeBigUint64(value)` |
 | `writer.writeFloatBE(value)` | `writer.writeFloat32(value)` |
 | `writer.writeDoubleBE(value)` | `writer.writeFloat64(value)` |
+| `reader.readInt32BE()` | `reader.readInt32(path)` |
+| `reader.readUInt32BE()` | `reader.readUint32(path)` |
+| `reader.readBigInt64BE()` | `reader.readBigInt64(path)` |
+| `reader.readBigUInt64BE()` | `reader.readBigUint64(path)` |
+| `reader.readFloatBE()` | `reader.readFloat32(path)` |
+| `reader.readDoubleBE()` | `reader.readFloat64(path)` |
 
 Reader methods now take a `path` string used in diagnostics, for example
 `reader.readInt32('Result.code')`.
+
+## Custom schema types
+
+If you defined your own XDR types by subclassing v4's `XdrPrimitiveType`,
+`XdrCompositeType`, or `NestedXdrType`, those base classes were removed. Extend
+`BaseType<T>` — supply `kind`, `_read`, and `_write`, and you inherit
+`encode`/`decode`/`validate`/`validateXdr` — or implement the `XdrType<T>`
+interface directly.
 
 ## TypeScript
 

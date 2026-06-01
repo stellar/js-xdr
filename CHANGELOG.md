@@ -3,18 +3,21 @@
 All notable changes to this project will be documented in this file. This
 project adheres to [Semantic Versioning](http://semver.org/).
 
-## [v5.0.0-rc.1](https://github.com/stellar/js-xdr/compare/v4.0.0...v5.0.0)
+## [v5.0.0-rc.1](https://github.com/stellar/js-xdr/compare/v4.0.0...v5.0.0-rc.1)
 
 A complete rewrite of the library. The runtime `xdr.config(...)` schema-definition DSL has been replaced with a set of statically-typed, explicitly-declared schema builders, and the entire source has been migrated from JavaScript to TypeScript. See [MIGRATION.md](./MIGRATION.md) for a step-by-step upgrade guide.
 
 ### Breaking Change
-* **Removed the dynamic `config` / `TypeBuilder` DSL.** Schemas are no longer built at runtime by resolving a graph of `Reference`s inside `xdr.config(...)`. Instead, you compose schemas directly from exported builder functions: `array`, `bool`, `double`, `enumType`, `fixedArray`, `float`, `int32`, `int64`, `lazy`, `opaque`, `option`, `string`, `struct`, `uint32`, `uint64`, `union`, `varOpaque`, and `void`. Forward/recursive references that the old DSL resolved automatically are now expressed explicitly with `lazy(() => schema)`.
+* **Removed the dynamic `config` / `TypeBuilder` DSL.** Schemas are no longer built at runtime by resolving a graph of `Reference`s inside `xdr.config(...)`. Instead, you compose schemas directly from exported builder functions: `array`, `bool`, `double`, `enumType`, `fixedArray`, `float`, `int32`, `int64`, `lazy`, `opaque`, `option`, `string`, `struct`, `uint32`, `uint64`, `union` (composed with the `case` and `field` arm helpers), `varOpaque`, and `void`. Forward/recursive references that the old DSL resolved automatically are now expressed explicitly with `lazy(() => schema)`.
 * **Renamed the encode/decode API.** `toXDR()` / `fromXDR()` → `encode()` / `decode()`. The `format` argument (`'raw' | 'hex' | 'base64'`) has been dropped — `encode` always returns a `Uint8Array` and `decode` always takes one. Callers that relied on hex/base64 strings or `Buffer` output must convert at the boundary.
 * **Updated validation APIs.** `validateXDR(input, format)` is now `validateXdr(bytes, options)` and accepts raw `Uint8Array` bytes only; callers that used hex/base64 validation must convert at the boundary first. The new `validate(value)` method checks whether a JavaScript value can be encoded by the schema.
 * **`encode()` returns `Uint8Array` instead of `Buffer`.**
 * **Renamed the low-level streaming types.** `XdrReader` → `Reader` and `XdrWriter` → `Writer`.
 * **Consolidated the error types.** `XdrReaderError`, `XdrWriterError`, `XdrDefinitionError`, and `XdrNotImplementedDefinitionError` are replaced by a single `XdrError`.
+* **Removed the exported base classes.** `XdrPrimitiveType`, `XdrCompositeType`, and `NestedXdrType` are gone; custom schemas now extend the new `BaseType` or implement the `XdrType<T>` interface.
 * **Renamed/reshaped the numeric types.** `Int`/`UnsignedInt` → `int32`/`uint32` (return JS `number`); `Hyper`/`UnsignedHyper`/`LargeInt` → `int64`/`uint64` (return `bigint`, with range-checked encoding). The `Quadruple` type has been removed (it was already unsupported and threw on use).
+* **`string` is now bytes-only.** `string(maxLength)` reads and writes a `Uint8Array` with no charset handling; v4's `String` accepted UTF-8 JavaScript strings on write and offered a `readString()` helper. Convert text at the boundary with `TextEncoder`/`TextDecoder`. (`opaque`/`varOpaque` are likewise `Uint8Array`, not `Buffer`.)
+* **Renamed and reshaped the array types.** v4's fixed-length `Array` → `fixedArray(element, length)`; its variable-length `VarArray` → `array(element, maxLength)`. Note the flip: `array` is the **variable-length** type in v5 (it was fixed-length in v4), so audit existing call sites.
 * **New package layout.** `main`/`module`/`browser` fields are replaced by an `exports` map exposing dual ESM (`dist/js-xdr.mjs`) and CommonJS (`dist/js-xdr.cjs`) builds plus generated type declarations (`dist/js-xdr.d.ts`). Output is now `dist/` only (the `lib/` build is gone), the package is marked `sideEffects: false`, and Node `>=22` is required.
 
 ### Added
