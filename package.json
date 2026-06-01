@@ -4,7 +4,7 @@
   "description": "Read/write XDR encoded data structures (RFC 4506)",
   "engines": {
     "node": ">=22.0.0",
-    "pnpm": ">=9.0.0"
+    "pnpm": ">=10.0.0"
   },
   "main": "./dist/js-xdr.cjs",
   "module": "./dist/js-xdr.mjs",
