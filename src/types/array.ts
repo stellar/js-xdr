@@ -28,13 +28,12 @@ class ArrayType<T> extends BaseType<T[]> {
           `${path}: array length ${length} exceeds maximum ${this.maxLength}`
         );
       }
-      // Reject a wire-declared count that cannot be backed by the remaining
-      // input. Every element consumes at least zero bytes, so a valid array of
-      // elements that consume >= 1 byte always has length <= remaining; only a
-      // zero-width element (void, opaque(0), empty struct) lets a tiny input
-      // declare millions of elements, which would otherwise loop/allocate
-      // unbounded (OOM / RangeError). `readBytes` guards byte-typed lengths the
-      // same way; this is the equivalent guard for the element-count loop.
+      // Defensive guard: the declared element count must not exceed the number
+      // of bytes remaining. This bounds the decode loop for zero-width element
+      // schemas (void, opaque(0), empty struct), where element reads do not
+      // advance the reader and could otherwise loop/allocate unbounded.
+      // For non-zero-width elements, `readBytes` still enforces exact byte
+      // availability during element decoding.
       if (length > reader.remaining) {
         throw new XdrError(
           `${path}: array length ${length} exceeds remaining ${reader.remaining} byte(s)`
