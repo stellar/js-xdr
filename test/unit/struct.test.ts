@@ -84,4 +84,31 @@ describe('struct', () => {
     const value = { begin: -1, end: 100, inclusive: false };
     expect(roundTrip(Range, value)).toEqual(value);
   });
+
+  describe('inherited field names', () => {
+    it('rejects a field named __proto__ at construction', () => {
+      expect(() =>
+        struct('Bad', { ['__proto__']: int32(), x: int32() })
+      ).toThrow(/'__proto__' is not allowed/);
+    });
+
+    it('throws when a field shadowing Object.prototype is missing, rather than encoding the inherited value', () => {
+      const Shadow = struct('Shadow', { toString: int32(), x: int32() });
+      // `'toString' in value` is true for any plain object; only an
+      // own-property check catches the missing field.
+      expect(() => encodeInvalid(Shadow, { x: 7 })).toThrow(
+        /missing struct field/i
+      );
+    });
+
+    it('round-trips a provided field that shadows Object.prototype', () => {
+      const Shadow = struct('Shadow', { toString: int32(), x: int32() });
+      const wire = bytes([0, 0, 0, 5, 0, 0, 0, 7]);
+      const decoded = Shadow.decode(wire);
+      expect(Object.getOwnPropertyDescriptor(decoded, 'toString')?.value).toBe(
+        5
+      );
+      expect(toArray(Shadow.encode(decoded))).toEqual(Array.from(wire));
+    });
+  });
 });
