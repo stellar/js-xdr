@@ -12,7 +12,7 @@
   "exports": {
     ".": {
       "import": {
-        "types": "./dist/js-xdr.d.ts",
+        "types": "./dist/js-xdr.d.mts",
         "default": "./dist/js-xdr.mjs"
       },
       "require": {
@@ -32,6 +32,7 @@
     "test:watch": "vitest",
     "lint": "eslint .",
     "typecheck": "tsc --noEmit",
+    "check:package-types": "attw --pack .",
     "test-generate": "bundle exec xdrgen -o generated -n test -l javascript examples/test.x",
     "fixtures:generate-v4": "node test/fixtures/generate-v4-compat.cjs",
     "fmt": "prettier --write '**/*.{js,ts,json}'",
@@ -59,6 +60,7 @@
     ]
   },
   "devDependencies": {
+    "@arethetypeswrong/cli": "^0.18.4",
     "@eslint/js": "^9.39.4",
     "@types/node": "^22.0.0",
     "esbuild": "^0.27.1",
