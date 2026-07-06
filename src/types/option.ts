@@ -26,9 +26,14 @@ class OptionType<T> extends BaseType<T | null> {
   }
 
   _write(value: T | null, writer: Writer, path: string): void {
-    BOOL_TYPE._write(value !== null, writer, `${path}.present`);
-    if (value !== null) {
-      this.element._write(value, writer, `${path}.value`);
+    writer.enter(path);
+    try {
+      BOOL_TYPE._write(value !== null, writer, `${path}.present`);
+      if (value !== null) {
+        this.element._write(value, writer, `${path}.value`);
+      }
+    } finally {
+      writer.exit();
     }
   }
 }

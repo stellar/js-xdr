@@ -147,27 +147,32 @@ class UnionType<
     writer: Writer,
     path: string
   ): void {
-    if (!isPlainObject(value) || !(this.switchKey in value)) {
-      throw new XdrError(
-        `${path}: expected union object with ${this.switchKey} discriminator`
+    writer.enter(path);
+    try {
+      if (!isPlainObject(value) || !(this.switchKey in value)) {
+        throw new XdrError(
+          `${path}: expected union object with ${this.switchKey} discriminator`
+        );
+      }
+      const unionValue = value as Readonly<Record<string, unknown>>;
+      const switchValue = unionValue[this.switchKey] as Infer<Switch>;
+      const unionCase = this.#casesByDiscriminant.get(switchValue);
+      const arm = unionCase?.arm ?? this.defaultArm;
+      if (arm === undefined) {
+        throw new XdrError(
+          `${path}: no case for union discriminator ${String(switchValue)}`
+        );
+      }
+      this.switchOn._write(switchValue, writer, `${path}.${this.switchKey}`);
+      writeUnionArm(
+        unionValue,
+        arm,
+        writer,
+        `${path}.${unionCase?.name ?? DEFAULT_CASE_NAME}`
       );
+    } finally {
+      writer.exit();
     }
-    const unionValue = value as Readonly<Record<string, unknown>>;
-    const switchValue = unionValue[this.switchKey] as Infer<Switch>;
-    const unionCase = this.#casesByDiscriminant.get(switchValue);
-    const arm = unionCase?.arm ?? this.defaultArm;
-    if (arm === undefined) {
-      throw new XdrError(
-        `${path}: no case for union discriminator ${String(switchValue)}`
-      );
-    }
-    this.switchOn._write(switchValue, writer, `${path}.${this.switchKey}`);
-    writeUnionArm(
-      unionValue,
-      arm,
-      writer,
-      `${path}.${unionCase?.name ?? DEFAULT_CASE_NAME}`
-    );
   }
 }
 

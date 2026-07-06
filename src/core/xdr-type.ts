@@ -17,6 +17,21 @@ export interface DecodeOptions {
 }
 
 /**
+ * Options for encoding values to XDR bytes.
+ */
+export interface EncodeOptions {
+  /**
+   * Maximum number of nested schemas that may be entered while encoding.
+   *
+   * Guards against cyclic values fed to recursive schemas (and unbounded
+   * schema recursion through `lazy`), which fail with an `XdrError` instead
+   * of overflowing the call stack. If the limit is exceeded, `encode` throws
+   * and `validate` returns `false`.
+   */
+  readonly maxDepth?: number;
+}
+
+/**
  * Runtime schema for one XDR type.
  *
  * `T` is the JavaScript value shape used by this schema. For example,
@@ -38,7 +53,7 @@ export interface XdrType<T> {
    *
    * Throws `XdrError` if the value does not match this schema.
    */
-  encode(value: T): Uint8Array;
+  encode(value: T, options?: EncodeOptions): Uint8Array;
   /**
    * Decodes raw XDR bytes into a JavaScript value.
    *
@@ -100,8 +115,8 @@ export abstract class BaseType<T> implements XdrType<T> {
     this.name = name;
   }
 
-  encode(value: T): Uint8Array {
-    const writer = new Writer();
+  encode(value: T, options?: EncodeOptions): Uint8Array {
+    const writer = new Writer(options?.maxDepth);
     this._write(value, writer, this.name ?? this.kind);
     return writer.toUint8Array();
   }

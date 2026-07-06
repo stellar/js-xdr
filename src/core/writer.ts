@@ -1,4 +1,6 @@
+import { XdrError } from './error.js';
 import { paddingLength, viewFor } from './helpers.js';
+import { DEFAULT_MAX_DEPTH } from './reader.js';
 
 const INITIAL_BUFFER_SIZE = 8192;
 
@@ -13,6 +15,25 @@ const INITIAL_BUFFER_SIZE = 8192;
 export class Writer {
   #buffer = new Uint8Array(INITIAL_BUFFER_SIZE);
   #offset = 0;
+  #depth = 0;
+  readonly #maxDepth: number;
+
+  constructor(maxDepth: number = DEFAULT_MAX_DEPTH) {
+    this.#maxDepth = maxDepth;
+  }
+
+  enter(path: string): void {
+    this.#depth += 1;
+    if (this.#depth > this.#maxDepth) {
+      throw new XdrError(
+        `${path}: max recursion depth ${this.#maxDepth} exceeded`
+      );
+    }
+  }
+
+  exit(): void {
+    this.#depth -= 1;
+  }
 
   writeBytes(bytes: Uint8Array): void {
     this.#ensureCapacity(bytes.length);
