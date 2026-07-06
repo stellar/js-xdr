@@ -8,33 +8,34 @@ jobs:
     runs-on: ubuntu-latest
     permissions:
       contents: read
-      id-token: write # Required for OIDC provenance
+      id-token: write # Required for OIDC trusted publishing / provenance
     steps:
       - name: Checkout
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
+
+      - name: Install pnpm
+        # Version comes from the packageManager field in package.json.
+        uses: pnpm/action-setup@v4
 
       - name: Install Node
-        uses: actions/setup-node@v3
+        uses: actions/setup-node@v4
         with:
           node-version: '22.x'
           registry-url: 'https://registry.npmjs.org'
-          always-auth: true
 
       - name: Update npm for trusted publishing
         run: npm install -g npm@11.5.1
 
-      - name: Install pnpm
-        uses: pnpm/action-setup@v4
-        with:
-          version: 9
-
       - name: Install Dependencies
-        run: pnpm install
+        run: pnpm install --frozen-lockfile
 
-      - name: Build & Test
-        run: pnpm build && pnpm test
+      - name: Build, Check & Test
+        run: pnpm build && pnpm typecheck && pnpm lint && pnpm test
 
+      # Auth relies on npm Trusted Publishing (OIDC) — no token secret. The
+      # repo must be registered as a trusted publisher for @stellar/js-xdr on
+      # npmjs.com for this to work.
       - name: Publish to npm
-        run: pnpm publish --access public --provenance --no-git-checks --tag ${{ github.event.release.prerelease && 'rc' || 'latest' }}
-        env:
-          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
+        run:
+          pnpm publish --access public --provenance --no-git-checks --tag ${{
+          github.event.release.prerelease && 'rc' || 'latest' }}
