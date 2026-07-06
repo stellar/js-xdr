@@ -67,4 +67,35 @@ describe('string', () => {
       expect(schema.validate(123)).toBe(false);
     });
   });
+
+  describe('padding and length bounds', () => {
+    it('rejects non-zero padding bytes on decode', () => {
+      // "hi" + [0, 7] padding: canonical form requires zero pad bytes.
+      expect(() => schema.decode(bytes([0, 0, 0, 2, 104, 105, 0, 7]))).toThrow(
+        /non-zero XDR padding/i
+      );
+    });
+
+    it('accepts a value exactly at maxLength on encode and decode', () => {
+      const atMax = string(2);
+      const wire = bytes([0, 0, 0, 2, 104, 105, 0, 0]);
+      expect(toArray(atMax.encode(bytes([104, 105])))).toEqual(
+        Array.from(wire)
+      );
+      expect(toArray(atMax.decode(wire))).toEqual([104, 105]);
+    });
+
+    it('validateXdr agrees with decode for good and bad bytes', () => {
+      const atMax = string(2);
+      expect(atMax.validateXdr(bytes([0, 0, 0, 2, 104, 105, 0, 0]))).toBe(true);
+      // Oversized length prefix, non-zero padding, truncated input.
+      expect(atMax.validateXdr(bytes([0, 0, 0, 3, 104, 105, 33, 0]))).toBe(
+        false
+      );
+      expect(atMax.validateXdr(bytes([0, 0, 0, 2, 104, 105, 0, 7]))).toBe(
+        false
+      );
+      expect(atMax.validateXdr(bytes([0, 0, 0, 2, 104]))).toBe(false);
+    });
+  });
 });
