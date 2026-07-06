@@ -1,3 +1,4 @@
+import { XdrError } from '../core/error.js';
 import type { Reader } from '../core/reader.js';
 import type { Writer } from '../core/writer.js';
 import { BaseType, type Infer, type XdrType } from '../core/xdr-type.js';
@@ -48,5 +49,11 @@ class OptionType<T> extends BaseType<T | null> {
 export function option<T extends XdrType<unknown>>(
   element: T
 ): XdrType<Infer<T> | null> {
+  // An absent outer option and a present-but-null inner option would both map
+  // to JS `null`, giving one value two wire encodings (and a lossy re-encode).
+  // XDR IDL cannot express a directly nested optional either.
+  if (element.kind === 'option') {
+    throw new XdrError('option: cannot nest option directly inside option');
+  }
   return new OptionType(element) as XdrType<Infer<T> | null>;
 }

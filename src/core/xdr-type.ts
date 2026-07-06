@@ -1,3 +1,4 @@
+import { XdrError } from './error.js';
 import { Reader } from './reader.js';
 import { Writer } from './writer.js';
 
@@ -132,8 +133,13 @@ export abstract class BaseType<T> implements XdrType<T> {
     try {
       this.decode(input, options);
       return true;
-    } catch {
-      return false;
+    } catch (error) {
+      // Only XdrError means "these bytes are invalid"; anything else is a
+      // schema or library bug and must not masquerade as a validation result.
+      if (error instanceof XdrError) {
+        return false;
+      }
+      throw error;
     }
   }
 
@@ -142,8 +148,11 @@ export abstract class BaseType<T> implements XdrType<T> {
       const writer = new Writer();
       this._write(value as T, writer, this.name ?? this.kind);
       return true;
-    } catch {
-      return false;
+    } catch (error) {
+      if (error instanceof XdrError) {
+        return false;
+      }
+      throw error;
     }
   }
 

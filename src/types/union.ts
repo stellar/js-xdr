@@ -90,8 +90,20 @@ class UnionType<
     this.cases = cases;
     this.defaultArm = defaultArm;
     this.switchKey = switchKey;
+    if (cases.length === 0 && defaultArm === undefined) {
+      throw new XdrError(
+        `${name}: union needs at least one case or a default arm`
+      );
+    }
     const names = new Set<string>();
     for (const unionCase of cases) {
+      if (!switchOn.validate(unionCase.discriminant)) {
+        throw new XdrError(
+          `${name}.${unionCase.name}: case discriminator ${String(
+            unionCase.discriminant
+          )} is not a valid ${switchOn.name ?? switchOn.kind} value`
+        );
+      }
       if (names.has(unionCase.name)) {
         throw new XdrError(
           `${name}: duplicate union case name ${unionCase.name}`
