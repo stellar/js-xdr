@@ -86,6 +86,12 @@ class UnionType<
     switchKey: SwitchKey
   ) {
     super(name);
+    // Same rationale as struct: '__proto__' cannot be assigned onto a plain
+    // value object without invoking the inherited prototype setter, and the
+    // `in`-based presence checks below would read Object.prototype for it.
+    if (switchKey === '__proto__') {
+      throw new XdrError(`${name}: switchKey '__proto__' is not allowed`);
+    }
     this.switchOn = switchOn;
     this.cases = cases;
     this.defaultArm = defaultArm;
@@ -147,7 +153,10 @@ class UnionType<
     writer: Writer,
     path: string
   ): void {
-    if (!isPlainObject(value) || !(this.switchKey in value)) {
+    if (
+      !isPlainObject(value) ||
+      !Object.prototype.hasOwnProperty.call(value, this.switchKey)
+    ) {
       throw new XdrError(
         `${path}: expected union object with ${this.switchKey} discriminator`
       );
@@ -199,6 +208,9 @@ function case_<
 }
 
 export { case_ as case };
+// `import { case }` is a syntax error, so consumers of the `case` export must
+// alias it; `unionCase` is the same helper under an importable name.
+export { case_ as unionCase };
 
 /**
  * Creates a schema for an XDR union.
@@ -277,7 +289,7 @@ function writeUnionArm(
   path: string
 ): void {
   if (isFieldArm(arm)) {
-    if (!(arm.name in value)) {
+    if (!Object.prototype.hasOwnProperty.call(value, arm.name)) {
       throw new XdrError(`${path}.${arm.name}: missing union arm payload`);
     }
     arm.schema._write(value[arm.name], writer, `${path}.${arm.name}`);
@@ -295,6 +307,11 @@ function assertArmPayloadName(
   if (isFieldArm(arm) && arm.name === switchKey) {
     throw new XdrError(
       `${unionName}.${caseName}: union arm payload field must not be named ${switchKey}`
+    );
+  }
+  if (isFieldArm(arm) && arm.name === '__proto__') {
+    throw new XdrError(
+      `${unionName}.${caseName}: union arm payload field name '__proto__' is not allowed`
     );
   }
 }
