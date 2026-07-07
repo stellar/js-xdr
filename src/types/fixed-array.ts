@@ -50,6 +50,19 @@ class FixedArrayType<T> extends BaseType<T[]> {
 export function fixedArray<T extends XdrType<unknown>>(
   element: T,
   length: number
-): XdrType<Infer<T>[]> {
-  return new FixedArrayType(element, length) as XdrType<Infer<T>[]>;
+): FixedArraySchema<Infer<T>[]> {
+  return new FixedArrayType(element, length) as unknown as FixedArraySchema<
+    Infer<T>[]
+  >;
+}
+
+/**
+ * Public introspection surface of a fixed-length array schema.
+ *
+ * Narrow any `XdrType<unknown>` with `schema.kind === 'fixedArray'`.
+ */
+export interface FixedArraySchema<T> extends XdrType<T> {
+  readonly kind: 'fixedArray';
+  readonly element: XdrType<unknown>;
+  readonly length: number;
 }

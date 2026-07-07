@@ -70,8 +70,21 @@ class ArrayType<T> extends BaseType<T[]> {
 export function array<T extends XdrType<unknown>>(
   element: T,
   maxLength: number
-): XdrType<Infer<T>[]> {
-  return new ArrayType(element, maxLength) as XdrType<Infer<T>[]>;
+): ArraySchema<Infer<T>[]> {
+  return new ArrayType(element, maxLength) as unknown as ArraySchema<
+    Infer<T>[]
+  >;
+}
+
+/**
+ * Public introspection surface of a variable-length array schema.
+ *
+ * Narrow any `XdrType<unknown>` with `schema.kind === 'array'`.
+ */
+export interface ArraySchema<T> extends XdrType<T> {
+  readonly kind: 'array';
+  readonly element: XdrType<unknown>;
+  readonly maxLength: number;
 }
 
 /**

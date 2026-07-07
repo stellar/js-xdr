@@ -237,7 +237,7 @@ export function union<
     readonly defaultArm?: DefaultArm;
     readonly switchKey?: SwitchKey;
   }
-): XdrType<UnionValue<Switch, Cases, DefaultArm, SwitchKey>> & {
+): UnionSchema<UnionValue<Switch, Cases, DefaultArm, SwitchKey>> & {
   readonly name: Name;
 } {
   const switchKey = (options.switchKey ?? 'type') as SwitchKey;
@@ -247,9 +247,30 @@ export function union<
     options.cases,
     options.defaultArm,
     switchKey
-  ) as unknown as XdrType<UnionValue<Switch, Cases, DefaultArm, SwitchKey>> & {
+  ) as unknown as UnionSchema<
+    UnionValue<Switch, Cases, DefaultArm, SwitchKey>
+  > & {
     readonly name: Name;
   };
+}
+
+/**
+ * Public introspection surface of a union schema.
+ *
+ * Narrow any `XdrType<unknown>` with `schema.kind === 'union'` to walk its
+ * discriminator and arms generically, for example in a schema-driven JSON
+ * converter.
+ */
+export interface UnionSchema<T> extends XdrType<T> {
+  readonly kind: 'union';
+  /** Schema that encodes the discriminant value. */
+  readonly switchOn: XdrType<unknown>;
+  /** Declared discriminator-to-arm mappings. */
+  readonly cases: ReadonlyArray<UnionCase<string, unknown, UnionArm>>;
+  /** Arm used for discriminants with no matching case, if declared. */
+  readonly defaultArm: UnionArm | undefined;
+  /** Property holding the discriminant on JavaScript values. */
+  readonly switchKey: string;
 }
 
 function readUnionArm(

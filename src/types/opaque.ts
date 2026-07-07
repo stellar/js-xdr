@@ -10,7 +10,7 @@ import { assertLength, assertUint8Array } from '../core/helpers.js';
 class OpaqueType extends BaseType<Uint8Array> {
   readonly kind = 'opaque';
 
-  constructor(private readonly length: number, name?: string) {
+  constructor(readonly length: number, name?: string) {
     super(name);
     assertLength(length, 'opaque length');
   }
@@ -40,6 +40,16 @@ class OpaqueType extends BaseType<Uint8Array> {
  * format contains the raw bytes followed by zero padding to a 4-byte boundary;
  * no length prefix is encoded.
  */
-export function opaque(length: number, name?: string): XdrType<Uint8Array> {
+export function opaque(length: number, name?: string): OpaqueSchema {
   return new OpaqueType(length, name);
+}
+
+/**
+ * Public introspection surface of a fixed-length opaque schema.
+ *
+ * Narrow any `XdrType<unknown>` with `schema.kind === 'opaque'`.
+ */
+export interface OpaqueSchema extends XdrType<Uint8Array> {
+  readonly kind: 'opaque';
+  readonly length: number;
 }

@@ -12,7 +12,7 @@ import { assertLength } from '../core/helpers.js';
 class StringType extends BaseType<Uint8Array> {
   readonly kind = 'string';
 
-  constructor(private readonly maxLength: number) {
+  constructor(readonly maxLength: number) {
     super();
     assertLength(maxLength, 'string maxLength');
   }
@@ -58,8 +58,18 @@ class StringType extends BaseType<Uint8Array> {
  * const value = new TextDecoder().decode(Name.decode(encoded));
  * ```
  */
-function string_(maxLength: number): XdrType<Uint8Array> {
+function string_(maxLength: number): StringSchema {
   return new StringType(maxLength);
 }
 
 export { string_ as string };
+
+/**
+ * Public introspection surface of a string schema.
+ *
+ * Narrow any `XdrType<unknown>` with `schema.kind === 'string'`.
+ */
+export interface StringSchema extends XdrType<Uint8Array> {
+  readonly kind: 'string';
+  readonly maxLength: number;
+}

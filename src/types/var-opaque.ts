@@ -10,7 +10,7 @@ import { assertLength, assertUint8Array } from '../core/helpers.js';
 class VarOpaqueType extends BaseType<Uint8Array> {
   readonly kind = 'varOpaque';
 
-  constructor(private readonly maxLength: number, name?: string) {
+  constructor(readonly maxLength: number, name?: string) {
     super(name);
     assertLength(maxLength, 'varOpaque maxLength');
   }
@@ -46,9 +46,16 @@ class VarOpaqueType extends BaseType<Uint8Array> {
  * Values are `Uint8Array`s with length at most `maxLength`. The wire format is
  * a uint32 byte length, the raw bytes, then zero padding to a 4-byte boundary.
  */
-export function varOpaque(
-  maxLength: number,
-  name?: string
-): XdrType<Uint8Array> {
+export function varOpaque(maxLength: number, name?: string): VarOpaqueSchema {
   return new VarOpaqueType(maxLength, name);
+}
+
+/**
+ * Public introspection surface of a variable-length opaque schema.
+ *
+ * Narrow any `XdrType<unknown>` with `schema.kind === 'varOpaque'`.
+ */
+export interface VarOpaqueSchema extends XdrType<Uint8Array> {
+  readonly kind: 'varOpaque';
+  readonly maxLength: number;
 }

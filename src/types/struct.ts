@@ -92,12 +92,24 @@ export function struct<
 >(
   name: Name,
   fields: Shape
-): XdrType<{ readonly [K in keyof Shape]: Infer<Shape[K]> }> & {
+): StructSchema<{ readonly [K in keyof Shape]: Infer<Shape[K]> }> & {
   readonly name: Name;
 } {
-  return new StructType(name, fields) as unknown as XdrType<{
+  return new StructType(name, fields) as unknown as StructSchema<{
     readonly [K in keyof Shape]: Infer<Shape[K]>;
   }> & {
     readonly name: Name;
   };
+}
+
+/**
+ * Public introspection surface of a struct schema.
+ *
+ * Narrow any `XdrType<unknown>` with `schema.kind === 'struct'` to walk its
+ * fields generically, for example in a schema-driven JSON converter.
+ */
+export interface StructSchema<T> extends XdrType<T> {
+  readonly kind: 'struct';
+  /** Ordered `[fieldName, fieldSchema]` pairs in wire order. */
+  readonly entries: ReadonlyArray<readonly [string, XdrType<unknown>]>;
 }

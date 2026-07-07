@@ -42,6 +42,16 @@ class OptionType<T> extends BaseType<T | null> {
  */
 export function option<T extends XdrType<unknown>>(
   element: T
-): XdrType<Infer<T> | null> {
-  return new OptionType(element) as XdrType<Infer<T> | null>;
+): OptionSchema<Infer<T> | null> {
+  return new OptionType(element) as unknown as OptionSchema<Infer<T> | null>;
+}
+
+/**
+ * Public introspection surface of an optional-value schema.
+ *
+ * Narrow any `XdrType<unknown>` with `schema.kind === 'option'`.
+ */
+export interface OptionSchema<T> extends XdrType<T> {
+  readonly kind: 'option';
+  readonly element: XdrType<unknown>;
 }
