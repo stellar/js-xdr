@@ -19,7 +19,13 @@ export default [
   },
   {
     input,
-    output: { file: 'dist/js-xdr.d.ts', format: 'es' },
+    output: [
+      // .d.mts for the ESM condition, .d.ts (interpreted as CJS by node16
+      // resolution) for require and legacy consumers. Same content; the
+      // extension is what tells TypeScript which module format it describes.
+      { file: 'dist/js-xdr.d.mts', format: 'es' },
+      { file: 'dist/js-xdr.d.ts', format: 'es' }
+    ],
     plugins: [dts()]
   }
 ];

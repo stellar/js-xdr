@@ -46,4 +46,27 @@ describe('varOpaque (variable-length)', () => {
       ).toThrow(/exceeds maximum/i);
     });
   });
+
+  describe('padding and length bounds', () => {
+    it('rejects non-zero padding bytes on decode', () => {
+      expect(() => schema.decode(bytes([0, 0, 0, 1, 9, 0, 0, 5]))).toThrow(
+        /non-zero XDR padding/i
+      );
+    });
+
+    it('accepts a value exactly at maxLength on encode and decode', () => {
+      const atMax = varOpaque(2);
+      const wire = bytes([0, 0, 0, 2, 9, 8, 0, 0]);
+      expect(toArray(atMax.encode(bytes([9, 8])))).toEqual(Array.from(wire));
+      expect(toArray(atMax.decode(wire))).toEqual([9, 8]);
+    });
+
+    it('validateXdr agrees with decode for good and bad bytes', () => {
+      const atMax = varOpaque(2);
+      expect(atMax.validateXdr(bytes([0, 0, 0, 2, 9, 8, 0, 0]))).toBe(true);
+      expect(atMax.validateXdr(bytes([0, 0, 0, 3, 9, 8, 7, 0]))).toBe(false);
+      expect(atMax.validateXdr(bytes([0, 0, 0, 2, 9, 8, 0, 5]))).toBe(false);
+      expect(atMax.validateXdr(bytes([0, 0, 0, 2, 9]))).toBe(false);
+    });
+  });
 });

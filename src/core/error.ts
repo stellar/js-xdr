@@ -17,7 +17,7 @@ export class XdrError extends Error {
    * builds of this package coexist in one dependency graph (each build has its
    * own class identity, so a reference-equality `instanceof` would fail).
    */
-  static [Symbol.hasInstance](value: unknown): boolean {
+  static override [Symbol.hasInstance](value: unknown): boolean {
     return value instanceof Error && value.name === BRAND;
   }
 }

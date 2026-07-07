@@ -33,11 +33,11 @@ Two things changed at the conceptual level; everything else follows from them:
 
 ## Package / environment
 
-| v4 | v5 |
-| --- | --- |
+| v4                                                                 | v5                                                                                                |
+| ------------------------------------------------------------------ | ------------------------------------------------------------------------------------------------- |
 | `main: lib/xdr.js`, `browser: dist/xdr.js`, `module: src/index.js` | `exports` map with ESM (`dist/js-xdr.mjs`) + CJS (`dist/js-xdr.cjs`) + types (`dist/js-xdr.d.ts`) |
-| `Buffer` in, `Buffer` out | `Uint8Array` in, `Uint8Array` out |
-| Node `>=20` | Node `>=22` |
+| `Buffer` in, `Buffer` out                                          | `Uint8Array` in, `Uint8Array` out                                                                 |
+| Node `>=20`                                                        | Node `>=22`                                                                                       |
 
 `encode()` returns a `Uint8Array`. If you need a `Buffer`, hex, or base64,
 convert at the boundary. The old `format` argument is gone.
@@ -51,10 +51,10 @@ const asHex = Buffer.from(bytes).toString('hex');
 
 ## Defining schemas
 
-The `xdr.config(...)` DSL, `xdr.lookup(...)`, `xdr.typedef(...)`, and the central
-type registry are removed. Define each schema as a value and reference it
-directly. Define dependencies before the schemas that use them; for forward or
-recursive references, wrap the reference in `lazy(() => ...)`.
+The `xdr.config(...)` DSL, `xdr.lookup(...)`, `xdr.typedef(...)`, and the
+central type registry are removed. Define each schema as a value and reference
+it directly. Define dependencies before the schemas that use them; for forward
+or recursive references, wrap the reference in `lazy(() => ...)`.
 
 `typedef` no longer creates a registry entry. Use a normal variable alias:
 
@@ -93,8 +93,15 @@ const types = XDR.config((xdr) => {
 
 ```ts
 import {
-  enumType, struct, union, uint32, int32, opaque,
-  void as xdrVoid, field, case as xdrCase
+  enumType,
+  struct,
+  union,
+  uint32,
+  int32,
+  opaque,
+  void as xdrVoid,
+  field,
+  case as xdrCase
 } from '@stellar/js-xdr';
 
 const ResultType = enumType('ResultType', { ok: 0, error: 1 });
@@ -117,12 +124,12 @@ const Signature = opaque(32);
 ```
 
 Notes:
+
 - Struct fields are an **object** (`{ name: schema }`), not an array of pairs.
   JavaScript property insertion order is the wire order.
 - A union case is `case(name, discriminant, arm)`. The arm is either `void()` or
   `field(payloadName, schema)`.
-- Enum members are plain numbers: `ResultType.ok` is `0`, not
-  `ResultType.ok()`.
+- Enum members are plain numbers: `ResultType.ok` is `0`, not `ResultType.ok()`.
 - A `defaultArm` is still supported:
   `union(name, { switchOn, cases, defaultArm })`.
 - The discriminator key on union values defaults to `type`; override it with
@@ -130,29 +137,30 @@ Notes:
 
 ### Type mapping
 
-| v4 | v5 | v5 value type |
-| --- | --- | --- |
-| `xdr.int()` / `XDR.Int` | `int32()` | `number` |
-| `xdr.uint()` / `XDR.UnsignedInt` | `uint32()` | `number` |
-| `XDR.Hyper` | `int64()` | `bigint` |
-| `XDR.UnsignedHyper` | `uint64()` | `bigint` |
-| `XDR.Float` | `float()` | `number` |
-| `XDR.Double` | `double()` | `number` |
-| `XDR.Quadruple` | removed | - |
-| `XDR.Bool` | `bool()` | `boolean` |
-| `new XDR.String(n)` | `string(maxLength)` | `Uint8Array` |
-| `xdr.opaque(n)` | `opaque(length)` | `Uint8Array` |
-| `xdr.varOpaque(n)` | `varOpaque(maxLength)` | `Uint8Array` |
-| `xdr.array(child, n)` fixed | `fixedArray(element, length)` | `T[]` |
-| `xdr.varArray(child, max)` variable | `array(element, maxLength)` | `T[]` |
-| `xdr.option(child)` | `option(element)` | `T \| null` |
-| `XDR.Void` | `void()` | `undefined` |
-| `xdr.enum(...)` | `enumType(...)` | member number |
-| `xdr.struct(...)` | `struct(...)` | plain object |
-| `xdr.union(...)` | `union(...)` | tagged object |
-| name lookup / forward ref | `lazy(() => schema)` | inferred |
+| v4                                  | v5                            | v5 value type |
+| ----------------------------------- | ----------------------------- | ------------- |
+| `xdr.int()` / `XDR.Int`             | `int32()`                     | `number`      |
+| `xdr.uint()` / `XDR.UnsignedInt`    | `uint32()`                    | `number`      |
+| `XDR.Hyper`                         | `int64()`                     | `bigint`      |
+| `XDR.UnsignedHyper`                 | `uint64()`                    | `bigint`      |
+| `XDR.Float`                         | `float()`                     | `number`      |
+| `XDR.Double`                        | `double()`                    | `number`      |
+| `XDR.Quadruple`                     | removed                       | -             |
+| `XDR.Bool`                          | `bool()`                      | `boolean`     |
+| `new XDR.String(n)`                 | `string(maxLength)`           | `Uint8Array`  |
+| `xdr.opaque(n)`                     | `opaque(length)`              | `Uint8Array`  |
+| `xdr.varOpaque(n)`                  | `varOpaque(maxLength)`        | `Uint8Array`  |
+| `xdr.array(child, n)` fixed         | `fixedArray(element, length)` | `T[]`         |
+| `xdr.varArray(child, max)` variable | `array(element, maxLength)`   | `T[]`         |
+| `xdr.option(child)`                 | `option(element)`             | `T \| null`   |
+| `XDR.Void`                          | `void()`                      | `undefined`   |
+| `xdr.enum(...)`                     | `enumType(...)`               | member number |
+| `xdr.struct(...)`                   | `struct(...)`                 | plain object  |
+| `xdr.union(...)`                    | `union(...)`                  | tagged object |
+| name lookup / forward ref           | `lazy(() => schema)`          | inferred      |
 
 Watch out for two renames:
+
 - **`array` is now the variable-length type** (was `varArray`); the fixed-length
   one is `fixedArray` (was `array`).
 - **`int64`/`uint64` are native `bigint`s**. There is no `Hyper` wrapper class,
@@ -180,8 +188,8 @@ were accessor methods. v5 reads and writes plain JavaScript values.
 
 ```js
 const c = new types.Color({ red: 1, green: 2, blue: 3 });
-c.red();               // 1
-c.red(9);              // setter
+c.red(); // 1
+c.red(9); // setter
 const buf = c.toXDR(); // Buffer
 ```
 
@@ -189,8 +197,7 @@ const buf = c.toXDR(); // Buffer
 
 ```ts
 const c = { red: 1, green: 2, blue: 3 };
-c.red;                 // 1
-c.red = 9;
+c.red; // 1
 const bytes = Color.encode(c); // Uint8Array
 ```
 
@@ -206,11 +213,11 @@ plain tagged objects.
 
 ```js
 const ok = types.Result.ok();
-ok.switch();       // ResultType.ok()
+ok.switch(); // ResultType.ok()
 
 const err = types.Result.error(7);
-err.switch();      // ResultType.error()
-err.code();        // 7
+err.switch(); // ResultType.error()
+err.code(); // 7
 ```
 
 **After (v5):**
@@ -219,11 +226,12 @@ err.code();        // 7
 const ok = { type: ResultType.ok };
 
 const err = { type: ResultType.error, code: 7 };
-err.type;          // 1
-err.code;          // 7
+err.type; // 1
+err.code; // 7
 ```
 
 Union rules:
+
 - A void arm is just the discriminator object: `{ type: ResultType.ok }`.
 - A payload arm includes the discriminator plus the field name declared with
   `field(payloadName, schema)`.
@@ -267,12 +275,12 @@ MaybeCode.encode(null);
 
 ## Encoding, decoding, and validation
 
-| v4 | v5 |
-| --- | --- |
-| `T.toXDR(value)` / `value.toXDR()` | `T.encode(value)` -> `Uint8Array` |
-| `T.fromXDR(input)` | `T.decode(bytes)` |
-| `T.validateXDR(input)` | `T.validateXdr(bytes)` |
-| `T.isValid(value)` | `T.validate(value)` |
+| v4                                  | v5                                       |
+| ----------------------------------- | ---------------------------------------- |
+| `T.toXDR(value)` / `value.toXDR()`  | `T.encode(value)` -> `Uint8Array`        |
+| `T.fromXDR(input)`                  | `T.decode(bytes)`                        |
+| `T.validateXDR(input)`              | `T.validateXdr(bytes)`                   |
+| `T.isValid(value)`                  | `T.validate(value)`                      |
 | `T.toXDR(value, 'base64' \| 'hex')` | no `format` arg; convert at the boundary |
 
 ```ts
@@ -294,11 +302,12 @@ if (Result.validateXdr(bytes)) {
 }
 ```
 
-`validate(value)` checks whether a JavaScript value can be encoded by the schema:
+`validate(value)` checks whether a JavaScript value can be encoded by the
+schema:
 
 ```ts
 Result.validate({ type: ResultType.error, code: 7 }); // true
-Result.validate({ type: ResultType.error });          // false
+Result.validate({ type: ResultType.error }); // false
 ```
 
 The recursion-depth guard is now a decode option rather than a constructor
@@ -330,28 +339,32 @@ try {
 If your old code distinguished reader, writer, and definition errors with
 `instanceof`, replace that branching with message- or operation-level handling.
 
+`instanceof XdrError` also works when the ESM and CJS builds of this package
+coexist in one dependency graph (the check is brand-based rather than
+class-identity-based). `error.name === 'XdrError'` is an equivalent check.
+
 ## Low-level Reader / Writer
 
-Most consumers should use `schema.encode(value)` and `schema.decode(bytes)`.
-If you used the raw streaming primitives, update the names and output method:
+Most consumers should use `schema.encode(value)` and `schema.decode(bytes)`. If
+you used the raw streaming primitives, update the names and output method:
 
-| v4 | v5 |
-| --- | --- |
-| `XdrReader` | `Reader` |
-| `XdrWriter` | `Writer` |
-| `writer.finalize()` | `writer.toUint8Array()` |
-| `writer.writeInt32BE(value)` | `writer.writeInt32(value)` |
-| `writer.writeUInt32BE(value)` | `writer.writeUint32(value)` |
-| `writer.writeBigInt64BE(value)` | `writer.writeBigInt64(value)` |
+| v4                               | v5                             |
+| -------------------------------- | ------------------------------ |
+| `XdrReader`                      | `Reader`                       |
+| `XdrWriter`                      | `Writer`                       |
+| `writer.finalize()`              | `writer.toUint8Array()`        |
+| `writer.writeInt32BE(value)`     | `writer.writeInt32(value)`     |
+| `writer.writeUInt32BE(value)`    | `writer.writeUint32(value)`    |
+| `writer.writeBigInt64BE(value)`  | `writer.writeBigInt64(value)`  |
 | `writer.writeBigUInt64BE(value)` | `writer.writeBigUint64(value)` |
-| `writer.writeFloatBE(value)` | `writer.writeFloat32(value)` |
-| `writer.writeDoubleBE(value)` | `writer.writeFloat64(value)` |
-| `reader.readInt32BE()` | `reader.readInt32(path)` |
-| `reader.readUInt32BE()` | `reader.readUint32(path)` |
-| `reader.readBigInt64BE()` | `reader.readBigInt64(path)` |
-| `reader.readBigUInt64BE()` | `reader.readBigUint64(path)` |
-| `reader.readFloatBE()` | `reader.readFloat32(path)` |
-| `reader.readDoubleBE()` | `reader.readFloat64(path)` |
+| `writer.writeFloatBE(value)`     | `writer.writeFloat32(value)`   |
+| `writer.writeDoubleBE(value)`    | `writer.writeFloat64(value)`   |
+| `reader.readInt32BE()`           | `reader.readInt32(path)`       |
+| `reader.readUInt32BE()`          | `reader.readUint32(path)`      |
+| `reader.readBigInt64BE()`        | `reader.readBigInt64(path)`    |
+| `reader.readBigUInt64BE()`       | `reader.readBigUint64(path)`   |
+| `reader.readFloatBE()`           | `reader.readFloat32(path)`     |
+| `reader.readDoubleBE()`          | `reader.readFloat64(path)`     |
 
 Reader methods now take a `path` string used in diagnostics, for example
 `reader.readInt32('Result.code')`.
@@ -371,17 +384,22 @@ Schemas are fully typed. Derive the value type of any schema with `Infer`:
 ```ts
 import type { Infer } from '@stellar/js-xdr';
 
-type Color = Infer<typeof Color>; // { red: number; green: number; blue: number }
+type Color = Infer<typeof Color>;
+// { readonly red: number; readonly green: number; readonly blue: number }
 ```
 
-`struct`, `union`, `enumType`, `array`, and `option` preserve value types through
-composition, so prefer deriving types from schemas instead of duplicating object
-shapes by hand.
+Struct and union value properties are typed `readonly`: schemas describe wire
+data, so build a new object instead of mutating a decoded value.
+
+`struct`, `union`, `enumType`, `array`, and `option` preserve value types
+through composition, so prefer deriving types from schemas instead of
+duplicating object shapes by hand.
 
 For very large XDR definitions, or definitions with cyclic references, deriving
 all value types through `Infer` can put significant pressure on the TypeScript
 compiler and language server. In those cases, prefer explicit hand-written value
-types at module boundaries and use `Infer` selectively for smaller local schemas.
+types at module boundaries and use `Infer` selectively for smaller local
+schemas.
 
 ## Verifying your migration
 
@@ -394,6 +412,7 @@ expect(Result.encode(value)).toEqual(Uint8Array.from(oldBytes));
 ```
 
 Recommended checks:
+
 - Decode old fixture bytes with the new schema.
 - Re-encode the decoded value and compare bytes exactly.
 - Add tests for invalid enum values, invalid padding, and trailing bytes if your
