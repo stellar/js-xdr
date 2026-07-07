@@ -310,12 +310,13 @@ Result.validate({ type: ResultType.error, code: 7 }); // true
 Result.validate({ type: ResultType.error }); // false
 ```
 
-The recursion-depth guard is now a decode option rather than a constructor
-argument:
+The recursion-depth guard is now an encode/decode option rather than a
+constructor argument:
 
 ```ts
 Result.decode(bytes, { maxDepth: 100 });
 Result.validateXdr(bytes, { maxDepth: 100 });
+Result.encode(value, { maxDepth: 100 }); // guards against cyclic values
 ```
 
 ## Errors
@@ -394,6 +395,33 @@ data, so build a new object instead of mutating a decoded value.
 `struct`, `union`, `enumType`, `array`, and `option` preserve value types
 through composition, so prefer deriving types from schemas instead of
 duplicating object shapes by hand.
+
+### Schema introspection
+
+Each builder returns a typed schema interface (`StructSchema`, `UnionSchema`,
+`ArraySchema`, …) with `kind` narrowed to a literal. To write a generic
+schema-driven walker (e.g. a JSON converter), cast the root once to the closed
+`AnySchema` union and switch on `kind` — each branch narrows to the matching
+interface, with compiler-checked exhaustiveness:
+
+```ts
+import type { AnySchema } from '@stellar/js-xdr';
+
+function describe(schema: AnySchema): string {
+  switch (schema.kind) {
+    case 'struct':
+      return `struct { ${schema.entries.map(([name]) => name).join(', ')} }`;
+    case 'enum':
+      return `enum ${schema.name}`;
+    case 'array':
+      return `${describe(schema.element as AnySchema)}<>`;
+    // ...remaining kinds
+  }
+}
+```
+
+`AnySchema` covers only the schemas this package creates; custom `BaseType`
+subclasses must be handled before the cast.
 
 For very large XDR definitions, or definitions with cyclic references, deriving
 all value types through `Infer` can put significant pressure on the TypeScript

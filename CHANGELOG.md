@@ -25,6 +25,8 @@ A complete rewrite of the library. The runtime `xdr.config(...)` schema-definiti
 * **`lazy(() => schema)`** builder for defining recursive and forward-referencing schemas.
 * **`BaseType` / `XdrType<T>`** are exported as the base class and interface for all schemas, along with a `DecodeOptions` `{ maxDepth }` option preserved from the prior recursion-depth guard.
 * **`enumType` reserved-name and duplicate-value validation** — throws if a member name collides with a schema property (`name`, `kind`, `encode`, …) or if two members share a wire value.
+* **Schema introspection API.** Every builder now returns a typed schema interface (`StructSchema`, `UnionSchema`, `ArraySchema`, `FixedArraySchema`, `OptionSchema`, `LazySchema`, `OpaqueSchema`, `VarOpaqueSchema`, `StringSchema`, `EnumSchema`) whose `kind` property is narrowed to a literal, plus a closed `AnySchema` union (with `PrimitiveSchema` covering the argument-less kinds). Schema-driven walkers — such as generic JSON converters — can cast once to `AnySchema` and `switch (schema.kind)` with exhaustiveness checking, instead of re-declaring internal shapes and casting. Supporting surface: `enumType` schemas expose `nameByValue` (wire value → member name); `opaque`/`varOpaque`/`string` expose their `length`/`maxLength`; `EnumMember`, `EnumName`, `Field`, `UnionArm`, and `UnionCase` helper types are exported.
+* **`encode(value, { maxDepth })`** — the depth guard also applies to encoding (via the exported `EncodeOptions`), failing with `XdrError` on cyclic values fed to recursive schemas instead of overflowing the call stack.
 
 ### Changed
 * **Build chain modernized:** Webpack + Babel → Rollup + esbuild; output is a clean dual ESM/CJS bundle with `.d.ts` emission via `rollup-plugin-dts`.
