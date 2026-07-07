@@ -51,6 +51,18 @@ class LazyType<T> extends BaseType<T> {
  */
 export function lazy<T extends XdrType<unknown>>(
   getSchema: () => T
-): XdrType<Infer<T>> {
-  return new LazyType(() => getSchema()) as XdrType<Infer<T>>;
+): LazySchema<Infer<T>> {
+  return new LazyType(() => getSchema()) as unknown as LazySchema<Infer<T>>;
+}
+
+/**
+ * Public introspection surface of a lazy schema reference.
+ *
+ * Narrow any `XdrType<unknown>` with `schema.kind === 'lazy'`, then call
+ * `getSchema()` to continue walking the resolved schema. Walkers must track
+ * visited schemas: recursive types resolve to themselves.
+ */
+export interface LazySchema<T> extends XdrType<T> {
+  readonly kind: 'lazy';
+  readonly getSchema: () => XdrType<unknown>;
 }

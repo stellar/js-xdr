@@ -48,12 +48,22 @@ class OptionType<T> extends BaseType<T | null> {
  */
 export function option<T extends XdrType<unknown>>(
   element: T
-): XdrType<Infer<T> | null> {
+): OptionSchema<Infer<T> | null> {
   // An absent outer option and a present-but-null inner option would both map
   // to JS `null`, giving one value two wire encodings (and a lossy re-encode).
   // XDR IDL cannot express a directly nested optional either.
   if (element.kind === 'option') {
     throw new XdrError('option: cannot nest option directly inside option');
   }
-  return new OptionType(element) as XdrType<Infer<T> | null>;
+  return new OptionType(element) as unknown as OptionSchema<Infer<T> | null>;
+}
+
+/**
+ * Public introspection surface of an optional-value schema.
+ *
+ * Narrow any `XdrType<unknown>` with `schema.kind === 'option'`.
+ */
+export interface OptionSchema<T> extends XdrType<T> {
+  readonly kind: 'option';
+  readonly element: XdrType<unknown>;
 }

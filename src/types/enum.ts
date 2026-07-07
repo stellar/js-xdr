@@ -16,6 +16,7 @@ export type EnumSchema<
   Name extends string,
   Values extends Record<string, number>
 > = XdrType<EnumMember<Values>> & {
+  readonly kind: 'enum';
   readonly name: Name;
   readonly nameByValue: ReadonlyMap<number, EnumName<Values>>;
 } & Values;
