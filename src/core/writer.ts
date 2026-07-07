@@ -25,6 +25,7 @@ export class Writer {
   enter(path: string): void {
     this.#depth += 1;
     if (this.#depth > this.#maxDepth) {
+      this.#depth -= 1;
       throw new XdrError(
         `${path}: max recursion depth ${this.#maxDepth} exceeded`
       );
