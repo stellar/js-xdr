@@ -51,12 +51,12 @@ export function assertBigIntRange(
   }
 }
 
-export function assertFiniteNumber(
+export function assertNumber(
   value: unknown,
   path: string
 ): asserts value is number {
-  if (typeof value !== 'number' || !Number.isFinite(value)) {
-    throw new XdrError(`${path}: expected finite number`);
+  if (typeof value !== 'number') {
+    throw new XdrError(`${path}: expected number`);
   }
 }
 

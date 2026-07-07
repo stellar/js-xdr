@@ -86,12 +86,30 @@ class UnionType<
     switchKey: SwitchKey
   ) {
     super(name);
+    // Same rationale as struct: '__proto__' cannot be defined as an own property on
+    // a plain object without invoking the inherited prototype setter, so it is
+    // not a legal discriminator field name.
+    if (switchKey === '__proto__') {
+      throw new XdrError(`${name}: switchKey '__proto__' is not allowed`);
+    }
     this.switchOn = switchOn;
     this.cases = cases;
     this.defaultArm = defaultArm;
     this.switchKey = switchKey;
+    if (cases.length === 0 && defaultArm === undefined) {
+      throw new XdrError(
+        `${name}: union needs at least one case or a default arm`
+      );
+    }
     const names = new Set<string>();
     for (const unionCase of cases) {
+      if (!switchOn.validate(unionCase.discriminant)) {
+        throw new XdrError(
+          `${name}.${unionCase.name}: case discriminator ${String(
+            unionCase.discriminant
+          )} is not a valid ${switchOn.name ?? switchOn.kind} value`
+        );
+      }
       if (names.has(unionCase.name)) {
         throw new XdrError(
           `${name}: duplicate union case name ${unionCase.name}`
@@ -147,27 +165,35 @@ class UnionType<
     writer: Writer,
     path: string
   ): void {
-    if (!isPlainObject(value) || !(this.switchKey in value)) {
-      throw new XdrError(
-        `${path}: expected union object with ${this.switchKey} discriminator`
+    writer.enter(path);
+    try {
+      if (
+        !isPlainObject(value) ||
+        !Object.prototype.hasOwnProperty.call(value, this.switchKey)
+      ) {
+        throw new XdrError(
+          `${path}: expected union object with ${this.switchKey} discriminator`
+        );
+      }
+      const unionValue = value as Readonly<Record<string, unknown>>;
+      const switchValue = unionValue[this.switchKey] as Infer<Switch>;
+      const unionCase = this.#casesByDiscriminant.get(switchValue);
+      const arm = unionCase?.arm ?? this.defaultArm;
+      if (arm === undefined) {
+        throw new XdrError(
+          `${path}: no case for union discriminator ${String(switchValue)}`
+        );
+      }
+      this.switchOn._write(switchValue, writer, `${path}.${this.switchKey}`);
+      writeUnionArm(
+        unionValue,
+        arm,
+        writer,
+        `${path}.${unionCase?.name ?? DEFAULT_CASE_NAME}`
       );
+    } finally {
+      writer.exit();
     }
-    const unionValue = value as Readonly<Record<string, unknown>>;
-    const switchValue = unionValue[this.switchKey] as Infer<Switch>;
-    const unionCase = this.#casesByDiscriminant.get(switchValue);
-    const arm = unionCase?.arm ?? this.defaultArm;
-    if (arm === undefined) {
-      throw new XdrError(
-        `${path}: no case for union discriminator ${String(switchValue)}`
-      );
-    }
-    this.switchOn._write(switchValue, writer, `${path}.${this.switchKey}`);
-    writeUnionArm(
-      unionValue,
-      arm,
-      writer,
-      `${path}.${unionCase?.name ?? DEFAULT_CASE_NAME}`
-    );
   }
 }
 
@@ -199,6 +225,9 @@ function case_<
 }
 
 export { case_ as case };
+// `import { case }` is a syntax error, so consumers of the `case` export must
+// alias it; `unionCase` is the same helper under an importable name.
+export { case_ as unionCase };
 
 /**
  * Creates a schema for an XDR union.
@@ -277,7 +306,7 @@ function writeUnionArm(
   path: string
 ): void {
   if (isFieldArm(arm)) {
-    if (!(arm.name in value)) {
+    if (!Object.prototype.hasOwnProperty.call(value, arm.name)) {
       throw new XdrError(`${path}.${arm.name}: missing union arm payload`);
     }
     arm.schema._write(value[arm.name], writer, `${path}.${arm.name}`);
@@ -295,6 +324,11 @@ function assertArmPayloadName(
   if (isFieldArm(arm) && arm.name === switchKey) {
     throw new XdrError(
       `${unionName}.${caseName}: union arm payload field must not be named ${switchKey}`
+    );
+  }
+  if (isFieldArm(arm) && arm.name === '__proto__') {
+    throw new XdrError(
+      `${unionName}.${caseName}: union arm payload field name '__proto__' is not allowed`
     );
   }
 }

@@ -6,6 +6,7 @@
     "node": ">=22.0.0",
     "pnpm": ">=10.0.0"
   },
+  "packageManager": "pnpm@10.33.0",
   "main": "./dist/js-xdr.cjs",
   "module": "./dist/js-xdr.mjs",
   "types": "./dist/js-xdr.d.ts",
@@ -37,13 +38,21 @@
     "fixtures:generate-v4": "node test/fixtures/generate-v4-compat.cjs",
     "fmt": "prettier --write '**/*.{js,ts,json}'",
     "prepare": "husky",
-    "clean": "rm -rf dist"
+    "prepublishOnly": "pnpm build && pnpm typecheck && pnpm lint && pnpm test",
+    "clean": "rm -rf dist lib"
   },
   "repository": {
     "type": "git",
     "url": "https://github.com/stellar/js-xdr.git"
   },
-  "keywords": [],
+  "keywords": [
+    "xdr",
+    "rfc4506",
+    "serialization",
+    "codec",
+    "binary",
+    "stellar"
+  ],
   "author": "Stellar Development Foundation <hello@stellar.org>",
   "license": "Apache-2.0",
   "bugs": {

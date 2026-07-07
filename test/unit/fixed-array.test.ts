@@ -1,5 +1,10 @@
 import { describe, it, expect } from 'vitest';
-import { fixedArray, int32 } from '../../src/index.js';
+import {
+  fixedArray,
+  int32,
+  void as voidType,
+  XdrError
+} from '../../src/index.js';
 import { bytes, toArray, roundTrip, encodeInvalid } from './_helpers.js';
 
 const schema = fixedArray(int32(), 3);
@@ -36,5 +41,19 @@ describe('fixedArray (fixed-length)', () => {
 
   it('round-trips element values', () => {
     expect(roundTrip(schema, [10, 20, 30])).toEqual([10, 20, 30]);
+  });
+
+  it('does not loop or allocate unbounded for a huge zero-width-element length', () => {
+    // Same guard as `array`: a schema-declared count beyond the remaining
+    // input fails fast with an XdrError instead of spinning the element loop.
+    const voidArray = fixedArray(voidType(), 4294967295);
+    let caught: unknown;
+    try {
+      voidArray.decode(bytes([]));
+    } catch (e) {
+      caught = e;
+    }
+    expect(caught).toBeInstanceOf(XdrError);
+    expect((caught as Error).message).toMatch(/exceeds remaining/i);
   });
 });

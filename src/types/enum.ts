@@ -21,6 +21,9 @@ export type EnumSchema<
 } & Values;
 
 const RESERVED_ENUM_MEMBER_NAMES = new Set([
+  // Assigning '__proto__' onto the schema would invoke the inherited prototype
+  // setter instead of defining a member constant.
+  '__proto__',
   'name',
   'kind',
   'encode',
@@ -98,9 +101,11 @@ export class EnumType<Values extends Record<string, number>> extends BaseType<
  */
 export function enumType<
   Name extends string,
-  Values extends Record<string, number>
+  const Values extends Record<string, number>
 >(name: Name, values: Values): EnumSchema<Name, Values> {
-  for (const memberName of Object.keys(values)) {
+  // getOwnPropertyNames (not Object.keys) so a computed ['__proto__'] key is
+  // caught; the plain `__proto__:` literal form never creates an own key.
+  for (const memberName of Object.getOwnPropertyNames(values)) {
     if (RESERVED_ENUM_MEMBER_NAMES.has(memberName)) {
       throw new XdrError(
         `${name}: enum member name ${memberName} collides with reserved property`
