@@ -86,9 +86,9 @@ class UnionType<
     switchKey: SwitchKey
   ) {
     super(name);
-    // Same rationale as struct: '__proto__' cannot be assigned onto a plain
-    // value object without invoking the inherited prototype setter, and the
-    // `in`-based presence checks below would read Object.prototype for it.
+    // Same rationale as struct: '__proto__' cannot be defined as an own property on
+    // a plain object without invoking the inherited prototype setter, so it is
+    // not a legal discriminator field name.
     if (switchKey === '__proto__') {
       throw new XdrError(`${name}: switchKey '__proto__' is not allowed`);
     }
