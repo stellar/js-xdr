@@ -8,25 +8,33 @@ on:
 jobs:
   build:
     runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        node-version: [22, 24]
     steps:
       - name: Checkout
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
 
-      - name: Use Node.js 22
-        uses: actions/setup-node@v3
+      - name: Use Node.js ${{ matrix.node-version }}
+        uses: actions/setup-node@v4
         with:
-          node-version: 22
+          node-version: ${{ matrix.node-version }}
 
       - name: Install pnpm
+        # Version comes from the packageManager field in package.json.
         uses: pnpm/action-setup@v4
-        with:
-          version: 10
 
       - name: Install Dependencies
         run: pnpm install --frozen-lockfile
 
       - name: Build All
         run: pnpm build
+
+      - name: Typecheck
+        run: pnpm typecheck
+
+      - name: Lint
+        run: pnpm lint
 
       - name: Run Tests
         run: pnpm test
