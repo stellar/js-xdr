@@ -30,3 +30,6 @@ function void_(): XdrType<void> {
 }
 
 export { void_ as void };
+// `import { void }` is a syntax error, so consumers of the `void` export must
+// alias it; `voidType` is the same schema under an importable name.
+export { void_ as voidType };

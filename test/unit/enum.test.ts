@@ -1,5 +1,5 @@
-import { describe, it, expect } from 'vitest';
-import { enumType } from '../../src/index.js';
+import { describe, it, expect, expectTypeOf } from 'vitest';
+import { enumType, type Infer } from '../../src/index.js';
 import { bytes, toArray, encodeInvalid } from './_helpers.js';
 
 const Color = enumType('Color', { red: 0, green: 1, blue: 2 });
@@ -19,7 +19,8 @@ describe('enum', () => {
     });
 
     it('throws on an unknown value', () => {
-      expect(() => Color.encode(9)).toThrow(/unknown enum value/i);
+      // 9 is now also a compile-time error thanks to literal member types.
+      expect(() => encodeInvalid(Color, 9)).toThrow(/unknown enum value/i);
       expect(() => encodeInvalid(Color, 'red')).toThrow(/unknown enum value/i);
     });
   });
@@ -70,5 +71,18 @@ describe('enum', () => {
         enumType('Bounds', { lo: -2147483648, hi: 2147483647 })
       ).not.toThrow();
     });
+
+    it('rejects a member named __proto__', () => {
+      expect(() => enumType('Bad', { ['__proto__']: 0 })).toThrow(
+        /reserved property/i
+      );
+    });
+  });
+
+  it('preserves member value literal types', () => {
+    // The `const` type parameter keeps members as literal types so union
+    // discriminant narrowing works. Compile-time assertions.
+    expectTypeOf(Color.green).toEqualTypeOf<1>();
+    expectTypeOf<Infer<typeof Color>>().toEqualTypeOf<0 | 1 | 2>();
   });
 });
