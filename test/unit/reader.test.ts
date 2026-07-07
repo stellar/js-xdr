@@ -1,5 +1,5 @@
 import { describe, it, expect } from 'vitest';
-import { Reader, option, int32 } from '../../src/index.js';
+import { Reader, array, int32 } from '../../src/index.js';
 import { bytes } from './_helpers.js';
 
 describe('Reader', () => {
@@ -80,16 +80,16 @@ describe('Reader', () => {
   });
 
   it('decode honors the maxDepth option', () => {
-    const nested = option(option(int32()));
+    const nested = array(array(int32(), 1), 1);
     const wire = bytes([0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0, 5]);
     expect(() => nested.decode(wire, { maxDepth: 1 })).toThrow(
       /max recursion depth/i
     );
-    expect(nested.decode(wire, { maxDepth: 2 })).toBe(5);
+    expect(nested.decode(wire, { maxDepth: 2 })).toEqual([[5]]);
   });
 
   it('validateXdr honors the maxDepth option', () => {
-    const nested = option(option(int32()));
+    const nested = array(array(int32(), 1), 1);
     const wire = bytes([0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0, 5]);
     expect(nested.validateXdr(wire, { maxDepth: 1 })).toBe(false);
     expect(nested.validateXdr(wire, { maxDepth: 2 })).toBe(true);

@@ -23,6 +23,15 @@ class FixedArrayType<T> extends BaseType<T[]> {
   _read(reader: Reader, path: string): T[] {
     reader.enter(path);
     try {
+      // Same guard as `array`: a schema-declared count beyond the remaining
+      // input cannot decode, and for zero-width element schemas (void,
+      // opaque(0), empty struct) the element loop would otherwise not be
+      // bounded by input size at all.
+      if (this.length > reader.remaining) {
+        throw new XdrError(
+          `${path}: array length ${this.length} exceeds remaining ${reader.remaining} byte(s)`
+        );
+      }
       return readArray(reader, this.length, this.element, path);
     } finally {
       reader.exit();
@@ -30,13 +39,18 @@ class FixedArrayType<T> extends BaseType<T[]> {
   }
 
   _write(value: T[], writer: Writer, path: string): void {
-    assertArray(value, path);
-    if (value.length !== this.length) {
-      throw new XdrError(
-        `${path}: expected array length ${this.length}, got ${value.length}`
-      );
+    writer.enter(path);
+    try {
+      assertArray(value, path);
+      if (value.length !== this.length) {
+        throw new XdrError(
+          `${path}: expected array length ${this.length}, got ${value.length}`
+        );
+      }
+      writeArray(value, writer, this.element, path);
+    } finally {
+      writer.exit();
     }
-    writeArray(value, writer, this.element, path);
   }
 }
 

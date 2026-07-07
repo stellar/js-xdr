@@ -24,7 +24,12 @@ class LazyType<T> extends BaseType<T> {
   }
 
   _write(value: T, writer: Writer, path: string): void {
-    this.getSchema()._write(value, writer, path);
+    writer.enter(path);
+    try {
+      this.getSchema()._write(value, writer, path);
+    } finally {
+      writer.exit();
+    }
   }
 }
 

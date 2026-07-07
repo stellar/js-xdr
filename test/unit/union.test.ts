@@ -171,4 +171,31 @@ describe('union', () => {
       );
     });
   });
+  describe('construction validation', () => {
+    it('rejects a case discriminator the switch schema cannot encode', () => {
+      expect(() =>
+        union('Bad', {
+          switchOn: AssetType,
+          // eslint-disable-next-line @typescript-eslint/no-explicit-any
+          cases: [caseOf('bogus', 5 as any, voidType())]
+        })
+      ).toThrow(/discriminator 5 is not a valid AssetType value/i);
+    });
+
+    it('rejects an empty union with no default arm', () => {
+      expect(() => union('Empty', { switchOn: int32(), cases: [] })).toThrow(
+        /at least one case or a default arm/i
+      );
+    });
+
+    it('accepts an empty union with a default arm', () => {
+      expect(() =>
+        union('DefaultOnly', {
+          switchOn: int32(),
+          cases: [],
+          defaultArm: field('a', int32())
+        })
+      ).not.toThrow();
+    });
+  });
 });
