@@ -13,15 +13,15 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v4
 
-      - name: Install pnpm
-        # Version comes from the packageManager field in package.json.
-        uses: pnpm/action-setup@v4
-
       - name: Install Node
         uses: actions/setup-node@v4
         with:
           node-version: '22.x'
           registry-url: 'https://registry.npmjs.org'
+
+      - name: Install pnpm
+        # Version comes from the packageManager field in package.json.
+        uses: pnpm/action-setup@v4
 
       - name: Update npm for trusted publishing
         run: npm install -g npm@11.5.1
@@ -36,6 +36,6 @@ jobs:
       # repo must be registered as a trusted publisher for @stellar/js-xdr on
       # npmjs.com for this to work.
       - name: Publish to npm
-        run:
+        run: >-
           pnpm publish --access public --provenance --no-git-checks --tag ${{
           github.event.release.prerelease && 'rc' || 'latest' }}
