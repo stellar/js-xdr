@@ -52,18 +52,23 @@ class StructType<
     writer: Writer,
     path: string
   ): void {
-    if (!isPlainObject(value)) {
-      throw new XdrError(`${path}: expected plain object`);
-    }
-    const record = value as Record<string, unknown>;
-    for (const [key, schema] of this.entries) {
-      // Use an own-property check: `'__proto__' in record` is satisfied by the
-      // inherited accessor even when no field was provided, which would bypass
-      // this guard and then read Object.prototype as the field value.
-      if (!Object.prototype.hasOwnProperty.call(record, key)) {
-        throw new XdrError(`${path}.${key}: missing struct field`);
+    writer.enter(path);
+    try {
+      if (!isPlainObject(value)) {
+        throw new XdrError(`${path}: expected plain object`);
       }
-      schema._write(record[key], writer, `${path}.${key}`);
+      const record = value as Record<string, unknown>;
+      for (const [key, schema] of this.entries) {
+        // Use an own-property check: `'__proto__' in record` is satisfied by
+        // the inherited accessor even when no field was provided, which would
+        // bypass this guard and then read Object.prototype as the field value.
+        if (!Object.prototype.hasOwnProperty.call(record, key)) {
+          throw new XdrError(`${path}.${key}: missing struct field`);
+        }
+        schema._write(record[key], writer, `${path}.${key}`);
+      }
+    } finally {
+      writer.exit();
     }
   }
 }

@@ -127,4 +127,75 @@ describe('union', () => {
       });
     });
   });
+
+  describe('inherited property names', () => {
+    it('rejects a switchKey named __proto__ at construction', () => {
+      expect(() =>
+        union('Bad', {
+          switchOn: AssetType,
+          cases: [caseOf('native', AssetType.native, voidType())],
+          switchKey: '__proto__'
+        })
+      ).toThrow(/'__proto__' is not allowed/);
+    });
+
+    it('rejects an arm payload field named __proto__ at construction', () => {
+      expect(() =>
+        union('Bad', {
+          switchOn: AssetType,
+          cases: [
+            caseOf('credit', AssetType.credit, field('__proto__', int32()))
+          ]
+        })
+      ).toThrow(/'__proto__' is not allowed/);
+    });
+
+    it('detects a missing discriminator that shadows Object.prototype', () => {
+      const Shadow = union('Shadow', {
+        switchOn: AssetType,
+        cases: [caseOf('native', AssetType.native, voidType())],
+        switchKey: 'constructor'
+      });
+      // `'constructor' in value` is true for any plain object; only an
+      // own-property check catches the missing discriminator.
+      expect(() => encodeInvalid(Shadow, {})).toThrow(/discriminator/i);
+    });
+
+    it('detects a missing arm payload that shadows Object.prototype', () => {
+      const Shadow = union('Shadow', {
+        switchOn: AssetType,
+        cases: [caseOf('credit', AssetType.credit, field('toString', int32()))]
+      });
+      expect(() => encodeInvalid(Shadow, { type: 1 })).toThrow(
+        /missing union arm payload/i
+      );
+    });
+  });
+  describe('construction validation', () => {
+    it('rejects a case discriminator the switch schema cannot encode', () => {
+      expect(() =>
+        union('Bad', {
+          switchOn: AssetType,
+          // eslint-disable-next-line @typescript-eslint/no-explicit-any
+          cases: [caseOf('bogus', 5 as any, voidType())]
+        })
+      ).toThrow(/discriminator 5 is not a valid AssetType value/i);
+    });
+
+    it('rejects an empty union with no default arm', () => {
+      expect(() => union('Empty', { switchOn: int32(), cases: [] })).toThrow(
+        /at least one case or a default arm/i
+      );
+    });
+
+    it('accepts an empty union with a default arm', () => {
+      expect(() =>
+        union('DefaultOnly', {
+          switchOn: int32(),
+          cases: [],
+          defaultArm: field('a', int32())
+        })
+      ).not.toThrow();
+    });
+  });
 });

@@ -29,4 +29,10 @@ describe('option', () => {
     expect(roundTrip(schema, 42)).toBe(42);
     expect(roundTrip(schema, null)).toBeNull();
   });
+
+  it('rejects a directly nested option at construction', () => {
+    // Absent-outer and present-but-null-inner would both decode to `null`,
+    // giving one JS value two wire encodings.
+    expect(() => option(option(int32()))).toThrow(/cannot nest option/i);
+  });
 });

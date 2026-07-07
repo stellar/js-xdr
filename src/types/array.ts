@@ -46,14 +46,19 @@ class ArrayType<T> extends BaseType<T[]> {
   }
 
   _write(value: T[], writer: Writer, path: string): void {
-    assertArray(value, path);
-    if (value.length > this.maxLength) {
-      throw new XdrError(
-        `${path}: array length ${value.length} exceeds maximum ${this.maxLength}`
-      );
+    writer.enter(path);
+    try {
+      assertArray(value, path);
+      if (value.length > this.maxLength) {
+        throw new XdrError(
+          `${path}: array length ${value.length} exceeds maximum ${this.maxLength}`
+        );
+      }
+      writer.writeUint32(value.length);
+      writeArray(value, writer, this.element, path);
+    } finally {
+      writer.exit();
     }
-    writer.writeUint32(value.length);
-    writeArray(value, writer, this.element, path);
   }
 }
 

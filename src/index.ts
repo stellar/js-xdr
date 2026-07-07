@@ -1,6 +1,6 @@
 // Bases (XdrValue, BytesValue, …) and the schema-builder primitives.
-export { BaseType } from './core/xdr-type.js';
-export type { DecodeOptions } from './core/xdr-type.js';
+export { BaseType, UNBOUNDED_MAX_LENGTH } from './core/xdr-type.js';
+export type { DecodeOptions, EncodeOptions } from './core/xdr-type.js';
 export type { Infer } from './core/xdr-type.js';
 export { Writer } from './core/writer.js';
 export { Reader } from './core/reader.js';
@@ -30,11 +30,11 @@ export { struct } from './types/struct.js';
 export type { StructSchema } from './types/struct.js';
 export { uint32 } from './types/uint32.js';
 export { uint64 } from './types/uint64.js';
-export { union, case, field } from './types/union.js';
+export { union, case, unionCase, field } from './types/union.js';
 export type { Field, UnionArm, UnionCase, UnionSchema } from './types/union.js';
 export { varOpaque } from './types/var-opaque.js';
 export type { VarOpaqueSchema } from './types/var-opaque.js';
-export { void } from './types/void.js';
+export { void, voidType } from './types/void.js';
 
 import type { XdrType } from './core/xdr-type.js';
 import type { ArraySchema } from './types/array.js';
