@@ -309,15 +309,17 @@ function readUnionArm(
   reader: Reader,
   path: string
 ): Record<string, unknown> {
-  const base = { [switchKey]: discriminant };
+  // Built field-by-field rather than as a literal spread onto a `base` object:
+  // the spread allocates a second object for every union read, and unions are
+  // the most common node in a Stellar XDR tree.
+  const result: Record<string, unknown> = {};
+  result[switchKey] = discriminant;
   if (isFieldArm(arm)) {
-    return {
-      ...base,
-      [arm.name]: arm.schema._read(reader, `${path}.${arm.name}`)
-    };
+    result[arm.name] = arm.schema._read(reader, `${path}.${arm.name}`);
+    return result;
   }
   arm._read(reader, path);
-  return base;
+  return result;
 }
 
 function writeUnionArm(
