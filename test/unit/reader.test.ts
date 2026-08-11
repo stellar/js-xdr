@@ -146,10 +146,25 @@ describe('Reader', () => {
     expect(() => reader.readInt32('p')).toThrow(/incomplete/i);
   });
 
-  it('rejects input that is not a typed array at construction', () => {
-    expect(() => new Reader([0, 0, 0, 5] as unknown as Uint8Array)).toThrow(
-      TypeError
-    );
+  it('rejects input that is not a byte-sized typed array', () => {
+    const bad = [
+      [0, 0, 0, 5],
+      new Uint16Array([1, 2]),
+      new DataView(new ArrayBuffer(4))
+    ];
+    for (const input of bad) {
+      expect(() => new Reader(input as unknown as Uint8Array)).toThrow(
+        TypeError
+      );
+    }
+  });
+
+  it('accepts any byte-sized view over a buffer', () => {
+    // Buffer is the common input from Node callers, and a subarray carries a
+    // non-zero byteOffset.
+    expect(new Reader(Buffer.from([0, 0, 0, 5])).readInt32('p')).toBe(5);
+    const window = bytes([9, 9, 0, 0, 0, 5]).subarray(2);
+    expect(new Reader(window).readInt32('p')).toBe(5);
   });
 
   it('validateXdr honors the maxDepth option', () => {

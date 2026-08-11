@@ -13,8 +13,10 @@ project adheres to [Semantic Versioning](http://semver.org/).
 - `Reader` now snapshots its input length at construction: bytes exposed by
   resizing the backing `ArrayBuffer` after construction are out of bounds and
   read as truncated input.
-- `Reader` rejects input that is not a real typed array with a `TypeError` at
-  construction instead of failing on the first read.
+- `Reader` rejects input that is not a byte-sized typed array with a
+  `TypeError` at construction instead of failing on the first read. A
+  `DataView` or a wider typed array such as `Uint16Array` used to read as the
+  wrong bytes.
 - `Reader` and `Writer` reject a non-integer or negative `maxDepth` with an
   `XdrError` instead of silently disabling the recursion guard.
 

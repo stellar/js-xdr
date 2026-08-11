@@ -41,6 +41,14 @@ export class Reader {
       throw new XdrError(`invalid maxDepth ${maxDepth}`);
     }
     this.#maxDepth = maxDepth;
+    // Reject anything that is not a byte-sized typed array. A `DataView` or a
+    // wider typed array carries `buffer`/`byteOffset`/`byteLength`, so scalar
+    // reads would work while `readBytes` indexed by element instead of byte
+    // and returned the wrong bytes. Checked structurally rather than with
+    // `instanceof` so a `Uint8Array` from another realm still works.
+    if (!ArrayBuffer.isView(bytes) || bytes.BYTES_PER_ELEMENT !== 1) {
+      throw new TypeError('Reader expects a Uint8Array');
+    }
     // A detached ArrayBuffer rejects DataView construction. Treat it as empty
     // input (a detached Uint8Array already reports length 0), so reads fail
     // with the usual XdrError instead of a TypeError here. Only that case:
