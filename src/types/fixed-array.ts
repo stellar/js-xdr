@@ -23,10 +23,10 @@ class FixedArrayType<T> extends BaseType<T[]> {
   _read(reader: Reader, path: string): T[] {
     reader.enter(path);
     try {
-      // Same guard as `array`: a schema-declared count beyond the remaining
-      // input cannot decode, and for zero-width element schemas (void,
-      // opaque(0), empty struct) the element loop would otherwise not be
-      // bounded by input size at all.
+      // The length is schema-declared rather than wire-supplied, but the
+      // same fail-fast as `array` applies: every element consumes at least
+      // one byte, so a length above the bytes remaining can never be
+      // satisfied.
       if (this.length > reader.remaining) {
         throw new XdrError(
           `${path}: array length ${this.length} exceeds remaining ${reader.remaining} byte(s)`

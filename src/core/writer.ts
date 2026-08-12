@@ -1,5 +1,5 @@
 import { XdrError } from './error.js';
-import { paddingLength, viewFor } from './helpers.js';
+import { paddingLength } from './helpers.js';
 import { DEFAULT_MAX_DEPTH } from './reader.js';
 
 const INITIAL_BUFFER_SIZE = 8192;
@@ -14,12 +14,25 @@ const INITIAL_BUFFER_SIZE = 8192;
  */
 export class Writer {
   #buffer = new Uint8Array(INITIAL_BUFFER_SIZE);
+  /**
+   * View over `#buffer`, reused by every scalar write and rebuilt only when
+   * the buffer grows. Writing through a per-call `Uint8Array` + `DataView`
+   * pair costs two allocations and a copy per integer.
+   */
+  #view = new DataView(this.#buffer.buffer);
   #offset = 0;
   #depth = 0;
   readonly #maxDepth: number;
 
   constructor(maxDepth: number = DEFAULT_MAX_DEPTH) {
+    if (maxDepth < 0 || !Number.isInteger(maxDepth)) {
+      throw new XdrError(`invalid maxDepth ${maxDepth}`);
+    }
     this.#maxDepth = maxDepth;
+  }
+
+  get offset(): number {
+    return this.#offset;
   }
 
   enter(path: string): void {
@@ -52,39 +65,48 @@ export class Writer {
   }
 
   writeInt32(value: number): void {
-    const bytes = new Uint8Array(4);
-    viewFor(bytes).setInt32(0, value, false);
-    this.writeBytes(bytes);
+    const offset = this.#prepareScalar(4);
+    this.#view.setInt32(offset, value, false);
+    this.#offset += 4;
   }
 
   writeUint32(value: number): void {
-    const bytes = new Uint8Array(4);
-    viewFor(bytes).setUint32(0, value, false);
-    this.writeBytes(bytes);
+    const offset = this.#prepareScalar(4);
+    this.#view.setUint32(offset, value, false);
+    this.#offset += 4;
   }
 
   writeBigInt64(value: bigint): void {
-    const bytes = new Uint8Array(8);
-    viewFor(bytes).setBigInt64(0, value, false);
-    this.writeBytes(bytes);
+    const offset = this.#prepareScalar(8);
+    this.#view.setBigInt64(offset, value, false);
+    this.#offset += 8;
   }
 
   writeBigUint64(value: bigint): void {
-    const bytes = new Uint8Array(8);
-    viewFor(bytes).setBigUint64(0, value, false);
-    this.writeBytes(bytes);
+    const offset = this.#prepareScalar(8);
+    this.#view.setBigUint64(offset, value, false);
+    this.#offset += 8;
   }
 
   writeFloat32(value: number): void {
-    const bytes = new Uint8Array(4);
-    viewFor(bytes).setFloat32(0, value, false);
-    this.writeBytes(bytes);
+    const offset = this.#prepareScalar(4);
+    this.#view.setFloat32(offset, value, false);
+    this.#offset += 4;
   }
 
   writeFloat64(value: number): void {
-    const bytes = new Uint8Array(8);
-    viewFor(bytes).setFloat64(0, value, false);
-    this.writeBytes(bytes);
+    const offset = this.#prepareScalar(8);
+    this.#view.setFloat64(offset, value, false);
+    this.#offset += 8;
+  }
+
+  /**
+   * Ensure a scalar fits and return its starting offset without advancing.
+   * Callers commit the offset only after the DataView write succeeds.
+   */
+  #prepareScalar(size: number): number {
+    this.#ensureCapacity(size);
+    return this.#offset;
   }
 
   toUint8Array(): Uint8Array {
@@ -105,5 +127,6 @@ export class Writer {
     const nextBuffer = new Uint8Array(nextLength);
     nextBuffer.set(this.#buffer);
     this.#buffer = nextBuffer;
+    this.#view = new DataView(nextBuffer.buffer);
   }
 }
