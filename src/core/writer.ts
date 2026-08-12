@@ -31,6 +31,10 @@ export class Writer {
     this.#maxDepth = maxDepth;
   }
 
+  get offset(): number {
+    return this.#offset;
+  }
+
   enter(path: string): void {
     this.#depth += 1;
     if (this.#depth > this.#maxDepth) {

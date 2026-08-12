@@ -43,17 +43,19 @@ describe('fixedArray (fixed-length)', () => {
     expect(roundTrip(schema, [10, 20, 30])).toEqual([10, 20, 30]);
   });
 
-  it('does not loop or allocate unbounded for a huge zero-width-element length', () => {
-    // Same guard as `array`: a schema-declared count beyond the remaining
-    // input fails fast with an XdrError instead of spinning the element loop.
-    const voidArray = fixedArray(voidType(), 4294967295);
-    let caught: unknown;
-    try {
-      voidArray.decode(bytes([]));
-    } catch (e) {
-      caught = e;
-    }
-    expect(caught).toBeInstanceOf(XdrError);
-    expect((caught as Error).message).toMatch(/exceeds remaining/i);
+  it('rejects a zero-width element type on first use', () => {
+    // The length is schema-declared rather than wire-supplied, but a fixed
+    // array of a zero-width type is itself zero-width, so it would multiply
+    // whatever count an enclosing array declares. Every element must move
+    // the offset, which rejects the first element from either direction.
+    const voids = fixedArray(voidType(), 3);
+    const value = [undefined, undefined, undefined];
+    expect(() => voids.encode(value)).toThrow(XdrError);
+    expect(() => voids.encode(value)).toThrow(
+      /element type 'void' encoded to zero bytes/i
+    );
+    expect(() => voids.decode(bytes([0, 0, 0, 0]))).toThrow(
+      /element type 'void' consumed no input/i
+    );
   });
 });

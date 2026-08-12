@@ -6,6 +6,7 @@ project adheres to [Semantic Versioning](http://semver.org/).
 ## Unreleased
 
 ### Changed
+* Encoding or decoding a non-empty `array` or `fixedArray` value now throws `XdrError` when the element type encodes to zero bytes, such as `void`, `opaque(0)`, or a struct whose fields are all of those. Every element must consume at least one byte, otherwise the wire-supplied element count is decoupled from the encoded size; the error names the offending element type. An empty value of such an array still round-trips.
 
 - Faster encoding and decoding: `Reader` and `Writer` now reuse a single
   `DataView` for all scalar reads and writes instead of allocating one per
