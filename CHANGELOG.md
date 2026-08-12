@@ -8,82 +8,204 @@ project adheres to [Semantic Versioning](http://semver.org/).
 ### Changed
 * Encoding or decoding a non-empty `array` or `fixedArray` value now throws `XdrError` when the element type encodes to zero bytes, such as `void`, `opaque(0)`, or a struct whose fields are all of those. Every element must consume at least one byte, otherwise the wire-supplied element count is decoupled from the encoded size; the error names the offending element type. An empty value of such an array still round-trips.
 
+- Faster encoding and decoding: `Reader` and `Writer` now reuse a single
+  `DataView` for all scalar reads and writes instead of allocating one per
+  value, and union decoding no longer allocates an extra object per arm.
+- `Reader` now snapshots its input length at construction: bytes exposed by
+  resizing the backing `ArrayBuffer` after construction are out of bounds and
+  read as truncated input.
+- `Reader` rejects input that is not a byte-sized typed array with a
+  `TypeError` at construction instead of failing on the first read. A
+  `DataView` or a wider typed array such as `Uint16Array` used to read as the
+  wrong bytes.
+- `Reader` and `Writer` reject a non-integer or negative `maxDepth` with an
+  `XdrError` instead of silently disabling the recursion guard.
+
+### Fixed
+
+- `Reader` now treats input backed by a detached `ArrayBuffer` as empty, so
+  `validateXdr` returns the schema's normal validation result instead of
+  throwing a `TypeError`.
+
 ## [v5.0.0-rc.1](https://github.com/stellar/js-xdr/compare/v4.0.0...v5.0.0-rc.1)
 
-A complete rewrite of the library. The runtime `xdr.config(...)` schema-definition DSL has been replaced with a set of statically-typed, explicitly-declared schema builders, and the entire source has been migrated from JavaScript to TypeScript. See [MIGRATION.md](./MIGRATION.md) for a step-by-step upgrade guide.
+A complete rewrite of the library. The runtime `xdr.config(...)`
+schema-definition DSL has been replaced with a set of statically-typed,
+explicitly-declared schema builders, and the entire source has been migrated
+from JavaScript to TypeScript. See [MIGRATION.md](./MIGRATION.md) for a
+step-by-step upgrade guide.
 
 ### Breaking Change
-* **Removed the dynamic `config` / `TypeBuilder` DSL.** Schemas are no longer built at runtime by resolving a graph of `Reference`s inside `xdr.config(...)`. Instead, you compose schemas directly from exported builder functions: `array`, `bool`, `double`, `enumType`, `fixedArray`, `float`, `int32`, `int64`, `lazy`, `opaque`, `option`, `string`, `struct`, `uint32`, `uint64`, `union` (composed with the `case` and `field` arm helpers), `varOpaque`, and `void`. Forward/recursive references that the old DSL resolved automatically are now expressed explicitly with `lazy(() => schema)`.
-* **Renamed the encode/decode API.** `toXDR()` / `fromXDR()` → `encode()` / `decode()`. The `format` argument (`'raw' | 'hex' | 'base64'`) has been dropped — `encode` always returns a `Uint8Array` and `decode` always takes one. Callers that relied on hex/base64 strings or `Buffer` output must convert at the boundary.
-* **Updated validation APIs.** `validateXDR(input, format)` is now `validateXdr(bytes, options)` and accepts raw `Uint8Array` bytes only; callers that used hex/base64 validation must convert at the boundary first. The new `validate(value)` method checks whether a JavaScript value can be encoded by the schema.
-* **`encode()` returns `Uint8Array` instead of `Buffer`.**
-* **Renamed the low-level streaming types.** `XdrReader` → `Reader` and `XdrWriter` → `Writer`.
-* **Consolidated the error types.** `XdrReaderError`, `XdrWriterError`, `XdrDefinitionError`, and `XdrNotImplementedDefinitionError` are replaced by a single `XdrError`.
-* **Removed the exported base classes.** `XdrPrimitiveType`, `XdrCompositeType`, and `NestedXdrType` are gone; custom schemas now extend the new `BaseType` or implement the `XdrType<T>` interface.
-* **Renamed/reshaped the numeric types.** `Int`/`UnsignedInt` → `int32`/`uint32` (return JS `number`); `Hyper`/`UnsignedHyper`/`LargeInt` → `int64`/`uint64` (return `bigint`, with range-checked encoding). The `Quadruple` type has been removed (it was already unsupported and threw on use).
-* **`string` is now bytes-only.** `string(maxLength)` reads and writes a `Uint8Array` with no charset handling; v4's `String` accepted UTF-8 JavaScript strings on write and offered a `readString()` helper. Convert text at the boundary with `TextEncoder`/`TextDecoder`. (`opaque`/`varOpaque` are likewise `Uint8Array`, not `Buffer`.)
-* **Renamed and reshaped the array types.** v4's fixed-length `Array` → `fixedArray(element, length)`; its variable-length `VarArray` → `array(element, maxLength)`. Note the flip: `array` is the **variable-length** type in v5 (it was fixed-length in v4), so audit existing call sites.
-* **New package layout.** `main`/`module`/`browser` fields are replaced by an `exports` map exposing dual ESM (`dist/js-xdr.mjs`) and CommonJS (`dist/js-xdr.cjs`) builds plus generated type declarations (`dist/js-xdr.d.ts`). Output is now `dist/` only (the `lib/` build is gone), the package is marked `sideEffects: false`, and Node `>=22` is required.
+
+- **Removed the dynamic `config` / `TypeBuilder` DSL.** Schemas are no longer
+  built at runtime by resolving a graph of `Reference`s inside
+  `xdr.config(...)`. Instead, you compose schemas directly from exported builder
+  functions: `array`, `bool`, `double`, `enumType`, `fixedArray`, `float`,
+  `int32`, `int64`, `lazy`, `opaque`, `option`, `string`, `struct`, `uint32`,
+  `uint64`, `union` (composed with the `case` and `field` arm helpers),
+  `varOpaque`, and `void`. Forward/recursive references that the old DSL
+  resolved automatically are now expressed explicitly with `lazy(() => schema)`.
+- **Renamed the encode/decode API.** `toXDR()` / `fromXDR()` → `encode()` /
+  `decode()`. The `format` argument (`'raw' | 'hex' | 'base64'`) has been
+  dropped — `encode` always returns a `Uint8Array` and `decode` always takes
+  one. Callers that relied on hex/base64 strings or `Buffer` output must convert
+  at the boundary.
+- **Updated validation APIs.** `validateXDR(input, format)` is now
+  `validateXdr(bytes, options)` and accepts raw `Uint8Array` bytes only; callers
+  that used hex/base64 validation must convert at the boundary first. The new
+  `validate(value)` method checks whether a JavaScript value can be encoded by
+  the schema.
+- **`encode()` returns `Uint8Array` instead of `Buffer`.**
+- **Renamed the low-level streaming types.** `XdrReader` → `Reader` and
+  `XdrWriter` → `Writer`.
+- **Consolidated the error types.** `XdrReaderError`, `XdrWriterError`,
+  `XdrDefinitionError`, and `XdrNotImplementedDefinitionError` are replaced by a
+  single `XdrError`.
+- **Removed the exported base classes.** `XdrPrimitiveType`, `XdrCompositeType`,
+  and `NestedXdrType` are gone; custom schemas now extend the new `BaseType` or
+  implement the `XdrType<T>` interface.
+- **Renamed/reshaped the numeric types.** `Int`/`UnsignedInt` → `int32`/`uint32`
+  (return JS `number`); `Hyper`/`UnsignedHyper`/`LargeInt` → `int64`/`uint64`
+  (return `bigint`, with range-checked encoding). The `Quadruple` type has been
+  removed (it was already unsupported and threw on use).
+- **`string` is now bytes-only.** `string(maxLength)` reads and writes a
+  `Uint8Array` with no charset handling; v4's `String` accepted UTF-8 JavaScript
+  strings on write and offered a `readString()` helper. Convert text at the
+  boundary with `TextEncoder`/`TextDecoder`. (`opaque`/`varOpaque` are likewise
+  `Uint8Array`, not `Buffer`.)
+- **Renamed and reshaped the array types.** v4's fixed-length `Array` →
+  `fixedArray(element, length)`; its variable-length `VarArray` →
+  `array(element, maxLength)`. Note the flip: `array` is the **variable-length**
+  type in v5 (it was fixed-length in v4), so audit existing call sites.
+- **New package layout.** `main`/`module`/`browser` fields are replaced by an
+  `exports` map exposing dual ESM (`dist/js-xdr.mjs`) and CommonJS
+  (`dist/js-xdr.cjs`) builds plus generated type declarations
+  (`dist/js-xdr.d.ts`). Output is now `dist/` only (the `lib/` build is gone),
+  the package is marked `sideEffects: false`, and Node `>=22` is required.
 
 ### Added
-* **First-class TypeScript types.** Schemas carry full type information; `Infer<typeof schema>` yields the encoded/decoded value type, and `struct`/`union`/`enumType` produce strongly-typed object, tagged-union, and named-member types.
-* **`lazy(() => schema)`** builder for defining recursive and forward-referencing schemas.
-* **`BaseType` / `XdrType<T>`** are exported as the base class and interface for all schemas, along with a `DecodeOptions` `{ maxDepth }` option preserved from the prior recursion-depth guard.
-* **`enumType` reserved-name and duplicate-value validation** — throws if a member name collides with a schema property (`name`, `kind`, `encode`, …) or if two members share a wire value.
-* **Schema introspection API.** Every builder now returns a typed schema interface (`StructSchema`, `UnionSchema`, `ArraySchema`, `FixedArraySchema`, `OptionSchema`, `LazySchema`, `OpaqueSchema`, `VarOpaqueSchema`, `StringSchema`, `EnumSchema`) whose `kind` property is narrowed to a literal, plus a closed `AnySchema` union (with `PrimitiveSchema` covering the argument-less kinds). Schema-driven walkers — such as generic JSON converters — can cast once to `AnySchema` and `switch (schema.kind)` with exhaustiveness checking, instead of re-declaring internal shapes and casting. Supporting surface: `enumType` schemas expose `nameByValue` (wire value → member name); `opaque`/`varOpaque`/`string` expose their `length`/`maxLength`; `EnumMember`, `EnumName`, `Field`, `UnionArm`, and `UnionCase` helper types are exported.
-* **`encode(value, { maxDepth })`** — the depth guard also applies to encoding (via the exported `EncodeOptions`), failing with `XdrError` on cyclic values fed to recursive schemas instead of overflowing the call stack.
+
+- **First-class TypeScript types.** Schemas carry full type information;
+  `Infer<typeof schema>` yields the encoded/decoded value type, and
+  `struct`/`union`/`enumType` produce strongly-typed object, tagged-union, and
+  named-member types.
+- **`lazy(() => schema)`** builder for defining recursive and
+  forward-referencing schemas.
+- **`BaseType` / `XdrType<T>`** are exported as the base class and interface for
+  all schemas, along with a `DecodeOptions` `{ maxDepth }` option preserved from
+  the prior recursion-depth guard.
+- **`enumType` reserved-name and duplicate-value validation** — throws if a
+  member name collides with a schema property (`name`, `kind`, `encode`, …) or
+  if two members share a wire value.
+- **Schema introspection API.** Every builder now returns a typed schema
+  interface (`StructSchema`, `UnionSchema`, `ArraySchema`, `FixedArraySchema`,
+  `OptionSchema`, `LazySchema`, `OpaqueSchema`, `VarOpaqueSchema`,
+  `StringSchema`, `EnumSchema`) whose `kind` property is narrowed to a literal,
+  plus a closed `AnySchema` union (with `PrimitiveSchema` covering the
+  argument-less kinds). Schema-driven walkers — such as generic JSON converters
+  — can cast once to `AnySchema` and `switch (schema.kind)` with exhaustiveness
+  checking, instead of re-declaring internal shapes and casting. Supporting
+  surface: `enumType` schemas expose `nameByValue` (wire value → member name);
+  `opaque`/`varOpaque`/`string` expose their `length`/`maxLength`; `EnumMember`,
+  `EnumName`, `Field`, `UnionArm`, and `UnionCase` helper types are exported.
+- **`encode(value, { maxDepth })`** — the depth guard also applies to encoding
+  (via the exported `EncodeOptions`), failing with `XdrError` on cyclic values
+  fed to recursive schemas instead of overflowing the call stack.
 
 ### Changed
-* **Build chain modernized:** Webpack + Babel → Rollup + esbuild; output is a clean dual ESM/CJS bundle with `.d.ts` emission via `rollup-plugin-dts`.
-* **Test framework replaced:** Mocha + Karma + Sinon + Chai → Vitest; the full unit suite was rewritten in TypeScript (`*.test.ts`).
-* **Linting modernized:** ESLint 8 (airbnb-base config) → ESLint 9 flat config (`eslint.config.mjs`) with `typescript-eslint`; added `pnpm lint` and `pnpm typecheck` scripts.
+
+- **Build chain modernized:** Webpack + Babel → Rollup + esbuild; output is a
+  clean dual ESM/CJS bundle with `.d.ts` emission via `rollup-plugin-dts`.
+- **Test framework replaced:** Mocha + Karma + Sinon + Chai → Vitest; the full
+  unit suite was rewritten in TypeScript (`*.test.ts`).
+- **Linting modernized:** ESLint 8 (airbnb-base config) → ESLint 9 flat config
+  (`eslint.config.mjs`) with `typescript-eslint`; added `pnpm lint` and
+  `pnpm typecheck` scripts.
 
 ## [v4.0.0](https://github.com/stellar/js-xdr/compare/v3.1.2...v4.0.0)
 
 ### Breaking Change
-* Removed [the custom `Buffer.subarray` polyfill](https://github.com/stellar/js-xdr/pull/118) introduced in v3.1.1 to address the issue of it not being usable in the React Native Hermes engine. We recommend using [`@exodus/patch-broken-hermes-typed-arrays`](https://github.com/ExodusMovement/patch-broken-hermes-typed-arrays) as an alternative. If needed, please review and consider manually adding it to your project ([#128](https://github.com/stellar/js-xdr/pull/128)).
+
+- Removed
+  [the custom `Buffer.subarray` polyfill](https://github.com/stellar/js-xdr/pull/118)
+  introduced in v3.1.1 to address the issue of it not being usable in the React
+  Native Hermes engine. We recommend using
+  [`@exodus/patch-broken-hermes-typed-arrays`](https://github.com/ExodusMovement/patch-broken-hermes-typed-arrays)
+  as an alternative. If needed, please review and consider manually adding it to
+  your project ([#128](https://github.com/stellar/js-xdr/pull/128)).
 
 ### Added
-* Added optional `maxDepth` decoding limits for nested recursive types to guard against stack overflows during decode. `Array`, `VarArray`, and `Option` constructors now accept a depth limit, and `Struct.create` / `Union.create` can configure per-type decode depth budgets.
+
+- Added optional `maxDepth` decoding limits for nested recursive types to guard
+  against stack overflows during decode. `Array`, `VarArray`, and `Option`
+  constructors now accept a depth limit, and `Struct.create` / `Union.create`
+  can configure per-type decode depth budgets.
 
 ### Fixed
-* Decoding Array and VarArray now fast fails when the array length exceeds remaining bytes to decode ([#132](https://github.com/stellar/js-xdr/pull/132))
 
-* Fixed silent truncation of bigint values exceeding the range of sized integers (`Hyper`, `UnsignedHyper`, and other `LargeInt` subtypes). Construction, encoding, and multi-part assembly now throw on overflow/underflow instead of silently clamping. `isValid` also validates value range. `sliceBigInt` now returns signed slice values for consistency ([#133](https://github.com/stellar/js-xdr/pull/133)).
+- Decoding Array and VarArray now fast fails when the array length exceeds
+  remaining bytes to decode ([#132](https://github.com/stellar/js-xdr/pull/132))
+
+- Fixed silent truncation of bigint values exceeding the range of sized integers
+  (`Hyper`, `UnsignedHyper`, and other `LargeInt` subtypes). Construction,
+  encoding, and multi-part assembly now throw on overflow/underflow instead of
+  silently clamping. `isValid` also validates value range. `sliceBigInt` now
+  returns signed slice values for consistency
+  ([#133](https://github.com/stellar/js-xdr/pull/133)).
 
 ## [v3.1.2](https://github.com/stellar/js-xdr/compare/v3.1.1...v3.1.2)
 
 ### Fixed
-* Increase robustness of compatibility across multiple `js-xdr` instances in an environment ([#122](https://github.com/stellar/js-xdr/pull/122)).
 
+- Increase robustness of compatibility across multiple `js-xdr` instances in an
+  environment ([#122](https://github.com/stellar/js-xdr/pull/122)).
 
 ## [v3.1.1](https://github.com/stellar/js-xdr/compare/v3.1.0...v3.1.1)
 
 ### Fixed
-* Add compatibility with pre-ES2016 environments (like some React Native JS compilers) by adding a custom `Buffer.subarray` polyfill ([#118](https://github.com/stellar/js-xdr/pull/118)).
 
+- Add compatibility with pre-ES2016 environments (like some React Native JS
+  compilers) by adding a custom `Buffer.subarray` polyfill
+  ([#118](https://github.com/stellar/js-xdr/pull/118)).
 
 ## [v3.1.0](https://github.com/stellar/js-xdr/compare/v3.0.1...v3.1.0)
 
 ### Added
-* The raw, underlying `XdrReader` and `XdrWriter` types are now exposed by the library for reading without consuming the entire stream ([#116](https://github.com/stellar/js-xdr/pull/116)).
+
+- The raw, underlying `XdrReader` and `XdrWriter` types are now exposed by the
+  library for reading without consuming the entire stream
+  ([#116](https://github.com/stellar/js-xdr/pull/116)).
 
 ### Fixed
-* Added additional type checks for passing a bytearray-like object to `XdrReader`s and improves the error with details ([#116](https://github.com/stellar/js-xdr/pull/116)).
 
+- Added additional type checks for passing a bytearray-like object to
+  `XdrReader`s and improves the error with details
+  ([#116](https://github.com/stellar/js-xdr/pull/116)).
 
 ## [v3.0.1](https://github.com/stellar/js-xdr/compare/v3.0.0...v3.0.1)
 
 ### Fixes
-- This package is now being published to `@stellar/js-xdr` on NPM.
-- The versions at `js-xdr` are now considered **deprecated** ([#111](https://github.com/stellar/js-xdr/pull/111)).
-- Misc. dependencies have been upgraded ([#104](https://github.com/stellar/js-xdr/pull/104), [#106](https://github.com/stellar/js-xdr/pull/106), [#107](https://github.com/stellar/js-xdr/pull/107), [#108](https://github.com/stellar/js-xdr/pull/108), [#105](https://github.com/stellar/js-xdr/pull/105)).
 
+- This package is now being published to `@stellar/js-xdr` on NPM.
+- The versions at `js-xdr` are now considered **deprecated**
+  ([#111](https://github.com/stellar/js-xdr/pull/111)).
+- Misc. dependencies have been upgraded
+  ([#104](https://github.com/stellar/js-xdr/pull/104),
+  [#106](https://github.com/stellar/js-xdr/pull/106),
+  [#107](https://github.com/stellar/js-xdr/pull/107),
+  [#108](https://github.com/stellar/js-xdr/pull/108),
+  [#105](https://github.com/stellar/js-xdr/pull/105)).
 
 ## [v3.0.0](https://github.com/stellar/js-xdr/compare/v2.0.0...v3.0.0)
 
 ### Breaking Change
-- Add support for easily encoding integers larger than 32 bits ([#100](https://github.com/stellar/js-xdr/pull/100)). This (partially) breaks the API for creating `Hyper` and `UnsignedHyper` instances. Previously, you would pass `low` and `high` parts to represent the lower and upper 32 bits. Now, you can pass the entire 64-bit value directly as a `bigint` or `string` instance, or as a list of "chunks" like before, e.g.:
+
+- Add support for easily encoding integers larger than 32 bits
+  ([#100](https://github.com/stellar/js-xdr/pull/100)). This (partially) breaks
+  the API for creating `Hyper` and `UnsignedHyper` instances. Previously, you
+  would pass `low` and `high` parts to represent the lower and upper 32 bits.
+  Now, you can pass the entire 64-bit value directly as a `bigint` or `string`
+  instance, or as a list of "chunks" like before, e.g.:
 
 ```diff
 -new Hyper({ low: 1, high: 1 }); // representing (1 << 32) + 1 = 4294967297n
@@ -92,10 +214,10 @@ A complete rewrite of the library. The runtime `xdr.config(...)` schema-definiti
 +new Hyper(1, 1);
 ```
 
-
 ## [v2.0.0](https://github.com/stellar/js-xdr/compare/v1.3.0...v2.0.0)
 
-- Refactor XDR serialization/deserialization logic ([#91](https://github.com/stellar/js-xdr/pull/91)).
+- Refactor XDR serialization/deserialization logic
+  ([#91](https://github.com/stellar/js-xdr/pull/91)).
 - Replace `long` dependency with native `BigInt` arithmetics.
 - Replace `lodash` dependency with built-in Array and Object methods, iterators.
 - Add `buffer` dependency for WebPack browser polyfill.
@@ -104,23 +226,28 @@ A complete rewrite of the library. The runtime `xdr.config(...)` schema-definiti
 - Always check that the entire read buffer is consumed (#32 fixed).
 - Check actual byte size of the string on write (#33 fixed).
 - Fix babel-polyfill build warnings (#34 fixed).
-- Upgrade dependencies to their latest versions ([#92](https://github.com/stellar/js-xdr/pull/92)).
+- Upgrade dependencies to their latest versions
+  ([#92](https://github.com/stellar/js-xdr/pull/92)).
 
 ## [v1.3.0](https://github.com/stellar/js-xdr/compare/v1.2.0...v1.3.0)
 
-- Inline and modernize the `cursor` dependency ([#](https://github.com/stellar/js-xdr/pull/63)).
+- Inline and modernize the `cursor` dependency
+  ([#](https://github.com/stellar/js-xdr/pull/63)).
 
 ## [v1.2.0](https://github.com/stellar/js-xdr/compare/v1.1.4...v1.2.0)
 
-- Add method `validateXDR(input, format = 'raw')` which validates if a given XDR is valid or  not. ([#56](https://github.com/stellar/js-xdr/pull/56)).
+- Add method `validateXDR(input, format = 'raw')` which validates if a given XDR
+  is valid or not. ([#56](https://github.com/stellar/js-xdr/pull/56)).
 
 ## [v1.1.4](https://github.com/stellar/js-xdr/compare/v1.1.3...v1.1.4)
 
-- Remove `core-js` dependency ([#45](https://github.com/stellar/js-xdr/pull/45)).
+- Remove `core-js` dependency
+  ([#45](https://github.com/stellar/js-xdr/pull/45)).
 
 ## [v1.1.3](https://github.com/stellar/js-xdr/compare/v1.1.2...v1.1.3)
 
-- Split out reference class to it's own file to avoid circular import  ([#39](https://github.com/stellar/js-xdr/pull/39)).
+- Split out reference class to it's own file to avoid circular import
+  ([#39](https://github.com/stellar/js-xdr/pull/39)).
 
 ## [v1.1.2](https://github.com/stellar/js-xdr/compare/v1.1.1...v1.1.2)
 

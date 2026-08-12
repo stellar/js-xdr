@@ -1,9 +1,5 @@
 import { XdrError } from './error.js';
 
-export function viewFor(bytes: Uint8Array): DataView {
-  return new DataView(bytes.buffer, bytes.byteOffset, bytes.byteLength);
-}
-
 export function paddingLength(length: number): number {
   return (4 - (length % 4)) % 4;
 }
