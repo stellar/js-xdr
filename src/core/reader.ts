@@ -14,11 +14,25 @@ export class Reader {
   #offset = 0;
   #depth = 0;
   readonly #maxDepth: number;
+  private readonly bytes: Uint8Array;
 
-  constructor(
-    private readonly bytes: Uint8Array,
-    maxDepth: number = DEFAULT_MAX_DEPTH
-  ) {
+  constructor(bytes: Uint8Array, maxDepth: number = DEFAULT_MAX_DEPTH) {
+    // Re-wrap subclassed inputs as a plain Uint8Array so `slice` in readBytes
+    // always copies. Buffer (and any other subclass) overrides `slice` to
+    // return a view. The prototype-identity check (not `constructor`, which a
+    // subclass can shadow) is a fast path for the common plain-Uint8Array
+    // input; the prototype determines which `slice` runs (an own `slice`
+    // property planted on a plain instance is the caller sabotaging their
+    // own input, same as before this normalization existed). The
+    // zero-length guard keeps a view over a detached ArrayBuffer working as
+    // before (it reports byteLength 0; constructing over its buffer would
+    // throw TypeError and change validateXdr's observable behavior).
+    this.bytes =
+      Object.getPrototypeOf(bytes) === Uint8Array.prototype
+        ? bytes
+        : bytes.byteLength === 0
+        ? new Uint8Array(0)
+        : new Uint8Array(bytes.buffer, bytes.byteOffset, bytes.byteLength);
     this.#maxDepth = maxDepth;
   }
 

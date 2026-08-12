@@ -3,6 +3,11 @@
 All notable changes to this project will be documented in this file. This
 project adheres to [Semantic Versioning](http://semver.org/).
 
+## Unreleased
+
+### Fixed
+* **`decode` returns independent copies for Node `Buffer` inputs.** `Buffer.prototype.slice` returns a view rather than a copy, so `opaque`/`varOpaque`/`string` values decoded from a `Buffer` aliased the caller's input and could expose Node's shared `Buffer` pool. `Reader` now normalizes its input so decoded byte values never share memory with the input.
+
 ## [v5.0.0-rc.1](https://github.com/stellar/js-xdr/compare/v4.0.0...v5.0.0-rc.1)
 
 A complete rewrite of the library. The runtime `xdr.config(...)` schema-definition DSL has been replaced with a set of statically-typed, explicitly-declared schema builders, and the entire source has been migrated from JavaScript to TypeScript. See [MIGRATION.md](./MIGRATION.md) for a step-by-step upgrade guide.
