@@ -28,12 +28,10 @@ class ArrayType<T> extends BaseType<T[]> {
           `${path}: array length ${length} exceeds maximum ${this.maxLength}`
         );
       }
-      // Defensive guard: the declared element count must not exceed the number
-      // of bytes remaining. This bounds the decode loop for zero-width element
-      // schemas (void, opaque(0), empty struct), where element reads do not
-      // advance the reader and could otherwise loop/allocate unbounded.
-      // For non-zero-width elements, `readBytes` still enforces exact byte
-      // availability during element decoding.
+      // Every element consumes at least one byte (`readArray` rejects any
+      // element that does not, at the first one). A count above the bytes
+      // remaining can therefore never be satisfied, so fail before decoding
+      // any elements.
       if (length > reader.remaining) {
         throw new XdrError(
           `${path}: array length ${length} exceeds remaining ${reader.remaining} byte(s)`
@@ -106,7 +104,21 @@ export function readArray<T>(
 ): T[] {
   const values: T[] = [];
   for (let i = 0; i < length; i += 1) {
-    values.push(element._read(reader, `${path}[${i}]`));
+    const before = reader.offset;
+    const value = element._read(reader, `${path}[${i}]`);
+    // Every element must consume input. Otherwise the element count alone
+    // decides how much memory this loop allocates, and `length` comes off
+    // the wire. This rejects any element type that encodes to zero bytes:
+    // `void`, `opaque(0)`, a struct whose fields are all of those, or a
+    // custom `XdrType` that reads nothing.
+    if (reader.offset === before) {
+      throw new XdrError(
+        `${path}[${i}]: element type '${
+          element.name ?? element.kind
+        }' consumed no input; an array element must encode to at least one byte`
+      );
+    }
+    values.push(value);
   }
   return values;
 }
@@ -125,7 +137,17 @@ export function writeArray<T>(
 ): void {
   let i = 0;
   for (const value of values) {
+    const before = writer.offset;
     element._write(value, writer, `${path}[${i}]`);
+    // The mirror of the check in `readArray`. Without it an array of a
+    // zero-width element type would encode to bytes that cannot decode back.
+    if (writer.offset === before) {
+      throw new XdrError(
+        `${path}[${i}]: element type '${
+          element.name ?? element.kind
+        }' encoded to zero bytes; an array element must encode to at least one byte`
+      );
+    }
     i += 1;
   }
 }

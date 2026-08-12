@@ -3,6 +3,11 @@
 All notable changes to this project will be documented in this file. This
 project adheres to [Semantic Versioning](http://semver.org/).
 
+## Unreleased
+
+### Changed
+* Encoding or decoding a non-empty `array` or `fixedArray` value now throws `XdrError` when the element type encodes to zero bytes, such as `void`, `opaque(0)`, or a struct whose fields are all of those. Every element must consume at least one byte, otherwise the wire-supplied element count is decoupled from the encoded size; the error names the offending element type. An empty value of such an array still round-trips.
+
 ## [v5.0.0-rc.1](https://github.com/stellar/js-xdr/compare/v4.0.0...v5.0.0-rc.1)
 
 A complete rewrite of the library. The runtime `xdr.config(...)` schema-definition DSL has been replaced with a set of statically-typed, explicitly-declared schema builders, and the entire source has been migrated from JavaScript to TypeScript. See [MIGRATION.md](./MIGRATION.md) for a step-by-step upgrade guide.
