@@ -65,7 +65,7 @@ export function assertUint8Array(
   }
   // Check if the Uint8Array is detached or out of bounds by attempting to access an element.
   try {
-    value.at(0);
+    Uint8Array.prototype.at.call(value, 0);
   } catch {
     throw new XdrError(`${path}: Uint8Array is detached or out of bounds`);
   }
