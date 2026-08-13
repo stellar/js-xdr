@@ -20,6 +20,11 @@ project adheres to [Semantic Versioning](http://semver.org/).
   wrong bytes.
 - `Reader` and `Writer` reject a non-integer or negative `maxDepth` with an
   `XdrError` instead of silently disabling the recursion guard.
+- `option` rejects a present option whose element decodes to `null`. Absence is
+  already `null`, so such a value would have two wire forms and would not
+  re-encode to the bytes it came from; `decode` throws an `XdrError` instead of
+  collapsing them. The wire form is legal XDR — to exchange it with a peer, put
+  a single-field struct between the two optionals.
 
 ### Fixed
 
