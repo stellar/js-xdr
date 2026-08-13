@@ -26,8 +26,9 @@ class OptionType<T> extends BaseType<T | null> {
       const value = this.element._read(reader, `${path}.value`);
       // A present option whose element decoded to `null` is indistinguishable
       // from an absent one, so the same value would have two wire forms and
-      // re-encoding would not reproduce these bytes. Reject the non-canonical
-      // form rather than silently collapsing it.
+      // re-encoding would not reproduce these bytes. Both forms are valid XDR;
+      // it is the representation here that cannot hold them apart, so reject
+      // these bytes rather than silently collapsing them into the shorter form.
       if (value === null) {
         throw new XdrError(
           `${path}: present option decoded to null, which is how an absent ` +
