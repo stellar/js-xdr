@@ -63,6 +63,12 @@ export function assertUint8Array(
   if (!(value instanceof Uint8Array)) {
     throw new XdrError(`${path}: expected Uint8Array`);
   }
+  // Check if the Uint8Array is detached or out of bounds by attempting to access an element.
+  try {
+    value.at(0);
+  } catch {
+    throw new XdrError(`${path}: Uint8Array is detached or out of bounds`);
+  }
 }
 
 export function assertArray(
