@@ -32,11 +32,9 @@ export class Reader {
    * cannot see turns into a raw RangeError from the scalar read.
    */
   readonly #length: number;
+  private readonly bytes: Uint8Array;
 
-  constructor(
-    private readonly bytes: Uint8Array,
-    maxDepth: number = DEFAULT_MAX_DEPTH
-  ) {
+  constructor(bytes: Uint8Array, maxDepth: number = DEFAULT_MAX_DEPTH) {
     if (maxDepth < 0 || !Number.isInteger(maxDepth)) {
       throw new XdrError(`invalid maxDepth ${maxDepth}`);
     }
@@ -49,13 +47,34 @@ export class Reader {
     if (!ArrayBuffer.isView(bytes) || bytes.BYTES_PER_ELEMENT !== 1) {
       throw new TypeError('Reader expects a Uint8Array');
     }
+    // Re-wrap subclassed inputs as a plain Uint8Array so `slice` in readBytes
+    // always copies. Buffer (and any other subclass) overrides `slice` to
+    // return a view. The prototype-identity check (not `constructor`, which a
+    // subclass can shadow) is a fast path for the common plain-Uint8Array
+    // input; the prototype determines which `slice` runs (an own `slice`
+    // property planted on a plain instance is the caller sabotaging their
+    // own input, same as before this normalization existed). The zero-length
+    // guard keeps a subclass view over a detached ArrayBuffer working as
+    // before (it reports byteLength 0; constructing over its buffer would
+    // throw TypeError).
+    this.bytes =
+      Object.getPrototypeOf(bytes) === Uint8Array.prototype
+        ? bytes
+        : bytes.byteLength === 0
+        ? new Uint8Array(0)
+        : new Uint8Array(bytes.buffer, bytes.byteOffset, bytes.byteLength);
     // A detached ArrayBuffer rejects DataView construction. Treat it as empty
     // input (a detached Uint8Array already reports length 0), so reads fail
     // with the usual XdrError instead of a TypeError here. Only that case:
     // any other bad input must surface the DataView constructor's TypeError.
-    this.#view = (bytes.buffer as { detached?: boolean } | undefined)?.detached
+    this.#view = (this.bytes.buffer as { detached?: boolean } | undefined)
+      ?.detached
       ? new DataView(new ArrayBuffer(0))
-      : new DataView(bytes.buffer, bytes.byteOffset, bytes.byteLength);
+      : new DataView(
+          this.bytes.buffer,
+          this.bytes.byteOffset,
+          this.bytes.byteLength
+        );
     this.#length = this.#view.byteLength;
   }
 

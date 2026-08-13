@@ -26,6 +26,12 @@ project adheres to [Semantic Versioning](http://semver.org/).
 - `Reader` now treats input backed by a detached `ArrayBuffer` as empty, so
   `validateXdr` returns the schema's normal validation result instead of
   throwing a `TypeError`.
+- `decode` returns independent copies for Node `Buffer` inputs.
+  `Buffer.prototype.slice` returns a view rather than a copy, so
+  `opaque`/`varOpaque`/`string` values decoded from a `Buffer` aliased the
+  caller's input and could expose Node's shared `Buffer` pool. `Reader` now
+  normalizes its input so decoded byte values never share memory with the
+  input ([#152](https://github.com/stellar/js-xdr/pull/152)).
 
 ## [v5.0.0-rc.1](https://github.com/stellar/js-xdr/compare/v4.0.0...v5.0.0-rc.1)
 
