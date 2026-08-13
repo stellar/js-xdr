@@ -88,6 +88,11 @@ step-by-step upgrade guide.
   `fixedArray(element, length)`; its variable-length `VarArray` →
   `array(element, maxLength)`. Note the flip: `array` is the **variable-length**
   type in v5 (it was fixed-length in v4), so audit existing call sites.
+- **An absent `option` is now `null`, not `undefined`.** v4's `Option.read`
+  returned `undefined` when the presence flag was false, and its `write`
+  accepted either `null` or `undefined` as absent. v5 reads and writes `null`
+  only; `undefined` is treated as a present value and fails inside the element
+  type. Audit call sites that omit an optional field by leaving it `undefined`.
 - **New package layout.** `main`/`module`/`browser` fields are replaced by an
   `exports` map exposing dual ESM (`dist/js-xdr.mjs`) and CommonJS
   (`dist/js-xdr.cjs`) builds plus generated type declarations
