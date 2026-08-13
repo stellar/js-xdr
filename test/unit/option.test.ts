@@ -11,7 +11,7 @@ describe('option', () => {
       expect(toArray(schema.encode(5))).toEqual([0, 0, 0, 1, 0, 0, 0, 5]);
     });
 
-    it('writes a present flag plus the value when set', () => {
+    it('writes a present flag plus a zero value, not the absent flag', () => {
       expect(toArray(schema.encode(0))).toEqual([0, 0, 0, 1, 0, 0, 0, 0]);
     });
 
@@ -24,7 +24,7 @@ describe('option', () => {
     it('reads the present flag then the value', () => {
       expect(schema.decode(bytes([0, 0, 0, 1, 0, 0, 0, 5]))).toBe(5);
     });
-    it('reads the present flag then the value', () => {
+    it('reads a present zero value, not null', () => {
       expect(schema.decode(bytes([0, 0, 0, 1, 0, 0, 0, 0]))).toBe(0);
     });
     it('reads null when the flag is absent', () => {
