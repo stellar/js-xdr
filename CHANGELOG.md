@@ -20,6 +20,13 @@ project adheres to [Semantic Versioning](http://semver.org/).
   wrong bytes.
 - `Reader` and `Writer` reject a non-integer or negative `maxDepth` with an
   `XdrError` instead of silently disabling the recursion guard.
+- `option` rejects a present option whose element decodes to `null`. Absence is
+  already `null`, so such a value would have two wire forms and would not
+  re-encode to the bytes it came from; `decode` throws an `XdrError` instead of
+  collapsing them. This covers a nested optional and any custom element type
+  that uses `null` as a real value. The wire form is legal XDR — to exchange it
+  with a peer, wrap the element in a single-field struct, which gives each form
+  its own JavaScript value.
 
 ### Fixed
 
@@ -83,6 +90,13 @@ step-by-step upgrade guide.
   `fixedArray(element, length)`; its variable-length `VarArray` →
   `array(element, maxLength)`. Note the flip: `array` is the **variable-length**
   type in v5 (it was fixed-length in v4), so audit existing call sites.
+- **An absent `option` is now `null`, not `undefined`.** v4's `Option.read`
+  returned `undefined` when the presence flag was false, and its `write`
+  accepted either `null` or `undefined` as absent. v5 reads and writes `null`
+  only; `undefined` no longer means absence and is handed to the element type as
+  a present value, which most element types reject (though `option(void())`, for
+  one, encodes it as a present void). Audit call sites that omit an optional
+  field by leaving it `undefined`.
 - **New package layout.** `main`/`module`/`browser` fields are replaced by an
   `exports` map exposing dual ESM (`dist/js-xdr.mjs`) and CommonJS
   (`dist/js-xdr.cjs`) builds plus generated type declarations
