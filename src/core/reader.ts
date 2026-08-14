@@ -1,7 +1,7 @@
 import { XdrError } from './error.js';
 import { paddingLength } from './helpers.js';
 
-export const DEFAULT_MAX_DEPTH = 200;
+export const DEFAULT_MAX_DEPTH = 1500;
 
 /**
  * Low-level reader for raw XDR bytes.
