@@ -2,7 +2,7 @@ import { XdrError } from '../core/error.js';
 import type { Reader } from '../core/reader.js';
 import type { Writer } from '../core/writer.js';
 import { BaseType, type XdrType } from '../core/xdr-type.js';
-import { assertLength } from '../core/helpers.js';
+import { assertLength, assertUint8Array } from '../core/helpers.js';
 
 /**
  * Reads and writes XDR `string<N>` values as bytes.
@@ -30,9 +30,7 @@ class StringType extends BaseType<Uint8Array> {
   }
 
   _write(value: Uint8Array, writer: Writer, path: string): void {
-    if (!(value instanceof Uint8Array)) {
-      throw new XdrError(`${path}: expected Uint8Array`);
-    }
+    assertUint8Array(value, path);
     if (value.length > this.maxLength) {
       throw new XdrError(
         `${path}: string byte length ${value.length} exceeds maximum ${this.maxLength}`
