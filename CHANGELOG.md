@@ -3,45 +3,63 @@
 All notable changes to this project will be documented in this file. This
 project adheres to [Semantic Versioning](http://semver.org/).
 
-## Unreleased
+## [v5.0.0-rc.2](https://github.com/stellar/js-xdr/compare/v5.0.0-rc.1...v5.0.0-rc.2)
 
 ### Changed
 
-- The default `maxDepth` for encoding and decoding is now 1500, up from 200.
-
-* Encoding or decoding a non-empty `array` or `fixedArray` value now throws `XdrError` when the element type encodes to zero bytes, such as `void`, `opaque(0)`, or a struct whose fields are all of those. Every element must consume at least one byte, otherwise the wire-supplied element count is decoupled from the encoded size; the error names the offending element type. An empty value of such an array still round-trips.
-
 - Faster encoding and decoding: `Reader` and `Writer` now reuse a single
   `DataView` for all scalar reads and writes instead of allocating one per
-  value, and union decoding no longer allocates an extra object per arm.
+  value, and union decoding no longer allocates an extra object per arm. On a
+  Stellar-shaped schema this is roughly 5x faster for both decode and encode on
+  scalar-heavy payloads; payloads dominated by one large opaque are unchanged
+  ([#150](https://github.com/stellar/js-xdr/pull/150)).
+- The default `maxDepth` for encoding and decoding is now 1500, up from 200
+  ([#155](https://github.com/stellar/js-xdr/pull/155)).
 - `Reader` now snapshots its input length at construction: bytes exposed by
   resizing the backing `ArrayBuffer` after construction are out of bounds and
-  read as truncated input.
-- `Reader` rejects input that is not a byte-sized typed array with a
-  `TypeError` at construction instead of failing on the first read. A
-  `DataView` or a wider typed array such as `Uint16Array` used to read as the
-  wrong bytes.
+  read as truncated input ([#150](https://github.com/stellar/js-xdr/pull/150)).
+- `Reader` rejects input that is not a byte-sized typed array with a `TypeError`
+  at construction instead of failing on the first read. A `DataView` or a wider
+  typed array such as `Uint16Array` used to read as the wrong bytes
+  ([#150](https://github.com/stellar/js-xdr/pull/150)).
 - `Reader` and `Writer` reject a non-integer or negative `maxDepth` with an
-  `XdrError` instead of silently disabling the recursion guard.
+  `XdrError` instead of silently disabling the recursion guard. `1 > NaN` is
+  false, so `maxDepth: NaN` used to turn the guard off
+  ([#150](https://github.com/stellar/js-xdr/pull/150)).
+- Encoding or decoding a non-empty `array` or `fixedArray` value now throws
+  `XdrError` when the element type encodes to zero bytes, such as `void`,
+  `opaque(0)`, or a struct whose fields are all of those. Every element must
+  consume at least one byte, otherwise the wire-supplied element count is
+  decoupled from the encoded size; the error names the offending element type.
+  An empty value of such an array still round-trips
+  ([#151](https://github.com/stellar/js-xdr/pull/151)).
 - `option` rejects a present option whose element decodes to `null`. Absence is
   already `null`, so such a value would have two wire forms and would not
   re-encode to the bytes it came from; `decode` throws an `XdrError` instead of
   collapsing them. This covers a nested optional and any custom element type
   that uses `null` as a real value. The wire form is legal XDR — to exchange it
   with a peer, wrap the element in a single-field struct, which gives each form
-  its own JavaScript value.
+  its own JavaScript value ([#154](https://github.com/stellar/js-xdr/pull/154)).
 
 ### Fixed
 
 - `Reader` now treats input backed by a detached `ArrayBuffer` as empty, so
   `validateXdr` returns the schema's normal validation result instead of
-  throwing a `TypeError`.
+  throwing a `TypeError` ([#150](https://github.com/stellar/js-xdr/pull/150)).
 - `decode` returns independent copies for Node `Buffer` inputs.
   `Buffer.prototype.slice` returns a view rather than a copy, so
   `opaque`/`varOpaque`/`string` values decoded from a `Buffer` aliased the
   caller's input and could expose Node's shared `Buffer` pool. `Reader` now
-  normalizes its input so decoded byte values never share memory with the
-  input ([#152](https://github.com/stellar/js-xdr/pull/152)).
+  normalizes its input so decoded byte values never share memory with the input
+  ([#152](https://github.com/stellar/js-xdr/pull/152)).
+- `opaque`, `varOpaque`, and `string` reject a `Uint8Array` whose backing buffer
+  has been detached, or whose span has fallen out of bounds under a shrunk
+  resizable buffer, with an `XdrError`. Such a view keeps its `Uint8Array`
+  prototype and reports `length === 0`, so it used to reach the writer and fail
+  with a native `TypeError`, which escaped `validate` as a throw instead of
+  `false`. These views are reachable through ordinary APIs: `postMessage`,
+  `structuredClone` with a transfer list, `ArrayBuffer.prototype.transfer`, or
+  `resize` ([#153](https://github.com/stellar/js-xdr/pull/153)).
 
 ## [v5.0.0-rc.1](https://github.com/stellar/js-xdr/compare/v4.0.0...v5.0.0-rc.1)
 
