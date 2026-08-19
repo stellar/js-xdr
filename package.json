@@ -31,6 +31,7 @@
     "build": "pnpm run clean && rollup -c rollup.config.mjs",
     "test": "vitest run",
     "test:watch": "vitest",
+    "bench": "vitest bench --run",
     "lint": "eslint .",
     "typecheck": "tsc --noEmit",
     "check:package-types": "attw --pack .",
