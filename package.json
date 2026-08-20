@@ -1,6 +1,6 @@
 {
   "name": "@stellar/js-xdr",
-  "version": "5.0.0-rc.2",
+  "version": "5.0.0",
   "description": "Read/write XDR encoded data structures (RFC 4506)",
   "engines": {
     "node": ">=22.0.0",
