@@ -1,6 +1,6 @@
-import type { BenchOptions } from 'vitest';
 import {
   array,
+  bool,
   enumType,
   fixedArray,
   int32,
@@ -18,28 +18,19 @@ import {
   void as voidType,
   type XdrType
 } from '../src/index.js';
-
-// Keep each benchmark short so the whole suite stays fast; raise `time`
-// locally when chasing small regressions.
-export const BENCH_OPTS: BenchOptions = { time: 250 };
-
-export function fill(length: number, seed = 7): Uint8Array {
-  const out = new Uint8Array(length);
-  for (let i = 0; i < length; i += 1) {
-    out[i] = (i * seed + 3) & 0xff;
-  }
-  return out;
-}
+import { fill } from './_bench.js';
 
 // -- Flat struct ------------------------------------------------------------
 
+// Mirrors the Range schema in test/unit/struct.test.ts, bool() included, so
+// the struct benches also cover the bool codec path.
 export const Range = struct('Range', {
   begin: int32(),
   end: int32(),
-  inclusive: int32()
+  inclusive: bool()
 });
 
-export const RANGE_VALUE = { begin: 5, end: 255, inclusive: 1 };
+export const RANGE_VALUE = { begin: 5, end: 255, inclusive: true };
 export const RANGE_BYTES = Range.encode(RANGE_VALUE);
 
 export const Line = struct('Line', { a: Range, b: Range });
@@ -50,7 +41,7 @@ export const LINE_BYTES = Line.encode(LINE_VALUE);
 
 const PublicKeyType = enumType('PublicKeyType', { ed25519: 0 });
 
-export const PublicKey = union('PublicKey', {
+const PublicKey = union('PublicKey', {
   switchOn: PublicKeyType,
   cases: [
     caseOf('ed25519', PublicKeyType.ed25519, field('ed25519', opaque(32)))
@@ -64,7 +55,7 @@ const CreditAsset = struct('CreditAsset', {
   issuer: PublicKey
 });
 
-export const Asset = union('Asset', {
+const Asset = union('Asset', {
   switchOn: AssetType,
   cases: [
     caseOf('native', AssetType.native, voidType()),
@@ -99,8 +90,6 @@ export const Transaction = struct('Transaction', {
   signatures: array(fixedArray(opaque(64), 1), 20)
 });
 
-export type PaymentValue = ReturnType<typeof makePayment>;
-
 export function makePayment(i: number) {
   return {
     destination: { type: 0 as const, ed25519: fill(32, i + 1) },
@@ -118,7 +107,7 @@ export function makePayment(i: number) {
   };
 }
 
-export function makeTransaction(operationCount: number) {
+function makeTransaction(operationCount: number) {
   const operations = [];
   for (let i = 0; i < operationCount; i += 1) {
     operations.push(makePayment(i));
@@ -148,7 +137,7 @@ export const LinkedList: XdrType<ListNode> = struct('ListNode', {
   next: option(lazy((): XdrType<ListNode> => LinkedList))
 });
 
-export function makeList(length: number): ListNode {
+function makeList(length: number): ListNode {
   let node: ListNode = { value: 0, next: null };
   for (let i = 1; i < length; i += 1) {
     node = { value: i, next: node };
@@ -156,5 +145,8 @@ export function makeList(length: number): ListNode {
   return node;
 }
 
+// Each node costs 3 recursion-depth units (struct + option + lazy), so with
+// the default maxDepth of 1500 the ceiling is 500 nodes. 300 leaves headroom;
+// going past 500 throws "max recursion depth exceeded" at module load.
 export const LIST_VALUE = makeList(300);
 export const LIST_BYTES = LinkedList.encode(LIST_VALUE);
