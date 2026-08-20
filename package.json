@@ -32,6 +32,8 @@
     "test": "vitest run",
     "test:watch": "vitest",
     "bench": "vitest bench --run",
+    "bench:baseline": "vitest bench --run --outputJson bench-baseline.json",
+    "bench:compare": "vitest bench --run --compare bench-baseline.json",
     "lint": "eslint .",
     "typecheck": "tsc --noEmit",
     "check:package-types": "attw --pack .",

@@ -3,5 +3,6 @@ lib/
 node_modules/
 tmp/
 generated/
+bench-baseline.json
 .DS_Store
 .vscode
