@@ -48,9 +48,56 @@ int64().encode(1099511627776n); // Uint8Array(8) [0, 0, 1, 0, 0, 0, 0, 0]
 int64().decode(Uint8Array.from([0, 0, 1, 0, 0, 0, 0, 0])); // returns 1099511627776n
 ```
 
-Compound types (`struct`, `union`, `enumType`, `array`, …) are composed the same
-way — see the [migration guide](MIGRATION.md) and [examples](examples/) for the
-full set of builders.
+Compound types are composed the same way. Struct values are plain objects,
+union values are tagged objects, and enum members are plain numbers:
+
+```javascript
+import {
+  enumType,
+  struct,
+  union,
+  uint32,
+  int32,
+  void as xdrVoid,
+  case as xdrCase,
+  field
+} from '@stellar/js-xdr';
+
+const Color = struct('Color', {
+  red: uint32(),
+  green: uint32(),
+  blue: uint32()
+});
+Color.encode({ red: 1, green: 2, blue: 3 }); // Uint8Array(12)
+
+const ResultType = enumType('ResultType', { ok: 0, error: 1 });
+const Result = union('Result', {
+  switchOn: ResultType,
+  cases: [
+    xdrCase('ok', ResultType.ok, xdrVoid()),
+    xdrCase('error', ResultType.error, field('code', int32()))
+  ]
+});
+Result.encode({ type: ResultType.error, code: 7 });
+```
+
+Recursive or forward references use `lazy(() => schema)`, optionals use
+`option(element)` (absent is `null`), and `validate(value)` /
+`validateXdr(bytes)` check values and bytes without throwing. See the
+[migration guide](MIGRATION.md) and [examples](examples/) for the full set of
+builders.
+
+### TypeScript
+
+Schemas carry full type information. Derive the value type of any schema with
+`Infer` instead of writing it by hand:
+
+```typescript
+import type { Infer } from '@stellar/js-xdr';
+
+type ColorValue = Infer<typeof Color>;
+// { readonly red: number; readonly green: number; readonly blue: number }
+```
 
 ## Caveats
 
@@ -64,13 +111,13 @@ There are a couple of caveats to be aware of with this library:
 ## Code generation
 
 `js-xdr` by itself does not have any ability to parse XDR IDL files and produce
-a parser for your custom data types. Instead, that is the responsibility of
-[`xdrgen`](http://github.com/stellar/xdrgen). xdrgen will take your .x files and
-produce a javascript file that target this library to allow for your own custom
-types.
-
-See [`stellar-base`](http://github.com/stellar/js-stellar-base) for an example
-(check out the src/generated directory)
+schemas for your custom data types. For an example of a code generator that
+targets this library, see the
+[`tools/xdrgen/generate.mjs`](https://github.com/stellar/js-stellar-sdk/blob/main/tools/xdrgen/generate.mjs)
+script in [`js-stellar-sdk`](https://github.com/stellar/js-stellar-sdk): it
+reads a JSON schema graph (`xdr/xdr.json`) and emits TypeScript files built on
+this library. Its output lives in that repository's `src/xdr/generated/`
+directory.
 
 ## Contributing
 
@@ -116,5 +163,5 @@ Please [see CONTRIBUTING.md for details](CONTRIBUTING.md).
 - Pre-commit hooks will automatically format staged files
 - Use `nvm` to manage Node versions: https://github.com/creationix/nvm
 
-**Note:** While the built library supports multiple Node versions, development
-requires Node.js ≥ 22.0.0 and pnpm ≥ 10.0.
+**Note:** The package's `engines` field requires Node.js ≥ 22.0.0 for
+consumers and development alike; pnpm ≥ 10.0 is needed for development only.

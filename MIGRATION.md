@@ -35,7 +35,7 @@ Two things changed at the conceptual level; everything else follows from them:
 
 | v4                                                                 | v5                                                                                                |
 | ------------------------------------------------------------------ | ------------------------------------------------------------------------------------------------- |
-| `main: lib/xdr.js`, `browser: dist/xdr.js`, `module: src/index.js` | `exports` map with ESM (`dist/js-xdr.mjs`) + CJS (`dist/js-xdr.cjs`) + types (`dist/js-xdr.d.ts`) |
+| `main: lib/xdr.js`, `browser: dist/xdr.js`, `module: src/index.js` | `exports` map with ESM (`dist/js-xdr.mjs`) + CJS (`dist/js-xdr.cjs`) + per-format types (`dist/js-xdr.d.mts` / `dist/js-xdr.d.ts`) |
 | `Buffer` in, `Buffer` out                                          | `Uint8Array` in, `Uint8Array` out                                                                 |
 | Node `>=20`                                                        | Node `>=22`                                                                                       |
 
@@ -271,6 +271,17 @@ Tagged.decode(bytes); // { type: 99, unknown: ... } for an unknown discriminator
 const MaybeCode = option(int32());
 MaybeCode.encode(7);
 MaybeCode.encode(null);
+```
+
+Because `null` marks absence, an option's element must never itself decode to
+`null`. `option(option(...))` throws at schema-construction time, and decoding
+a present option whose element produced `null` (through `lazy` or a custom
+type) throws an `XdrError`. If your v4 schema nested optionals, wrap the inner
+option in a single-field struct — same wire format, distinct values:
+
+```ts
+const Nested = option(struct('Wrapped', { value: option(int32()) }));
+// null | { value: null } | { value: 7 }
 ```
 
 ## Encoding, decoding, and validation

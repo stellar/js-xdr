@@ -117,12 +117,15 @@ step-by-step upgrade guide.
   only; `undefined` no longer means absence and is handed to the element type as
   a present value, which most element types reject (though `option(void())`, for
   one, encodes it as a present void). Audit call sites that omit an optional
-  field by leaving it `undefined`.
-- **New package layout.** `main`/`module`/`browser` fields are replaced by an
-  `exports` map exposing dual ESM (`dist/js-xdr.mjs`) and CommonJS
-  (`dist/js-xdr.cjs`) builds plus generated type declarations
-  (`dist/js-xdr.d.ts`). Output is now `dist/` only (the `lib/` build is gone),
-  the package is marked `sideEffects: false`, and Node `>=22` is required.
+  field by leaving it `undefined`. Because `null` marks absence,
+  `option(option(...))` now throws at schema-construction time; wrap the inner
+  option in a single-field struct instead.
+- **New package layout.** An `exports` map now exposes dual ESM
+  (`dist/js-xdr.mjs`) and CommonJS (`dist/js-xdr.cjs`) builds with per-format
+  type declarations (`dist/js-xdr.d.mts` / `dist/js-xdr.d.ts`); the `browser`
+  field is gone, and `main`/`module`/`types` remain as fallbacks pointing at
+  `dist/`. Output is now `dist/` only (the `lib/` build is gone), the package
+  is marked `sideEffects: false`, and Node `>=22` is required.
 
 ### Added
 
