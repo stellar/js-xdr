@@ -102,11 +102,6 @@ step-by-step upgrade guide.
 
 - **Build chain modernized:** Webpack + Babel → Rollup + esbuild; output is a
   clean dual ESM/CJS bundle with `.d.ts` emission via `rollup-plugin-dts`.
-- **Test framework replaced:** Mocha + Karma + Sinon + Chai → Vitest; the full
-  unit suite was rewritten in TypeScript (`*.test.ts`).
-- **Linting modernized:** ESLint 8 (airbnb-base config) → ESLint 9 flat config
-  (`eslint.config.mjs`) with `typescript-eslint`; added `pnpm lint` and
-  `pnpm typecheck` scripts.
 - The default `maxDepth` for encoding and decoding is now 1500, up from 200 in
   v4 ([#155](https://github.com/stellar/js-xdr/pull/155)).
 - `Reader` accepts only byte-sized typed arrays (`Uint8Array` and its
