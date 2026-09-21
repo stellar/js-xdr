@@ -30,6 +30,7 @@ const RESERVED_ENUM_MEMBER_NAMES = new Set([
   'encode',
   'decode',
   'validate',
+  'validateXdr',
   '_read',
   '_write',
   'nameByValue'

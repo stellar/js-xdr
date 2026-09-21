@@ -54,6 +54,7 @@ describe('enum', () => {
     it('rejects member names that collide with reserved properties', () => {
       expect(() => enumType('Bad', { name: 0 })).toThrow(/reserved/i);
       expect(() => enumType('Bad', { decode: 1 })).toThrow(/reserved/i);
+      expect(() => enumType('Bad', { validateXdr: 0 })).toThrow(/reserved/i);
     });
 
     it('rejects member values outside the int32 range', () => {
