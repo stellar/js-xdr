@@ -1,5 +1,6 @@
 import { describe, it, expect } from 'vitest';
 import {
+  BaseType,
   union,
   enumType,
   int32,
@@ -14,6 +15,7 @@ import {
   void as voidType
 } from '../../src/index.js';
 import { field, case as caseOf } from '../../src/types/union.js';
+import type { Reader, Writer } from '../../src/index.js';
 import { bytes, toArray, roundTrip, encodeInvalid } from './_helpers.js';
 
 const AssetType = enumType('AssetType', { native: 0, credit: 1 });
@@ -238,6 +240,27 @@ describe('union', () => {
           cases: [caseOf('t', true, voidType())]
         })
       ).not.toThrow();
+    });
+
+    it('rejects a custom-kind switch at construction', () => {
+      class Code extends BaseType<number> {
+        readonly kind = 'code';
+
+        _read(reader: Reader, path: string): number {
+          return reader.readInt32(path);
+        }
+
+        _write(value: number, writer: Writer): void {
+          writer.writeInt32(value);
+        }
+      }
+
+      expect(() =>
+        union('Bad', {
+          switchOn: new Code(),
+          cases: [caseOf('a', 7, voidType())]
+        })
+      ).toThrow(/switchOn must be int32, uint32, bool, or an enum, got code/);
     });
 
     it('rejects a lazy float switch with cases at construction', () => {
