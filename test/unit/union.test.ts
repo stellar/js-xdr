@@ -1,5 +1,18 @@
 import { describe, it, expect } from 'vitest';
-import { union, enumType, int32, void as voidType } from '../../src/index.js';
+import {
+  union,
+  enumType,
+  int32,
+  uint32,
+  bool,
+  float,
+  double,
+  lazy,
+  int64,
+  uint64,
+  string,
+  void as voidType
+} from '../../src/index.js';
 import { field, case as caseOf } from '../../src/types/union.js';
 import { bytes, toArray, roundTrip, encodeInvalid } from './_helpers.js';
 
@@ -196,6 +209,90 @@ describe('union', () => {
           defaultArm: field('a', int32())
         })
       ).not.toThrow();
+    });
+
+    it.each([
+      ['float', float()],
+      ['double', double()],
+      ['int64', int64()],
+      ['uint64', uint64()],
+      ['string', string(8)]
+    ])('rejects a %s switch at construction', (_kind, schema) => {
+      expect(() =>
+        union('Bad', {
+          // eslint-disable-next-line @typescript-eslint/no-explicit-any
+          switchOn: schema as any,
+          cases: [],
+          defaultArm: voidType()
+        })
+      ).toThrow(/switchOn must be int32, uint32, bool, or an enum/);
+    });
+
+    it('accepts uint32 and bool switches', () => {
+      expect(() =>
+        union('U', { switchOn: uint32(), cases: [caseOf('a', 1, voidType())] })
+      ).not.toThrow();
+      expect(() =>
+        union('B', {
+          switchOn: bool(),
+          cases: [caseOf('t', true, voidType())]
+        })
+      ).not.toThrow();
+    });
+
+    it('rejects a lazy float switch with cases at construction', () => {
+      expect(() =>
+        union('Bad', {
+          switchOn: lazy(() => float()),
+          cases: [caseOf('a', 0.5, voidType())]
+        })
+      ).toThrow(/Bad: switchOn must be .*, got float/);
+    });
+
+    it('accepts a lazy switch wrapped in another lazy', () => {
+      const Kind = enumType('Kind', { a: 0 });
+      const U = union('U', {
+        switchOn: lazy(() => lazy(() => Kind)),
+        cases: [caseOf('a', Kind.a, voidType())]
+      });
+      expect(U.decode(U.encode({ type: Kind.a }))).toEqual({ type: 0 });
+    });
+
+    it('rejects a lazy switch that resolves to itself', () => {
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      const Self: any = lazy(() => Self);
+      const Bad = union('Bad', {
+        switchOn: Self,
+        cases: [],
+        defaultArm: voidType()
+      });
+      expect(() => Bad.encode({ type: 0 })).toThrow(
+        /switchOn lazy schema never resolves/
+      );
+    });
+
+    it('rejects a case-less lazy float switch on first use', () => {
+      const Bad = union('Bad', {
+        switchOn: lazy(() => float()),
+        cases: [],
+        defaultArm: voidType()
+      });
+      expect(() => Bad.encode({ type: 0 })).toThrow(
+        /Bad: switchOn must be int32, uint32, bool, or an enum, got float/
+      );
+      expect(() => Bad.decode(new Uint8Array(4))).toThrow(/switchOn must be/);
+    });
+
+    it('accepts a lazy switch declared after the union', () => {
+      const Later = union('Later', {
+        switchOn: lazy(() => Kind),
+        cases: [],
+        defaultArm: voidType()
+      });
+      const Kind = enumType('Kind', { a: 0 });
+      expect(Later.decode(Later.encode({ type: Kind.a }))).toEqual({
+        type: 0
+      });
     });
   });
 });

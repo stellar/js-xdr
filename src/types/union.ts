@@ -3,6 +3,7 @@ import type { Reader } from '../core/reader.js';
 import type { Writer } from '../core/writer.js';
 import { BaseType, type Infer, type XdrType } from '../core/xdr-type.js';
 import { isPlainObject } from '../core/helpers.js';
+import type { LazySchema } from './lazy.js';
 
 /**
  * Named payload field for a non-void union arm.
@@ -57,6 +58,15 @@ type UnionValue<
 
 const DEFAULT_CASE_NAME = 'default';
 
+// RFC 4506 §6.4: a union discriminant must be int, unsigned int, bool, or an
+// enum (typedefs resolve to one of these schemas).
+const DISCRIMINANT_KINDS: ReadonlySet<string> = new Set([
+  'int32',
+  'uint32',
+  'bool',
+  'enum'
+]);
+
 /**
  * Reads and writes XDR unions.
  *
@@ -77,6 +87,9 @@ class UnionType<
   readonly defaultArm: DefaultArm;
   readonly switchKey: SwitchKey;
   readonly #casesByDiscriminant = new Map<Infer<Switch>, Cases[number]>();
+  // A lazy switch in a case-less union may be a forward reference, so its kind
+  // is checked on first read or write instead of at construction.
+  #switchOnChecked: boolean;
 
   constructor(
     name: string,
@@ -91,6 +104,12 @@ class UnionType<
     // not a legal discriminator field name.
     if (switchKey === '__proto__') {
       throw new XdrError(`${name}: switchKey '__proto__' is not allowed`);
+    }
+    // Cases force a lazy switch to resolve in the validate loop below anyway, so
+    // only a case-less union can still be waiting on a forward reference.
+    this.#switchOnChecked = switchOn.kind !== 'lazy' || cases.length > 0;
+    if (this.#switchOnChecked) {
+      assertDiscriminantSchema(name, switchOn);
     }
     this.switchOn = switchOn;
     this.cases = cases;
@@ -137,6 +156,7 @@ class UnionType<
   ): UnionValue<Switch, Cases, DefaultArm, SwitchKey> {
     reader.enter(path);
     try {
+      this.#checkSwitchOn();
       const discriminant = this.switchOn._read(
         reader,
         `${path}.${this.switchKey}`
@@ -167,6 +187,7 @@ class UnionType<
   ): void {
     writer.enter(path);
     try {
+      this.#checkSwitchOn();
       if (
         !isPlainObject(value) ||
         !Object.prototype.hasOwnProperty.call(value, this.switchKey)
@@ -193,6 +214,13 @@ class UnionType<
       );
     } finally {
       writer.exit();
+    }
+  }
+
+  #checkSwitchOn(): void {
+    if (!this.#switchOnChecked) {
+      assertDiscriminantSchema(this.name ?? this.kind, this.switchOn);
+      this.#switchOnChecked = true;
     }
   }
 }
@@ -336,6 +364,28 @@ function writeUnionArm(
     return;
   }
   arm._write(undefined, writer, path);
+}
+
+function assertDiscriminantSchema(
+  unionName: string,
+  switchOn: XdrType<unknown>
+): void {
+  let schema = switchOn;
+  const seen = new Set<XdrType<unknown>>();
+  while (schema.kind === 'lazy') {
+    if (seen.has(schema)) {
+      throw new XdrError(`${unionName}: switchOn lazy schema never resolves`);
+    }
+    seen.add(schema);
+    schema = (schema as LazySchema<unknown>).getSchema();
+  }
+  if (!DISCRIMINANT_KINDS.has(schema.kind)) {
+    throw new XdrError(
+      `${unionName}: switchOn must be int32, uint32, bool, or an enum, got ${
+        schema.name ?? schema.kind
+      }`
+    );
+  }
 }
 
 function assertArmPayloadName(

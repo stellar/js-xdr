@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file. This
 project adheres to [Semantic Versioning](http://semver.org/).
 
+## Unreleased
+
+### Fixed
+
+- `union()` now throws an `XdrError` when `switchOn` is not `int32`, `uint32`,
+  `bool`, or an enum, as RFC 4506 §6.4 requires. A `float()` switch could encode
+  values that then failed to decode. A `lazy` switch is checked at construction
+  when the union has cases, and on first encode or decode otherwise. Custom
+  `XdrType` schemas with their own `kind` are no longer accepted as a
+  discriminant ([#162](https://github.com/stellar/js-xdr/issues/162)).
+
 ## [v5.0.0](https://github.com/stellar/js-xdr/compare/v4.0.0...v5.0.0)
 
 A complete rewrite of the library. The runtime `xdr.config(...)`
