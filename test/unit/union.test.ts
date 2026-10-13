@@ -291,6 +291,18 @@ describe('union', () => {
       expect(() => Bad.decode(new Uint8Array(4))).toThrow(/switchOn must be/);
     });
 
+    it('throws a bad case-less lazy switch from validate, not false', () => {
+      const Bad = union('Bad', {
+        switchOn: lazy(() => float()),
+        cases: [],
+        defaultArm: voidType()
+      });
+      expect(() => Bad.validate({ type: 0 })).toThrow(/switchOn must be/);
+      expect(() => Bad.validateXdr(new Uint8Array(4))).toThrow(
+        /switchOn must be/
+      );
+    });
+
     it('accepts a lazy switch declared after the union', () => {
       const Later = union('Later', {
         switchOn: lazy(() => Kind),

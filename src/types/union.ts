@@ -110,7 +110,10 @@ class UnionType<
     // only a case-less union can still be waiting on a forward reference.
     this.#switchOnChecked = switchOn.kind !== 'lazy' || cases.length > 0;
     if (this.#switchOnChecked) {
-      assertDiscriminantSchema(name, switchOn);
+      const problem = discriminantSchemaProblem(switchOn);
+      if (problem !== undefined) {
+        throw new XdrError(`${name}: ${problem}`);
+      }
     }
     this.switchOn = switchOn;
     this.cases = cases;
@@ -220,7 +223,12 @@ class UnionType<
 
   #checkSwitchOn(): void {
     if (!this.#switchOnChecked) {
-      assertDiscriminantSchema(this.name ?? this.kind, this.switchOn);
+      const problem = discriminantSchemaProblem(this.switchOn);
+      if (problem !== undefined) {
+        // A plain Error, not XdrError: this is a schema bug, and validate and
+        // validateXdr would report an XdrError as invalid input.
+        throw new Error(`${this.name ?? this.kind}: ${problem}`);
+      }
       this.#switchOnChecked = true;
     }
   }
@@ -367,26 +375,25 @@ function writeUnionArm(
   arm._write(undefined, writer, path);
 }
 
-// Lazy hops are capped like nesting depth, since a lazy may return a new lazy
-// on every call.
-function assertDiscriminantSchema(
-  unionName: string,
+// Returns why switchOn cannot be a discriminant, or undefined if it can. Lazy
+// hops are capped like nesting depth, since a lazy may return a new lazy on
+// every call.
+function discriminantSchemaProblem(
   switchOn: XdrType<unknown>
-): void {
+): string | undefined {
   let schema = switchOn;
   for (let hops = 0; schema.kind === 'lazy'; hops++) {
     if (hops === DEFAULT_MAX_DEPTH) {
-      throw new XdrError(`${unionName}: switchOn lazy schema never resolves`);
+      return 'switchOn lazy schema never resolves';
     }
     schema = (schema as LazySchema<unknown>).getSchema();
   }
   if (!DISCRIMINANT_KINDS.has(schema.kind)) {
-    throw new XdrError(
-      `${unionName}: switchOn must be int32, uint32, bool, or an enum, got ${
-        schema.name ?? schema.kind
-      }`
-    );
+    return `switchOn must be int32, uint32, bool, or an enum, got ${
+      schema.name ?? schema.kind
+    }`;
   }
+  return undefined;
 }
 
 function assertArmPayloadName(
