@@ -271,6 +271,14 @@ describe('union', () => {
       );
     });
 
+    it('rejects a lazy switch that returns a new lazy on every call', () => {
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      const mk = (): any => lazy(mk);
+      expect(() =>
+        union('Bad', { switchOn: mk(), cases: [caseOf('a', 0, voidType())] })
+      ).toThrow(/switchOn lazy schema never resolves/);
+    });
+
     it('rejects a case-less lazy float switch on first use', () => {
       const Bad = union('Bad', {
         switchOn: lazy(() => float()),

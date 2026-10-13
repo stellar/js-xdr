@@ -3,6 +3,7 @@ import type { Reader } from '../core/reader.js';
 import type { Writer } from '../core/writer.js';
 import { BaseType, type Infer, type XdrType } from '../core/xdr-type.js';
 import { isPlainObject } from '../core/helpers.js';
+import { DEFAULT_MAX_DEPTH } from '../core/reader.js';
 import type { LazySchema } from './lazy.js';
 
 /**
@@ -366,17 +367,17 @@ function writeUnionArm(
   arm._write(undefined, writer, path);
 }
 
+// Lazy hops are capped like nesting depth, since a lazy may return a new lazy
+// on every call.
 function assertDiscriminantSchema(
   unionName: string,
   switchOn: XdrType<unknown>
 ): void {
   let schema = switchOn;
-  const seen = new Set<XdrType<unknown>>();
-  while (schema.kind === 'lazy') {
-    if (seen.has(schema)) {
+  for (let hops = 0; schema.kind === 'lazy'; hops++) {
+    if (hops === DEFAULT_MAX_DEPTH) {
       throw new XdrError(`${unionName}: switchOn lazy schema never resolves`);
     }
-    seen.add(schema);
     schema = (schema as LazySchema<unknown>).getSchema();
   }
   if (!DISCRIMINANT_KINDS.has(schema.kind)) {
