@@ -7,12 +7,15 @@ project adheres to [Semantic Versioning](http://semver.org/).
 
 ### Fixed
 
-- `union()` now throws an `XdrError` when `switchOn` is not `int32`, `uint32`,
-  `bool`, or an enum, as RFC 4506 §6.4 requires. A `float()` switch could encode
-  values that then failed to decode. A `lazy` switch is checked at construction
-  when the union has cases, and on first encode or decode otherwise. Custom
-  `XdrType` schemas with their own `kind` are no longer accepted as a
-  discriminant ([#162](https://github.com/stellar/js-xdr/issues/162)).
+- `union()` now throws an `XdrError` at construction when `switchOn` is not
+  `int32`, `uint32`, `bool`, or an enum, as RFC 4506 §6.4 requires. A `float()`
+  switch could encode values that then failed to decode. A `lazy` switch is
+  checked at construction when the union has cases. Otherwise it is checked on
+  first encode, decode, `validate`, or `validateXdr`, which throw a plain
+  `Error` for a bad switch instead of returning `false`. A lazy switch that
+  never resolves is rejected after `DEFAULT_MAX_DEPTH` steps. Custom `XdrType`
+  schemas with their own `kind` are no longer accepted as a discriminant
+  ([#162](https://github.com/stellar/js-xdr/issues/162)).
 
 ## [v5.0.0](https://github.com/stellar/js-xdr/compare/v4.0.0...v5.0.0)
 
