@@ -3,6 +3,15 @@
 All notable changes to this project will be documented in this file. This
 project adheres to [Semantic Versioning](http://semver.org/).
 
+## Unreleased
+
+### Fixed
+
+- `union()`: now throws `XdrError` when `switchKey` or a `field()` payload name
+  is not a primitive string, closing a bypass of the `'__proto__'` name check.
+  Numbers and Symbols, which plain JS used to accept as names, are now rejected
+  ([#174](https://github.com/stellar/js-xdr/pull/174)).
+
 ## [v5.0.0](https://github.com/stellar/js-xdr/compare/v4.0.0...v5.0.0)
 
 A complete rewrite of the library. The runtime `xdr.config(...)`
