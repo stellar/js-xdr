@@ -32,13 +32,15 @@ class StructType<
     // XDR identifiers start with a letter. Names that start with a digit can
     // be array-index keys, which JS enumerates first in numeric order, so the
     // wire order would silently differ from the declared order.
-    const digitName = names.find((key) => /^[0-9]/.test(key));
-    if (digitName !== undefined) {
+    // Check the same keys that get encoded (enumerable own properties).
+    const entries = Object.entries(fields) as [string, XdrType<unknown>][];
+    const digitEntry = entries.find(([key]) => /^[0-9]/.test(key));
+    if (digitEntry !== undefined) {
       throw new XdrError(
-        `${name}: struct field name '${digitName}' must not start with a digit`
+        `${name}: struct field name '${digitEntry[0]}' must not start with a digit`
       );
     }
-    this.entries = Object.entries(fields) as [string, XdrType<unknown>][];
+    this.entries = entries;
   }
 
   _read(
