@@ -1,5 +1,6 @@
 import { describe, it, expect } from 'vitest';
-import { Writer } from '../../src/index.js';
+import { runInNewContext } from 'node:vm';
+import { Writer, XdrError } from '../../src/index.js';
 import { bytes, toArray } from './_helpers.js';
 
 describe('Writer', () => {
@@ -100,11 +101,106 @@ describe('Writer', () => {
   it('does not advance after a scalar write fails', () => {
     const writer = new Writer();
     expect(() => writer.writeBigInt64(1 as unknown as bigint)).toThrow(
-      TypeError
+      XdrError
     );
 
     writer.writeUint32(7);
     expect(toArray(writer.toUint8Array())).toEqual([0, 0, 0, 7]);
+  });
+
+  describe('input validation', () => {
+    // Each case must throw XdrError and leave the writer untouched, so a
+    // following valid write lands at offset 0.
+    function expectRejected(write: (writer: Writer) => void): void {
+      const writer = new Writer();
+      expect(() => write(writer)).toThrow(XdrError);
+      expect(writer.offset).toBe(0);
+      writer.writeUint32(7);
+      expect(toArray(writer.toUint8Array())).toEqual([0, 0, 0, 7]);
+    }
+
+    it('rejects out-of-range and non-integer 32-bit values', () => {
+      for (const value of [2 ** 31, -(2 ** 31) - 1, 1000.75, NaN, Infinity]) {
+        expectRejected((w) => w.writeInt32(value));
+      }
+      for (const value of [2 ** 32, -1, 0.5, NaN, Infinity]) {
+        expectRejected((w) => w.writeUint32(value));
+      }
+      expectRejected((w) => w.writeUint32('1' as unknown as number));
+    });
+
+    it('accepts 32-bit range edges', () => {
+      const writer = new Writer();
+      writer.writeInt32(-(2 ** 31));
+      writer.writeInt32(2 ** 31 - 1);
+      writer.writeUint32(0);
+      writer.writeUint32(2 ** 32 - 1);
+      expect(toArray(writer.toUint8Array())).toEqual([
+        128, 0, 0, 0, 127, 255, 255, 255, 0, 0, 0, 0, 255, 255, 255, 255
+      ]);
+    });
+
+    it('rejects out-of-range 64-bit values', () => {
+      expectRejected((w) => w.writeBigInt64(1n << 63n));
+      expectRejected((w) => w.writeBigInt64(-(1n << 63n) - 1n));
+      expectRejected((w) => w.writeBigUint64(1n << 64n));
+      expectRejected((w) => w.writeBigUint64(-1n));
+      expectRejected((w) => w.writeBigUint64(1 as unknown as bigint));
+    });
+
+    it('accepts 64-bit range edges', () => {
+      const writer = new Writer();
+      writer.writeBigInt64(-(1n << 63n));
+      writer.writeBigInt64((1n << 63n) - 1n);
+      writer.writeBigUint64(0n);
+      writer.writeBigUint64((1n << 64n) - 1n);
+      expect(writer.offset).toBe(32);
+    });
+
+    it('rejects padding lengths that are not nonnegative integers', () => {
+      for (const length of [1.5, -1, NaN, Infinity]) {
+        expectRejected((w) => w.writePadding(length));
+      }
+    });
+
+    it('rejects byte inputs that are not Uint8Arrays', () => {
+      const forged = [
+        { length: -4 },
+        { length: 4, [Symbol.toStringTag]: 'Uint8Array' },
+        Object.create(Uint8Array.prototype),
+        new DataView(new ArrayBuffer(4)),
+        new Uint16Array(2),
+        new Int8Array(4),
+        new Uint8ClampedArray(4),
+        [1, 2, 3, 4]
+      ];
+      for (const value of forged) {
+        expectRejected((w) => w.writeBytes(value as unknown as Uint8Array));
+      }
+    });
+
+    it('does not let a forged length rewind the cursor', () => {
+      const writer = new Writer();
+      writer.writeUint32(0xaaaaaaaa);
+      writer.writeUint32(0xbbbbbbbb);
+      expect(() =>
+        writer.writeBytes({ length: -4 } as unknown as Uint8Array)
+      ).toThrow(XdrError);
+      writer.writeUint32(0xcccccccc);
+      expect(toArray(writer.toUint8Array())).toEqual([
+        0xaa, 0xaa, 0xaa, 0xaa, 0xbb, 0xbb, 0xbb, 0xbb, 0xcc, 0xcc, 0xcc, 0xcc
+      ]);
+    });
+
+    it('accepts Buffer and Uint8Arrays from another realm', () => {
+      const foreign = runInNewContext('new Uint8Array([1, 2, 3])');
+      expect(foreign instanceof Uint8Array).toBe(false);
+
+      const writer = new Writer();
+      writer.writeBytes(foreign);
+      writer.writeBytes(Buffer.from([4, 5]));
+      expect(toArray(writer.toUint8Array())).toEqual([1, 2, 3, 4, 5]);
+    });
   });
 
   it('pads to the next 4-byte boundary based on length', () => {
