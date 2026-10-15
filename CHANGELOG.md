@@ -3,6 +3,14 @@
 All notable changes to this project will be documented in this file. This
 project adheres to [Semantic Versioning](http://semver.org/).
 
+## Unreleased
+
+### Fixed
+
+- `struct()` now throws an `XdrError` when a field name starts with a digit, as
+  RFC 4506 identifiers must start with a letter. Schemas that declare such
+  fields used to load and now throw when defined.
+
 ## [v5.0.0](https://github.com/stellar/js-xdr/compare/v4.0.0...v5.0.0)
 
 A complete rewrite of the library. The runtime `xdr.config(...)`
