@@ -23,9 +23,19 @@ class StructType<
     super(name);
     // '__proto__' is not a legal XDR identifier and cannot be assigned onto a
     // plain result object without rewriting its prototype; reject it up front.
-    if (Object.getOwnPropertyNames(fields).includes('__proto__')) {
+    const names = Object.getOwnPropertyNames(fields);
+    if (names.includes('__proto__')) {
       throw new XdrError(
         `${name}: struct field name '__proto__' is not allowed`
+      );
+    }
+    // XDR identifiers start with a letter. Names that start with a digit can
+    // be array-index keys, which JS enumerates first in numeric order, so the
+    // wire order would silently differ from the declared order.
+    const digitName = names.find((key) => /^[0-9]/.test(key));
+    if (digitName !== undefined) {
+      throw new XdrError(
+        `${name}: struct field name '${digitName}' must not start with a digit`
       );
     }
     this.entries = Object.entries(fields) as [string, XdrType<unknown>][];
