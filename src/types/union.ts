@@ -88,7 +88,12 @@ class UnionType<
     super(name);
     // Same rationale as struct: '__proto__' cannot be defined as an own property on
     // a plain object without invoking the inherited prototype setter, so it is
-    // not a legal discriminator field name.
+    // not a legal discriminator field name. The typeof check comes first: a
+    // String object or other non-string key passes `===` but is coerced to
+    // '__proto__' when used as a property key.
+    if (typeof switchKey !== 'string') {
+      throw new XdrError(`${name}: switchKey must be a string`);
+    }
     if (switchKey === '__proto__') {
       throw new XdrError(`${name}: switchKey '__proto__' is not allowed`);
     }
@@ -344,12 +349,20 @@ function assertArmPayloadName(
   arm: UnionArm,
   switchKey: string
 ): void {
-  if (isFieldArm(arm) && arm.name === switchKey) {
+  if (!isFieldArm(arm)) {
+    return;
+  }
+  if (typeof arm.name !== 'string') {
+    throw new XdrError(
+      `${unionName}.${caseName}: union arm payload field name must be a string`
+    );
+  }
+  if (arm.name === switchKey) {
     throw new XdrError(
       `${unionName}.${caseName}: union arm payload field must not be named ${switchKey}`
     );
   }
-  if (isFieldArm(arm) && arm.name === '__proto__') {
+  if (arm.name === '__proto__') {
     throw new XdrError(
       `${unionName}.${caseName}: union arm payload field name '__proto__' is not allowed`
     );
