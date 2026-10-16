@@ -1,5 +1,6 @@
+import { runInNewContext } from 'node:vm';
 import { describe, it, expect } from 'vitest';
-import { struct, int32, bool } from '../../src/index.js';
+import { struct, int32, bool, varOpaque } from '../../src/index.js';
 import { bytes, toArray, roundTrip, encodeInvalid } from './_helpers.js';
 
 const Range = struct('Range', {
@@ -60,6 +61,15 @@ describe('struct', () => {
       expect(() =>
         Range.encode({ begin: 2147483648, end: 0, inclusive: false })
       ).toThrow(/range/i);
+    });
+
+    it('accepts a byte field holding a Uint8Array from another realm', () => {
+      const Blob = struct('Blob', { data: varOpaque(10) });
+      const foreign = runInNewContext('new Uint8Array([1, 2, 3])');
+      expect(toArray(Blob.encode({ data: foreign }))).toEqual([
+        0, 0, 0, 3, 1, 2, 3, 0
+      ]);
+      expect(Blob.validate({ data: foreign })).toBe(true);
     });
   });
 

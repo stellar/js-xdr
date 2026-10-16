@@ -1,3 +1,4 @@
+import { runInNewContext } from 'node:vm';
 import { describe, it, expect } from 'vitest';
 import { opaque } from '../../src/index.js';
 import { bytes, toArray, encodeInvalid } from './_helpers.js';
@@ -26,6 +27,12 @@ describe('opaque (fixed-length)', () => {
       expect(() => encodeInvalid(opaque(2), [1, 2])).toThrow(
         /expected Uint8Array/i
       );
+    });
+
+    it('accepts a Uint8Array from another realm', () => {
+      const foreign = runInNewContext('new Uint8Array([1, 2, 3, 4])');
+      expect(toArray(opaque(4).encode(foreign))).toEqual([1, 2, 3, 4]);
+      expect(opaque(4).validate(foreign)).toBe(true);
     });
   });
 
