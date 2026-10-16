@@ -165,6 +165,52 @@ describe('union', () => {
       ).toThrow(/'__proto__' is not allowed/);
     });
 
+    it('rejects a non-string switchKey at construction', () => {
+      for (const switchKey of [
+        new String('__proto__'),
+        { toString: () => '__proto__' },
+        Symbol('type'),
+        0
+      ]) {
+        expect(() =>
+          union('Bad', {
+            switchOn: AssetType,
+            cases: [caseOf('native', AssetType.native, voidType())],
+            switchKey: switchKey as unknown as string
+          })
+        ).toThrow(/switchKey must be a string/);
+      }
+    });
+
+    it('rejects a non-string arm payload field name at construction', () => {
+      for (const name of [
+        new String('__proto__'),
+        { toString: () => '__proto__' },
+        Symbol('code'),
+        0
+      ]) {
+        expect(() =>
+          union('Bad', {
+            switchOn: AssetType,
+            cases: [
+              caseOf(
+                'credit',
+                AssetType.credit,
+                field(name as unknown as string, int32())
+              )
+            ]
+          })
+        ).toThrow(/field name must be a string/);
+        expect(() =>
+          union('Bad', {
+            switchOn: AssetType,
+            cases: [],
+            defaultArm: field(name as unknown as string, int32())
+          })
+        ).toThrow(/field name must be a string/);
+      }
+    });
+
     it('detects a missing discriminator that shadows Object.prototype', () => {
       const Shadow = union('Shadow', {
         switchOn: AssetType,

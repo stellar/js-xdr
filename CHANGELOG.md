@@ -7,6 +7,10 @@ project adheres to [Semantic Versioning](http://semver.org/).
 
 ### Fixed
 
+- `union()`: now throws `XdrError` when `switchKey` or a `field()` payload name
+  is not a primitive string, closing a bypass of the `'__proto__'` name check.
+  Numbers and Symbols, which plain JS used to accept as names, are now rejected
+  ([#174](https://github.com/stellar/js-xdr/pull/174)).
 - `struct()` now throws an `XdrError` when a field name starts with a digit, as
   RFC 4506 identifiers must start with a letter. Schemas that declare such
   fields used to load and now throw when defined.
