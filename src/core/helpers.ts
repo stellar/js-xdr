@@ -56,6 +56,18 @@ export function assertNumber(
   }
 }
 
+// Reads the internal [[TypedArrayName]] slot. Unlike `instanceof`, this works
+// for typed arrays from other realms, and unlike `Object.prototype.toString`,
+// an object can't fake it with its own `Symbol.toStringTag`.
+const typedArrayName = Object.getOwnPropertyDescriptor(
+  Object.getPrototypeOf(Uint8Array.prototype),
+  Symbol.toStringTag
+)!.get!;
+
+export function isUint8Array(value: unknown): value is Uint8Array {
+  return typedArrayName.call(value) === 'Uint8Array';
+}
+
 export function assertUint8Array(
   value: unknown,
   path: string
