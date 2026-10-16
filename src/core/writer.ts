@@ -83,9 +83,10 @@ export class Writer {
   // which silently wraps or truncates out-of-range and fractional values.
   // The 32-bit checks use the bitwise round trip: it holds only for integers
   // already in range, and it is cheaper than the general range helpers on
-  // this hot path.
+  // this hot path. The typeof guard comes first because the bitwise operators
+  // throw a native TypeError on bigint and symbol.
   writeInt32(value: number): void {
-    if ((value | 0) !== value) {
+    if (typeof value !== 'number' || (value | 0) !== value) {
       throw new XdrError(
         'writeInt32: expected integer in range -2147483648..2147483647'
       );
@@ -96,7 +97,7 @@ export class Writer {
   }
 
   writeUint32(value: number): void {
-    if (value >>> 0 !== value) {
+    if (typeof value !== 'number' || value >>> 0 !== value) {
       throw new XdrError(
         'writeUint32: expected integer in range 0..4294967295'
       );

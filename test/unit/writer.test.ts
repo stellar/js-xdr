@@ -126,7 +126,11 @@ describe('Writer', () => {
       for (const value of [2 ** 32, -1, 0.5, NaN, Infinity]) {
         expectRejected((w) => w.writeUint32(value));
       }
+      expectRejected((w) => w.writeInt32(1n as unknown as number));
+      expectRejected((w) => w.writeInt32(Symbol() as unknown as number));
       expectRejected((w) => w.writeUint32('1' as unknown as number));
+      expectRejected((w) => w.writeUint32(1n as unknown as number));
+      expectRejected((w) => w.writeUint32(Symbol() as unknown as number));
     });
 
     it('accepts 32-bit range edges', () => {
