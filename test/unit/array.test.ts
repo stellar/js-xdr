@@ -253,4 +253,39 @@ describe('array (variable-length)', () => {
       );
     });
   });
+
+  describe('arrays that change during encode', () => {
+    it('writes as many elements as the count prefix says when length grows mid-write', () => {
+      const items: number[] = [1, 2];
+      let fired = false;
+      Object.defineProperty(items, 1, {
+        configurable: true,
+        enumerable: true,
+        get() {
+          if (!fired) {
+            fired = true;
+            items.push(16);
+          }
+          return 2;
+        }
+      });
+      expect(toArray(array(int32(), 10).encode(items))).toEqual([
+        0, 0, 0, 2, 0, 0, 0, 1, 0, 0, 0, 2
+      ]);
+    });
+
+    it('ignores a replaced Symbol.iterator', () => {
+      const items = [1, 2];
+      Object.defineProperty(items, Symbol.iterator, {
+        value: function* () {
+          yield 1;
+          yield 2;
+          yield 3;
+        }
+      });
+      expect(toArray(array(int32(), 10).encode(items))).toEqual([
+        0, 0, 0, 2, 0, 0, 0, 1, 0, 0, 0, 2
+      ]);
+    });
+  });
 });

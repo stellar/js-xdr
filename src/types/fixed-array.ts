@@ -42,12 +42,13 @@ class FixedArrayType<T> extends BaseType<T[]> {
     writer.enter(path);
     try {
       assertArray(value, path);
-      if (value.length !== this.length) {
+      const length = value.length;
+      if (length !== this.length) {
         throw new XdrError(
-          `${path}: expected array length ${this.length}, got ${value.length}`
+          `${path}: expected array length ${this.length}, got ${length}`
         );
       }
-      writeArray(value, writer, this.element, path);
+      writeArray(value, this.length, writer, this.element, path);
     } finally {
       writer.exit();
     }

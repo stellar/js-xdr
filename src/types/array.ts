@@ -47,13 +47,16 @@ class ArrayType<T> extends BaseType<T[]> {
     writer.enter(path);
     try {
       assertArray(value, path);
-      if (value.length > this.maxLength) {
+      // Read `length` once so the count prefix and the element bodies come
+      // from the same view of the array.
+      const length = value.length;
+      if (length > this.maxLength) {
         throw new XdrError(
-          `${path}: array length ${value.length} exceeds maximum ${this.maxLength}`
+          `${path}: array length ${length} exceeds maximum ${this.maxLength}`
         );
       }
-      writer.writeUint32(value.length);
-      writeArray(value, writer, this.element, path);
+      writer.writeUint32(length);
+      writeArray(value, length, writer, this.element, path);
     } finally {
       writer.exit();
     }
@@ -124,21 +127,25 @@ export function readArray<T>(
 }
 
 /**
- * Writes array elements without writing a length prefix.
+ * Writes `length` array elements without writing a length prefix.
+ *
+ * Indexes up to the caller's `length` rather than iterating, so the number of
+ * elements written always matches the length the caller checked or encoded,
+ * even if `values.length` or `Symbol.iterator` change during the write.
  *
  * This is a schema-composition helper used by `array` and `fixedArray`;
  * application code should normally use `schema.encode(value)`.
  */
 export function writeArray<T>(
   values: T[],
+  length: number,
   writer: Writer,
   element: XdrType<T>,
   path: string
 ): void {
-  let i = 0;
-  for (const value of values) {
+  for (let i = 0; i < length; i += 1) {
     const before = writer.offset;
-    element._write(value, writer, `${path}[${i}]`);
+    element._write(values[i] as T, writer, `${path}[${i}]`);
     // The mirror of the check in `readArray`. Without it an array of a
     // zero-width element type would encode to bytes that cannot decode back.
     if (writer.offset === before) {
@@ -148,6 +155,5 @@ export function writeArray<T>(
         }' encoded to zero bytes; an array element must encode to at least one byte`
       );
     }
-    i += 1;
   }
 }
