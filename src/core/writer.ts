@@ -1,8 +1,16 @@
 import { XdrError } from './error.js';
-import { paddingLength } from './helpers.js';
+import {
+  assertBigIntRange,
+  assertLength,
+  isUint8Array,
+  paddingLength
+} from './helpers.js';
 import { DEFAULT_MAX_DEPTH } from './reader.js';
 
 const INITIAL_BUFFER_SIZE = 8192;
+const INT64_MIN = -(1n << 63n);
+const INT64_MAX = (1n << 63n) - 1n;
+const UINT64_MAX = (1n << 64n) - 1n;
 
 /**
  * Low-level writer for raw XDR bytes.
@@ -50,12 +58,19 @@ export class Writer {
   }
 
   writeBytes(bytes: Uint8Array): void {
+    // `bytes.length` drives the cursor, so a forged object with a negative
+    // length would rewind it, and a wider typed array or DataView would be
+    // copied by element instead of by byte.
+    if (!isUint8Array(bytes)) {
+      throw new XdrError('writeBytes: expected Uint8Array');
+    }
     this.#ensureCapacity(bytes.length);
     this.#buffer.set(bytes, this.#offset);
     this.#offset += bytes.length;
   }
 
   writePadding(length: number): void {
+    assertLength(length, 'writePadding');
     const padding = paddingLength(length);
     if (padding > 0) {
       this.#ensureCapacity(padding);
@@ -64,25 +79,43 @@ export class Writer {
     }
   }
 
+  // The integer writers check their own range rather than rely on DataView,
+  // which silently wraps or truncates out-of-range and fractional values.
+  // The 32-bit checks use the bitwise round trip: it holds only for integers
+  // already in range, and it is cheaper than the general range helpers on
+  // this hot path. The typeof guard comes first because the bitwise operators
+  // throw a native TypeError on bigint and symbol.
   writeInt32(value: number): void {
+    if (typeof value !== 'number' || (value | 0) !== value) {
+      throw new XdrError(
+        'writeInt32: expected integer in range -2147483648..2147483647'
+      );
+    }
     const offset = this.#prepareScalar(4);
     this.#view.setInt32(offset, value, false);
     this.#offset += 4;
   }
 
   writeUint32(value: number): void {
+    if (typeof value !== 'number' || value >>> 0 !== value) {
+      throw new XdrError(
+        'writeUint32: expected integer in range 0..4294967295'
+      );
+    }
     const offset = this.#prepareScalar(4);
     this.#view.setUint32(offset, value, false);
     this.#offset += 4;
   }
 
   writeBigInt64(value: bigint): void {
+    assertBigIntRange(value, INT64_MIN, INT64_MAX, 'writeBigInt64');
     const offset = this.#prepareScalar(8);
     this.#view.setBigInt64(offset, value, false);
     this.#offset += 8;
   }
 
   writeBigUint64(value: bigint): void {
+    assertBigIntRange(value, 0n, UINT64_MAX, 'writeBigUint64');
     const offset = this.#prepareScalar(8);
     this.#view.setBigUint64(offset, value, false);
     this.#offset += 8;
