@@ -58,4 +58,30 @@ describe('fixedArray (fixed-length)', () => {
       /element type 'void' consumed no input/i
     );
   });
+
+  describe('arrays that change during encode', () => {
+    it('throws when the array is shorter than its first length read', () => {
+      let reads = 0;
+      const items = new Proxy([7], {
+        get(target, key, receiver) {
+          return key === 'length' && reads++ === 0
+            ? 3
+            : Reflect.get(target, key, receiver);
+        }
+      });
+      expect(() => schema.encode(items)).toThrow(XdrError);
+    });
+
+    it('ignores a replaced Symbol.iterator', () => {
+      const items = [1, 2, 3];
+      Object.defineProperty(items, Symbol.iterator, {
+        value: function* () {
+          yield 1;
+        }
+      });
+      expect(toArray(schema.encode(items))).toEqual([
+        0, 0, 0, 1, 0, 0, 0, 2, 0, 0, 0, 3
+      ]);
+    });
+  });
 });

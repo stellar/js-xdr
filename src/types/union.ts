@@ -3,6 +3,8 @@ import type { Reader } from '../core/reader.js';
 import type { Writer } from '../core/writer.js';
 import { BaseType, type Infer, type XdrType } from '../core/xdr-type.js';
 import { isPlainObject } from '../core/helpers.js';
+import { DEFAULT_MAX_DEPTH } from '../core/reader.js';
+import type { LazySchema } from './lazy.js';
 
 /**
  * Named payload field for a non-void union arm.
@@ -57,6 +59,15 @@ type UnionValue<
 
 const DEFAULT_CASE_NAME = 'default';
 
+// RFC 4506 §6.4: a union discriminant must be int, unsigned int, bool, or an
+// enum (typedefs resolve to one of these schemas).
+const DISCRIMINANT_KINDS: ReadonlySet<string> = new Set([
+  'int32',
+  'uint32',
+  'bool',
+  'enum'
+]);
+
 /**
  * Reads and writes XDR unions.
  *
@@ -77,6 +88,9 @@ class UnionType<
   readonly defaultArm: DefaultArm;
   readonly switchKey: SwitchKey;
   readonly #casesByDiscriminant = new Map<Infer<Switch>, Cases[number]>();
+  // A lazy switch in a case-less union may be a forward reference, so its kind
+  // is checked on first read or write instead of at construction.
+  #switchOnChecked: boolean;
 
   constructor(
     name: string,
@@ -88,9 +102,23 @@ class UnionType<
     super(name);
     // Same rationale as struct: '__proto__' cannot be defined as an own property on
     // a plain object without invoking the inherited prototype setter, so it is
-    // not a legal discriminator field name.
+    // not a legal discriminator field name. The typeof check comes first: a
+    // String object or other non-string key passes `===` but is coerced to
+    // '__proto__' when used as a property key.
+    if (typeof switchKey !== 'string') {
+      throw new XdrError(`${name}: switchKey must be a string`);
+    }
     if (switchKey === '__proto__') {
       throw new XdrError(`${name}: switchKey '__proto__' is not allowed`);
+    }
+    // Cases force a lazy switch to resolve in the validate loop below anyway, so
+    // only a case-less union can still be waiting on a forward reference.
+    this.#switchOnChecked = switchOn.kind !== 'lazy' || cases.length > 0;
+    if (this.#switchOnChecked) {
+      const problem = discriminantSchemaProblem(switchOn);
+      if (problem !== undefined) {
+        throw new XdrError(`${name}: ${problem}`);
+      }
     }
     this.switchOn = switchOn;
     this.cases = cases;
@@ -137,6 +165,7 @@ class UnionType<
   ): UnionValue<Switch, Cases, DefaultArm, SwitchKey> {
     reader.enter(path);
     try {
+      this.#checkSwitchOn();
       const discriminant = this.switchOn._read(
         reader,
         `${path}.${this.switchKey}`
@@ -167,6 +196,7 @@ class UnionType<
   ): void {
     writer.enter(path);
     try {
+      this.#checkSwitchOn();
       if (
         !isPlainObject(value) ||
         !Object.prototype.hasOwnProperty.call(value, this.switchKey)
@@ -193,6 +223,18 @@ class UnionType<
       );
     } finally {
       writer.exit();
+    }
+  }
+
+  #checkSwitchOn(): void {
+    if (!this.#switchOnChecked) {
+      const problem = discriminantSchemaProblem(this.switchOn);
+      if (problem !== undefined) {
+        // A plain Error, not XdrError: this is a schema bug, and validate and
+        // validateXdr would report an XdrError as invalid input.
+        throw new Error(`${this.name ?? this.kind}: ${problem}`);
+      }
+      this.#switchOnChecked = true;
     }
   }
 }
@@ -338,18 +380,47 @@ function writeUnionArm(
   arm._write(undefined, writer, path);
 }
 
+// Returns why switchOn cannot be a discriminant, or undefined if it can. Lazy
+// hops are capped like nesting depth, since a lazy may return a new lazy on
+// every call.
+function discriminantSchemaProblem(
+  switchOn: XdrType<unknown>
+): string | undefined {
+  let schema = switchOn;
+  for (let hops = 0; schema.kind === 'lazy'; hops++) {
+    if (hops === DEFAULT_MAX_DEPTH) {
+      return 'switchOn lazy schema never resolves';
+    }
+    schema = (schema as LazySchema<unknown>).getSchema();
+  }
+  if (!DISCRIMINANT_KINDS.has(schema.kind)) {
+    return `switchOn must be int32, uint32, bool, or an enum, got ${
+      schema.name ?? schema.kind
+    }`;
+  }
+  return undefined;
+}
+
 function assertArmPayloadName(
   unionName: string,
   caseName: string,
   arm: UnionArm,
   switchKey: string
 ): void {
-  if (isFieldArm(arm) && arm.name === switchKey) {
+  if (!isFieldArm(arm)) {
+    return;
+  }
+  if (typeof arm.name !== 'string') {
+    throw new XdrError(
+      `${unionName}.${caseName}: union arm payload field name must be a string`
+    );
+  }
+  if (arm.name === switchKey) {
     throw new XdrError(
       `${unionName}.${caseName}: union arm payload field must not be named ${switchKey}`
     );
   }
-  if (isFieldArm(arm) && arm.name === '__proto__') {
+  if (arm.name === '__proto__') {
     throw new XdrError(
       `${unionName}.${caseName}: union arm payload field name '__proto__' is not allowed`
     );
