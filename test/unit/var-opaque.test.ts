@@ -1,3 +1,4 @@
+import { runInNewContext } from 'node:vm';
 import { describe, it, expect } from 'vitest';
 import { varOpaque } from '../../src/index.js';
 import { bytes, toArray, encodeInvalid } from './_helpers.js';
@@ -29,6 +30,25 @@ describe('varOpaque (variable-length)', () => {
       expect(() => encodeInvalid(schema, [1, 2, 3])).toThrow(
         /expected Uint8Array/i
       );
+    });
+
+    it('accepts a Uint8Array from another realm', () => {
+      const foreign = runInNewContext('new Uint8Array([1, 2, 3])');
+      expect(toArray(schema.encode(foreign))).toEqual([0, 0, 0, 3, 1, 2, 3, 0]);
+      expect(schema.validate(foreign)).toBe(true);
+    });
+
+    it('rejects values that only look like a Uint8Array', () => {
+      const spoof = { [Symbol.toStringTag]: 'Uint8Array', length: 0 };
+      expect(() => encodeInvalid(schema, spoof)).toThrow(
+        /expected Uint8Array/i
+      );
+      expect(() => encodeInvalid(schema, new Proxy(bytes([1]), {}))).toThrow(
+        /expected Uint8Array/i
+      );
+      expect(() =>
+        encodeInvalid(schema, runInNewContext('new Uint16Array(1)'))
+      ).toThrow(/expected Uint8Array/i);
     });
   });
 

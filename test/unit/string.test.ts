@@ -1,3 +1,4 @@
+import { runInNewContext } from 'node:vm';
 import { describe, it, expect } from 'vitest';
 import { string } from '../../src/index.js';
 import { bytes, toArray, roundTrip, encodeInvalid } from './_helpers.js';
@@ -31,6 +32,14 @@ describe('string', () => {
     it('throws for non-Uint8Array input', () => {
       expect(() => encodeInvalid(schema, 'Hi')).toThrow(/expected Uint8Array/i);
       expect(() => encodeInvalid(schema, 123)).toThrow(/expected Uint8Array/i);
+    });
+
+    it('accepts a Uint8Array from another realm', () => {
+      const foreign = runInNewContext('new Uint8Array([104, 105])');
+      expect(toArray(schema.encode(foreign))).toEqual([
+        0, 0, 0, 2, 104, 105, 0, 0
+      ]);
+      expect(schema.validate(foreign)).toBe(true);
     });
   });
 
