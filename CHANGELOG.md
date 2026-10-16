@@ -7,6 +7,9 @@ project adheres to [Semantic Versioning](http://semver.org/).
 
 ### Fixed
 
+- `struct()` now throws an `XdrError` when a field name starts with a digit, as
+  RFC 4506 identifiers must start with a letter. Schemas that declare such
+  fields used to load and now throw when defined.
 - `union()` now throws an `XdrError` at construction when `switchOn` is not
   `int32`, `uint32`, `bool`, or an enum, as RFC 4506 §6.4 requires. A `float()`
   switch could encode values that then failed to decode. A `lazy` switch is

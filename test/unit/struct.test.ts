@@ -92,6 +92,22 @@ describe('struct', () => {
       ).toThrow(/'__proto__' is not allowed/);
     });
 
+    it('rejects integer-like field names that JS would reorder', () => {
+      const fields: Record<string, ReturnType<typeof int32>> = {};
+      fields['2'] = int32();
+      fields.a = int32();
+      fields['1'] = int32();
+      expect(() => struct('IntegerKeys', fields)).toThrow(
+        /'1' must not start with a digit/
+      );
+    });
+
+    it('rejects field names that start with a digit', () => {
+      expect(() => struct('Bad', { x: int32(), '01': int32() })).toThrow(
+        /'01' must not start with a digit/
+      );
+    });
+
     it('throws when a field shadowing Object.prototype is missing, rather than encoding the inherited value', () => {
       const Shadow = struct('Shadow', { toString: int32(), x: int32() });
       // `'toString' in value` is true for any plain object; only an
